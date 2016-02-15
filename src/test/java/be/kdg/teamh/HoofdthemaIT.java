@@ -7,6 +7,7 @@ import be.kdg.teamh.repositories.HoofdthemaRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,11 +21,15 @@ public class HoofdthemaIT
     @Autowired
     HoofdthemaRepository repository;
 
+    @Mock
+    Gebruiker gebruiker = new Gebruiker();
+
+    @Mock
+    Organisatie organisatie = new Organisatie();
+
     @Test
     public void createHoofdthema()
     {
-        Gebruiker gebruiker = new Gebruiker();
-        Organisatie organisatie = new Organisatie();
         Hoofdthema hoofdthema = new Hoofdthema(1, "Voetbal", "Nieuwe voetbalveld", organisatie, gebruiker);
 
         repository.save(hoofdthema);
