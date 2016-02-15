@@ -12,7 +12,7 @@ public class Hoofdthema
     private String naam;
     private String beschrijving;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Organisatie organisatie;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -27,6 +27,7 @@ public class Hoofdthema
         this.gebruiker = gebruiker;
     }
 
-    public Hoofdthema() {
+    public Hoofdthema()
+    {
     }
 }

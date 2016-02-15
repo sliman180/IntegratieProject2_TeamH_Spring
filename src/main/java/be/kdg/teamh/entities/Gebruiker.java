@@ -15,6 +15,7 @@ public class Gebruiker
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    public Gebruiker() {
+    public Gebruiker()
+    {
     }
 }

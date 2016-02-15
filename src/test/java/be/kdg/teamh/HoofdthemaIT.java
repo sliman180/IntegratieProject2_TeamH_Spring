@@ -9,15 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 public class HoofdthemaIT
 {
-
     Gebruiker gebruiker;
     Organisatie organisatie;
 
@@ -34,7 +31,7 @@ public class HoofdthemaIT
     @Test
     public void createHoofdthema()
     {
-        Hoofdthema hoofdthema = new Hoofdthema(1,"Voetbal","Nieuwe voetbalveld", organisatie, gebruiker);
+        Hoofdthema hoofdthema = new Hoofdthema(1, "Voetbal", "Nieuwe voetbalveld", organisatie, gebruiker);
         hoofdthemaRepository.save(hoofdthema);
 
         // Opslaan in db

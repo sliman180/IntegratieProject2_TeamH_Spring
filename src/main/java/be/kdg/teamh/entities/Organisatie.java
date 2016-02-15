@@ -10,9 +10,10 @@ public class Organisatie
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Hoofdthema hoofdthema;
 
-    public Organisatie() {
+    public Organisatie()
+    {
     }
 }
