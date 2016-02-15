@@ -11,4 +11,10 @@ public class ExampleTest
     {
         assertTrue(true);
     }
+
+    @Test
+    public void blablablabla()
+    {
+        assertTrue(true);
+    }
 }
