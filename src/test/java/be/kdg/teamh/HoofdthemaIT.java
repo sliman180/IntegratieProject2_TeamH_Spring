@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 public class HoofdthemaIT
@@ -19,7 +21,7 @@ public class HoofdthemaIT
     Organisatie organisatie;
 
     @Autowired
-    HoofdthemaRepository hoofdthemaRepository;
+    HoofdthemaRepository repository;
 
     @Before
     public void setUp()
@@ -32,10 +34,9 @@ public class HoofdthemaIT
     public void createHoofdthema()
     {
         Hoofdthema hoofdthema = new Hoofdthema(1, "Voetbal", "Nieuwe voetbalveld", organisatie, gebruiker);
-        hoofdthemaRepository.save(hoofdthema);
 
-        // Opslaan in db
-        // Aantal hoofdthema's opvragen
-        // Moet gelijk zijn aan 1
+        repository.save(hoofdthema);
+
+        assertEquals(1, repository.count());
     }
 }
