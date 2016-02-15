@@ -17,22 +17,14 @@ import static org.junit.Assert.assertEquals;
 @SpringApplicationConfiguration(Application.class)
 public class HoofdthemaIT
 {
-    Gebruiker gebruiker;
-    Organisatie organisatie;
-
     @Autowired
     HoofdthemaRepository repository;
-
-    @Before
-    public void setUp()
-    {
-        gebruiker = new Gebruiker();
-        organisatie = new Organisatie();
-    }
 
     @Test
     public void createHoofdthema()
     {
+        Gebruiker gebruiker = new Gebruiker();
+        Organisatie organisatie = new Organisatie();
         Hoofdthema hoofdthema = new Hoofdthema(1, "Voetbal", "Nieuwe voetbalveld", organisatie, gebruiker);
 
         repository.save(hoofdthema);
