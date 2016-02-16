@@ -18,4 +18,8 @@ public class Gebruiker
     public Gebruiker()
     {
     }
+
+    public int getId() {
+        return id;
+    }
 }

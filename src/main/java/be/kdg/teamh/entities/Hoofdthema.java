@@ -20,7 +20,7 @@ public class Hoofdthema
 
     public Hoofdthema()
     {
-        //
+
     }
 
     public Hoofdthema(int id, String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
