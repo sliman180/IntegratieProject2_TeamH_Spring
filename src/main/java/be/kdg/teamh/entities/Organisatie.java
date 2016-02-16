@@ -3,6 +3,7 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "organisatie")
 public class Organisatie {
 
     @Id
@@ -14,6 +15,9 @@ public class Organisatie {
 
     @ManyToOne
     private Gebruiker organisator;
+
+    public Organisatie() {
+    }
 
     public Organisatie(String naam, String beschrijving, Gebruiker organisator) {
     }
