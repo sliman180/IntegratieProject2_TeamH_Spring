@@ -1,34 +1,38 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.repositories.HoofdthemaRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 public class HoofdthemaIT
 {
     @Autowired
-    HoofdthemaRepository repository;
+    private WebApplicationContext context;
+    private MockMvc mvc;
+
+    @Before
+    public void setUp()
+    {
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
 
     @Test
-    public void createHoofdthema()
+    public void indexHoofdthema() throws Exception
     {
-        Gebruiker gebruiker = new Gebruiker();
-        Organisatie organisatie = new Organisatie();
-        Hoofdthema hoofdthema = new Hoofdthema(1, "Voetbal", "Nieuwe voetbalveld", organisatie, gebruiker);
-
-        repository.save(hoofdthema);
-
-        assertEquals(1, repository.count());
+        this.mvc.perform(get("/hoofdthemas")).andExpect(status().isOk());
     }
 }

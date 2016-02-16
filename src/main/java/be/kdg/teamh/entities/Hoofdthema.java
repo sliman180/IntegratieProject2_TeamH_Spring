@@ -18,6 +18,11 @@ public class Hoofdthema
     @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
+    public Hoofdthema()
+    {
+        //
+    }
+
     public Hoofdthema(int id, String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
     {
         this.id = id;
@@ -27,7 +32,28 @@ public class Hoofdthema
         this.gebruiker = gebruiker;
     }
 
-    public Hoofdthema()
+    public int getId()
     {
+        return id;
+    }
+
+    public String getNaam()
+    {
+        return naam;
+    }
+
+    public String getBeschrijving()
+    {
+        return beschrijving;
+    }
+
+    public Organisatie getOrganisatie()
+    {
+        return organisatie;
+    }
+
+    public Gebruiker getGebruiker()
+    {
+        return gebruiker;
     }
 }
