@@ -4,6 +4,7 @@ import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.services.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,9 +21,11 @@ public class OrganisatieController {
         organisatieService.addOrganisatie(organisatie);
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public Organisatie getOrganisatie(@PathVariable Integer id) {
-        return organisatieService.getOrganisatie(id);
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Organisatie> getOrganisatie(@PathVariable Integer id) {
+        Organisatie organisatie = organisatieService.getOrganisatie(id);
+        if (organisatie == null) return new ResponseEntity<Organisatie>(organisatie, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<Organisatie>(organisatie, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.PUT)

@@ -128,4 +128,12 @@ public class OrganisatieIT {
         this.mvc.perform(delete("/organisatie/delete/" + id))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void getOrganisatie() throws Exception {
+        int id = 1;
+
+        this.mvc.perform(get("/organisatie/get/" + id))
+                .andExpect(status().isOk());
+    }
 }
