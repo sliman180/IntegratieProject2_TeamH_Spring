@@ -1,6 +1,7 @@
 package be.kdg.teamh.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "hoofdthemas")
@@ -9,7 +10,11 @@ public class Hoofdthema
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @NotNull
     private String naam;
+
+    @NotNull
     private String beschrijving;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -23,9 +28,8 @@ public class Hoofdthema
         //
     }
 
-    public Hoofdthema(int id, String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
+    public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
     {
-        this.id = id;
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.organisatie = organisatie;
@@ -75,5 +79,11 @@ public class Hoofdthema
     public void setGebruiker(Gebruiker gebruiker)
     {
         this.gebruiker = gebruiker;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Hoofdthema{" + "id=" + id + ", naam='" + naam + '\'' + ", beschrijving='" + beschrijving + '\'' + ", organisatie=" + organisatie + ", gebruiker=" + gebruiker + '}';
     }
 }
