@@ -80,10 +80,4 @@ public class Hoofdthema
     {
         this.gebruiker = gebruiker;
     }
-
-    @Override
-    public String toString()
-    {
-        return "Hoofdthema{" + "id=" + id + ", naam='" + naam + '\'' + ", beschrijving='" + beschrijving + '\'' + ", organisatie=" + organisatie + ", gebruiker=" + gebruiker + '}';
-    }
 }
