@@ -19,7 +19,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.Charset;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebAppConfiguration
@@ -29,6 +32,9 @@ public class OrganisatieIT {
 
     @Autowired
     public OrganisatieService organisatieService;
+
+    Gebruiker testGebruiker;
+    Organisatie organisatie;
 
 
    /* @Before
@@ -63,15 +69,24 @@ public class OrganisatieIT {
 
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+
+        testGebruiker = new Gebruiker("Naam", "Voornaam", "test@hotmail.be", "wachtwoord");
+        organisatie = new Organisatie("NaamOrganisatie", "Beschrijving", testGebruiker);
+
+
+        String nieuwOrganisatieString = new ObjectMapper().writeValueAsString(organisatie);
+        this.mvc.perform(post("/organisatie/create")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(nieuwOrganisatieString));
     }
 
 
     @Test
     public void maakOrganisatie() throws Exception {
-        Gebruiker organisator = new Gebruiker("TestNaam", "TestVoornaam", "test@hotmail.be", "wachtwoord");
-        Organisatie organisatie = new Organisatie("NaamOrganisatie", "Beschrijving", organisator);
+
+        Organisatie organisatie = new Organisatie("NaamOrganisatie", "Beschrijving", testGebruiker);
 
 
         String nieuwOrganisatieString = new ObjectMapper().writeValueAsString(organisatie);
@@ -82,9 +97,35 @@ public class OrganisatieIT {
     }
 
 
-   /* @Test
-    public void bestaatNietOrganisatie(){
-        //this.mvc.perform()
-    }*/
+    @Test
+    public void bestaatNietOrganisatie() throws Exception {
+        int id = 420;
 
+        this.mvc.perform(get("/organisatie/get/" + id))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void wijzigOrganisatie() throws Exception {
+        organisatie.setNaam("NieuweNaam");
+        String gewijzigdeOrganisatieString = new ObjectMapper().writeValueAsString(organisatie);
+
+
+        this.mvc.perform(put("/organisatie/edit")
+                .accept(MediaType.APPLICATION_JSON)
+                .content(gewijzigdeOrganisatieString))
+                .andExpect(status().isOk());
+
+
+//        this.mvc.perform("organisatie/get/" + id)
+//                .andExpect(status().);
+    }
+
+    @Test
+    public void verwijderOrganisatie() throws Exception {
+        int id = 1;
+
+        this.mvc.perform(delete("/organisatie/delete/" + id))
+                .andExpect(status().isOk());
+    }
 }

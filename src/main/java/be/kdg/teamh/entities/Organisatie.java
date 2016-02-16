@@ -25,4 +25,12 @@ public class Organisatie {
     public int getId() {
         return id;
     }
+
+    public String getNaam() {
+        return naam;
+    }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
 }

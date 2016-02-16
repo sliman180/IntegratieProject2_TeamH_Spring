@@ -4,10 +4,7 @@ import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.services.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/organisatie")
@@ -21,5 +18,20 @@ public class OrganisatieController {
     public void maakNieuweOrganisatie(Organisatie organisatie) {
 
         organisatieService.addOrganisatie(organisatie);
+    }
+
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    public Organisatie getOrganisatie(@PathVariable Integer id) {
+        return organisatieService.getOrganisatie(id);
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
+    public void wijzigOrganisatie(Organisatie organisatie) {
+        organisatieService.editOrganisatie(organisatie);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public void verwijderOrganisatie(@PathVariable Integer id){
+        organisatieService.deleteOrganisatie(id);
     }
 }

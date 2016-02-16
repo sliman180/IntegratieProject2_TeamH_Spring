@@ -15,7 +15,6 @@ public class OrganisatieServiceImpl implements OrganisatieService {
 
     public void addOrganisatie(Organisatie organisatie) {
         organisatieRepository.save(organisatie);
-
     }
 
     public Organisatie getOrganisatie(int id) {
@@ -31,5 +30,15 @@ public class OrganisatieServiceImpl implements OrganisatieService {
             return organisaties.get(id);
         }
         */
+    }
+
+    @Override
+    public void editOrganisatie(Organisatie organisatie) {
+        organisatieRepository.save(organisatie);
+    }
+
+    @Override
+    public void deleteOrganisatie(int id) {
+        organisatieRepository.delete(id);
     }
 }

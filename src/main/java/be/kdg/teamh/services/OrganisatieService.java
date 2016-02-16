@@ -9,4 +9,8 @@ public interface OrganisatieService {
     void addOrganisatie(Organisatie organisatie);
 
     Organisatie getOrganisatie(int id);
+
+    void editOrganisatie(Organisatie organisatie);
+
+    void deleteOrganisatie(int id);
 }
