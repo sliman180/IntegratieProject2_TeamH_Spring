@@ -3,7 +3,6 @@ package be.kdg.teamh;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,18 +11,19 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,7 +65,7 @@ public class HoofdthemaIT
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas/create").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
@@ -79,9 +79,18 @@ public class HoofdthemaIT
     @Test
     public void updateHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
+        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(put("/hoofdthemas/edit/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+            .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(1)));
+
+        json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
+
+        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
 
         this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
@@ -90,5 +99,25 @@ public class HoofdthemaIT
             .andExpect(jsonPath("$[0].id", is(1)))
             .andExpect(jsonPath("$[0].naam", is("Voetbal")))
             .andExpect(jsonPath("$[0].beschrijving", is("Vernieuwd voetbalveld")));
+    }
+
+    @Test
+    public void deleteHoofdthema() throws Exception
+    {
+        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+            .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(1)));
+
+        this.mvc.perform(delete("/hoofdthemas/1"))
+            .andExpect(status().isOk());
+
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)));
     }
 }

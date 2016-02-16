@@ -22,17 +22,31 @@ public class HoofdthemaController
         return service.all();
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Hoofdthema show(@PathVariable("id") int id)
+    {
+        return service.find(id);
+    }
+
     @ResponseStatus(code = HttpStatus.CREATED)
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestBody Hoofdthema hoofdthema)
     {
         service.create(hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "edit/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema)
     {
         service.update(id, hoofdthema);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") int id)
+    {
+        service.delete(id);
     }
 }

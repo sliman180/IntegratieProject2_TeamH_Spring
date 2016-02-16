@@ -20,6 +20,12 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
+    public Hoofdthema find(int id)
+    {
+        return repository.findOne(id);
+    }
+
+    @Override
     public void create(Hoofdthema hoofdthema)
     {
         repository.save(hoofdthema);
@@ -36,5 +42,11 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
         old.setGebruiker(hoofdthema.getGebruiker());
 
         repository.save(old);
+    }
+
+    @Override
+    public void delete(int id)
+    {
+        repository.delete(id);
     }
 }
