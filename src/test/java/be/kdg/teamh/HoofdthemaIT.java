@@ -55,7 +55,7 @@ public class HoofdthemaIT
     @Test
     public void indexHoofdthema() throws Exception
     {
-        this.mvc.perform(get("/hoofdthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -68,7 +68,7 @@ public class HoofdthemaIT
         this.mvc.perform(post("/hoofdthemas/create").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/hoofdthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
@@ -84,7 +84,7 @@ public class HoofdthemaIT
         this.mvc.perform(put("/hoofdthemas/edit/1").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/hoofdthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
