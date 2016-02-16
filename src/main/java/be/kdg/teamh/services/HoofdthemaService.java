@@ -17,4 +17,9 @@ public class HoofdthemaService
     {
         return repository.findAll();
     }
+
+    public void create(Hoofdthema hoofdthema)
+    {
+        repository.save(hoofdthema);
+    }
 }
