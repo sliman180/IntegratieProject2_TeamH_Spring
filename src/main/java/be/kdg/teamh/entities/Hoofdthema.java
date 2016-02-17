@@ -23,9 +23,9 @@ public class Hoofdthema
     @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
-    public Hoofdthema()
+    private Hoofdthema()
     {
-        //
+        // JPA constructor
     }
 
     public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
