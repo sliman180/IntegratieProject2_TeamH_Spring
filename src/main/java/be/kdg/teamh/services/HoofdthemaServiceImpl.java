@@ -20,9 +20,9 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void create(Hoofdthema hoofdthema)
+    public Hoofdthema create(Hoofdthema hoofdthema)
     {
-        repository.save(hoofdthema);
+        return repository.save(hoofdthema);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema)
+    public Hoofdthema update(int id, Hoofdthema hoofdthema)
     {
         Hoofdthema old = repository.findOne(id);
 
@@ -41,7 +41,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
         old.setOrganisatie(hoofdthema.getOrganisatie());
         old.setGebruiker(hoofdthema.getGebruiker());
 
-        repository.save(old);
+        return repository.save(old);
     }
 
     @Override
