@@ -2,6 +2,8 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "hoofdthemas")
@@ -9,6 +11,7 @@ public class Hoofdthema
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "hoofdthemaId")
     private int id;
 
     @NotNull
@@ -17,11 +20,14 @@ public class Hoofdthema
     @NotNull
     private String beschrijving;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Organisatie organisatie;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hoofdthema")
+    private List<Tag> tags = new ArrayList<>();
 
     private Hoofdthema()
     {
