@@ -4,11 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class ExampleTest
-{
+public class ExampleTest {
     @Test
-    public void blablabla()
-    {
+    public void blablabla() {
         assertTrue(true);
     }
 }

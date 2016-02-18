@@ -1,16 +1,21 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Organisatie;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+
+
 public interface OrganisatieService {
 
-    void addOrganisatie(Organisatie organisatie);
+    Organisatie addOrganisatie(Organisatie organisatie);
 
     Organisatie getOrganisatie(int id);
 
-    void editOrganisatie(Organisatie organisatie);
+    Organisatie editOrganisatie(Organisatie organisatie);
 
     void deleteOrganisatie(int id);
+
+    List<Organisatie> readAllOrganisaties();
+
+
 }
