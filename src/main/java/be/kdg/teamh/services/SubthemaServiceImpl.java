@@ -4,25 +4,25 @@ import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.repositories.SubthemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Created by lollik on 18/02/2016.
+ */
 @Service
-@Transactional
 public class SubthemaServiceImpl implements SubthemaService {
 
     @Autowired
-    SubthemaRepository subthemaRepository;
+    private SubthemaRepository subthemaRepository;
 
     @Override
-    public void createSubthema(Subthema subthema){
-        this.subthemaRepository.save(subthema);
+    public Subthema subthemaMaken(Subthema subthema) {
+        return this.subthemaRepository.save(subthema);
     }
 
     @Override
-    public List<Subthema> findAll() {
+    public List<Subthema> subthemasOphalen() {
         return this.subthemaRepository.findAll();
     }
-
 }
