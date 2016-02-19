@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HoofdthemaRepository extends JpaRepository<Hoofdthema, Integer>
-{
+public interface HoofdthemaRepository extends JpaRepository<Hoofdthema, Integer> {
 }
