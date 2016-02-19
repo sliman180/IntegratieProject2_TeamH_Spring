@@ -1,6 +1,5 @@
 package be.kdg.teamh;
 
-
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Organisatie;
 import com.google.gson.Gson;

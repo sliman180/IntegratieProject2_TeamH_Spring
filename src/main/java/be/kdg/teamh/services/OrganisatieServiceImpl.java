@@ -13,7 +13,6 @@ public class OrganisatieServiceImpl implements OrganisatieService
     @Autowired
     OrganisatieRepository repository;
 
-    @Override
     public List<Organisatie> all()
     {
         return repository.findAll();
@@ -38,6 +37,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
 
         old.setNaam(organisatie.getNaam());
         old.setBeschrijving(organisatie.getBeschrijving());
+        old.setOrganisator(organisatie.getOrganisator());
 
         repository.save(old);
     }
