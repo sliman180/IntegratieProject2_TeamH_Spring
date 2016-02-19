@@ -19,7 +19,7 @@ public class Hoofdthema
     @NotNull
     private String beschrijving;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Organisatie organisatie;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
