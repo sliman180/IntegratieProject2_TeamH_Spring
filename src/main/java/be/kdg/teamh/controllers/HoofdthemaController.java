@@ -24,9 +24,9 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Hoofdthema create(@RequestBody Hoofdthema hoofdthema)
+    public void create(@RequestBody Hoofdthema hoofdthema)
     {
-        return service.create(hoofdthema);
+        service.create(hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -38,9 +38,9 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public Hoofdthema update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema)
+    public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema)
     {
-        return service.update(id, hoofdthema);
+        service.update(id, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

@@ -8,8 +8,8 @@ import java.util.List;
 public interface HoofdthemaService
 {
     List<Hoofdthema> all();
-    Hoofdthema create(Hoofdthema hoofdthema);
+    void create(Hoofdthema hoofdthema);
     Hoofdthema find(int id);
-    Hoofdthema update(int id, Hoofdthema hoofdthema);
+    void update(int id, Hoofdthema hoofdthema);
     void delete(int id);
 }
