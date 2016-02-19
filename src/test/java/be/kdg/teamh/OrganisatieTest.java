@@ -28,44 +28,52 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class OrganisatieTest {
-    @Mock
-    Gebruiker gebruiker;
+public class OrganisatieTest
+{
     private MockMvc mvc;
+
     @Autowired
     private WebApplicationContext context;
+
     @Autowired
     private Gson gson;
 
+    @Mock
+    Gebruiker gebruiker;
+
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception
+    {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     @Test
-    public void indexOrganisatie() throws Exception {
+    public void indexOrganisatie() throws Exception
+    {
         this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createOrganisatie() throws Exception {
+    public void createOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].naam", is("NaamOrganisatie")))
-                .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(1)))
+            .andExpect(jsonPath("$[0].id", is(1)))
+            .andExpect(jsonPath("$[0].naam", is("NaamOrganisatie")))
+            .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createOrganisatie_nullInput() throws Exception {
+    public void createOrganisatie_nullInput() throws Exception
+    {
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json));
@@ -73,46 +81,49 @@ public class OrganisatieTest {
 
 
     @Test
-    public void showOrganisatie() throws Exception {
+    public void showOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
-                .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
+            .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
     }
 
     @Test
-    public void updateOrganisatie() throws Exception {
+    public void updateOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         this.mvc.perform(get("/organisaties/1")
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
-                .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+            .contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id", is(1)))
+            .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
+            .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateOrganisatie_nullInput() throws Exception {
+    public void updateOrganisatie_nullInput() throws Exception
+    {
         String json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie(null, null, gebruiker));
 
@@ -120,11 +131,12 @@ public class OrganisatieTest {
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateOrganisatie_nonExistingOrganisatie() throws Exception {
+    public void updateOrganisatie_nonExistingOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
@@ -132,29 +144,31 @@ public class OrganisatieTest {
     }
 
     @Test
-    public void deleteOrganisatie() throws Exception {
+    public void deleteOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1"))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         this.mvc.perform(delete("/organisaties/1"))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteOrganisatie_nonExistingOrganisatie() throws Exception {
+    public void deleteOrganisatie_nonExistingOrganisatie() throws Exception
+    {
         String json = gson.toJson(new Organisatie("KdG Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/organisaties/2"));
     }

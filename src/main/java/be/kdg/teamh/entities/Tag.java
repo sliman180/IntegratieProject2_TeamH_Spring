@@ -4,7 +4,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tags")
-public class Tag {
+public class Tag
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -12,7 +13,8 @@ public class Tag {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Hoofdthema hoofdthema;
 
-    public Tag() {
+    public Tag()
+    {
         // JPA constructor
     }
 }

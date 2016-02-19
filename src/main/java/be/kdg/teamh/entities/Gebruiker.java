@@ -6,7 +6,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "gebruikers")
-public class Gebruiker {
+public class Gebruiker
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -14,7 +15,8 @@ public class Gebruiker {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    public Gebruiker() {
+    public Gebruiker()
+    {
         // JPA constructor
     }
 }
