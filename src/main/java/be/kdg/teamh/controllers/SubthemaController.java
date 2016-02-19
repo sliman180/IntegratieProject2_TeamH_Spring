@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Created by lollik on 18/02/2016.
+ */
 @RestController
 @RequestMapping("/subthemas")
 public class SubthemaController {
@@ -15,15 +18,12 @@ public class SubthemaController {
     @Autowired
     private SubthemaService subthemaService;
 
-    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public void create(@RequestBody Subthema subthema){
-        this.subthemaService.createSubthema(subthema);
-    }
+    @ResponseStatus(HttpStatus.CREATED)
+    public Subthema create(@RequestBody Subthema subthema){return subthemaService.subthemaMaken(subthema);}
 
-    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Subthema> getAll(){
-        return this.subthemaService.findAll();
-    }
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody List<Subthema> get(){return subthemaService.subthemasOphalen();}
+
 }

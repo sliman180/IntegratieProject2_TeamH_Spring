@@ -10,19 +10,16 @@ public class Subthema {
     private int id;
     private String naam;
     private String beschrijving;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Hoofdthema hoofdthema;
-    @ManyToOne
-    private Gebruiker gebruiker;
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema, Gebruiker gebruiker) {
+    public Subthema() {
+    }
+
+    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema) {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
-        this.gebruiker = gebruiker;
-    }
-
-    public Subthema() {
     }
 
     public int getId() {
@@ -43,5 +40,13 @@ public class Subthema {
 
     public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
+    }
+
+    public Hoofdthema getHoofdthema() {
+        return hoofdthema;
+    }
+
+    public void setHoofdthema(Hoofdthema hoofdthema) {
+        this.hoofdthema = hoofdthema;
     }
 }

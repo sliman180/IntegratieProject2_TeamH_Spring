@@ -1,13 +1,13 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Subthema;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+/**
+ * Created by lollik on 18/02/2016.
+ */
 public interface SubthemaService {
-    void createSubthema(Subthema subthema);
-
-    List<Subthema> findAll();
+    Subthema subthemaMaken(Subthema subthema);
+    List<Subthema> subthemasOphalen();
 }
