@@ -4,18 +4,11 @@ import be.kdg.teamh.entities.Organisatie;
 
 import java.util.List;
 
-
-public interface OrganisatieService {
-
-    Organisatie addOrganisatie(Organisatie organisatie);
-
-    Organisatie getOrganisatie(int id);
-
-    Organisatie editOrganisatie(Organisatie organisatie);
-
-    void deleteOrganisatie(int id);
-
-    List<Organisatie> readAllOrganisaties();
-
-
+public interface OrganisatieService
+{
+    List<Organisatie> all();
+    void create(Organisatie organisatie);
+    Organisatie find(int id);
+    void update(int id, Organisatie organisatie);
+    void delete(int id);
 }

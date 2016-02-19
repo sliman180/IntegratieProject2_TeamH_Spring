@@ -10,43 +10,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/organisatie")
-public class OrganisatieController {
-
+@RequestMapping("/organisaties")
+public class OrganisatieController
+{
     @Autowired
-    private OrganisatieService organisatieService;
+    private OrganisatieService service;
 
-    @ResponseBody
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Organisatie> index() {
-        return organisatieService.readAllOrganisaties();
+    public List<Organisatie> index()
+    {
+        return service.all();
     }
-
 
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    @ResponseBody
-    public Organisatie create(@RequestBody Organisatie organisatie) {
-
-        return organisatieService.addOrganisatie(organisatie);
-
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public void create(@RequestBody Organisatie organisatie)
+    {
+        service.create(organisatie);
     }
 
-    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Organisatie> getOrganisatie(@PathVariable Integer id) {
-        Organisatie organisatie = organisatieService.getOrganisatie(id);
-        if (organisatie == null) return new ResponseEntity<>(organisatie, HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(organisatie, HttpStatus.OK);
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Organisatie show(@PathVariable int id)
+    {
+        return service.find(id);
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    public Organisatie update(@RequestBody Organisatie organisatie) {
-        return organisatieService.editOrganisatie(organisatie);
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie)
+    {
+        service.update(id, organisatie);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) {
-        organisatieService.deleteOrganisatie(id);
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") int id)
+    {
+        service.delete(id);
     }
 }

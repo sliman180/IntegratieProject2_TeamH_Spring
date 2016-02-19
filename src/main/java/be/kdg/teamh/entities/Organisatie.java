@@ -4,8 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "organisatie")
-public class Organisatie {
+@Table(name = "organisaties")
+public class Organisatie
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,44 +21,55 @@ public class Organisatie {
     @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker organisator;
 
-    public Organisatie() {
+    public Organisatie()
+    {
+        // JPA Constructor
     }
 
-    public Organisatie(String naam, String beschrijving, Gebruiker organisator) {
+    public Organisatie(String naam, String beschrijving, Gebruiker organisator)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.organisator = organisator;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public String getNaam() {
+    public String getNaam()
+    {
         return naam;
     }
 
-    public void setNaam(String naam) {
+    public void setNaam(String naam)
+    {
         this.naam = naam;
     }
 
-    public String getBeschrijving() {
+    public String getBeschrijving()
+    {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
+    public void setBeschrijving(String beschrijving)
+    {
         this.beschrijving = beschrijving;
     }
 
-    public Gebruiker getOrganisator() {
+    public Gebruiker getOrganisator()
+    {
         return organisator;
     }
 
-    public void setOrganisator(Gebruiker organisator) {
+    public void setOrganisator(Gebruiker organisator)
+    {
         this.organisator = organisator;
     }
 }

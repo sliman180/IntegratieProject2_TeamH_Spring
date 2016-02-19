@@ -8,37 +8,43 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrganisatieServiceImpl implements OrganisatieService {
-
+public class OrganisatieServiceImpl implements OrganisatieService
+{
     @Autowired
-    OrganisatieRepository organisatieRepository;
+    OrganisatieRepository repository;
 
     @Override
-    public Organisatie addOrganisatie(Organisatie organisatie) {
-        return organisatieRepository.save(organisatie);
+    public List<Organisatie> all()
+    {
+        return repository.findAll();
     }
 
     @Override
-    public Organisatie getOrganisatie(int id) {
-        try {
-            return organisatieRepository.findOne(id);
-        } catch (IndexOutOfBoundsException ie) {
-            return null;
-        }
+    public void create(Organisatie organisatie)
+    {
+        repository.save(organisatie);
     }
 
     @Override
-    public Organisatie editOrganisatie(Organisatie organisatie) {
-        return organisatieRepository.save(organisatie);
+    public Organisatie find(int id)
+    {
+        return repository.findOne(id);
     }
 
     @Override
-    public void deleteOrganisatie(int id) {
-        organisatieRepository.delete(id);
+    public void update(int id, Organisatie organisatie)
+    {
+        Organisatie old = repository.findOne(id);
+
+        old.setNaam(organisatie.getNaam());
+        old.setBeschrijving(organisatie.getBeschrijving());
+
+        repository.save(old);
     }
 
     @Override
-    public List<Organisatie> readAllOrganisaties() {
-        return organisatieRepository.findAll();
+    public void delete(int id)
+    {
+        repository.delete(id);
     }
 }
