@@ -5,3 +5,4 @@ jdk:
 
 notifications:
   slack: integratieproject2:JhoQxoRUfWvTPc7y5JTq18FN
+  email: false
