@@ -4,6 +4,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Tag;
+import be.kdg.teamh.exceptions.HoofdthemaNotFound;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -102,11 +103,7 @@ public class HoofdthemaTest
             .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
 
-    /*
-
-    TODO
-
-    @Test
+    @Test(expected = NestedServletException.class)
     public void showHoofdthema_nonExistingHoofdthema() throws Exception
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
@@ -120,8 +117,6 @@ public class HoofdthemaTest
             .andExpect(jsonPath("$.naam", is("Voetbal")))
             .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
-
-    */
 
     @Test
     public void updateHoofdthema() throws Exception
