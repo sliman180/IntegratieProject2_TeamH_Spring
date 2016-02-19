@@ -17,12 +17,32 @@ public class SubthemaServiceImpl implements SubthemaService {
     private SubthemaRepository subthemaRepository;
 
     @Override
-    public Subthema subthemaMaken(Subthema subthema) {
-        return this.subthemaRepository.save(subthema);
+    public void subthemaMaken(Subthema subthema) {
+        this.subthemaRepository.save(subthema);
     }
 
     @Override
     public List<Subthema> subthemasOphalen() {
         return this.subthemaRepository.findAll();
+    }
+
+    @Override
+    public void subthemaVerwijderen(int id) {
+        this.subthemaRepository.delete(id);
+    }
+
+    @Override
+    public Subthema subthemaOphalen(int id) {
+        return this.subthemaRepository.findOne(id);
+    }
+
+    @Override
+    public void subthemaAnpassen(int id, Subthema subthema) {
+        Subthema old = this.subthemaRepository.findOne(id);
+
+        old.setNaam(subthema.getNaam());
+        old.setBeschrijving(subthema.getBeschrijving());
+
+        this.subthemaRepository.save(old);
     }
 }

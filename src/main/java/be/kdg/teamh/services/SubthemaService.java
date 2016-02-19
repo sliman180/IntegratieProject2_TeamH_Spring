@@ -8,6 +8,9 @@ import java.util.List;
  * Created by lollik on 18/02/2016.
  */
 public interface SubthemaService {
-    Subthema subthemaMaken(Subthema subthema);
+    void subthemaMaken(Subthema subthema);
     List<Subthema> subthemasOphalen();
+    void subthemaVerwijderen(int id);
+    Subthema subthemaOphalen(int id);
+    void subthemaAnpassen(int id, Subthema subthema);
 }

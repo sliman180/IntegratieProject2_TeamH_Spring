@@ -1,20 +1,18 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Subthema;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -24,12 +22,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-/**
- * Created by lollik on 18/02/2016.
- */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SubthemaIT {
 
     private MockMvc mockMvc;
@@ -46,27 +42,89 @@ public class SubthemaIT {
     }
 
     @Test
-    public void subthemaAanmakenEnKoppelenAanHoofdthema() throws Exception {
-        Hoofdthema hoofdthema = new Hoofdthema("MTB","Ardennen");
-        Subthema subthema = new Subthema("Houfallize", "Route 6",hoofdthema);
+    public void createSubthema() throws Exception {
+        Subthema subthema = new Subthema("Houffalize", "Route 6");
         String jsonSubthema = gson.toJson(subthema);
 
-        MvcResult postResult = this.mockMvc.perform(post("/subthemas/create").contentType(MediaType.APPLICATION_JSON).content(jsonSubthema))
-                .andExpect(status().isCreated())
-                .andDo(print()).andReturn();
-
-        Subthema responseSubthema = gson.fromJson(postResult.getResponse().getContentAsString(), Subthema.class);
+        this.mockMvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(jsonSubthema))
+                .andExpect(status().isCreated());
 
         this.mockMvc.perform(get("/subthemas").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$",hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(responseSubthema.getId())))
-                .andExpect(jsonPath("$[0].naam",is(responseSubthema.getNaam())))
-                .andExpect(jsonPath("$[0].beschrijving",is(responseSubthema.getBeschrijving())))
-                .andExpect(jsonPath("$[0].hoofdthema.id",is(responseSubthema.getHoofdthema().getId())))
-                .andExpect(jsonPath("$[0].hoofdthema.naam",is(responseSubthema.getHoofdthema().getNaam())))
-                .andExpect(jsonPath("$[0].hoofdthema.beschrijving",is(responseSubthema.getHoofdthema().getBeschrijving())))
-                .andDo(print());
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam",is("Houffalize")))
+                .andExpect(jsonPath("$[0].beschrijving",is("Route 6")));
+    }
+
+    @Test
+    public void deleteSubthema() throws Exception {
+        Subthema subthema = new Subthema("Houffalize", "Route 6");
+        String jsonSubthema = gson.toJson(subthema);
+
+        this.mockMvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(jsonSubthema))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(delete("/subthemas/1"))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/subthemas").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void updateSubthema() throws Exception {
+        Subthema subthema = new Subthema("Houffalize", "Route 6");
+        String jsonSubthema = gson.toJson(subthema);
+
+        this.mockMvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(jsonSubthema))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        Subthema subthema1 = new Subthema("Houffalize","Route 3");
+        String jsonConten1 = gson.toJson(subthema1);
+
+        this.mockMvc.perform(put("/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(jsonConten1))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam",is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving",is("Route 3")));
 
     }
+
+    @Test
+    public void showSubthema() throws Exception {
+        Subthema subthema = new Subthema("Houffalize", "Route 6");
+        String jsonSubthema = gson.toJson(subthema);
+
+        this.mockMvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(jsonSubthema))
+                .andExpect(status().isCreated());
+
+        this.mockMvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam",is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving",is("Route 6")));
+    }
+
+    @Test
+    public void indexSubthema() throws Exception {
+        this.mockMvc.perform(get("/subthemas").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+
 }

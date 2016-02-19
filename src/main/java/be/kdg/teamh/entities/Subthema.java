@@ -1,6 +1,7 @@
 package be.kdg.teamh.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Subthema {
@@ -10,16 +11,13 @@ public class Subthema {
     private int id;
     private String naam;
     private String beschrijving;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Hoofdthema hoofdthema;
 
     public Subthema() {
     }
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema) {
+    public Subthema(String naam, String beschrijving) {
         this.naam = naam;
         this.beschrijving = beschrijving;
-        this.hoofdthema = hoofdthema;
     }
 
     public int getId() {
@@ -40,13 +38,5 @@ public class Subthema {
 
     public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
-    }
-
-    public Hoofdthema getHoofdthema() {
-        return hoofdthema;
-    }
-
-    public void setHoofdthema(Hoofdthema hoofdthema) {
-        this.hoofdthema = hoofdthema;
     }
 }
