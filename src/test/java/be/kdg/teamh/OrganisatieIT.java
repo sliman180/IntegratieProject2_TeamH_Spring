@@ -101,31 +101,37 @@ public class OrganisatieIT {
                 .andExpect(status().isNotFound());
     }
 
-    /*@Test
+    @Test
     public void wijzigOrganisatie() throws Exception {
+        Organisatie organisatie = new Organisatie("NaamOrganisatie", "Beschrijving", testGebruiker);
+        String json = gson.toJson(organisatie);
+
+        this.mvc.perform(post("/organisatie/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)).andDo(print())
+                .andExpect(status().isOk());
+
         organisatie.setNaam("NieuweNaam");
+
 
         Gson gson = new Gson();
         String gewijzigdeOrganisatieString = gson.toJson(organisatie);
 
-
-
-        this.mvc.perform(put("/organisatie/edit")
+        MvcResult result = this.mvc.perform(put("/organisatie/edit")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(gewijzigdeOrganisatieString))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
 
+        String jsonn = result.getResponse().getContentAsString();
+        Organisatie opgeslagenOrganisatie = gson.fromJson(jsonn, Organisatie.class);
 
-        this.mvc.perform(get("/organisatie/get/"+organisatie.getId()+"")
+        int id = opgeslagenOrganisatie.getId();
+
+        this.mvc.perform(get("/organisatie/get/" + id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$.naam", is("NieuweNaam")));
-
-
-
-//        this.mvc.perform("organisatie/get/" + id)
-//                .andExpect(status().);
-    }*/
+                .andExpect(jsonPath("$.naam", is(opgeslagenOrganisatie.getNaam()))).andDo(print());
+    }
 
     @Test
     public void getOrganisatie() throws Exception {
