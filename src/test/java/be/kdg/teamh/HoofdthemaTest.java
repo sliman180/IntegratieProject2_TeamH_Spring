@@ -110,7 +110,7 @@ public class HoofdthemaTest
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Vernieuw voetbalveld")));
+            .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
     }
 
     @Test
