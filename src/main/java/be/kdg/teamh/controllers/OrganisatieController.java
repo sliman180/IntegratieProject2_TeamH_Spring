@@ -24,28 +24,31 @@ public class OrganisatieController {
     }
 
 
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public Organisatie create(@RequestBody Organisatie organisatie) {
+    public void create(@RequestBody Organisatie organisatie) {
 
-        return organisatieService.addOrganisatie(organisatie);
+        organisatieService.addOrganisatie(organisatie);
 
     }
 
-    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ResponseEntity<Organisatie> getOrganisatie(@PathVariable Integer id) {
         Organisatie organisatie = organisatieService.getOrganisatie(id);
         if (organisatie == null) return new ResponseEntity<>(organisatie, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(organisatie, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
-    public Organisatie update(@RequestBody Organisatie organisatie) {
-        return organisatieService.editOrganisatie(organisatie);
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie) {
+        organisatieService.editOrganisatie(id, organisatie);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id) {
         organisatieService.deleteOrganisatie(id);
     }

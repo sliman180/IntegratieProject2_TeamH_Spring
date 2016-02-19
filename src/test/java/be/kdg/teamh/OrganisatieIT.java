@@ -16,7 +16,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -71,25 +70,20 @@ public class OrganisatieIT {
     @Test
     public void maakOrganisatie() throws Exception {
 
-
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", testGebruiker));
 
-        MvcResult result = this.mvc.perform(post("/organisatie/create")
+        this.mvc.perform(post("/organisatie")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)).andDo(print())
-                .andExpect(status().isOk()).andReturn();
-
-
-        String jsonn = result.getResponse().getContentAsString();
-        Organisatie organisatie = gson.fromJson(jsonn, Organisatie.class);
+                .andExpect(status().isCreated());
 
 
         this.mvc.perform(get("/organisatie").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(organisatie.getId())))
-                .andExpect(jsonPath("$[0].naam", is(organisatie.getNaam())))
-                .andExpect(jsonPath("$[0].beschrijving", is(organisatie.getBeschrijving())));
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam", is("NaamOrganisatie")))
+                .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
     }
 
 
@@ -97,19 +91,19 @@ public class OrganisatieIT {
     public void bestaatNietOrganisatie() throws Exception {
         Integer id = 420;
 
-        this.mvc.perform(get("/organisatie/get/" + id))
+        this.mvc.perform(get("/organisatie/" + id))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void wijzigOrganisatie() throws Exception {
-        Organisatie organisatie = new Organisatie("NaamOrganisatie", "Beschrijving", testGebruiker);
+        Organisatie organisatie = new Organisatie("teWijzigenNaam", "Beschrijving", testGebruiker);
         String json = gson.toJson(organisatie);
 
-        this.mvc.perform(post("/organisatie/create")
+        this.mvc.perform(post("/organisatie")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)).andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         organisatie.setNaam("NieuweNaam");
 
@@ -117,39 +111,29 @@ public class OrganisatieIT {
         Gson gson = new Gson();
         String gewijzigdeOrganisatieString = gson.toJson(organisatie);
 
-        MvcResult result = this.mvc.perform(put("/organisatie/edit")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+        this.mvc.perform(put("/organisatie/1")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(gewijzigdeOrganisatieString))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk());
 
-        String jsonn = result.getResponse().getContentAsString();
-        Organisatie opgeslagenOrganisatie = gson.fromJson(jsonn, Organisatie.class);
 
-        int id = opgeslagenOrganisatie.getId();
-
-        this.mvc.perform(get("/organisatie/get/" + id)
-                .contentType(MediaType.APPLICATION_JSON_UTF8))
+        this.mvc.perform(get("/organisatie/1")
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$.naam", is(opgeslagenOrganisatie.getNaam()))).andDo(print());
+                .andExpect(jsonPath("$.naam", is("NieuweNaam"))).andDo(print());
     }
 
     @Test
     public void getOrganisatie() throws Exception {
 
         String json = gson.toJson(new Organisatie("NaamOrganisatieOld", "Beschrijving", testGebruiker));
-
-        MvcResult result = this.mvc.perform(post("/organisatie/create")
+        this.mvc.perform(post("/organisatie")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)).andDo(print())
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isCreated());
 
 
-        String jsonn = result.getResponse().getContentAsString();
-        Organisatie opgeslagenOrganisatie = gson.fromJson(jsonn, Organisatie.class);
-
-        int id = opgeslagenOrganisatie.getId();
-
-        this.mvc.perform(get("/organisatie/get/" + id))
+        this.mvc.perform(get("/organisatie/1"))
                 .andExpect(status().isOk()).andDo(print());
     }
 
@@ -159,25 +143,18 @@ public class OrganisatieIT {
         Organisatie organisatie = new Organisatie("teVerwijderenOrganisatie", "Beschrijving", testGebruiker);
         String json = gson.toJson(organisatie);
 
-        MvcResult result = this.mvc.perform(post("/organisatie/create")
+        this.mvc.perform(post("/organisatie")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)).andDo(print())
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isCreated());
 
-        String jsonn = result.getResponse().getContentAsString();
-        Organisatie opgeslagenOrganisatie = gson.fromJson(jsonn, Organisatie.class);
-
-
-        int id = opgeslagenOrganisatie.getId();
-
-
-        this.mvc.perform(get("/organisatie/get/" + id))
+        this.mvc.perform(get("/organisatie/1"))
                 .andExpect(status().isOk());
 
-        this.mvc.perform(delete("/organisatie/delete/" + id))
+        this.mvc.perform(delete("/organisatie/1"))
                 .andExpect(status().isOk());
 
-        this.mvc.perform(get("/organisatie/get/" + id))
+        this.mvc.perform(get("/organisatie/1"))
                 .andExpect(status().isNotFound());
     }
 

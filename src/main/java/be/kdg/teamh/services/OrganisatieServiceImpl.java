@@ -14,8 +14,8 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     OrganisatieRepository organisatieRepository;
 
     @Override
-    public Organisatie addOrganisatie(Organisatie organisatie) {
-        return organisatieRepository.save(organisatie);
+    public void addOrganisatie(Organisatie organisatie) {
+        organisatieRepository.save(organisatie);
     }
 
     @Override
@@ -28,8 +28,15 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public Organisatie editOrganisatie(Organisatie organisatie) {
-        return organisatieRepository.save(organisatie);
+    public void editOrganisatie(int id, Organisatie organisatie) {
+        Organisatie old = organisatieRepository.findOne(id);
+
+        old.setNaam(organisatie.getNaam());
+        old.setBeschrijving(organisatie.getBeschrijving());
+        old.setOrganisator(organisatie.getOrganisator());
+
+
+        organisatieRepository.save(old);
     }
 
     @Override

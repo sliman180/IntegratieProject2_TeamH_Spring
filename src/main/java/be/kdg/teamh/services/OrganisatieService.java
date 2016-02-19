@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface OrganisatieService {
 
-    Organisatie addOrganisatie(Organisatie organisatie);
+    void addOrganisatie(Organisatie organisatie);
 
     Organisatie getOrganisatie(int id);
 
-    Organisatie editOrganisatie(Organisatie organisatie);
+    void editOrganisatie(int id, Organisatie organisatie);
 
     void deleteOrganisatie(int id);
 
