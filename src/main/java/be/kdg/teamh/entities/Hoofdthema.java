@@ -11,7 +11,6 @@ public class Hoofdthema
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "hoofdthemaId")
     private int id;
 
     @NotNull
@@ -26,7 +25,7 @@ public class Hoofdthema
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hoofdthema")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
     private Hoofdthema()
