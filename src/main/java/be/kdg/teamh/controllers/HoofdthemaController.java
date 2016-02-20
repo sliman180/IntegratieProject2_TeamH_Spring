@@ -39,14 +39,14 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema)
+    public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema) throws HoofdthemaNotFound
     {
         service.update(id, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id) throws HoofdthemaNotFound
     {
         service.delete(id);
     }
