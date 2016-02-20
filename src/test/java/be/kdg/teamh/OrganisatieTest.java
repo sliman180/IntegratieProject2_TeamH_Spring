@@ -10,16 +10,21 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,22 +34,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class OrganisatieTest {
-    @Mock
-    Gebruiker gebruiker;
+
     private MockMvc mvc;
     @Autowired
     private WebApplicationContext context;
     @Autowired
     private Gson gson;
 
+    @Mock
+    Gebruiker gebruiker;
+
+    @Autowired
+    FilterChainProxy filterChainProxy;
+
+    public static RequestPostProcessor login() {
+        return httpBasic("user", "user");
+    }
+
     @Before
-    public void setUp() throws Exception {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    public void setUp() throws Exception
+    {
+        this.mvc = MockMvcBuilders
+                .webAppContextSetup(this.context)
+                .addFilters(filterChainProxy)
+                .build();
     }
 
     @Test
-    public void indexOrganisatie() throws Exception {
-        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
+    public void indexOrganisatie() throws Exception
+    {
+        this.mvc.perform(get("/organisaties")
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -53,10 +73,14 @@ public class OrganisatieTest {
     public void createOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/organisaties").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1)))
@@ -68,7 +92,9 @@ public class OrganisatieTest {
     public void createOrganisatie_nullInput() throws Exception {
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
 
@@ -76,10 +102,13 @@ public class OrganisatieTest {
     public void showOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1")
+                .with(login())
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -91,15 +120,20 @@ public class OrganisatieTest {
     public void updateOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/organisaties/1")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
 
         this.mvc.perform(get("/organisaties/1")
+                .with(login())
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -111,40 +145,54 @@ public class OrganisatieTest {
     public void updateOrganisatie_nullInput() throws Exception {
         String json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie(null, null, gebruiker));
 
-        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/organisaties/1")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test(expected = NestedServletException.class)
     public void updateOrganisatie_nonExistingOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/organisaties/2")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
     public void deleteOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/organisaties/1"))
+        this.mvc.perform(get("/organisaties/1")
+                .with(login()))
                 .andExpect(status().isOk());
 
-        this.mvc.perform(delete("/organisaties/1"))
+        this.mvc.perform(delete("/organisaties/1")
+                .with(login()))
                 .andExpect(status().isOk());
 
-        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/organisaties")
+                .with(login())
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -153,9 +201,11 @@ public class OrganisatieTest {
     public void deleteOrganisatie_nonExistingOrganisatie() throws Exception {
         String json = gson.toJson(new Organisatie("KdG Organisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties")
+                .with(login())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/organisaties/2"));
+        this.mvc.perform(delete("/organisaties/2").with(login()));
     }
 }
