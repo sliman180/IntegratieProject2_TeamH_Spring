@@ -9,17 +9,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter
+{
     /**
      * This section defines the user accounts which can be used for
      * authentication as well as the roles each user has.
      */
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
 
         auth.inMemoryAuthentication()
-                .withUser("greg").password("turnquist").roles("USER").and()
-                .withUser("user").password("user").roles("USER", "ADMIN");
+            .withUser("user").password("user").roles("USER").and()
+            .withUser("admin").password("admin").roles("USER", "ADMIN");
     }
 
     /**
@@ -27,20 +29,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * - BASIC authentication is supported (enough for this REST-based demo)
      * - /employees is secured using URL security shown below
      * - CSRF headers are disabled since we are only testing the REST interface,
-     *   not a web one.
-     *
+     * not a web one.
+     * <p>
      * NOTE: GET is not shown which defaults to permitted.
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
+    protected void configure(HttpSecurity http) throws Exception
+    {
         http
-                .httpBasic().and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/organisaties").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/organisaties/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/organisaties/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/organisaties/**").hasRole("ADMIN").and()
-                .csrf().disable();
+            .httpBasic().and()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.GET, "/organisaties/**").hasRole("USER")
+            .antMatchers(HttpMethod.POST, "/organisaties").hasRole("ADMIN")
+            .antMatchers(HttpMethod.PUT, "/organisaties/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.DELETE, "/organisaties/**").hasRole("ADMIN")
+            .and().csrf().disable();
     }
 }
