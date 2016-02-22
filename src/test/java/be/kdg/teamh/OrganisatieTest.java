@@ -50,6 +50,9 @@ public class OrganisatieTest {
     public static RequestPostProcessor login() {
         return httpBasic("user", "user");
     }
+    public static RequestPostProcessor badLogin() {
+        return httpBasic("usher", "usher");
+    }
 
     @Before
     public void setUp() throws Exception
@@ -89,6 +92,21 @@ public class OrganisatieTest {
                 .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
     }
 
+    @Test
+    public void createOrganisatieUnauthorised() throws Exception {
+        String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
+
+        this.mvc.perform(post("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(get("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
     @Test(expected = NestedServletException.class)
     public void createOrganisatie_nullInput() throws Exception {
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
@@ -96,6 +114,16 @@ public class OrganisatieTest {
         this.mvc.perform(post("/organisaties")
                 .with(login())
                 .contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
+    @Test
+    public void createOrganisatie_nullInputUnauthorised() throws Exception {
+        String json = gson.toJson(new Organisatie(null, null, gebruiker));
+
+        this.mvc.perform(post("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
     }
 
 
@@ -115,6 +143,21 @@ public class OrganisatieTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
                 .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+    }
+
+    @Test
+    public void showOrganisatieUnauthorised() throws Exception {
+        String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
+
+        this.mvc.perform(post("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(get("/organisaties/1")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -140,6 +183,28 @@ public class OrganisatieTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
                 .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+    }
+
+    @Test
+    public void updateOrganisatieUnauthorised() throws Exception {
+        String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
+
+        this.mvc.perform(post("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
+
+        json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
+
+        this.mvc.perform(put("/organisaties/1")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(get("/organisaties/1")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test(expected = NestedServletException.class)
@@ -196,6 +261,29 @@ public class OrganisatieTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void deleteOrganisatieUnauthorised() throws Exception {
+        String json = gson.toJson(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
+
+        this.mvc.perform(post("/organisaties")
+                .with(badLogin())
+                .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(get("/organisaties/1")
+                .with(badLogin()))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(delete("/organisaties/1")
+                .with(badLogin()))
+                .andExpect(status().isUnauthorized());
+
+        this.mvc.perform(get("/organisaties")
+                .with(badLogin())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test(expected = NestedServletException.class)
