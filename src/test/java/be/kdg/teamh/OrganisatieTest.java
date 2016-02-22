@@ -64,6 +64,7 @@ public class OrganisatieTest {
     public void indexOrganisatie() throws Exception
     {
         this.mvc.perform(get("/organisaties")
+                .with(login())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
