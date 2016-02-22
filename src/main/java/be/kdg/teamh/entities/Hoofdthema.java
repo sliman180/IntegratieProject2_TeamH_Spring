@@ -3,6 +3,8 @@ package be.kdg.teamh.entities;
 import be.kdg.teamh.entities.Subthema;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,17 +13,31 @@ public class Hoofdthema {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String naam,beschrijving;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Subthema> subthemaList;
 
-    public Hoofdthema() {
+    @NotNull
+    private String naam;
+
+    @NotNull
+    private String beschrijving;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Organisatie organisatie;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Gebruiker gebruiker;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Tag> tags = new ArrayList<>();
+
+    private Hoofdthema()
+    {
+        // JPA constructor
     }
 
-    public Hoofdthema(String naam, String beschrijving, List<Subthema> subthemaList) {
+    public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
-        this.subthemaList = subthemaList;
     }
 
     public int getId() {
@@ -43,14 +59,4 @@ public class Hoofdthema {
     public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
     }
-
-    public List<Subthema> getSubthemaList() {
-        return subthemaList;
-    }
-
-    public void setSubthemaList(List<Subthema> subthemaList) {
-        this.subthemaList = subthemaList;
-    }
-
-    public void aadSubthema(Subthema subthema){this.subthemaList.add(subthema);}
 }
