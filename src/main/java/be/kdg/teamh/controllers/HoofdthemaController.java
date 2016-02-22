@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.exceptions.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.HoofdthemaNotFoundException;
 import be.kdg.teamh.services.HoofdthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,21 +32,21 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Hoofdthema show(@PathVariable("id") int id) throws HoofdthemaNotFound
+    public Hoofdthema show(@PathVariable("id") int id) throws HoofdthemaNotFoundException
     {
         return service.find(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema) throws HoofdthemaNotFound
+    public void update(@PathVariable("id") int id, @RequestBody Hoofdthema hoofdthema) throws HoofdthemaNotFoundException
     {
         service.update(id, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) throws HoofdthemaNotFound
+    public void delete(@PathVariable("id") int id) throws HoofdthemaNotFoundException
     {
         service.delete(id);
     }
