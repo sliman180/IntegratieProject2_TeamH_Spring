@@ -30,5 +30,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .antMatchers(HttpMethod.PUT, "/hoofdthemas/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.DELETE, "/hoofdthemas/**").hasRole("ADMIN")
             .and().csrf().disable();
+
+        http.httpBasic()
+                .and().authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/kaarten/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/kaarten").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/kaarten/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/kaarten/**").hasRole("ADMIN")
+                .and().csrf().disable();
     }
 }

@@ -15,6 +15,9 @@ public class Gebruiker
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Kaart> kaarten = new ArrayList<>();
+
     public Gebruiker()
     {
         // JPA constructor
