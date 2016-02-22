@@ -12,17 +12,28 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import javax.servlet.Filter;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +49,9 @@ public class HoofdthemaTest
     private WebApplicationContext context;
 
     @Autowired
+    private FilterChainProxy filterChainProxy;
+
+    @Autowired
     private Gson gson;
 
     @Mock
@@ -46,21 +60,25 @@ public class HoofdthemaTest
     @Mock
     private Gebruiker gebruiker;
 
-    @Mock
-    private Tag tag;
+
+    public static RequestPostProcessor login() {
+        return httpBasic("user", "user");
+    }
 
     @Before
-    public void setUp()
-    {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    public void setUp() throws Exception {
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter(filterChainProxy).build();
+
+
     }
 
     @Test
     public void indexHoofdthema() throws Exception
     {
-        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+        //.with(user("user").password("password").roles("USER"))
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
@@ -68,15 +86,15 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].naam", is("Voetbal")))
-            .andExpect(jsonPath("$[0].beschrijving", is("Nieuw voetbalveld")));
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam", is("Voetbal")))
+                .andExpect(jsonPath("$[0].beschrijving", is("Nieuw voetbalveld")));
     }
 
     @Test(expected = NestedServletException.class)
@@ -84,7 +102,7 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()));
     }
 
     @Test
@@ -92,29 +110,29 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
+        this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Voetbal")))
+                .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
 
-    @Test
+    @Test(expected = NestedServletException.class)
     public void showHoofdthema_nonExistingHoofdthema() throws Exception
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/hoofdthemas/2").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
+        this.mvc.perform(get("/hoofdthemas/2").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.naam", is("Voetbal")))
+                .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
 
     @Test
@@ -122,19 +140,19 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isOk());
+        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isOk());
 
-        this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
+        this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Voetbal")))
+                .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
     }
 
     @Test(expected = NestedServletException.class)
@@ -142,12 +160,12 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
 
-        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).with(login()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -155,12 +173,12 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(put("/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json).with(login()));
     }
 
     @Test
@@ -168,15 +186,15 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/hoofdthemas/1"))
-            .andExpect(status().isOk());
+        this.mvc.perform(delete("/hoofdthemas/1").with(login()))
+                .andExpect(status().isOk());
 
-        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+        this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON).with(login()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
@@ -184,9 +202,9 @@ public class HoofdthemaTest
     {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
+                .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/hoofdthemas/2"));
+        this.mvc.perform(delete("/hoofdthemas/2").with(login()));
     }
 }
