@@ -102,26 +102,12 @@ public class HoofdthemaTest
             .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
 
-    /*
-
-    TODO
-
-    @Test
+    @Test(expected = NestedServletException.class)
     public void showHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
-
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
-
-        this.mvc.perform(get("/hoofdthemas/2").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
+        this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
-
-    */
 
     @Test
     public void updateHoofdthema() throws Exception
@@ -159,14 +145,10 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
-
-        json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
-
-        this.mvc.perform(put("/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
+            .andExpect(status().isNotFound());
     }
 
     @Test
@@ -188,11 +170,7 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
-
-        this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
-
-        this.mvc.perform(delete("/hoofdthemas/2"));
+        this.mvc.perform(delete("/hoofdthemas/1"))
+            .andExpect(status().isNotFound());
     }
 }

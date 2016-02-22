@@ -1,6 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Hoofdthema;
+import be.kdg.teamh.exceptions.HoofdthemaNotFound;
 import be.kdg.teamh.repositories.HoofdthemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,27 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public Hoofdthema find(int id)
+    public Hoofdthema find(int id) throws HoofdthemaNotFound
     {
-        return repository.findOne(id);
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null)
+        {
+            throw new HoofdthemaNotFound();
+        }
+
+        return hoofdthema;
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema)
+    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFound
     {
         Hoofdthema old = repository.findOne(id);
+
+        if (old == null)
+        {
+            throw new HoofdthemaNotFound();
+        }
 
         old.setNaam(hoofdthema.getNaam());
         old.setBeschrijving(hoofdthema.getBeschrijving());
@@ -45,8 +58,15 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void delete(int id)
+    public void delete(int id) throws HoofdthemaNotFound
     {
-        repository.delete(id);
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null)
+        {
+            throw new HoofdthemaNotFound();
+        }
+
+        repository.delete(hoofdthema);
     }
 }
