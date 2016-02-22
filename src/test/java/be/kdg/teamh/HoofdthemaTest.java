@@ -141,7 +141,7 @@ public class HoofdthemaTest
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).with(login()))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated()); 
 
         json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
