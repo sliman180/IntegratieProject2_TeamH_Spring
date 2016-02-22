@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hoofdthemas")
 public class Hoofdthema
 {
     @Id
@@ -84,5 +83,15 @@ public class Hoofdthema
     public void setGebruiker(Gebruiker gebruiker)
     {
         this.gebruiker = gebruiker;
+    }
+
+    public List<Tag> getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags)
+    {
+        this.tags = tags;
     }
 }
