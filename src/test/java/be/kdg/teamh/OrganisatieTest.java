@@ -10,16 +10,19 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,21 +39,25 @@ public class OrganisatieTest
     private WebApplicationContext context;
 
     @Autowired
+    private FilterChainProxy filterChainProxy;
+
+    @Autowired
     private Gson gson;
 
     @Mock
-    Gebruiker gebruiker;
+    private Gebruiker gebruiker;
 
     @Before
     public void setUp() throws Exception
     {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilters(filterChainProxy).build();
     }
 
     @Test
     public void indexOrganisatie() throws Exception
     {
-        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON)
+            .with(loginAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -60,10 +67,12 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/organisaties").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/organisaties").contentType(MediaType.APPLICATION_JSON)
+            .with(loginAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
@@ -76,20 +85,21 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()));
     }
-
 
     @Test
     public void showOrganisatie() throws Exception
     {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/organisaties/1")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        this.mvc.perform(get("/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+            .with(loginAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
@@ -101,16 +111,18 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/organisaties/1")
-            .contentType(MediaType.APPLICATION_JSON_UTF8))
+        this.mvc.perform(get("/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8)
+            .with(loginAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
@@ -122,12 +134,15 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie(null, null, gebruiker));
 
-        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/organisaties/1")
+            .with(loginAsAdmin())
+            .contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test(expected = NestedServletException.class)
@@ -135,12 +150,15 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/organisaties/2")
+            .with(loginAsAdmin())
+            .contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
@@ -148,16 +166,20 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/organisaties/1"))
+        this.mvc.perform(get("/organisaties/1")
+            .with(loginAsUser()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(delete("/organisaties/1"))
+        this.mvc.perform(delete("/organisaties/1")
+            .with(loginAsAdmin()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON)
+            .with(loginAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -167,9 +189,25 @@ public class OrganisatieTest
     {
         String json = gson.toJson(new Organisatie("KdG Organisatie", "KdG", gebruiker));
 
-        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
+            .with(loginAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/organisaties/2"));
+        this.mvc.perform(delete("/organisaties/2").with(loginAsAdmin()));
+    }
+
+    private RequestPostProcessor loginAsUser()
+    {
+        return httpBasic("user", "user");
+    }
+
+    private RequestPostProcessor loginAsAdmin()
+    {
+        return httpBasic("admin", "admin");
+    }
+
+    private RequestPostProcessor loginWithWrongCredentials()
+    {
+        return httpBasic("wrong", "wrong");
     }
 }

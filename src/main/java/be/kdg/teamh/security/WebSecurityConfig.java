@@ -29,6 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             .antMatchers(HttpMethod.POST, "/hoofdthemas").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/hoofdthemas/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.DELETE, "/hoofdthemas/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET, "/organisaties/**").hasRole("USER")
+            .antMatchers(HttpMethod.POST, "/organisaties").hasRole("ADMIN")
+            .antMatchers(HttpMethod.PUT, "/organisaties/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.DELETE, "/organisaties/**").hasRole("ADMIN")
             .and().csrf().disable();
 
         http.httpBasic()
