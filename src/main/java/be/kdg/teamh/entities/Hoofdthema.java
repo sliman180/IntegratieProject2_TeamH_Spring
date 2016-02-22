@@ -25,6 +25,9 @@ public class Hoofdthema
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
+    private List<Subthema> subthemas = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
     private Hoofdthema()

@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.SubthemaNotFoundException;
 import be.kdg.teamh.services.SubthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,21 +32,21 @@ public class SubthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Subthema show(@PathVariable Integer id)
+    public Subthema show(@PathVariable Integer id) throws SubthemaNotFoundException
     {
         return service.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Subthema subthema)
+    public void update(@PathVariable("id") int id, @RequestBody Subthema subthema) throws SubthemaNotFoundException
     {
         service.update(id, subthema);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id) throws SubthemaNotFoundException
     {
         service.delete(id);
     }

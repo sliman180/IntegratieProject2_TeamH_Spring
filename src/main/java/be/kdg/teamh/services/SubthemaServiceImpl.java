@@ -1,6 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.SubthemaNotFoundException;
 import be.kdg.teamh.repositories.SubthemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,35 +17,54 @@ public class SubthemaServiceImpl implements SubthemaService
     @Override
     public List<Subthema> all()
     {
-        return this.repository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public void create(Subthema subthema)
     {
-        this.repository.save(subthema);
+        repository.save(subthema);
     }
 
     @Override
-    public Subthema find(int id)
+    public Subthema find(int id) throws SubthemaNotFoundException
     {
-        return this.repository.findOne(id);
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null)
+        {
+            throw new SubthemaNotFoundException();
+        }
+
+        return subthema;
     }
 
     @Override
-    public void update(int id, Subthema subthema)
+    public void update(int id, Subthema subthema) throws SubthemaNotFoundException
     {
-        Subthema old = this.repository.findOne(id);
+        Subthema old = repository.findOne(id);
+
+        if (subthema == null)
+        {
+            throw new SubthemaNotFoundException();
+        }
 
         old.setNaam(subthema.getNaam());
         old.setBeschrijving(subthema.getBeschrijving());
 
-        this.repository.save(old);
+        repository.save(old);
     }
 
     @Override
-    public void delete(int id)
+    public void delete(int id) throws SubthemaNotFoundException
     {
-        this.repository.delete(id);
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null)
+        {
+            throw new SubthemaNotFoundException();
+        }
+
+        repository.delete(subthema);
     }
 }

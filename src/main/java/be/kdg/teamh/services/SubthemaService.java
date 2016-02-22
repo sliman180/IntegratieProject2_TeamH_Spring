@@ -1,14 +1,15 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.SubthemaNotFoundException;
 
 import java.util.List;
 
 public interface SubthemaService
 {
-    void create(Subthema subthema);
     List<Subthema> all();
-    void delete(int id);
-    Subthema find(int id);
-    void update(int id, Subthema subthema);
+    void create(Subthema subthema);
+    Subthema find(int id) throws SubthemaNotFoundException;
+    void update(int id, Subthema subthema) throws SubthemaNotFoundException;
+    void delete(int id) throws SubthemaNotFoundException;
 }

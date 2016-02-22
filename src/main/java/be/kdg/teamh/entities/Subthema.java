@@ -2,6 +2,7 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,10 +22,10 @@ public class Subthema
     private Hoofdthema hoofdthema;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Cirkelsessie> cirkelsessies;
+    private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<SubthemaKaart> subthemaKaarten;
+    private List<SubthemaKaart> subthemaKaarten = new ArrayList<>();
 
     public Subthema()
     {
