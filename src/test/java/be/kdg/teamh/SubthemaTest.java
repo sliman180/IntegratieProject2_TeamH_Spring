@@ -117,7 +117,7 @@ public class SubthemaTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void showSubthema_nonExistingHoofdthema() throws Exception
+    public void showSubthema_nonExistingSubthema() throws Exception
     {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
@@ -153,7 +153,7 @@ public class SubthemaTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nullInput() throws Exception
+    public void updateSubthema_nullInput() throws Exception
     {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
@@ -168,7 +168,7 @@ public class SubthemaTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nonExistingHoofdthema() throws Exception
+    public void updateSubthema_nonExistingSubthema() throws Exception
     {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
@@ -202,7 +202,7 @@ public class SubthemaTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
+    public void deleteSubthema_nonExistingSubthema() throws Exception
     {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
