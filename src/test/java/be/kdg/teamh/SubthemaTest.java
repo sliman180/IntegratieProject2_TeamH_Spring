@@ -102,7 +102,7 @@ public class SubthemaTest {
     }
 
     @Test(expected = NestedServletException.class)
-    public void showSubthema_nonExistingHoofdthema() throws Exception {
+    public void showSubthema_nonExistingSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
@@ -150,7 +150,7 @@ public class SubthemaTest {
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nonExistingHoofdthema() throws Exception {
+    public void updateSubthema_nonExistingSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
@@ -182,7 +182,7 @@ public class SubthemaTest {
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception {
+    public void deleteSubthema_nonExistingSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
