@@ -35,8 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SubthemaTest
-{
+public class SubthemaTest {
     private MockMvc mvc;
 
     @Autowired
@@ -58,174 +57,161 @@ public class SubthemaTest
     private List<SubthemaKaart> subthemaKaarten;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter(filterChainProxy).build();
     }
 
     @Test
-    public void indexSubthema() throws Exception
-    {
+    public void indexSubthema() throws Exception {
         this.mvc.perform(get("/subthemas").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createSubthema() throws Exception
-    {
+    public void createSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/subthemas").contentType(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].naam", is("Houffalize")))
-            .andExpect(jsonPath("$[0].beschrijving", is("Route 6")));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam", is("Houffalize")))
+                .andExpect(jsonPath("$[0].beschrijving", is("Route 6")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createSubthema_nullInput() throws Exception
-    {
+    public void createSubthema_nullInput() throws Exception {
         String json = gson.toJson(new Subthema(null, null, hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test
-    public void showSubthema() throws Exception
-    {
+    public void showSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Houffalize")))
-            .andExpect(jsonPath("$.beschrijving", is("Route 6")));
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving", is("Route 6")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showSubthema_nonExistingHoofdthema() throws Exception
-    {
+    public void showSubthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/subthemas/2").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()));
+                .with(loginAsUser()));
     }
 
     @Test
-    public void updateSubthema() throws Exception
-    {
+    public void updateSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(put("/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk());
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/subthemas/1").contentType(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Houffalize")))
-            .andExpect(jsonPath("$.beschrijving", is("Route 3")));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving", is("Route 3")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nullInput() throws Exception
-    {
+    public void updateHoofdthema_nullInput() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Subthema(null, null, hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(put("/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nonExistingHoofdthema() throws Exception
-    {
+    public void updateHoofdthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(put("/subthemas/2").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test
-    public void deleteSubthema() throws Exception
-    {
+    public void deleteSubthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/subthemas/1")
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk());
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/subthemas").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
-    {
+    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/subthemas/2")
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
-    private RequestPostProcessor loginAsUser()
-    {
+
+    private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");
     }
 
-    private RequestPostProcessor loginAsAdmin()
-    {
+    private RequestPostProcessor loginAsAdmin() {
         return httpBasic("admin", "admin");
     }
 
-    private RequestPostProcessor loginWithWrongCredentials()
-    {
+    private RequestPostProcessor loginWithWrongCredentials() {
         return httpBasic("wrong", "wrong");
     }
 }

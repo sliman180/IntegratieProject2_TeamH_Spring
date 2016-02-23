@@ -3,6 +3,8 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "kaarten")
@@ -23,6 +25,9 @@ public class Kaart {
     private Gebruiker gebruiker;
 
     private boolean commentsToelaatbaar;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
 
     public Kaart() {
@@ -76,5 +81,17 @@ public class Kaart {
 
     public void setCommentsToelaatbaar(boolean commentsToelaatbaar) {
         this.commentsToelaatbaar = commentsToelaatbaar;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

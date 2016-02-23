@@ -9,30 +9,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HoofdthemaServiceImpl implements HoofdthemaService
-{
+public class HoofdthemaServiceImpl implements HoofdthemaService {
     @Autowired
     private HoofdthemaRepository repository;
 
     @Override
-    public List<Hoofdthema> all()
-    {
+    public List<Hoofdthema> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Hoofdthema hoofdthema)
-    {
+    public void create(Hoofdthema hoofdthema) {
         repository.save(hoofdthema);
     }
 
     @Override
-    public Hoofdthema find(int id) throws HoofdthemaNotFoundException
-    {
+    public Hoofdthema find(int id) throws HoofdthemaNotFoundException {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFoundException();
         }
 
@@ -40,12 +35,10 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFoundException
-    {
+    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFoundException {
         Hoofdthema old = repository.findOne(id);
 
-        if (old == null)
-        {
+        if (old == null) {
             throw new HoofdthemaNotFoundException();
         }
 
@@ -58,12 +51,10 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFoundException
-    {
+    public void delete(int id) throws HoofdthemaNotFoundException {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFoundException();
         }
 

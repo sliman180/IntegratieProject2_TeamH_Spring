@@ -8,31 +8,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrganisatieServiceImpl implements OrganisatieService
-{
+public class OrganisatieServiceImpl implements OrganisatieService {
     @Autowired
     OrganisatieRepository repository;
 
-    public List<Organisatie> all()
-    {
+    public List<Organisatie> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Organisatie organisatie)
-    {
+    public void create(Organisatie organisatie) {
         repository.save(organisatie);
     }
 
     @Override
-    public Organisatie find(int id)
-    {
+    public Organisatie find(int id) {
         return repository.findOne(id);
     }
 
     @Override
-    public void update(int id, Organisatie organisatie)
-    {
+    public void update(int id, Organisatie organisatie) {
         Organisatie old = repository.findOne(id);
 
         old.setNaam(organisatie.getNaam());
@@ -43,8 +38,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void delete(int id)
-    {
+    public void delete(int id) {
         repository.delete(id);
     }
 }

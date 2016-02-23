@@ -5,11 +5,14 @@ import be.kdg.teamh.exceptions.SubthemaNotFoundException;
 
 import java.util.List;
 
-public interface SubthemaService
-{
+public interface SubthemaService {
     List<Subthema> all();
+
     void create(Subthema subthema);
+
     Subthema find(int id) throws SubthemaNotFoundException;
+
     void update(int id, Subthema subthema) throws SubthemaNotFoundException;
+
     void delete(int id) throws SubthemaNotFoundException;
 }

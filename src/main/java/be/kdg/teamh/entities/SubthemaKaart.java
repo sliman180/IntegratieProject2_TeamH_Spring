@@ -3,8 +3,7 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 
 @Entity
-public class SubthemaKaart
-{
+public class SubthemaKaart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -12,28 +11,23 @@ public class SubthemaKaart
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
 
-    public SubthemaKaart()
-    {
+    public SubthemaKaart() {
         // JPA Constructor
     }
 
-    public SubthemaKaart(Subthema subthema)
-    {
+    public SubthemaKaart(Subthema subthema) {
         this.subthema = subthema;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public Subthema getSubthema()
-    {
+    public Subthema getSubthema() {
         return subthema;
     }
 
-    public void setSubthema(Subthema subthema)
-    {
+    public void setSubthema(Subthema subthema) {
         this.subthema = subthema;
     }
 }

@@ -5,8 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-public class Cirkelsessie
-{
+public class Cirkelsessie {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -23,61 +22,50 @@ public class Cirkelsessie
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
 
-    public Cirkelsessie()
-    {
+    public Cirkelsessie() {
         // JPA Constructor
     }
 
-    public Cirkelsessie(String naam, Date datum, int maxAantalKaarten, Subthema subthema)
-    {
+    public Cirkelsessie(String naam, Date datum, int maxAantalKaarten, Subthema subthema) {
         this.naam = naam;
         this.datum = datum;
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public Date getDatum()
-    {
+    public Date getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum)
-    {
+    public void setDatum(Date datum) {
         this.datum = datum;
     }
 
-    public int getMaxAantalKaarten()
-    {
+    public int getMaxAantalKaarten() {
         return maxAantalKaarten;
     }
 
-    public void setMaxAantalKaarten(int maxAantalKaarten)
-    {
+    public void setMaxAantalKaarten(int maxAantalKaarten) {
         this.maxAantalKaarten = maxAantalKaarten;
     }
 
-    public Subthema getSubthema()
-    {
+    public Subthema getSubthema() {
         return subthema;
     }
 
-    public void setSubthema(Subthema subthema)
-    {
+    public void setSubthema(Subthema subthema) {
         this.subthema = subthema;
     }
 }

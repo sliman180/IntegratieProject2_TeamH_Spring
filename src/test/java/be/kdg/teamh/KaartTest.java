@@ -1,5 +1,6 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.entities.Comment;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Kaart;
 import com.google.gson.Gson;
@@ -24,7 +25,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,7 +68,7 @@ public class KaartTest {
 
         this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
-                .andExpect(status().isCreated()).andDo(print());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/kaarten").accept(MediaType.APPLICATION_JSON)
                 .with(loginAsAdmin()))
@@ -193,6 +193,62 @@ public class KaartTest {
 
         this.mvc.perform(delete("/kaarten/2")
                 .with(loginAsAdmin()));
+    }
+
+
+    @Test
+    public void commentToevoegenAanKaart() throws Exception {
+        String kaartJson = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(kaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/kaarten").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
+                .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+
+
+        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+
+
+        this.mvc.perform(post("/kaarten/1/addComment").contentType(MediaType.APPLICATION_JSON).content(commentJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/kaarten/1/getComments").contentType(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void commentToevoegenAanKaart_nietToegelaten() throws Exception {
+        String kaartJson = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(kaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/kaarten").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
+                .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+
+
+        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+
+
+        this.mvc.perform(post("/kaarten/1/addComment").contentType(MediaType.APPLICATION_JSON).content(commentJson)
+                .with(loginAsAdmin()));
+
     }
 
 

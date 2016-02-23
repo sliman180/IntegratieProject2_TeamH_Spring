@@ -32,8 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HoofdthemaTest
-{
+public class HoofdthemaTest {
     private MockMvc mvc;
 
     @Autowired
@@ -52,174 +51,160 @@ public class HoofdthemaTest
     private Gebruiker gebruiker;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter(filterChainProxy).build();
     }
 
     @Test
-    public void indexHoofdthema() throws Exception
-    {
+    public void indexHoofdthema() throws Exception {
         this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createHoofdthema() throws Exception
-    {
+    public void createHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].naam", is("Voetbal")))
-            .andExpect(jsonPath("$[0].beschrijving", is("Nieuw voetbalveld")));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam", is("Voetbal")))
+                .andExpect(jsonPath("$[0].beschrijving", is("Nieuw voetbalveld")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createHoofdthema_nullInput() throws Exception
-    {
+    public void createHoofdthema_nullInput() throws Exception {
         String json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test
-    public void showHoofdthema() throws Exception
-    {
+    public void showHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Voetbal")))
+                .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showHoofdthema_nonExistingHoofdthema() throws Exception
-    {
+    public void showHoofdthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/hoofdthemas/2").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()));
+                .with(loginAsUser()));
     }
 
     @Test
-    public void updateHoofdthema() throws Exception
-    {
+    public void updateHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk());
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/hoofdthemas/1").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Voetbal")))
+                .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nullInput() throws Exception
-    {
+    public void updateHoofdthema_nullInput() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
 
         this.mvc.perform(put("/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nonExistingHoofdthema() throws Exception
-    {
+    public void updateHoofdthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(put("/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
     @Test
-    public void deleteHoofdthema() throws Exception
-    {
+    public void deleteHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/hoofdthemas/1")
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk());
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/hoofdthemas").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsAdmin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
-    {
+    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception {
         String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
-            .andExpect(status().isCreated());
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/hoofdthemas/2")
-            .with(loginAsAdmin()));
+                .with(loginAsAdmin()));
     }
 
-    private RequestPostProcessor loginAsUser()
-    {
+    private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");
     }
 
-    private RequestPostProcessor loginAsAdmin()
-    {
+    private RequestPostProcessor loginAsAdmin() {
         return httpBasic("admin", "admin");
     }
 
-    private RequestPostProcessor loginWithWrongCredentials()
-    {
+    private RequestPostProcessor loginWithWrongCredentials() {
         return httpBasic("wrong", "wrong");
     }
 }

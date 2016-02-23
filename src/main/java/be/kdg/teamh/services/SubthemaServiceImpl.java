@@ -9,30 +9,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SubthemaServiceImpl implements SubthemaService
-{
+public class SubthemaServiceImpl implements SubthemaService {
     @Autowired
     private SubthemaRepository repository;
 
     @Override
-    public List<Subthema> all()
-    {
+    public List<Subthema> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Subthema subthema)
-    {
+    public void create(Subthema subthema) {
         repository.save(subthema);
     }
 
     @Override
-    public Subthema find(int id) throws SubthemaNotFoundException
-    {
+    public Subthema find(int id) throws SubthemaNotFoundException {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null)
-        {
+        if (subthema == null) {
             throw new SubthemaNotFoundException();
         }
 
@@ -40,12 +35,10 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void update(int id, Subthema subthema) throws SubthemaNotFoundException
-    {
+    public void update(int id, Subthema subthema) throws SubthemaNotFoundException {
         Subthema old = repository.findOne(id);
 
-        if (subthema == null)
-        {
+        if (subthema == null) {
             throw new SubthemaNotFoundException();
         }
 
@@ -56,12 +49,10 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void delete(int id) throws SubthemaNotFoundException
-    {
+    public void delete(int id) throws SubthemaNotFoundException {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null)
-        {
+        if (subthema == null) {
             throw new SubthemaNotFoundException();
         }
 
