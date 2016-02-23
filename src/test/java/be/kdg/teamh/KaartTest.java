@@ -23,8 +23,7 @@ import org.springframework.web.util.NestedServletException;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -81,12 +80,121 @@ public class KaartTest {
     }
 
     @Test(expected = NestedServletException.class)
-    public void createHoofdthema_nullInput() throws Exception {
+    public void createKaart_nullInput() throws Exception {
         String json = gson.toJson(new Kaart(null, null, true, gebruiker));
 
         this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
     }
+
+    @Test
+    public void showKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/kaarten/1").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.imageUrl", is("http://www.afbeeldingurl.be")))
+                .andExpect(jsonPath("$.tekst", is("Een kaartje")));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void showKaart_nonExistingKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/kaarten/2").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsUser()));
+    }
+
+    @Test
+    public void updateKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(put("/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
+
+        this.mvc.perform(get("/kaarten/1").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.tekst", is("Een gewijzigde kaartje")))
+                .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeeldingurl.be")));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void updateKaart_nullInput() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Kaart(null, null, true, gebruiker));
+
+        this.mvc.perform(put("/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void updateKaart_nonExistingKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(put("/kaarten/2").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()));
+    }
+
+    @Test
+    public void deleteKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(delete("/kaarten/1")
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
+
+        this.mvc.perform(get("/kaarten").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void deleteKaart_nonExistingKaart() throws Exception {
+        String json = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(delete("/kaarten/2")
+                .with(loginAsAdmin()));
+    }
+
 
     private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");
