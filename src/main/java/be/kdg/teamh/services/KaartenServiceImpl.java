@@ -3,6 +3,7 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Comment;
 import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.KaartNotFoundException;
 import be.kdg.teamh.repositories.KaartenRepository;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 public class KaartenServiceImpl implements KaartenService {
+
 
     @Autowired
     KaartenRepository repository;
@@ -25,6 +27,7 @@ public class KaartenServiceImpl implements KaartenService {
     public void create(Kaart kaart) {
         repository.save(kaart);
     }
+
 
     @Override
     public Kaart find(int id) throws KaartNotFoundException {
@@ -86,4 +89,23 @@ public class KaartenServiceImpl implements KaartenService {
         Kaart kaart = repository.findOne(id);
         return kaart.getComments();
     }
+
+    @Override
+    public void addSubthema(int id, Subthema subthema) {
+
+        Kaart kaart = repository.findOne(id);
+        kaart.addSubthema(subthema);
+        repository.save(kaart);
+
+
+    }
+
+    @Override
+    public List<Subthema> getSubthemas(int id) {
+        Kaart kaart = repository.findOne(id);
+
+        return kaart.getSubthemas();
+    }
 }
+
+

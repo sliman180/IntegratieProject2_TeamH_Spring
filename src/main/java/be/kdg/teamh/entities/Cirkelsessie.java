@@ -2,7 +2,9 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Cirkelsessie {
@@ -13,7 +15,7 @@ public class Cirkelsessie {
     @NotNull
     private String naam;
 
-    @NotNull
+
     private Date datum;
 
     @NotNull
@@ -21,6 +23,10 @@ public class Cirkelsessie {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Spelkaart> spelkaarten = new ArrayList<>();
+
 
     public Cirkelsessie() {
         // JPA Constructor
@@ -33,8 +39,17 @@ public class Cirkelsessie {
         this.subthema = subthema;
     }
 
+    public Cirkelsessie(String naam, int maxAantalKaarten) {
+        this.naam = naam;
+        this.maxAantalKaarten = maxAantalKaarten;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNaam() {
@@ -67,5 +82,17 @@ public class Cirkelsessie {
 
     public void setSubthema(Subthema subthema) {
         this.subthema = subthema;
+    }
+
+    public List<Spelkaart> getSpelkaarten() {
+        return spelkaarten;
+    }
+
+    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+        this.spelkaarten = spelkaarten;
+    }
+
+    public void addSpelkaart(Spelkaart spelkaart) {
+        spelkaarten.add(spelkaart);
     }
 }

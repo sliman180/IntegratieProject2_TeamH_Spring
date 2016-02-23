@@ -32,6 +32,9 @@ public class Kaart {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Subthema> subthemas = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Spelkaart> spelkaarten = new ArrayList<>();
+
 
     public Kaart() {
 
@@ -96,5 +99,21 @@ public class Kaart {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void addSubthema(Subthema subthema) {
+        this.subthemas.add(subthema);
+    }
+
+    public List<Subthema> getSubthemas() {
+        return subthemas;
+    }
+
+    public void setSubthemas(List<Subthema> subthemas) {
+        this.subthemas = subthemas;
+    }
+
+    public void addSpelkaart(Spelkaart spelkaart) {
+        this.spelkaarten.add(spelkaart);
     }
 }

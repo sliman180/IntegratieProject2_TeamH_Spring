@@ -1,8 +1,6 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.entities.Comment;
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.*;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +23,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,6 +47,9 @@ public class KaartTest {
 
     @Mock
     private Gebruiker gebruiker;
+
+    @Mock
+    private Hoofdthema hoofdthema;
 
     @Before
     public void setUp() throws Exception {
@@ -251,6 +253,73 @@ public class KaartTest {
 
     }
 
+
+    @Test
+    public void koppelKaartAanSubthema() throws Exception {
+
+        String kaartJson = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(kaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        String subthemaJson = gson.toJson(new Subthema("Een subthema", "beschrijving", hoofdthema));
+        String subthemaJson2 = gson.toJson(new Subthema("Een subthema 2", "beschrijving", hoofdthema));
+
+
+        this.mvc.perform(post("/kaarten/1/addSubthema").contentType(MediaType.APPLICATION_JSON).content(subthemaJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(post("/kaarten/1/addSubthema").contentType(MediaType.APPLICATION_JSON).content(subthemaJson2)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+
+        this.mvc.perform(get("/kaarten/1/getSubthemas").contentType(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2))).andDo(print());
+
+
+    }
+
+
+    @Test
+    public void verschuifKaartMetEénStap() throws Exception {
+
+
+        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
+
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10);
+
+        String spelkaartJson = gson.toJson(new Spelkaart(kaart, cirkelsessie));
+
+        this.mvc.perform(post("/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+
+        this.mvc.perform(patch("/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
+
+
+        this.mvc.perform(get("/spelkaarten/1").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.positie", is(1)));
+
+
+    }
+
+//    @Test
+//    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
+//
+//
+//
+//    }
 
     private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");
