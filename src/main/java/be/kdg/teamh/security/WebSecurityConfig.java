@@ -8,14 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
-    {
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("user").password("user").roles("USER").and()
                 .withUser("admin").password("admin").roles("USER", "ADMIN");
@@ -24,11 +21,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/cirkelsessies/**").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/cirkelsessies").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/cirkelsessies/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/cirkelsessies/**").hasRole("ADMIN")
 
-        .and().csrf().disable();
+                .antMatchers(HttpMethod.GET, "/hoofdthemas/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/hoofdthemas").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/hoofdthemas/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/hoofdthemas/**").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/subthemas/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/subthemas").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/subthemas/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/subthemas/**").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/organisaties/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/organisaties").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/organisaties/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/organisaties/**").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/kaarten/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/kaarten").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/kaarten/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/kaarten/**").hasRole("ADMIN")
+
+                .and().csrf().disable();
     }
 }
