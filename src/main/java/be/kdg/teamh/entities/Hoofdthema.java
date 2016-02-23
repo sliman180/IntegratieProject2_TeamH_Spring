@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hoofdthemas")
 public class Hoofdthema
 {
     @Id
@@ -24,6 +23,9 @@ public class Hoofdthema
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Subthema> subthemas = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
@@ -84,5 +86,15 @@ public class Hoofdthema
     public void setGebruiker(Gebruiker gebruiker)
     {
         this.gebruiker = gebruiker;
+    }
+
+    public List<Tag> getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags)
+    {
+        this.tags = tags;
     }
 }
