@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -79,6 +80,13 @@ public class KaartTest {
                 .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
     }
 
+    @Test(expected = NestedServletException.class)
+    public void createHoofdthema_nullInput() throws Exception {
+        String json = gson.toJson(new Kaart(null, null, true, gebruiker));
+
+        this.mvc.perform(post("/kaarten").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()));
+    }
 
     private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");
