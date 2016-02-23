@@ -1,9 +1,7 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.entities.SubthemaKaart;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +19,6 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
-
-import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -50,11 +46,6 @@ public class SubthemaTest {
     @Mock
     private Hoofdthema hoofdthema;
 
-    @Mock
-    private List<Cirkelsessie> cirkelsessies;
-
-    @Mock
-    private List<SubthemaKaart> subthemaKaarten;
 
     @Before
     public void setUp() {
@@ -71,7 +62,7 @@ public class SubthemaTest {
 
     @Test
     public void createSubthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -88,7 +79,7 @@ public class SubthemaTest {
 
     @Test(expected = NestedServletException.class)
     public void createSubthema_nullInput() throws Exception {
-        String json = gson.toJson(new Subthema(null, null, hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema(null, null, hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
@@ -96,7 +87,7 @@ public class SubthemaTest {
 
     @Test
     public void showSubthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -112,7 +103,7 @@ public class SubthemaTest {
 
     @Test(expected = NestedServletException.class)
     public void showSubthema_nonExistingHoofdthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -124,13 +115,13 @@ public class SubthemaTest {
 
     @Test
     public void updateSubthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema, cirkelsessies, subthemaKaarten));
+        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema));
 
         this.mvc.perform(put("/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -146,13 +137,13 @@ public class SubthemaTest {
 
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nullInput() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema(null, null, hoofdthema, cirkelsessies, subthemaKaarten));
+        json = gson.toJson(new Subthema(null, null, hoofdthema));
 
         this.mvc.perform(put("/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
@@ -160,13 +151,13 @@ public class SubthemaTest {
 
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nonExistingHoofdthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema, cirkelsessies, subthemaKaarten));
+        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema));
 
         this.mvc.perform(put("/subthemas/2").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
@@ -174,7 +165,7 @@ public class SubthemaTest {
 
     @Test
     public void deleteSubthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -192,7 +183,7 @@ public class SubthemaTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteHoofdthema_nonExistingHoofdthema() throws Exception {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema, cirkelsessies, subthemaKaarten));
+        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/subthemas").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))

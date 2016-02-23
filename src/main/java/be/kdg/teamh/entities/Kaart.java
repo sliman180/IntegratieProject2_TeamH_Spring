@@ -29,6 +29,9 @@ public class Kaart {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Subthema> subthemas = new ArrayList<>();
+
 
     public Kaart() {
 

@@ -23,23 +23,26 @@ public class Subthema {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<SubthemaKaart> subthemaKaarten = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Kaart> kaarten = new ArrayList<>();
 
     public Subthema() {
         // JPA Constructor
     }
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema, List<Cirkelsessie> cirkelsessies, List<SubthemaKaart> subthemaKaarten) {
+    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema) {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
-        this.cirkelsessies = cirkelsessies;
-        this.subthemaKaarten = subthemaKaarten;
+
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNaam() {
@@ -66,19 +69,19 @@ public class Subthema {
         this.hoofdthema = hoofdthema;
     }
 
-    public List<Cirkelsessie> getCirkelsessieList() {
+    public List<Cirkelsessie> getCirkelsessies() {
         return cirkelsessies;
     }
 
-    public void setCirkelsessieList(List<Cirkelsessie> cirkelsessies) {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public List<SubthemaKaart> getSubthemaKaarten() {
-        return subthemaKaarten;
+    public List<Kaart> getKaarten() {
+        return kaarten;
     }
 
-    public void setSubthemaKaarten(List<SubthemaKaart> subthemaKaarten) {
-        this.subthemaKaarten = subthemaKaarten;
+    public void setKaarten(List<Kaart> kaarten) {
+        this.kaarten = kaarten;
     }
 }
