@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
  * Created by S on 22-2-2016.
  */
 @Entity
-@Table(name = "deelname")
 public class Deelname {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -4,11 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by S on 22-2-2016.
- */
 @Entity
-@Table(name = "subthema")
 public class Subthema {
 
     @Id

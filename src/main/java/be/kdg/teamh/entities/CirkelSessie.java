@@ -9,7 +9,6 @@ import java.util.List;
  * Created by S on 22-2-2016.
  */
 @Entity
-@Table(name = "cirkelsessies")
 public class Cirkelsessie {
 
     @Id
@@ -31,13 +30,18 @@ public class Cirkelsessie {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
 
-    public Cirkelsessie(Subthema subthema, String naam, Gebruiker gebruiker) {
-        this.subthema = subthema;
+    public Cirkelsessie(String naam, Gebruiker gebruiker, Integer maxAantalKaarten, Subthema subthema) {
         this.naam = naam;
         this.gebruiker = gebruiker;
+        this.maxAantalKaarten = maxAantalKaarten;
+        this.subthema = subthema;
     }
 
     public Cirkelsessie() {
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getNaam() {
@@ -79,4 +83,6 @@ public class Cirkelsessie {
     public void setDeelnames(List<Deelname> deelnames) {
         this.deelnames = deelnames;
     }
+
+    public void addDeelname(Deelname deelname){this.deelnames.add(deelname);}
 }
