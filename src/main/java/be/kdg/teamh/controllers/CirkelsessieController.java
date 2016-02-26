@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.services.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,12 @@ public class CirkelsessieController {
     @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id) throws CirkelsessieNotFound {
         service.delete(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/subthema",method = RequestMethod.GET)
+    public Subthema getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound {
+        return service.find(id).getSubthema();
     }
 
 }

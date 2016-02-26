@@ -232,6 +232,23 @@ public class CirkelsessieTest {
                 .with(loginAsAdmin()));
     }
 
+    @Test
+    public void checkCirkelsessieLinkedToSubthema() throws Exception {
+        subthema = new Subthema("Houffalize","Route 6",null);
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
+
+        this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk()).andDo(print())
+                .andExpect(jsonPath("$.id",is(1))).andDo(print())
+                .andExpect(jsonPath("$.naam",is("Houffalize"))).andDo(print())
+                .andExpect(jsonPath("$.beschrijving",is("Route 6"))).andDo(print());
+    }
+
 
     private RequestPostProcessor loginAsUser()
     {
