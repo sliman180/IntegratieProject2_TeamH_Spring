@@ -90,7 +90,7 @@ public class CirkelsessieTest {
 //    Create  null input
     @Test
     public void createCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -107,7 +107,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NullPointerException.class)
     public void createCirkelsessie_nullInput() throws Exception {
-        String json = gson.toJson(new Cirkelsessie(null,gebruiker,null,subthema));
+        String json = gson.toJson(new Cirkelsessie(null,null,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
@@ -118,7 +118,7 @@ public class CirkelsessieTest {
 //    Read non existing
     @Test
     public void showCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -134,7 +134,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void showCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -151,13 +151,13 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie("Session two",gebruiker,15,subthema));
+        json = gson.toJson(new Cirkelsessie("Session two",15,subthema,gebruiker));
 
         this.mvc.perform(put("/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -173,13 +173,13 @@ public class CirkelsessieTest {
 
     @Test(expected = NullPointerException.class)
     public void updateCirkelsessie_nullInput() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie(null,gebruiker,null,subthema));
+        json = gson.toJson(new Cirkelsessie(null,null,subthema,gebruiker));
 
         this.mvc.perform(put("/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()));
@@ -188,13 +188,13 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(put("/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin())).andExpect(status().isOk());
@@ -204,7 +204,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -222,7 +222,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
@@ -235,7 +235,7 @@ public class CirkelsessieTest {
     @Test
     public void checkCirkelsessieLinkedToSubthema() throws Exception {
         subthema = new Subthema("Houffalize","Route 6",null);
-        String json = gson.toJson(new Cirkelsessie("Session one",gebruiker,10,subthema));
+        String json = gson.toJson(new Cirkelsessie("Session one",10,subthema,gebruiker));
 
         this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
                 .with(loginAsAdmin()))
