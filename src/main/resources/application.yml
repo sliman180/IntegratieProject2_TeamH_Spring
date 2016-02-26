@@ -1,0 +1,19 @@
+spring:
+  jpa:
+      hibernate:
+        ddl-auto: create-drop
+
+---
+
+spring:
+  main:
+    banner_mode: off
+  profiles: production
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: postgres://cfmcvduwxtnlos:gcSuPsa-JVf9KXewQjuAxtESiU@ec2-79-125-117-94.eu-west-1.compute.amazonaws.com:5432/dakjepaet1m99c
+    username: cfmcvduwxtnlos
+    password: gcSuPsa-JVf9KXewQjuAxtESiU
