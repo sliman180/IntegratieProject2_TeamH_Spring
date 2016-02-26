@@ -31,8 +31,11 @@ public class Cirkelsessie {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Deelname> deelnames = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Spelkaart> spelkaarten = new ArrayList<>();
 
     public Cirkelsessie() {
         // JPA Constructor
@@ -41,6 +44,14 @@ public class Cirkelsessie {
     public Cirkelsessie(String naam, /*LocalDateTime datum,*/ Integer maxAantalKaarten, Subthema subthema, Gebruiker gebruiker) {
         this.naam = naam;
 //        this.datum = datum;
+        this.maxAantalKaarten = maxAantalKaarten;
+        this.subthema = subthema;
+        this.gebruiker = gebruiker;
+    }
+
+    //constructor voor het clonen van een sessie
+    public Cirkelsessie(String naam, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker) {
+        this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
@@ -99,4 +110,23 @@ public class Cirkelsessie {
     }
 
     public void addDeelname(Deelname deelname){this.deelnames.add(deelname);}
+
+    public List<Spelkaart> getSpelkaarten() {
+        return spelkaarten;
+    }
+
+    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+        this.spelkaarten = spelkaarten;
+    }
+
+    public void addSpelKaart(Spelkaart spelkaart){
+        this.spelkaarten.add(spelkaart);
+    }
+
+    public void cloneDeelnames(List<Deelname> deelnames){
+        for (Deelname d:deelnames) {
+            d.setCirkelSessie(this);
+            this.deelnames.add(d);
+        }
+    }
 }

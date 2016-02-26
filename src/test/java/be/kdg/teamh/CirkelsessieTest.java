@@ -21,7 +21,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -32,6 +34,7 @@ import javax.servlet.Filter;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -113,7 +116,7 @@ public class CirkelsessieTest {
                 .with(loginAsAdmin()));
 
         this.mvc.perform(get("/cirkelsessies").contentType(MediaType.APPLICATION_JSON)
-                .with(loginAsAdmin())).andDo(print());
+                .with(loginAsAdmin()));
     }
 //    Read non existing
     @Test
@@ -243,10 +246,35 @@ public class CirkelsessieTest {
 
         this.mvc.perform(get("/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON)
                 .with(loginAsAdmin()))
-                .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$.id",is(1))).andDo(print())
-                .andExpect(jsonPath("$.naam",is("Houffalize"))).andDo(print())
-                .andExpect(jsonPath("$.beschrijving",is("Route 6"))).andDo(print());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.naam",is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving",is("Route 6")));
+    }
+
+    @Test
+    public void cloneCirkelSessie() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one",10,subthema,gebruiker);
+        Deelname deelname = new Deelname(gebruiker,cirkelsessie,10,false);
+//        cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
+        String json = gson.toJson(cirkelsessie);
+        System.out.println(json);
+
+        this.mvc.perform(post("/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(post("/cirkelsessies/1/clone").contentType(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(2)))
+                .andExpect(jsonPath("$.naam",is("Session one")))
+                .andExpect(jsonPath("$.maxAantalKaarten",is(10)))
+                .andExpect(jsonPath("$.deelnames",hasSize(0)));
     }
 
 

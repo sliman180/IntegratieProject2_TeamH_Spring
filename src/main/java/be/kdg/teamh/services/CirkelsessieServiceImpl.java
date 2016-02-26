@@ -55,6 +55,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService{
         repository.save(old);
     }
 
+
     @Override
     public void delete(int id) throws CirkelsessieNotFound {
         Cirkelsessie cirkelsessie = repository.findOne(id);
@@ -65,5 +66,14 @@ public class CirkelsessieServiceImpl implements CirkelsessieService{
 
         repository.delete(cirkelsessie);
     }
+
+    @Override
+    public void clone(int id) {
+        Cirkelsessie old = repository.findOne(id);
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(),old.getMaxAantalKaarten(),old.getSubthema(),old.getGebruiker());
+        clone.cloneDeelnames(old.getDeelnames());
+        repository.save(clone);
+    }
+
 
 }
