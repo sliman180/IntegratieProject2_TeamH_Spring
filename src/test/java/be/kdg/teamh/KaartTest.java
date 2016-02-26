@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -279,7 +278,7 @@ public class KaartTest {
         this.mvc.perform(get("/kaarten/1/getSubthemas").contentType(MediaType.APPLICATION_JSON)
                 .with(loginAsAdmin()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2))).andDo(print());
+                .andExpect(jsonPath("$", hasSize(2)));
 
 
     }
@@ -291,7 +290,7 @@ public class KaartTest {
 
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
 
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
 
         String spelkaartJson = gson.toJson(new Spelkaart(kaart, cirkelsessie));
 
@@ -314,12 +313,75 @@ public class KaartTest {
 
     }
 
-//    @Test
-//    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
-//
-//
-//
-//    }
+    @Test(expected = NestedServletException.class)
+    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
+
+        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
+
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        spelkaart.setPositie(cirkelsessie.getAantalCirkels());
+
+        String spelkaartJson = gson.toJson(spelkaart);
+
+        this.mvc.perform(post("/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isCreated());
+
+
+        this.mvc.perform(patch("/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isConflict());
+
+    }
+
+    @Test
+    public void legKaartenBuitenDeCirkel() throws Exception {
+
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
+        Kaart kaart;
+        Spelkaart spelkaart;
+        String spelkaartJson;
+
+        for (int x = 0; x < 5; x++) {
+
+            kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
+
+            spelkaart = new Spelkaart(kaart, cirkelsessie);
+
+            spelkaartJson = gson.toJson(spelkaart);
+
+            this.mvc.perform(post("/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson)
+                    .with(loginAsAdmin()))
+                    .andExpect(status().isCreated());
+        }
+
+        this.mvc.perform(get("/spelkaarten").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].positie", is(0)))
+                .andExpect(jsonPath("$[1].positie", is(0)))
+                .andExpect(jsonPath("$[2].positie", is(0)))
+                .andExpect(jsonPath("$[3].positie", is(0)))
+                .andExpect(jsonPath("$[4].positie", is(0)));
+    }
+
+
+    @Test
+    public void importeerKaartenVanuitCsv() throws Exception {
+        String gebruikerJson = gson.toJson(new Gebruiker());
+
+        this.mvc.perform(post("/kaarten/importCards//kaarten.csv/").contentType(MediaType.APPLICATION_JSON).content(gebruikerJson)
+                .with(loginAsAdmin()))
+                .andExpect(status().isOk());
+
+        this.mvc.perform(get("/kaarten").accept(MediaType.APPLICATION_JSON)
+                .with(loginAsUser()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)));
+
+    }
 
     private RequestPostProcessor loginAsUser() {
         return httpBasic("user", "user");

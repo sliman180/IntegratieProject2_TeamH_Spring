@@ -1,11 +1,14 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.exceptions.KaartMaxPositieReached;
 import be.kdg.teamh.exceptions.KaartNotFoundException;
 import be.kdg.teamh.services.SpelkaartenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/spelkaarten")
@@ -14,6 +17,12 @@ public class SpelkaartController {
     @Autowired
     private SpelkaartenService service;
 
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<Spelkaart> index() {
+        return service.all();
+    }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -42,8 +51,9 @@ public class SpelkaartController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/verschuif/{id}", method = RequestMethod.PATCH)
-    public void verschuifKaart(@PathVariable("id") int id) throws KaartNotFoundException {
+    public void verschuifKaart(@PathVariable("id") int id) throws KaartNotFoundException, KaartMaxPositieReached {
         service.verschuif(id);
     }
+
 
 }

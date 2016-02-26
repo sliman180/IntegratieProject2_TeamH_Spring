@@ -1,6 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.exceptions.KaartMaxPositieReached;
 import be.kdg.teamh.exceptions.KaartNotFoundException;
 import be.kdg.teamh.repositories.SpelkaartenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,15 @@ public class SpelkaartenServiceImpl implements SpelkaartenService {
     }
 
     @Override
-    public void verschuif(int id) throws KaartNotFoundException {
+    public void verschuif(int id) throws KaartNotFoundException, KaartMaxPositieReached {
 
         Spelkaart spelkaart = repository.findOne(id);
         if (spelkaart == null) {
             throw new KaartNotFoundException();
+        }
+
+        if (spelkaart.getPositie() == spelkaart.getCirkelsessie().getAantalCirkels()) {
+            throw new KaartMaxPositieReached();
         }
 
 

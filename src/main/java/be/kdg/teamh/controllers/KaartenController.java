@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Comment;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -74,6 +76,12 @@ public class KaartenController {
     @RequestMapping(value = "/{id}/getComments", method = RequestMethod.GET)
     public List<Comment> allComments(@PathVariable("id") int id) {
         return service.allComments(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/importCards/{csvPath}", method = RequestMethod.POST)
+    public void importCards(@PathVariable("csvPath") String csvPath, @RequestBody Gebruiker gebruiker) throws IOException {
+        service.importCards(csvPath, gebruiker);
     }
 
 

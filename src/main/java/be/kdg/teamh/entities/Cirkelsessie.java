@@ -15,6 +15,9 @@ public class Cirkelsessie {
     @NotNull
     private String naam;
 
+    @NotNull
+    private int aantalCirkels;
+
 
     private Date datum;
 
@@ -32,16 +35,27 @@ public class Cirkelsessie {
         // JPA Constructor
     }
 
-    public Cirkelsessie(String naam, Date datum, int maxAantalKaarten, Subthema subthema) {
+    public Cirkelsessie(String naam, Date datum, int maxAantalKaarten, int aantalCirkels, Subthema subthema) {
         this.naam = naam;
         this.datum = datum;
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
+        this.aantalCirkels = aantalCirkels;
     }
 
-    public Cirkelsessie(String naam, int maxAantalKaarten) {
+    public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels) {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
+        this.aantalCirkels = aantalCirkels;
+    }
+
+
+    public int getAantalCirkels() {
+        return aantalCirkels;
+    }
+
+    public void setAantalCirkels(int aantalCirkels) {
+        this.aantalCirkels = aantalCirkels;
     }
 
     public int getId() {

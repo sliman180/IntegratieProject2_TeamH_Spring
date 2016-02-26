@@ -1,7 +1,9 @@
 package be.kdg.teamh.services;
 
 
+import au.com.bytecode.opencsv.CSVReader;
 import be.kdg.teamh.entities.Comment;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
@@ -10,6 +12,9 @@ import be.kdg.teamh.repositories.KaartenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -105,6 +110,29 @@ public class KaartenServiceImpl implements KaartenService {
         Kaart kaart = repository.findOne(id);
 
         return kaart.getSubthemas();
+    }
+
+    @Override
+    public void importCards(String csvPath, Gebruiker gebruiker) throws IOException {
+        CSVReader reader = new CSVReader(new FileReader(csvPath));
+        String[] nextLine;
+        Boolean commentsToelaatbaar = false;
+        List<Kaart> geimporteerdeKaarten = new ArrayList<>();
+
+        while ((nextLine = reader.readNext()) != null) {
+            // nextLine[] is an array of values from the line
+
+            if (nextLine[2].toLowerCase().equals("false")) {
+                commentsToelaatbaar = false;
+            } else if (nextLine[2].toLowerCase().equals("true")) {
+                commentsToelaatbaar = true;
+            }
+            Kaart kaart = new Kaart(nextLine[0], nextLine[1], commentsToelaatbaar, gebruiker);
+
+            repository.save(kaart);
+        }
+
+
     }
 }
 
