@@ -1,29 +1,30 @@
 package be.kdg.teamh.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-/**
- * Created by S on 22-2-2016.
- */
 @Entity
-@Table(name = "spelkaart")
-public class Spelkaart {
+@Table(name = "spelkaarten")
+public class Spelkaart implements Serializable
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cirkelsessie cirkelSessie;
 
-
-    public Spelkaart() {
+    public Spelkaart()
+    {
     }
 
-    public Cirkelsessie getCirkelSessie() {
+    public Cirkelsessie getCirkelSessie()
+    {
         return cirkelSessie;
     }
 
-    public void setCirkelSessie(Cirkelsessie cirkelSessie) {
+    public void setCirkelSessie(Cirkelsessie cirkelSessie)
+    {
         this.cirkelSessie = cirkelSessie;
     }
 }

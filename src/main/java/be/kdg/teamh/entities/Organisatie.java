@@ -2,15 +2,16 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "organisaties")
-public class Organisatie
+public class Organisatie implements Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -19,8 +20,8 @@ public class Organisatie
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Gebruiker organisator;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
@@ -30,11 +31,11 @@ public class Organisatie
         // JPA Constructor
     }
 
-    public Organisatie(String naam, String beschrijving, Gebruiker organisator)
+    public Organisatie(String naam, String beschrijving, Gebruiker gebruiker)
     {
         this.naam = naam;
         this.beschrijving = beschrijving;
-        this.organisator = organisator;
+        this.gebruiker = gebruiker;
     }
 
     public int getId()
@@ -69,11 +70,11 @@ public class Organisatie
 
     public Gebruiker getOrganisator()
     {
-        return organisator;
+        return gebruiker;
     }
 
-    public void setOrganisator(Gebruiker organisator)
+    public void setOrganisator(Gebruiker gebruiker)
     {
-        this.organisator = organisator;
+        this.gebruiker = gebruiker;
     }
 }

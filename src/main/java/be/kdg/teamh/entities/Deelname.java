@@ -2,18 +2,15 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-/**
- * Created by S on 22-2-2016.
- */
 @Entity
-public class Deelname {
+@Table(name = "deelnames")
+public class Deelname implements Serializable
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Cirkelsessie cirkelSessie;
 
     @NotNull
     private int aangemaakteKaarten;
@@ -21,36 +18,53 @@ public class Deelname {
     @NotNull
     private boolean medeorganisator;
 
-    public Deelname(Gebruiker gebruiker, Cirkelsessie cirkelSessie, int aangemaakteKaarten, boolean medeorganisator) {
-        this.cirkelSessie = cirkelSessie;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Cirkelsessie cirkelsessie;
+
+    public Deelname()
+    {
+        // JPA COnstructor
+    }
+
+    public Deelname( int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie)
+    {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
+        this.cirkelsessie = cirkelsessie;
     }
 
-    public Deelname() {
+    public int getId()
+    {
+        return id;
     }
 
-    public Cirkelsessie getCirkelSessie() {
-        return cirkelSessie;
-    }
-
-    public void setCirkelSessie(Cirkelsessie cirkelSessie) {
-        this.cirkelSessie = cirkelSessie;
-    }
-
-    public int getAangemaakteKaarten() {
+    public int getAangemaakteKaarten()
+    {
         return aangemaakteKaarten;
     }
 
-    public void setAangemaakteKaarten(int aangemaakteKaarten) {
+    public void setAangemaakteKaarten(int aangemaakteKaarten)
+    {
         this.aangemaakteKaarten = aangemaakteKaarten;
     }
 
-    public boolean isMedeorganisator() {
+    public boolean isMedeorganisator()
+    {
         return medeorganisator;
     }
 
-    public void setMedeorganisator(boolean medeorganisator) {
+    public void setMedeorganisator(boolean medeorganisator)
+    {
         this.medeorganisator = medeorganisator;
+    }
+
+    public Cirkelsessie getCirkelsessie()
+    {
+        return cirkelsessie;
+    }
+
+    public void setCirkelsessie(Cirkelsessie cirkelsessie)
+    {
+        this.cirkelsessie = cirkelsessie;
     }
 }
