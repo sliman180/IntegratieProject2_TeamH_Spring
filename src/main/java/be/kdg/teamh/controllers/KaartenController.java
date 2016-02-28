@@ -15,12 +15,10 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kaarten")
+@RequestMapping("/api/kaarten")
 public class KaartenController {
-
     @Autowired
     private KaartenService service;
-
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -71,18 +69,16 @@ public class KaartenController {
         return service.getSubthemas(id);
     }
 
-
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/{id}/getComments", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}/getComments", method = RequestMethod.GET)
+
     public List<Comment> allComments(@PathVariable("id") int id) {
         return service.allComments(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/importCards/{csvPath}", method = RequestMethod.POST)
+    @RequestMapping(value = "/importCards/{csvPath}/", method = RequestMethod.POST)
     public void importCards(@PathVariable("csvPath") String csvPath, @RequestBody Gebruiker gebruiker) throws IOException {
         service.importCards(csvPath, gebruiker);
     }
-
-
 }

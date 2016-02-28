@@ -1,0 +1,22 @@
+spring:
+  jpa:
+      hibernate:
+        ddl-auto: create-drop
+
+---
+
+spring:
+  profiles: production
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+    show-sql: false
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+    driverClassName: org.postgresql.Driver
+    removeAbandoned: true
+    initialSize: 5
+    maxActive: 10
+    maxIdle: 5
+    minIdle: 2

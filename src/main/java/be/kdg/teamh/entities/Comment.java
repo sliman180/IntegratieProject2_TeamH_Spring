@@ -2,20 +2,18 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-public class Comment {
-
-
+public class Comment implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
     private String tekst;
-
 
     private LocalDateTime datum;
 
@@ -25,12 +23,9 @@ public class Comment {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Kaart kaart;
 
-
     public Comment() {
-
-        //JPA
+        //JPA Constructor
     }
-
 
     public Comment(String tekst, Gebruiker gebruiker) {
         this.tekst = tekst;

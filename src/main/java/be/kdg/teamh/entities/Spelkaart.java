@@ -64,5 +64,4 @@ public class Spelkaart {
         this.positie = positie;
     }
 
-
 }

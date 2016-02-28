@@ -1,18 +1,16 @@
 package be.kdg.teamh.entities;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "kaarten")
-public class Kaart {
-
-
+public class Kaart implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -21,10 +19,11 @@ public class Kaart {
     @NotNull
     private String imageUrl;
 
+    @NotNull
+    private boolean commentsToelaatbaar;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
-
-    private boolean commentsToelaatbaar;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
@@ -37,23 +36,13 @@ public class Kaart {
 
 
     public Kaart() {
-
-        //JPA
+        //JPA Constructor
     }
 
     public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
         this.commentsToelaatbaar = commentsToelaatbaar;
-        this.gebruiker = gebruiker;
-
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
 
@@ -87,6 +76,14 @@ public class Kaart {
 
     public void setCommentsToelaatbaar(boolean commentsToelaatbaar) {
         this.commentsToelaatbaar = commentsToelaatbaar;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 
     public List<Comment> getComments() {
