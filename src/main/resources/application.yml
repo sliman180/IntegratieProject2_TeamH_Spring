@@ -11,7 +11,7 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQL82Dialect
         show-sql: false
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: create
     datasource:
         url: ${JDBC_DATABASE_URL}
         driverClassName: org.postgresql.Driver
