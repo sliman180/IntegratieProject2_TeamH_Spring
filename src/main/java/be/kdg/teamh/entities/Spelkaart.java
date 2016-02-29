@@ -19,7 +19,7 @@ public class Spelkaart {
     private Cirkelsessie cirkelsessie;
 
     @NotNull
-    private int positie;
+    private Integer positie;
 
     public Spelkaart() {
         //JPA
@@ -60,7 +60,7 @@ public class Spelkaart {
         return positie;
     }
 
-    public void setPositie(int positie) {
+    public void setPositie(Integer positie) {
         this.positie = positie;
     }
 
