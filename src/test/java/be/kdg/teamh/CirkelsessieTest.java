@@ -25,6 +25,8 @@ import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -103,14 +105,14 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$.maxAantalKaarten", is(10)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void updateCirkelsessie() throws Exception {
         String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie("Session two", 5, 15, subthema, gebruiker));
+        json = gson.toJson(new Cirkelsessie("Session two", 10, 15, subthema, gebruiker));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
@@ -119,7 +121,8 @@ public class CirkelsessieTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.naam", is("Session two")))
-                .andExpect(jsonPath("$.maxAantalKaarten", is(15)));
+                .andExpect(jsonPath("$.maxAantalKaarten", is(10)))
+                .andExpect(jsonPath("$.aantalCirkels", is(15))).andDo(print());
     }
 
     @Test(expected = NullPointerException.class)

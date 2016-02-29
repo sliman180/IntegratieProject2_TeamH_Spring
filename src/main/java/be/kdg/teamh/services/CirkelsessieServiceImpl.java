@@ -46,7 +46,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         old.setNaam(cirkelsessie.getNaam());
         old.setGebruiker(cirkelsessie.getGebruiker());
         old.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
-        old.setSubthema(cirkelsessie.getSubthema());
+        old.setAantalCirkels(cirkelsessie.getAantalCirkels());
 
         repository.save(old);
     }

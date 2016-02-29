@@ -36,8 +36,8 @@ public class CirkelsessieController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
-        service.update(cirkelsessie.getId(), cirkelsessie);
+    public void update(@PathVariable("id") int id,@RequestBody Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
+        service.update(id, cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
