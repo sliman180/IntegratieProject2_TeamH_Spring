@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/kaarten")
 public class KaartenController {
+
     @Autowired
     private KaartenService service;
 

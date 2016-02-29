@@ -113,4 +113,12 @@ public class Kaart implements Serializable {
     public void addSpelkaart(Spelkaart spelkaart) {
         this.spelkaarten.add(spelkaart);
     }
+
+    public List<Spelkaart> getSpelkaarten() {
+        return spelkaarten;
+    }
+
+    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+        this.spelkaarten = spelkaarten;
+    }
 }
