@@ -51,4 +51,10 @@ public class CirkelsessieController {
     public Subthema getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound {
         return service.find(id).getSubthema();
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/clone",method = RequestMethod.POST)
+    public void cloneCirkelSessie(@PathVariable("id") int id){
+                service.clone(id);
+    }
 }

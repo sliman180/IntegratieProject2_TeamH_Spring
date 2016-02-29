@@ -1,6 +1,7 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Subthema;
 import com.google.gson.Gson;
@@ -185,5 +186,31 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$.id", is(1))).andDo(print())
                 .andExpect(jsonPath("$.naam", is("Houffalize"))).andDo(print())
                 .andExpect(jsonPath("$.beschrijving", is("Route 6"))).andDo(print());
+        this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.naam",is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving",is("Route 6")));
+    }
+
+    @Test
+    public void cloneCirkelSessie() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one",5,10,subthema,gebruiker);
+//        cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
+        String json = gson.toJson(cirkelsessie);
+
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(post("/api/cirkelsessies/1/clone").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(2)))
+                .andExpect(jsonPath("$.naam",is("Session one")))
+                .andExpect(jsonPath("$.maxAantalKaarten",is(5)))
+                .andExpect(jsonPath("$.aantalCirkels",is(10)))
+                .andExpect(jsonPath("$.deelnames",hasSize(0)));
     }
 }

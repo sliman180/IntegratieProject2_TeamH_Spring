@@ -57,4 +57,8 @@ public class Deelname implements Serializable {
     public void setCirkelsessie(Cirkelsessie cirkelsessie) {
         this.cirkelsessie = cirkelsessie;
     }
+
+    public void setCirkelSessie(Cirkelsessie cirkelSessie) {
+        this.cirkelsessie = cirkelSessie;
+    }
 }
