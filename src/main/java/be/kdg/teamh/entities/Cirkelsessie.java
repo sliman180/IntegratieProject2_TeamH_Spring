@@ -132,4 +132,11 @@ public class Cirkelsessie implements Serializable {
     public void addSpelkaart(Spelkaart spelkaart) {
         spelkaarten.add(spelkaart);
     }
+
+    public void cloneDeelnames(List<Deelname> deelnames) {
+        for (Deelname deelname : deelnames) {
+            deelname.setCirkelsessie(this);
+            this.deelnames.add(deelname);
+        }
+    }
 }

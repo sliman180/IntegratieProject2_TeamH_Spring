@@ -66,7 +66,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     @Override
     public void clone(int id) {
         Cirkelsessie old = repository.findOne(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(),old.getMaxAantalKaarten(),old.getSubthema(),old.getGebruiker());
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(),old.getMaxAantalKaarten(),old.getAantalCirkels(),old.getSubthema(),old.getGebruiker());
         clone.cloneDeelnames(old.getDeelnames());
         repository.save(clone);
     }
