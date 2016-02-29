@@ -22,7 +22,7 @@ public class Kaart implements Serializable {
     @NotNull
     private boolean commentsToelaatbaar;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)

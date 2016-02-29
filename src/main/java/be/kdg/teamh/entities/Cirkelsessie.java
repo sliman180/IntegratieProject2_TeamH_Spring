@@ -26,10 +26,10 @@ public class Cirkelsessie implements Serializable {
     // private LocalDateTime datum;
     // TODO: http://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)

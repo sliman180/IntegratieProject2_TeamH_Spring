@@ -19,10 +19,10 @@ public class Hoofdthema implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Organisatie organisatie;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)

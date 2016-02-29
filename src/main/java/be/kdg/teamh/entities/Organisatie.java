@@ -19,7 +19,7 @@ public class Organisatie implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)

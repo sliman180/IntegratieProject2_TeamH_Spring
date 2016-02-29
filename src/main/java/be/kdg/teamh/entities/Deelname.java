@@ -17,7 +17,7 @@ public class Deelname implements Serializable {
     @NotNull
     private boolean medeorganisator;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Cirkelsessie cirkelsessie;
 
     public Deelname() {

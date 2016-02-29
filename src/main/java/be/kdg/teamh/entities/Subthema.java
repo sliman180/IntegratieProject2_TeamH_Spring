@@ -19,7 +19,7 @@ public class Subthema implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Hoofdthema hoofdthema;
 
     @OneToMany(cascade = CascadeType.ALL)
