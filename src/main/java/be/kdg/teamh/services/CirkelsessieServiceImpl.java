@@ -8,11 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by S on 22-2-2016.
- */
 @Service
-public class CirkelsessieServiceImpl implements CirkelsessieService{
+public class CirkelsessieServiceImpl implements CirkelsessieService {
 
     @Autowired
     private CirkelsessieRepository repository;
@@ -29,9 +26,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService{
 
     @Override
     public Cirkelsessie find(int id) throws CirkelsessieNotFound {
-        Cirkelsessie cirkelsessie =  repository.findOne(id);
+        Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        if (cirkelsessie == null){
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
@@ -40,10 +37,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService{
 
     @Override
     public void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
-       Cirkelsessie old = repository.findOne(id);
+        Cirkelsessie old = repository.findOne(id);
 
-        if (old == null)
-        {
+        if (old == null) {
             throw new CirkelsessieNotFound();
         }
 
@@ -60,7 +56,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService{
     public void delete(int id) throws CirkelsessieNotFound {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        if(cirkelsessie == null){
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 

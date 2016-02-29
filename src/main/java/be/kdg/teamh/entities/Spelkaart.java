@@ -1,29 +1,67 @@
 package be.kdg.teamh.entities;
 
-import javax.persistence.*;
 
-/**
- * Created by S on 22-2-2016.
- */
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 @Entity
-@Table(name = "spelkaart")
+@Table(name = "spelkaarten")
 public class Spelkaart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    private Cirkelsessie cirkelSessie;
+    private Kaart kaart;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Cirkelsessie cirkelsessie;
+
+    @NotNull
+    private int positie;
 
     public Spelkaart() {
+        //JPA
+
     }
 
-    public Cirkelsessie getCirkelSessie() {
-        return cirkelSessie;
+    public Spelkaart(Kaart kaart, Cirkelsessie cirkelsessie) {
+        this.kaart = kaart;
+        this.positie = 0;
+        this.cirkelsessie = cirkelsessie;
     }
 
-    public void setCirkelSessie(Cirkelsessie cirkelSessie) {
-        this.cirkelSessie = cirkelSessie;
+    public int getId() {
+        return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Kaart getKaart() {
+        return kaart;
+    }
+
+    public void setKaart(Kaart kaart) {
+        this.kaart = kaart;
+    }
+
+    public Cirkelsessie getCirkelsessie() {
+        return cirkelsessie;
+    }
+
+    public void setCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessie = cirkelsessie;
+    }
+
+    public int getPositie() {
+        return positie;
+    }
+
+    public void setPositie(int positie) {
+        this.positie = positie;
+    }
+
 }
