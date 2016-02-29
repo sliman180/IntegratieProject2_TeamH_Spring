@@ -27,7 +27,7 @@ public class Deelname implements Serializable {
         // JPA COnstructor
     }
 
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
+    public Deelname(Integer aangemaakteKaarten, Boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
         this.cirkelsessie = cirkelsessie;
@@ -36,14 +36,6 @@ public class Deelname implements Serializable {
 
     public int getId() {
         return id;
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
     }
 
     public int getAangemaakteKaarten() {
@@ -70,7 +62,11 @@ public class Deelname implements Serializable {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public void setCirkelSessie(Cirkelsessie cirkelSessie) {
-        this.cirkelsessie = cirkelSessie;
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 }

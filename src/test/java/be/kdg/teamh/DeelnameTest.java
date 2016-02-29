@@ -3,6 +3,8 @@ package be.kdg.teamh;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.DeelnameNotFound;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -53,6 +56,148 @@ public class DeelnameTest {
     }
 
     @Test
+    public void indexDeelname() throws Exception {
+        this.mvc.perform(get("/api/deelnames").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void createDeelname() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.aangemaakteKaarten",is(15)))
+                .andExpect(jsonPath("$.medeorganisator",is(false)))
+                .andExpect(jsonPath("$.cirkelsessie.id",is(1)))
+                .andExpect(jsonPath("$.cirkelsessie.naam",is("Session one")))
+                .andExpect(jsonPath("$.gebruiker.id",is(1)))
+                .andExpect(jsonPath("$.gebruiker.naam",is("Georgy")));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void createDeelname_nullInput() throws Exception {
+        Deelname deelname = new Deelname(null,null,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
+    @Test
+    public void showDeelname() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.aangemaakteKaarten",is(15)))
+                .andExpect(jsonPath("$.medeorganisator",is(false)))
+                .andExpect(jsonPath("$.cirkelsessie.id",is(1)))
+                .andExpect(jsonPath("$.cirkelsessie.naam",is("Session one")))
+                .andExpect(jsonPath("$.gebruiker.id",is(1)))
+                .andExpect(jsonPath("$.gebruiker.naam",is("Georgy")));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void showDeelname_nonExistingDeelname() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateDeelname() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Deelname(20, true,cirkelsessie, gebruiker));
+
+        this.mvc.perform(put("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk());
+
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id",is(1)))
+                .andExpect(jsonPath("$.aangemaakteKaarten",is(20)))
+                .andExpect(jsonPath("$.medeorganisator",is(true)));
+/*                .andExpect(jsonPath("$.cirkelsessie.id",is(2)))
+                .andExpect(jsonPath("$.cirkelsessie.naam",is("Session one")))
+                .andExpect(jsonPath("$.gebruiker.id",is(2)))
+                .andExpect(jsonPath("$.gebruiker.naam",is("Georgy"))).andDo(print());*/
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void updateDeelname_nullInput() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Deelname(null, null, cirkelsessie, gebruiker));
+
+        this.mvc.perform(put("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void updateCirkelsessie_nonExistingDeelname() throws Exception {
+        Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
+        String json = gson.toJson(deelname);
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        json = gson.toJson(new Deelname(20, true, cirkelsessie, gebruiker));
+
+        this.mvc.perform(put("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON).content(json));
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void deleteDeelname() throws Exception {
+        String json = gson.toJson(new Deelname(15,false,cirkelsessie,gebruiker));
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(delete("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test(expected = NestedServletException.class)
+    public void deleteDeelname_nonExistingDeelname() throws Exception {
+        String json = gson.toJson(new Deelname(15,false,cirkelsessie,gebruiker));
+
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isCreated());
+
+        this.mvc.perform(delete("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
     public void deelNemenAanCirkelsessie() throws Exception {
         Deelname deelname = new Deelname(15,false,cirkelsessie,gebruiker);
         String json = gson.toJson(deelname);
@@ -68,8 +213,7 @@ public class DeelnameTest {
                 .andExpect(jsonPath("$.cirkelsessie.id",is(1)))
                 .andExpect(jsonPath("$.cirkelsessie.naam",is("Session one")))
                 .andExpect(jsonPath("$.gebruiker.id",is(1)))
-                .andExpect(jsonPath("$.gebruiker.naam",is("Georgy")))
-                .andDo(print());
+                .andExpect(jsonPath("$.gebruiker.naam",is("Georgy")));
     }
 
 }

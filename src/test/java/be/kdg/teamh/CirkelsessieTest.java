@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
@@ -103,7 +104,7 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$.maxAantalKaarten", is(10)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test/*(expected = NestedServletException.class)*/
     public void updateCirkelsessie() throws Exception {
         String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
 
