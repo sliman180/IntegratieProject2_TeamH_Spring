@@ -243,7 +243,6 @@ public class KaartTest {
     @Test
     public void verschuifKaartMetEénStap() throws Exception {
 
-
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
 
         Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
