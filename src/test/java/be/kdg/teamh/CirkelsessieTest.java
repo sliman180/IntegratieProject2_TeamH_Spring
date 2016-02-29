@@ -23,7 +23,6 @@ import org.springframework.web.util.NestedServletException;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -182,10 +181,10 @@ public class CirkelsessieTest {
                 .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andDo(print())
-                .andExpect(jsonPath("$.id", is(1))).andDo(print())
-                .andExpect(jsonPath("$.naam", is("Houffalize"))).andDo(print())
-                .andExpect(jsonPath("$.beschrijving", is("Route 6"))).andDo(print());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving", is("Route 6")));
         this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id",is(1)))
