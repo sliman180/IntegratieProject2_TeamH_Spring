@@ -20,18 +20,30 @@ public class Deelname implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Cirkelsessie cirkelsessie;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Gebruiker gebruiker;
+
     public Deelname() {
         // JPA COnstructor
     }
 
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie) {
+    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
         this.cirkelsessie = cirkelsessie;
+        this.gebruiker = gebruiker;
     }
 
     public int getId() {
         return id;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 
     public int getAangemaakteKaarten() {
