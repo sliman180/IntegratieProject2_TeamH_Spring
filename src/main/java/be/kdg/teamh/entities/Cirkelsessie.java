@@ -40,6 +40,9 @@ public class Cirkelsessie implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Chat chat;
+
 
     public Cirkelsessie() {
         // JPA Constructor
@@ -52,14 +55,6 @@ public class Cirkelsessie implements Serializable {
         this.gebruiker = gebruiker;
         this.aantalCirkels = aantalCirkels;
     }
-
-
-    public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels) {
-        this.naam = naam;
-        this.maxAantalKaarten = maxAantalKaarten;
-        this.aantalCirkels = aantalCirkels;
-    }
-
 
     public int getAantalCirkels() {
         return aantalCirkels;

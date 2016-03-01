@@ -21,6 +21,9 @@ public class Gebruiker implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Message> messages = new ArrayList<>();
+
     public Gebruiker() {
         // JPA constructor
     }

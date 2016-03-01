@@ -271,54 +271,6 @@ public class KaartTest {
 
     }
 
-    @Test(expected = NestedServletException.class)
-    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
-
-        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
-
-        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
-        spelkaart.setPositie(cirkelsessie.getAantalCirkels());
-
-        String spelkaartJson = gson.toJson(spelkaart);
-
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                .andExpect(status().isCreated());
-
-
-        this.mvc.perform(patch("/api/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                .andExpect(status().isConflict());
-
-    }
-
-    @Test
-    public void legKaartenBuitenDeCirkel() throws Exception {
-
-        Kaart kaart;
-        Spelkaart spelkaart;
-        String spelkaartJson;
-
-        for (int x = 0; x < 5; x++) {
-
-            kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
-
-            spelkaart = new Spelkaart(kaart, cirkelsessie);
-
-            spelkaartJson = gson.toJson(spelkaart);
-
-            this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                    .andExpect(status().isCreated());
-        }
-
-        this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(5)))
-                .andExpect(jsonPath("$[0].positie", is(0)))
-                .andExpect(jsonPath("$[1].positie", is(0)))
-                .andExpect(jsonPath("$[2].positie", is(0)))
-                .andExpect(jsonPath("$[3].positie", is(0)))
-                .andExpect(jsonPath("$[4].positie", is(0)));
-    }
-
 
     @Test
     public void importeerKaartenVanuitCsv() throws Exception {
@@ -333,36 +285,6 @@ public class KaartTest {
 
     }
 
-    @Test
-    public void kiesKaartenUitEenVerzameling() throws Exception {
 
-
-        Kaart kaart;
-        Spelkaart spelkaart;
-        String spelkaartJson;
-
-        for (int x = 0; x < 5; x++) {
-
-            kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
-
-            spelkaart = new Spelkaart(kaart, cirkelsessie);
-
-            spelkaartJson = gson.toJson(spelkaart);
-
-            this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                    .andExpect(status().isCreated());
-        }
-
-
-        this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(5)))
-                .andExpect(jsonPath("$[0].cirkelsessie.id", is(1)))
-                .andExpect(jsonPath("$[1].cirkelsessie.id", is(2)))
-                .andExpect(jsonPath("$[2].cirkelsessie.id", is(3)))
-                .andExpect(jsonPath("$[3].cirkelsessie.id", is(4)))
-                .andExpect(jsonPath("$[4].cirkelsessie.id", is(5)));
-
-    }
 
 }

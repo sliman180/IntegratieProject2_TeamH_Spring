@@ -76,8 +76,6 @@ public class KaartenServiceImpl implements KaartenService {
     public void createComment(int id, Comment comment) throws CommentsNotAllowed {
         Kaart kaart = repository.findOne(id);
 
-
-        System.out.println(kaart.isCommentsToelaatbaar());
         if (!kaart.isCommentsToelaatbaar()) {
             throw new CommentsNotAllowed();
         }
