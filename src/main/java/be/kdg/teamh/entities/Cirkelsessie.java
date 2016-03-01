@@ -11,6 +11,7 @@ import java.util.List;
 public class Cirkelsessie implements Serializable
 {
     @Id
+    @Column(name = "CirkelsessieId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -27,10 +28,10 @@ public class Cirkelsessie implements Serializable
     // private LocalDateTime datum;
     // TODO: http://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)

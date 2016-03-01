@@ -11,7 +11,7 @@ public class Tag implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Hoofdthema hoofdthema;
 
     public Tag()

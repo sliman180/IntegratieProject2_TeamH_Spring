@@ -18,10 +18,10 @@ public class Comment implements Serializable
 
     private LocalDateTime datum;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Kaart kaart;
 
     public Comment()

@@ -12,10 +12,11 @@ public class Spelkaart implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "KaartId", nullable = true)
     private Kaart kaart;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Cirkelsessie cirkelsessie;
 
     @NotNull
