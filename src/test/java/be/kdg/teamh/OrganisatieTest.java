@@ -1,7 +1,11 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.configuration.JwtFilter;
 import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.LoginResponse;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.entities.Rol;
+import be.kdg.teamh.exceptions.IsForbidden;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +19,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import javax.servlet.ServletException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -39,9 +49,6 @@ public class OrganisatieTest
     private WebApplicationContext context;
 
     @Autowired
-    private FilterChainProxy filterChainProxy;
-
-    @Autowired
     private Gson gson;
 
     @Mock
@@ -50,24 +57,23 @@ public class OrganisatieTest
     @Before
     public void setUp() throws Exception
     {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilters(filterChainProxy).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter(new JwtFilter(), "/organisaties/*").build();
     }
 
     @Test
     public void indexOrganisatie() throws Exception
     {
         this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
 
-    @Test
+    @Test(expected = ServletException.class)
     public void indexOrganisatie_wrongCredentials() throws Exception
     {
         this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON)
-            .with(loginWithWrongCredentials()))
-            .andExpect(status().isUnauthorized());
+            .header("Authorization", getTokenAsInexistent()));
     }
 
     @Test
@@ -76,11 +82,11 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties").contentType(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
+                .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
@@ -94,26 +100,26 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+                .header("Authorization", getTokenAsAdmin()));
     }
 
-    @Test
+    @Test(expected = NestedServletException.class)
     public void createOrganisatie_wrongRole() throws Exception
     {
-        String json = gson.toJson(new Organisatie(null, null, gebruiker));
+        String json = gson.toJson(new Organisatie("", "", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isForbidden());
     }
 
-    @Test
+    @Test(expected = ServletException.class)
     public void createOrganisatie_wrongCredentials() throws Exception
     {
         String json = gson.toJson(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginWithWrongCredentials()))
+            .header("Authorization", getTokenAsInexistent()))
             .andExpect(status().isUnauthorized());
     }
 
@@ -123,29 +129,28 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8)
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
             .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
     }
 
-    @Test
+    @Test(expected = ServletException.class)
     public void showOrganisatie_wrongCredentials() throws Exception
     {
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8)
-            .with(loginWithWrongCredentials()))
-            .andExpect(status().isUnauthorized());
+            .header("Authorization", getTokenAsInexistent()));
     }
 
     @Test
@@ -154,17 +159,17 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isOk());
 
         this.mvc.perform(get("/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8)
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
@@ -177,13 +182,13 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+            .header("Authorization", getTokenAsAdmin()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -192,44 +197,44 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(put("/organisaties/2").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()));
+            .header("Authorization", getTokenAsAdmin()));
     }
 
-    @Test
+    @Test(expected = NestedServletException.class)
     public void updateOrganisatie_wrongRole() throws Exception
     {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/2").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsUser()))
+        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json)
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isForbidden());
     }
 
-    @Test
+    @Test(expected = ServletException.class)
     public void updateOrganisatie_wrongCredentials() throws Exception
     {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         json = gson.toJson(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
-        this.mvc.perform(put("/organisaties/2").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginWithWrongCredentials()))
+        this.mvc.perform(put("/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json)
+            .header("Authorization", getTokenAsInexistent()))
             .andExpect(status().isUnauthorized());
     }
 
@@ -239,19 +244,19 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/organisaties/1")
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isOk());
 
         this.mvc.perform(delete("/organisaties/1")
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isOk());
 
         this.mvc.perform(get("/organisaties").accept(MediaType.APPLICATION_JSON)
-            .with(loginAsUser()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -262,53 +267,75 @@ public class OrganisatieTest
         String json = gson.toJson(new Organisatie("KdG Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/organisaties/2")
-            .with(loginAsAdmin()));
+            .header("Authorization", getTokenAsAdmin()));
     }
 
-    @Test
+    @Test(expected = NestedServletException.class)
     public void deleteOrganisatie_wrongRole() throws Exception
     {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/organisaties/2")
-            .with(loginAsUser()))
+        this.mvc.perform(delete("/organisaties/1")
+            .header("Authorization", getTokenAsUser()))
             .andExpect(status().isForbidden());
     }
 
-    @Test
+    @Test(expected = ServletException.class)
     public void deleteOrganisatie_wrongCredentials() throws Exception
     {
         String json = gson.toJson(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/organisaties").contentType(MediaType.APPLICATION_JSON).content(json)
-            .with(loginAsAdmin()))
+            .header("Authorization", getTokenAsAdmin()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/organisaties/2")
-            .with(loginWithWrongCredentials()))
+        this.mvc.perform(delete("/organisaties/1")
+            .header("Authorization", getTokenAsInexistent()))
             .andExpect(status().isUnauthorized());
     }
 
-    private RequestPostProcessor loginAsUser()
-    {
-        return httpBasic("user", "user");
+    private String getTokenAsUser() throws Exception {
+        List<Rol> rollen = new ArrayList<>();
+        rollen.add(new Rol("user", "user"));
+        String json = gson.toJson(new Gebruiker("user", "user", rollen));
+
+        MvcResult mvcResult = mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andReturn();
+
+        return  "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
     }
 
-    private RequestPostProcessor loginAsAdmin()
-    {
-        return httpBasic("admin", "admin");
+    private String getTokenAsAdmin() throws Exception {
+        List<Rol> rollen = new ArrayList<>();
+        rollen.add(new Rol("admin", "admin"));
+        rollen.add(new Rol("user", "user"));
+        String json = gson.toJson(new Gebruiker("admin", "admin", rollen));
+
+        MvcResult mvcResult = mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andReturn();
+
+        return  "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
     }
 
-    private RequestPostProcessor loginWithWrongCredentials()
-    {
-        return httpBasic("wrong", "wrong");
+    private String getTokenAsInexistent() throws Exception {
+        List<Rol> rollen = new ArrayList<>();
+        rollen.add(new Rol("wrong", ""));
+        String json = gson.toJson(new Gebruiker("wrong", "wrong", rollen));
+
+        MvcResult mvcResult = mvc.perform(post("/user/login").contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andReturn();
+
+        return  "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
     }
 }
