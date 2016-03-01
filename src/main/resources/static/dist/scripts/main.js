@@ -29,6 +29,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/organisaties", {
+                templateUrl: "/dist/views/organisaties/index.html",
+                controller: "OrganisatieIndexController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
@@ -164,5 +170,32 @@
     }
 
     angular.module("kandoe").controller("HomeController", HomeController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    OrganisatieIndexController.$inject = ["$route", "OrganisatieService"];
+    function OrganisatieIndexController($route, OrganisatieService) {
+
+        var vm = this;
+
+        vm.organisaties = [];
+
+        OrganisatieService.all().then(function(data) {
+            vm.organisaties = data;
+        });
+
+        vm.addOrganisatie = function(organisatie) {
+            OrganisatieService.create(organisatie).then(function() {
+                $route.reload();
+            });
+        }
+
+    }
+
+    angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
 
 })(window.angular);

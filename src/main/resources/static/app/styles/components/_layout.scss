@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+.mdl-navigation__header {
+
+    color: $layout-header-text-color;
+    text-decoration: none;
+
+    & .material-icons {
+        vertical-align: middle;
+    }
+}
+
 .mdl-navigation__link {
 
     color: $layout-text-color;

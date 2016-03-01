@@ -426,7 +426,7 @@ p {
 }
 
 a {
-  color: rgb(255,64,129);
+  color: rgb(255,82,82);
   font-weight: 500;
 }
 
@@ -3003,7 +3003,7 @@ ul, ol {
 }
 
 .mdl-color--accent {
-  background-color: rgb(255,64,129) !important;
+  background-color: rgb(255,82,82) !important;
 }
 
 .mdl-color--accent-contrast {
@@ -3023,7 +3023,7 @@ ul, ol {
 }
 
 .mdl-color-text--accent {
-  color: rgb(255,64,129) !important;
+  color: rgb(255,82,82) !important;
 }
 
 .mdl-color-text--accent-contrast {
@@ -3106,7 +3106,7 @@ ul, ol {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgb(255,64,129);
+  background: rgb(255,82,82);
   color: rgb(255,255,255);
 }
 .mdl-button .mdl-badge[data-badge]:after {
@@ -3114,7 +3114,7 @@ ul, ol {
   right: -5px;
 }
 .mdl-badge.mdl-badge--no-background[data-badge]:after {
-  color: rgb(255,64,129);
+  color: rgb(255,82,82);
   background: rgba(255,255,255,0.2);
   box-shadow: 0 0 1px gray;
 }
@@ -3245,17 +3245,17 @@ input.mdl-button[type="submit"] {
   background-color: rgba(158,158,158, 0.40);
 }
 .mdl-button--fab.mdl-button--colored {
-  background: rgb(255,64,129);
+  background: rgb(255,82,82);
   color: rgb(255,255,255);
 }
 .mdl-button--fab.mdl-button--colored:hover {
-  background-color: rgb(255,64,129);
+  background-color: rgb(255,82,82);
 }
 .mdl-button--fab.mdl-button--colored:focus:not(:active) {
-  background-color: rgb(255,64,129);
+  background-color: rgb(255,82,82);
 }
 .mdl-button--fab.mdl-button--colored:active {
-  background-color: rgb(255,64,129);
+  background-color: rgb(255,82,82);
 }
 .mdl-button--fab.mdl-button--colored .mdl-ripple {
   background: rgb(255,255,255);
@@ -3323,14 +3323,14 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-button--accent.mdl-button--accent {
-  color: rgb(255,64,129);
+  color: rgb(255,82,82);
 }
 .mdl-button--accent.mdl-button--accent .mdl-ripple {
   background: rgb(255,255,255);
 }
 .mdl-button--accent.mdl-button--accent.mdl-button--raised, .mdl-button--accent.mdl-button--accent.mdl-button--fab {
   color: rgb(255,255,255);
-  background-color: rgb(255,64,129);
+  background-color: rgb(255,82,82);
 }
 
 .mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled {
@@ -3375,7 +3375,7 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-card__media {
-  background-color: rgb(255,64,129);
+  background-color: rgb(255,82,82);
   background-repeat: repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -3595,7 +3595,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   background: transparent;
 }
 
-.mdl-data-table {
+.mdl-data-table, .mdl-data-table-full-width {
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-collapse: collapse;
@@ -3603,36 +3603,36 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   font-size: 13px;
   background-color: rgb(255,255,255);
 }
-.mdl-data-table thead {
+.mdl-data-table thead, .mdl-data-table-full-width thead {
   padding-bottom: 3px;
 }
-.mdl-data-table thead .mdl-data-table__select {
+.mdl-data-table thead .mdl-data-table__select, .mdl-data-table-full-width thead .mdl-data-table__select {
   margin-top: 0;
 }
-.mdl-data-table tbody tr {
+.mdl-data-table tbody tr, .mdl-data-table-full-width tbody tr {
   position: relative;
   height: 48px;
   transition-duration: 0.28s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-property: background-color;
 }
-.mdl-data-table tbody tr.is-selected {
+.mdl-data-table tbody tr.is-selected, .mdl-data-table-full-width tbody tr.is-selected {
   background-color: #e0e0e0;
 }
-.mdl-data-table tbody tr:hover {
+.mdl-data-table tbody tr:hover, .mdl-data-table-full-width tbody tr:hover {
   background-color: #eeeeee;
 }
-.mdl-data-table td, .mdl-data-table th {
+.mdl-data-table td, .mdl-data-table-full-width td, .mdl-data-table th, .mdl-data-table-full-width th {
   padding: 0 18px 12px 18px;
   text-align: right;
 }
-.mdl-data-table td:first-of-type, .mdl-data-table th:first-of-type {
+.mdl-data-table td:first-of-type, .mdl-data-table-full-width td:first-of-type, .mdl-data-table th:first-of-type, .mdl-data-table-full-width th:first-of-type {
   padding-left: 24px;
 }
-.mdl-data-table td:last-of-type, .mdl-data-table th:last-of-type {
+.mdl-data-table td:last-of-type, .mdl-data-table-full-width td:last-of-type, .mdl-data-table th:last-of-type, .mdl-data-table-full-width th:last-of-type {
   padding-right: 24px;
 }
-.mdl-data-table td {
+.mdl-data-table td, .mdl-data-table-full-width td {
   position: relative;
   vertical-align: middle;
   height: 48px;
@@ -3641,10 +3641,10 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   padding-top: 12px;
   box-sizing: border-box;
 }
-.mdl-data-table td .mdl-data-table__select {
+.mdl-data-table td .mdl-data-table__select, .mdl-data-table-full-width td .mdl-data-table__select {
   vertical-align: middle;
 }
-.mdl-data-table th {
+.mdl-data-table th, .mdl-data-table-full-width th {
   position: relative;
   vertical-align: bottom;
   text-overflow: ellipsis;
@@ -3658,10 +3658,10 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   padding-bottom: 8px;
   box-sizing: border-box;
 }
-.mdl-data-table th.mdl-data-table__header--sorted-ascending, .mdl-data-table th.mdl-data-table__header--sorted-descending {
+.mdl-data-table th.mdl-data-table__header--sorted-ascending, .mdl-data-table-full-width th.mdl-data-table__header--sorted-ascending, .mdl-data-table th.mdl-data-table__header--sorted-descending, .mdl-data-table-full-width th.mdl-data-table__header--sorted-descending {
   color: rgba(0, 0, 0, 0.87);
 }
-.mdl-data-table th.mdl-data-table__header--sorted-ascending:before, .mdl-data-table th.mdl-data-table__header--sorted-descending:before {
+.mdl-data-table th.mdl-data-table__header--sorted-ascending:before, .mdl-data-table-full-width th.mdl-data-table__header--sorted-ascending:before, .mdl-data-table th.mdl-data-table__header--sorted-descending:before, .mdl-data-table-full-width th.mdl-data-table__header--sorted-descending:before {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
@@ -3679,14 +3679,21 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   margin-right: 5px;
   vertical-align: sub;
 }
-.mdl-data-table th.mdl-data-table__header--sorted-ascending:hover, .mdl-data-table th.mdl-data-table__header--sorted-descending:hover {
+.mdl-data-table th.mdl-data-table__header--sorted-ascending:hover, .mdl-data-table-full-width th.mdl-data-table__header--sorted-ascending:hover, .mdl-data-table th.mdl-data-table__header--sorted-descending:hover, .mdl-data-table-full-width th.mdl-data-table__header--sorted-descending:hover {
   cursor: pointer;
 }
-.mdl-data-table th.mdl-data-table__header--sorted-ascending:hover:before, .mdl-data-table th.mdl-data-table__header--sorted-descending:hover:before {
+.mdl-data-table th.mdl-data-table__header--sorted-ascending:hover:before, .mdl-data-table-full-width th.mdl-data-table__header--sorted-ascending:hover:before, .mdl-data-table th.mdl-data-table__header--sorted-descending:hover:before, .mdl-data-table-full-width th.mdl-data-table__header--sorted-descending:hover:before {
   color: rgba(0, 0, 0, 0.26);
 }
-.mdl-data-table th.mdl-data-table__header--sorted-descending:before {
+.mdl-data-table th.mdl-data-table__header--sorted-descending:before, .mdl-data-table-full-width th.mdl-data-table__header--sorted-descending:before {
   content: "\e5db";
+}
+
+.mdl-data-table-full-width {
+  width: 100%;
+}
+.mdl-data-table-full-width td:last-of-type, .mdl-data-table-full-width th:last-of-type {
+  width: 100%;
 }
 
 .mdl-data-table__select {
@@ -4642,6 +4649,14 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   box-sizing: border-box;
 }
 
+.mdl-navigation__header {
+  color: rgb(255,255,255);
+  text-decoration: none;
+}
+.mdl-navigation__header .material-icons {
+  vertical-align: middle;
+}
+
 .mdl-navigation__link {
   color: rgb(66,66,66);
   text-decoration: none;
@@ -5258,7 +5273,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   bottom: 0;
   left: 0;
   position: absolute;
-  background: rgb(255,64,129);
+  background: rgb(255,82,82);
   -webkit-animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
           animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
   transition: all 1s cubic-bezier(0.4, 0, 1, 1);
@@ -5731,7 +5746,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 .mdl-snackbar__action {
   background: transparent;
   border: none;
-  color: rgb(255,64,129);
+  color: rgb(255,82,82);
   text-transform: uppercase;
   padding: 14px 24px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;

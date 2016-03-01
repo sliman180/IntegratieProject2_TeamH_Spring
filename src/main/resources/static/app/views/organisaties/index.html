@@ -1,0 +1,29 @@
+<div class="mdl-cell mdl-cell--6-col">
+    <ul class="mdl-list">
+        <li class="mdl-list__item" ng-repeat="organisatie in vm.organisaties">
+            <span class="mdl-list__item-primary-content">{{ organisatie.naam }}</span>
+        </li>
+    </ul>
+</div>
+
+<div class="mdl-cell mdl-cell--6-col">
+
+    <form ng-submit="vm.addOrganisatie(organisatie)">
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="naam" ng-model="organisatie.naam">
+            <label class="mdl-textfield__label" for="naam">Naam</label>
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="beschrijving" ng-model="organisatie.beschrijving">
+            <label class="mdl-textfield__label" for="beschrijving">Beschrijving</label>
+        </div>
+
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+            Toevoegen
+        </button>
+
+    </form>
+
+</div>

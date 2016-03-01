@@ -104,6 +104,18 @@
     }
 }
 
+.mdl-data-table-full-width {
+    @extend .mdl-data-table;
+    width: 100%;
+
+    td, th {
+
+        &:last-of-type {
+            width: 100%;
+        }
+    }
+}
+
 .mdl-data-table__select {
     width: 16px;
 }

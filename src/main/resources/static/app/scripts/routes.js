@@ -12,6 +12,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/organisaties", {
+                templateUrl: "/dist/views/organisaties/index.html",
+                controller: "OrganisatieIndexController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
