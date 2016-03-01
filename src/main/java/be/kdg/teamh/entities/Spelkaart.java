@@ -13,7 +13,6 @@ public class Spelkaart implements Serializable
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "KaartId", nullable = true)
     private Kaart kaart;
 
     @ManyToOne(cascade = CascadeType.ALL)

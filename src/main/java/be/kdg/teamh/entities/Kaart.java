@@ -11,7 +11,6 @@ import java.util.List;
 public class Kaart implements Serializable
 {
     @Id
-    @Column(name = "KaartId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
