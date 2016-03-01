@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "cirkelsessies")
 public class Cirkelsessie implements Serializable {
     @Id
+    @Column(name = "CirkelsessieId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

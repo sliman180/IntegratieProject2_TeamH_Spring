@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "kaarten")
 public class Kaart implements Serializable {
     @Id
+    @Column(name = "KaartId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -31,7 +32,7 @@ public class Kaart implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
 
@@ -112,5 +113,13 @@ public class Kaart implements Serializable {
 
     public void addSpelkaart(Spelkaart spelkaart) {
         this.spelkaarten.add(spelkaart);
+    }
+
+    public List<Spelkaart> getSpelkaarten() {
+        return spelkaarten;
+    }
+
+    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+        this.spelkaarten = spelkaarten;
     }
 }

@@ -2,10 +2,7 @@ package be.kdg.teamh.services;
 
 
 import au.com.bytecode.opencsv.CSVReader;
-import be.kdg.teamh.entities.Comment;
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.KaartNotFoundException;
 import be.kdg.teamh.repositories.KaartenRepository;
@@ -113,6 +110,20 @@ public class KaartenServiceImpl implements KaartenService {
     }
 
     @Override
+    public void addSpelkaart(int id, Spelkaart spelkaart) {
+        Kaart kaart = repository.findOne(id);
+        kaart.addSpelkaart(spelkaart);
+        repository.save(kaart);
+    }
+
+    @Override
+    public List<Spelkaart> getSpelkaarten(int id) {
+        Kaart kaart = repository.findOne(id);
+
+        return kaart.getSpelkaarten();
+    }
+
+    @Override
     public void importCards(String csvPath, Gebruiker gebruiker) throws IOException {
         CSVReader reader = new CSVReader(new FileReader(csvPath));
         String[] nextLine;
@@ -131,6 +142,8 @@ public class KaartenServiceImpl implements KaartenService {
 
             repository.save(kaart);
         }
+
+
 
 
     }

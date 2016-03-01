@@ -9,10 +9,11 @@ import javax.validation.constraints.NotNull;
 public class Spelkaart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "KaartId",nullable = true)
     private Kaart kaart;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -23,7 +24,6 @@ public class Spelkaart {
 
     public Spelkaart() {
         //JPA
-
     }
 
     public Spelkaart(Kaart kaart, Cirkelsessie cirkelsessie) {

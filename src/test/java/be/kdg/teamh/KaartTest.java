@@ -192,10 +192,10 @@ public class KaartTest {
 
         String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
 
-        this.mvc.perform(post("/api/kaarten/1/addComment").contentType(MediaType.APPLICATION_JSON).content(commentJson))
+        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten/1/getComments").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -216,7 +216,7 @@ public class KaartTest {
 
         String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
 
-        this.mvc.perform(post("/api/kaarten/1/addComment").contentType(MediaType.APPLICATION_JSON).content(commentJson));
+        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson));
     }
 
 
@@ -232,14 +232,14 @@ public class KaartTest {
         String subthemaJson2 = gson.toJson(new Subthema("Een subthema 2", "beschrijving", hoofdthema));
 
 
-        this.mvc.perform(post("/api/kaarten/1/addSubthema").contentType(MediaType.APPLICATION_JSON).content(subthemaJson))
+        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(subthemaJson))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(post("/api/kaarten/1/addSubthema").contentType(MediaType.APPLICATION_JSON).content(subthemaJson2))
+        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(subthemaJson2))
                 .andExpect(status().isCreated());
 
 
-        this.mvc.perform(get("/api/kaarten/1/getSubthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
@@ -249,7 +249,6 @@ public class KaartTest {
 
     @Test
     public void verschuifKaartMetEénStap() throws Exception {
-
 
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
 
