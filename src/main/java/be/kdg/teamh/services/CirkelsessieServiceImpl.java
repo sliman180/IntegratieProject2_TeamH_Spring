@@ -3,6 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
+import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

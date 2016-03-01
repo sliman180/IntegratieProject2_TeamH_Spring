@@ -3,7 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.services.CirkelsessieService;
+import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

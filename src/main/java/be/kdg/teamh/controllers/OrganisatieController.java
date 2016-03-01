@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.OrganisatieNotFound;
-import be.kdg.teamh.services.OrganisatieService;
+import be.kdg.teamh.services.contracts.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

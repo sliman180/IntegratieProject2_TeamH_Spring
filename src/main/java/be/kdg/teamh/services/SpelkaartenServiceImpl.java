@@ -4,6 +4,7 @@ import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
 import be.kdg.teamh.exceptions.SpelkaartNotFound;
 import be.kdg.teamh.repositories.SpelkaartenRepository;
+import be.kdg.teamh.services.contracts.SpelkaartenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

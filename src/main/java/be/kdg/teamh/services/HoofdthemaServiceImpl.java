@@ -3,6 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.exceptions.HoofdthemaNotFound;
 import be.kdg.teamh.repositories.HoofdthemaRepository;
+import be.kdg.teamh.services.contracts.HoofdthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.exceptions.HoofdthemaNotFound;
-import be.kdg.teamh.services.HoofdthemaService;
+import be.kdg.teamh.services.contracts.HoofdthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

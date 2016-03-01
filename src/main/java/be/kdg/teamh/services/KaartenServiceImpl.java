@@ -5,6 +5,7 @@ import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.KaartNotFound;
 import be.kdg.teamh.repositories.KaartenRepository;
+import be.kdg.teamh.services.contracts.KaartenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

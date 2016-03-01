@@ -1,4 +1,4 @@
-package be.kdg.teamh.services;
+package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
