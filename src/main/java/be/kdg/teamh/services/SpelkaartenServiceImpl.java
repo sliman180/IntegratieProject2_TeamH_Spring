@@ -6,10 +6,12 @@ import be.kdg.teamh.exceptions.KaartNotFoundException;
 import be.kdg.teamh.repositories.SpelkaartenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class SpelkaartenServiceImpl implements SpelkaartenService {
 
 

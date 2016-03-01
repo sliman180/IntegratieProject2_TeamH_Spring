@@ -5,10 +5,12 @@ import be.kdg.teamh.exceptions.SubthemaNotFoundException;
 import be.kdg.teamh.repositories.SubthemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class SubthemaServiceImpl implements SubthemaService {
     @Autowired
     private SubthemaRepository repository;

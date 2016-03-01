@@ -17,10 +17,10 @@ public class Comment implements Serializable {
 
     private LocalDateTime datum;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Gebruiker gebruiker;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Kaart kaart;
 
     public Comment() {
