@@ -7,7 +7,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "gebruikers")
-public class Gebruiker implements Serializable {
+public class Gebruiker implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,7 +22,8 @@ public class Gebruiker implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    public Gebruiker() {
+    public Gebruiker()
+    {
         // JPA constructor
     }
 }

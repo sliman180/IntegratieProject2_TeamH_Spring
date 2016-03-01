@@ -5,7 +5,8 @@ import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 
 import java.util.List;
 
-public interface CirkelsessieService {
+public interface CirkelsessieService
+{
     List<Cirkelsessie> all();
 
     void create(Cirkelsessie hoofdthema);
@@ -15,5 +16,6 @@ public interface CirkelsessieService {
     void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound;
 
     void delete(int id) throws CirkelsessieNotFound;
-    void clone(int id);
+
+    void clone(int id) throws CirkelsessieNotFound;
 }

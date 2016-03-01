@@ -8,7 +8,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "kaarten")
-public class Kaart implements Serializable {
+public class Kaart implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -34,91 +35,111 @@ public class Kaart implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
-
-    public Kaart() {
+    public Kaart()
+    {
         //JPA Constructor
     }
 
-    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Gebruiker gebruiker) {
+    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Gebruiker gebruiker)
+    {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
         this.commentsToelaatbaar = commentsToelaatbaar;
         this.gebruiker = gebruiker;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getTekst() {
+    public String getTekst()
+    {
         return tekst;
     }
 
-    public void setTekst(String tekst) {
+    public void setTekst(String tekst)
+    {
         this.tekst = tekst;
     }
 
-    public String getImageUrl() {
+    public String getImageUrl()
+    {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl)
+    {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isCommentsToelaatbaar() {
+    public boolean isCommentsToelaatbaar()
+    {
         return commentsToelaatbaar;
     }
 
-    public void setCommentsToelaatbaar(boolean commentsToelaatbaar) {
+    public void setCommentsToelaatbaar(boolean commentsToelaatbaar)
+    {
         this.commentsToelaatbaar = commentsToelaatbaar;
     }
 
-    public Gebruiker getGebruiker() {
+    public Gebruiker getGebruiker()
+    {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker) {
+    public void setGebruiker(Gebruiker gebruiker)
+    {
         this.gebruiker = gebruiker;
     }
 
-    public List<Comment> getComments() {
+    public List<Comment> getComments()
+    {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<Comment> comments)
+    {
         this.comments = comments;
     }
 
-    public void addComment(Comment comment) {
+    public void addComment(Comment comment)
+    {
         this.comments.add(comment);
     }
 
-    public void addSubthema(Subthema subthema) {
+    public void addSubthema(Subthema subthema)
+    {
         this.subthemas.add(subthema);
     }
 
-    public List<Subthema> getSubthemas() {
+    public List<Subthema> getSubthemas()
+    {
         return subthemas;
     }
 
-    public void setSubthemas(List<Subthema> subthemas) {
+    public void setSubthemas(List<Subthema> subthemas)
+    {
         this.subthemas = subthemas;
     }
 
-    public void addSpelkaart(Spelkaart spelkaart) {
+    public void addSpelkaart(Spelkaart spelkaart)
+    {
         this.spelkaarten.add(spelkaart);
     }
 
-    public List<Spelkaart> getSpelkaarten() {
+    public List<Spelkaart> getSpelkaarten()
+    {
         return spelkaarten;
     }
 
-    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+    public void setSpelkaarten(List<Spelkaart> spelkaarten)
+    {
         this.spelkaarten = spelkaarten;
     }
 }

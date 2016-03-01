@@ -7,7 +7,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
-import be.kdg.teamh.exceptions.KaartNotFoundException;
+import be.kdg.teamh.exceptions.KaartNotFound;
 import be.kdg.teamh.repositories.KaartenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,42 +18,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class KaartenServiceImpl implements KaartenService {
-
-
+public class KaartenServiceImpl implements KaartenService
+{
     @Autowired
     KaartenRepository repository;
 
-    public List<Kaart> all() {
+    public List<Kaart> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(Kaart kaart) {
+    public void create(Kaart kaart)
+    {
         repository.save(kaart);
     }
 
-
     @Override
-    public Kaart find(int id) throws KaartNotFoundException {
+    public Kaart find(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
-            throw new KaartNotFoundException();
+        if (kaart == null)
+        {
+            throw new KaartNotFound();
         }
 
         return kaart;
     }
 
     @Override
-    public void update(int id, Kaart kaart) throws KaartNotFoundException {
-
-
-        Kaart old = repository.findOne(id);
-
-        if (old == null) {
-            throw new KaartNotFoundException();
-        }
+    public void update(int id, Kaart kaart) throws KaartNotFound
+    {
+        Kaart old = find(id);
 
         old.setImageUrl(kaart.getImageUrl());
         old.setTekst(kaart.getTekst());
@@ -63,76 +60,79 @@ public class KaartenServiceImpl implements KaartenService {
     }
 
     @Override
-    public void delete(int id) throws KaartNotFoundException {
-
-        Kaart kaart = repository.findOne(id);
-
-        if (kaart == null) {
-            throw new KaartNotFoundException();
-        }
+    public void delete(int id) throws KaartNotFound
+    {
+        Kaart kaart = find(id);
 
         repository.delete(kaart);
-
     }
 
     @Override
-    public void createComment(int id, Comment comment) throws CommentsNotAllowed {
-        Kaart kaart = repository.findOne(id);
+    public void createComment(int id, Comment comment) throws KaartNotFound, CommentsNotAllowed
+    {
+        Kaart kaart = find(id);
 
-
-        System.out.println(kaart.isCommentsToelaatbaar());
-        if (!kaart.isCommentsToelaatbaar()) {
+        if (!kaart.isCommentsToelaatbaar())
+        {
             throw new CommentsNotAllowed();
         }
 
         kaart.addComment(comment);
+
         repository.save(kaart);
     }
 
     @Override
-    public List<Comment> allComments(int id) {
-        Kaart kaart = repository.findOne(id);
+    public List<Comment> allComments(int id) throws KaartNotFound
+    {
+        Kaart kaart = find(id);
+
         return kaart.getComments();
     }
 
     @Override
-    public void addSubthema(int id, Subthema subthema) {
+    public void addSubthema(int id, Subthema subthema) throws KaartNotFound
+    {
+        Kaart kaart = find(id);
 
-        Kaart kaart = repository.findOne(id);
         kaart.addSubthema(subthema);
+
         repository.save(kaart);
-
-
     }
 
     @Override
-    public List<Subthema> getSubthemas(int id) {
-        Kaart kaart = repository.findOne(id);
+    public List<Subthema> getSubthemas(int id) throws KaartNotFound
+    {
+        Kaart kaart = find(id);
 
         return kaart.getSubthemas();
     }
 
     @Override
-    public void importCards(String csvPath, Gebruiker gebruiker) throws IOException {
+    public void importCards(String csvPath, Gebruiker gebruiker) throws IOException
+    {
         CSVReader reader = new CSVReader(new FileReader(csvPath));
         String[] nextLine;
         Boolean commentsToelaatbaar = false;
         List<Kaart> geimporteerdeKaarten = new ArrayList<>();
 
-        while ((nextLine = reader.readNext()) != null) {
+        while ((nextLine = reader.readNext()) != null)
+        {
             // nextLine[] is an array of values from the line
 
-            if (nextLine[2].toLowerCase().equals("false")) {
+            if (nextLine[2].toLowerCase().equals("false"))
+            {
                 commentsToelaatbaar = false;
-            } else if (nextLine[2].toLowerCase().equals("true")) {
+            }
+            else if (nextLine[2].toLowerCase().equals("true"))
+            {
                 commentsToelaatbaar = true;
             }
+
             Kaart kaart = new Kaart(nextLine[0], nextLine[1], commentsToelaatbaar, gebruiker);
 
             repository.save(kaart);
         }
-
-
     }
 }
 

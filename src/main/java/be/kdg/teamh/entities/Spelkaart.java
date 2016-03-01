@@ -1,15 +1,15 @@
 package be.kdg.teamh.entities;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "spelkaarten")
-public class Spelkaart {
-
+public class Spelkaart implements Serializable
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -21,47 +21,55 @@ public class Spelkaart {
     @NotNull
     private int positie;
 
-    public Spelkaart() {
-        //JPA
-
+    public Spelkaart()
+    {
+        // JPA Constructor
     }
 
-    public Spelkaart(Kaart kaart, Cirkelsessie cirkelsessie) {
+    public Spelkaart(Kaart kaart, Cirkelsessie cirkelsessie)
+    {
         this.kaart = kaart;
         this.positie = 0;
         this.cirkelsessie = cirkelsessie;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public Kaart getKaart() {
+    public Kaart getKaart()
+    {
         return kaart;
     }
 
-    public void setKaart(Kaart kaart) {
+    public void setKaart(Kaart kaart)
+    {
         this.kaart = kaart;
     }
 
-    public Cirkelsessie getCirkelsessie() {
+    public Cirkelsessie getCirkelsessie()
+    {
         return cirkelsessie;
     }
 
-    public void setCirkelsessie(Cirkelsessie cirkelsessie) {
+    public void setCirkelsessie(Cirkelsessie cirkelsessie)
+    {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public int getPositie() {
+    public int getPositie()
+    {
         return positie;
     }
 
-    public void setPositie(int positie) {
+    public void setPositie(int positie)
+    {
         this.positie = positie;
     }
-
 }
