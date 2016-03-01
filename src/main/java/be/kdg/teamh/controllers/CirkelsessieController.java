@@ -36,7 +36,7 @@ public class CirkelsessieController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id,@RequestBody Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
+    public void update(@PathVariable("id") int id, @RequestBody Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
         service.update(id, cirkelsessie);
     }
 
@@ -53,8 +53,20 @@ public class CirkelsessieController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/clone",method = RequestMethod.POST)
-    public void cloneCirkelSessie(@PathVariable("id") int id){
-                service.clone(id);
+    @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
+    public void cloneCirkelSessie(@PathVariable("id") int id) {
+        service.clone(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "gepland", method = RequestMethod.GET)
+    public List<Cirkelsessie> showGepland() throws CirkelsessieNotFound {
+        return service.allGepland();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "actief", method = RequestMethod.GET)
+    public List<Cirkelsessie> showActief() throws CirkelsessieNotFound {
+        return service.allActief();
     }
 }

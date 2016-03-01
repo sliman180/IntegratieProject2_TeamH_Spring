@@ -1,9 +1,9 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Subthema;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,19 +20,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import java.time.LocalDateTime;
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CirkelsessieTest {
+
     @Mock
     Gebruiker gebruiker;
     @Mock
@@ -40,8 +41,12 @@ public class CirkelsessieTest {
     private MockMvc mvc;
     @Autowired
     private WebApplicationContext context;
+
     @Autowired
     private Gson gson;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Before
     public void setUp() {
@@ -57,7 +62,7 @@ public class CirkelsessieTest {
 
     @Test
     public void createCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 10, 5, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 10, 5, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -67,20 +72,20 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].naam", is("Session one")))
-                .andExpect(jsonPath("$[0].maxAantalKaarten", is(10)));
+                .andExpect(jsonPath("$[0].aantalCirkels", is(10)))
+                .andExpect(jsonPath("$[0].maxAantalKaarten", is(5)));
     }
 
     @Test(expected = NullPointerException.class)
     public void createCirkelsessie_nullInput() throws Exception {
-        String json = gson.toJson(new Cirkelsessie(null, null, 5, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie(null, null, null, null, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
     public void showCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
-
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
@@ -88,12 +93,13 @@ public class CirkelsessieTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.naam", is("Session one")))
-                .andExpect(jsonPath("$.maxAantalKaarten", is(5)));
+                .andExpect(jsonPath("$.aantalCirkels", is(5)))
+                .andExpect(jsonPath("$.maxAantalKaarten", is(10)));
     }
 
     @Test(expected = NestedServletException.class)
     public void showCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -102,17 +108,18 @@ public class CirkelsessieTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.naam", is("Session one")))
+                .andExpect(jsonPath("$[0].aantalCirkels", is(5)))
                 .andExpect(jsonPath("$.maxAantalKaarten", is(10)));
     }
 
     @Test
     public void updateCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie("Session two", 10, 15, subthema, gebruiker));
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 8, 15, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
@@ -121,30 +128,30 @@ public class CirkelsessieTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.naam", is("Session two")))
-                .andExpect(jsonPath("$.maxAantalKaarten", is(10)))
-                .andExpect(jsonPath("$.aantalCirkels", is(15))).andDo(print());
+                .andExpect(jsonPath("$.aantalCirkels", is(8)))
+                .andExpect(jsonPath("$.maxAantalKaarten", is(15)));
     }
 
     @Test(expected = NullPointerException.class)
     public void updateCirkelsessie_nullInput() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie(null, null, 10, subthema, gebruiker));
+        json = objectMapper.writeValueAsString(new Cirkelsessie(null, null, null, null, null, subthema, gebruiker));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(put("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
@@ -152,7 +159,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -167,7 +174,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -178,7 +185,7 @@ public class CirkelsessieTest {
     @Test
     public void checkCirkelsessieLinkedToSubthema() throws Exception {
         subthema = new Subthema("Houffalize", "Route 6", null);
-        String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -190,16 +197,15 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$.beschrijving", is("Route 6")));
         this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",is(1)))
-                .andExpect(jsonPath("$.naam",is("Houffalize")))
-                .andExpect(jsonPath("$.beschrijving",is("Route 6")));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving", is("Route 6")));
     }
 
     @Test
     public void cloneCirkelSessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one",5,10,subthema,gebruiker);
-//        cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
-        String json = gson.toJson(cirkelsessie);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, gebruiker);
+        String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
@@ -209,10 +215,44 @@ public class CirkelsessieTest {
 
         this.mvc.perform(get("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",is(2)))
-                .andExpect(jsonPath("$.naam",is("Session one")))
-                .andExpect(jsonPath("$.maxAantalKaarten",is(5)))
-                .andExpect(jsonPath("$.aantalCirkels",is(10)))
-                .andExpect(jsonPath("$.deelnames",hasSize(0)));
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.naam", is("Session one")))
+                .andExpect(jsonPath("$.maxAantalKaarten", is(5)))
+                .andExpect(jsonPath("$.aantalCirkels", is(10)))
+                .andExpect(jsonPath("$.deelnames", hasSize(0)));
     }
+
+    @Test
+    public void showGeplandeCirkelSessies() throws Exception {
+
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, true, LocalDateTime.now().plusMonths(3), subthema, gebruiker));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 5, 10, false, LocalDateTime.now(), subthema, gebruiker));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/cirkelsessies/gepland").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].naam", is("Session one")));
+
+    }
+
+    @Test
+    public void showActieveCirkelSessies() throws Exception {
+
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, true, LocalDateTime.now().plusMonths(3), subthema, gebruiker));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 5, 10, false, LocalDateTime.now().minusDays(1), subthema, gebruiker));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session three", 5, 10, false, LocalDateTime.now().minusDays(1), subthema, gebruiker));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/cirkelsessies/actief").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].naam", is("Session two")))
+                .andExpect(jsonPath("$[1].naam", is("Session three")));
+
+    }
+
 }

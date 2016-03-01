@@ -3,6 +3,7 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,11 @@ public class Cirkelsessie implements Serializable {
     @NotNull
     private int maxAantalKaarten;
 
-    // @NotNull
-    // private LocalDateTime datum;
-    // TODO: http://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
+    @NotNull
+    private boolean isGesloten;
+
+    @NotNull
+    private LocalDateTime startDatum;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Subthema subthema;
@@ -44,14 +47,15 @@ public class Cirkelsessie implements Serializable {
         // JPA Constructor
     }
 
-    public Cirkelsessie(String naam, Integer maxAantalKaarten, int aantalCirkels, Subthema subthema, Gebruiker gebruiker) {
+    public Cirkelsessie(String naam, Integer aantalCirkels, Integer maxAantalKaarten, Boolean isGesloten, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker) {
         this.naam = naam;
+        this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
+        this.isGesloten = isGesloten;
+        this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
-        this.aantalCirkels = aantalCirkels;
     }
-
 
     public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels) {
         this.naam = naam;
@@ -59,6 +63,22 @@ public class Cirkelsessie implements Serializable {
         this.aantalCirkels = aantalCirkels;
     }
 
+
+    public boolean isGesloten() {
+        return isGesloten;
+    }
+
+    public void setGesloten(boolean gesloten) {
+        isGesloten = gesloten;
+    }
+
+    public LocalDateTime getStartDatum() {
+        return startDatum;
+    }
+
+    public void setStartDatum(LocalDateTime startDatum) {
+        this.startDatum = startDatum;
+    }
 
     public int getAantalCirkels() {
         return aantalCirkels;
@@ -71,7 +91,6 @@ public class Cirkelsessie implements Serializable {
     public int getId() {
         return id;
     }
-
 
     public void setId(int id) {
         this.id = id;

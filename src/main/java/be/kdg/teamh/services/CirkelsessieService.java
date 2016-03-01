@@ -15,5 +15,10 @@ public interface CirkelsessieService {
     void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound;
 
     void delete(int id) throws CirkelsessieNotFound;
+
     void clone(int id);
+
+    List<Cirkelsessie> allGepland();
+
+    List<Cirkelsessie> allActief();
 }
