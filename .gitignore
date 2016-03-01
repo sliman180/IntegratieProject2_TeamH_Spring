@@ -35,3 +35,8 @@ out/
 # Mac
 
 .DS_Store
+
+# Frontend
+
+.sass-cache/
+node_modules/

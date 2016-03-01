@@ -2,13 +2,16 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "organisaties")
-public class Organisatie {
+public class Organisatie implements Serializable
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -17,51 +20,61 @@ public class Organisatie {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Gebruiker organisator;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Hoofdthema> hoofdthema;
+    private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    public Organisatie() {
+    public Organisatie()
+    {
         // JPA Constructor
     }
 
-    public Organisatie(String naam, String beschrijving, Gebruiker organisator) {
+    public Organisatie(String naam, String beschrijving, Gebruiker gebruiker)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
-        this.organisator = organisator;
+        this.gebruiker = gebruiker;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public String getNaam() {
+    public String getNaam()
+    {
         return naam;
     }
 
-    public void setNaam(String naam) {
+    public void setNaam(String naam)
+    {
         this.naam = naam;
     }
 
-    public String getBeschrijving() {
+    public String getBeschrijving()
+    {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
+    public void setBeschrijving(String beschrijving)
+    {
         this.beschrijving = beschrijving;
     }
 
-    public Gebruiker getOrganisator() {
-        return organisator;
+    public Gebruiker getOrganisator()
+    {
+        return gebruiker;
     }
 
-    public void setOrganisator(Gebruiker organisator) {
-        this.organisator = organisator;
+    public void setOrganisator(Gebruiker gebruiker)
+    {
+        this.gebruiker = gebruiker;
     }
 }

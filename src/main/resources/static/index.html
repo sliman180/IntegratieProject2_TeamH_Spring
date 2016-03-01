@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html ng-app="kandoe">
+<head>
+
+    <meta charset="utf-8"/>
+    <title>Kandoe</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="dist/styles/main.min.css">
+
+</head>
+<body ng-cloak>
+
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">
+                    <a class="mdl-navigation__header" href="/#/">Kandoe</a>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                    <a class="mdl-navigation__link" href="">Link</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">
+                <a class="mdl-navigation__header" href="/#/">Kandoe</a>
+            </span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+                <a class="mdl-navigation__link" href="">Link</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid" ng-view></div>
+        </main>
+    </div>
+
+    <script src="dist/scripts/vendor.min.js"></script>
+    <script src="dist/scripts/main.min.js"></script>
+
+</body>
+</html>

@@ -2,14 +2,16 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "hoofdthemas")
-public class Hoofdthema {
+public class Hoofdthema implements Serializable
+{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -18,59 +20,83 @@ public class Hoofdthema {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Organisatie organisatie;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Gebruiker gebruiker;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Subthema> subthemas = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
-    private Hoofdthema() {
+    private Hoofdthema()
+    {
         // JPA constructor
     }
 
-    public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker) {
+    public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.organisatie = organisatie;
         this.gebruiker = gebruiker;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public String getNaam() {
+    public String getNaam()
+    {
         return naam;
     }
 
-    public void setNaam(String naam) {
+    public void setNaam(String naam)
+    {
         this.naam = naam;
     }
 
-    public String getBeschrijving() {
+    public String getBeschrijving()
+    {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
+    public void setBeschrijving(String beschrijving)
+    {
         this.beschrijving = beschrijving;
     }
 
-    public Organisatie getOrganisatie() {
+    public Organisatie getOrganisatie()
+    {
         return organisatie;
     }
 
-    public void setOrganisatie(Organisatie organisatie) {
+    public void setOrganisatie(Organisatie organisatie)
+    {
         this.organisatie = organisatie;
     }
 
-    public Gebruiker getGebruiker() {
+    public Gebruiker getGebruiker()
+    {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker) {
+    public void setGebruiker(Gebruiker gebruiker)
+    {
         this.gebruiker = gebruiker;
+    }
+
+    public List<Tag> getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags)
+    {
+        this.tags = tags;
     }
 }
