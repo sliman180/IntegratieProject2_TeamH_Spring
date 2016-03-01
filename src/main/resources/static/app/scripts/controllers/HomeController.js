@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function HomeController(OrganisatieService) {
+    function HomeController() {
 
         var vm = this;
 

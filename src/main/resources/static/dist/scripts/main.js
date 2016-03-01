@@ -157,8 +157,7 @@
 
     "use strict";
 
-    HomeController.$inject = ["OrganisatieService"];
-    function HomeController(OrganisatieService) {
+    function HomeController() {
 
         var vm = this;
 
