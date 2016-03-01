@@ -51,8 +51,8 @@ public class KaartenController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @RequestBody Comment comment) throws CommentsNotAllowed {
-        service.createComment(id, comment);
+    public void createComment(@PathVariable("id") int id, @RequestBody Commentaar commentaar) throws CommentsNotAllowed {
+        service.createComment(id, commentaar);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -82,7 +82,7 @@ public class KaartenController {
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
 
-    public List<Comment> allComments(@PathVariable("id") int id) {
+    public List<Commentaar> allComments(@PathVariable("id") int id) {
         return service.allComments(id);
     }
 

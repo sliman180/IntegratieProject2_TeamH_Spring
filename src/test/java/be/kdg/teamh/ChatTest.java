@@ -1,6 +1,7 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,10 @@ public class ChatTest {
 
     @Mock
     private Chat chat;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @Before
     public void setUp() throws Exception {
@@ -181,7 +186,7 @@ public class ChatTest {
 
     @Test
     public void addMessagesToChat() throws Exception {
-        Message message;
+        Bericht bericht;
         String messageJson;
 
         String json = gson.toJson(chat);
@@ -189,14 +194,14 @@ public class ChatTest {
                 .andExpect(status().isCreated());
 
         for (int x = 0; x < 5; x++) {
-            message = new Message("Heey" + x, LocalDateTime.now().toString(), gebruiker);
-            messageJson = gson.toJson(message);
+            bericht = new Bericht("Heey" + x, LocalDateTime.now(), gebruiker);
+            messageJson = objectMapper.writeValueAsString(bericht);
             this.mvc.perform(post("/api/chats/1/messages").contentType(MediaType.APPLICATION_JSON).content(messageJson))
                     .andExpect(status().isCreated());
         }
 
         this.mvc.perform(get("/api/chats/1").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.messages", hasSize(5)));
+                .andExpect(jsonPath("$.berichten", hasSize(5)));
 
     }
 

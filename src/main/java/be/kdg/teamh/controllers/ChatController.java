@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
+import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
-import be.kdg.teamh.entities.Message;
 import be.kdg.teamh.exceptions.ChatNotFound;
 import be.kdg.teamh.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class ChatController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "{id}/messages", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @RequestBody Message message) throws ChatNotFound {
-        service.createMessage(id, message);
+    public void createComment(@PathVariable("id") int id, @RequestBody Bericht bericht) throws ChatNotFound {
+        service.createMessage(id, bericht);
     }
 }

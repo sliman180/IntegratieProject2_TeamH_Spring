@@ -13,7 +13,7 @@ public class Spelkaart {
     private int id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "KaartId",nullable = true)
+    @JoinColumn(name = "KaartId", nullable = true)
     private Kaart kaart;
 
     @ManyToOne(cascade = CascadeType.PERSIST)

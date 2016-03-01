@@ -27,12 +27,12 @@ public class Kaart implements Serializable {
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Commentaar> commentaars = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
 
@@ -87,16 +87,16 @@ public class Kaart implements Serializable {
         this.gebruiker = gebruiker;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Commentaar> getCommentaars() {
+        return commentaars;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setCommentaars(List<Commentaar> commentaars) {
+        this.commentaars = commentaars;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
+    public void addComment(Commentaar commentaar) {
+        this.commentaars.add(commentaar);
     }
 
     public void addSubthema(Subthema subthema) {

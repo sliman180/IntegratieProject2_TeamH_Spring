@@ -2,12 +2,13 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments")
-public class Comment implements Serializable {
+@Table(name = "messages")
+public class Bericht {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,29 +16,41 @@ public class Comment implements Serializable {
     @NotNull
     private String tekst;
 
+    @NotNull
     private LocalDateTime datum;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Chat chat;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Kaart kaart;
 
-    public Comment() {
-        //JPA Constructor
+    public Bericht() {
+        //JPA
     }
 
-    public Comment(String tekst, Gebruiker gebruiker) {
+    public Bericht(String tekst, LocalDateTime datum, Gebruiker gebruiker) {
         this.tekst = tekst;
+        this.datum = datum;
         this.gebruiker = gebruiker;
     }
 
-    public Kaart getKaart() {
-        return kaart;
+
+    public Chat getChat() {
+        return chat;
     }
 
-    public void setKaart(Kaart kaart) {
-        this.kaart = kaart;
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 
     public int getId() {
@@ -62,13 +75,5 @@ public class Comment implements Serializable {
 
     public void setDatum(LocalDateTime datum) {
         this.datum = datum;
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
     }
 }

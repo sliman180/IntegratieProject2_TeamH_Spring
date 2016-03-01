@@ -22,9 +22,9 @@ public interface KaartenService {
 
     void delete(int id) throws KaartNotFoundException;
 
-    void createComment(int id, Comment comment) throws CommentsNotAllowed;
+    void createComment(int id, Commentaar commentaar) throws CommentsNotAllowed;
 
-    List<Comment> allComments(int id);
+    List<Commentaar> allComments(int id);
 
     void addSubthema(int id, Subthema subthema);
 
@@ -32,7 +32,7 @@ public interface KaartenService {
 
     List<Spelkaart> getSpelkaarten(int id);
 
-    void addSpelkaart(int id,Spelkaart spelkaart);
+    void addSpelkaart(int id, Spelkaart spelkaart);
 
 
 }

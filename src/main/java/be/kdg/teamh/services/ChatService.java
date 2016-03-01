@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
-import be.kdg.teamh.entities.Message;
 import be.kdg.teamh.exceptions.ChatNotFound;
 
 import java.util.List;
@@ -18,5 +18,5 @@ public interface ChatService {
 
     void delete(int id) throws ChatNotFound;
 
-    void createMessage(int id, Message message) throws ChatNotFound;
+    void createMessage(int id, Bericht bericht) throws ChatNotFound;
 }

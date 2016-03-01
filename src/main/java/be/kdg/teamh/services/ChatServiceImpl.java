@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
-import be.kdg.teamh.entities.Message;
 import be.kdg.teamh.exceptions.ChatNotFound;
 import be.kdg.teamh.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +45,9 @@ public class ChatServiceImpl implements ChatService {
             throw new ChatNotFound();
         }
 
-
         old.setNaam(chat.getNaam());
         old.setCirkelsessie(chat.getCirkelsessie());
-        old.setMessages(chat.getMessages());
+        old.setBerichten(chat.getBerichten());
 
         repository.save(old);
     }
@@ -66,7 +65,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void createMessage(int id, Message message) throws ChatNotFound {
+    public void createMessage(int id, Bericht bericht) throws ChatNotFound {
         Chat chat = repository.findOne(id);
 
 
@@ -74,7 +73,7 @@ public class ChatServiceImpl implements ChatService {
             throw new ChatNotFound();
         }
 
-        chat.addMessage(message);
+        chat.addBericht(bericht);
         repository.save(chat);
     }
 }

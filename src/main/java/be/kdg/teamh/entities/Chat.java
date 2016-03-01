@@ -17,7 +17,7 @@ public class Chat {
     private String naam;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Message> messages = new ArrayList<>();
+    private List<Bericht> berichten = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.PERSIST)
     private Cirkelsessie cirkelsessie;
@@ -42,12 +42,12 @@ public class Chat {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<Bericht> getBerichten() {
+        return berichten;
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public void setBerichten(List<Bericht> berichten) {
+        this.berichten = berichten;
     }
 
     public int getId() {
@@ -66,7 +66,7 @@ public class Chat {
         this.naam = naam;
     }
 
-    public void addMessage(Message message) {
-        this.messages.add(message);
+    public void addBericht(Bericht bericht) {
+        this.berichten.add(bericht);
     }
 }

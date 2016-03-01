@@ -190,7 +190,7 @@ public class KaartTest {
                 .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
                 .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
-        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+        String commentJson = gson.toJson(new Commentaar("Een comment", gebruiker));
 
         this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson))
                 .andExpect(status().isCreated());
@@ -214,7 +214,7 @@ public class KaartTest {
                 .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
                 .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
-        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+        String commentJson = gson.toJson(new Commentaar("Een comment", gebruiker));
 
         this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson));
     }
@@ -284,7 +284,6 @@ public class KaartTest {
                 .andExpect(jsonPath("$", hasSize(3)));
 
     }
-
 
 
 }

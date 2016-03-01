@@ -200,6 +200,7 @@ public class CirkelsessieTest {
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
 
+
         this.mvc.perform(post("/api/cirkelsessies/1/clone").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 

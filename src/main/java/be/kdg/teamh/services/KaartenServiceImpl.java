@@ -73,21 +73,21 @@ public class KaartenServiceImpl implements KaartenService {
     }
 
     @Override
-    public void createComment(int id, Comment comment) throws CommentsNotAllowed {
+    public void createComment(int id, Commentaar commentaar) throws CommentsNotAllowed {
         Kaart kaart = repository.findOne(id);
 
         if (!kaart.isCommentsToelaatbaar()) {
             throw new CommentsNotAllowed();
         }
 
-        kaart.addComment(comment);
+        kaart.addComment(commentaar);
         repository.save(kaart);
     }
 
     @Override
-    public List<Comment> allComments(int id) {
+    public List<Commentaar> allComments(int id) {
         Kaart kaart = repository.findOne(id);
-        return kaart.getComments();
+        return kaart.getCommentaars();
     }
 
     @Override
@@ -140,8 +140,6 @@ public class KaartenServiceImpl implements KaartenService {
 
             repository.save(kaart);
         }
-
-
 
 
     }

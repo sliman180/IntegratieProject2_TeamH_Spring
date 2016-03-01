@@ -2,12 +2,12 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "messages")
-public class Message {
-
-
+@Table(name = "comments")
+public class Commentaar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,41 +15,29 @@ public class Message {
     @NotNull
     private String tekst;
 
-    @NotNull
-    private String datum;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Chat chat;
+    private LocalDateTime datum;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Kaart kaart;
 
-    public Message() {
-        //JPA
+    public Commentaar() {
+        //JPA Constructor
     }
 
-    public Message(String tekst, String datum, Gebruiker gebruiker) {
+    public Commentaar(String tekst, Gebruiker gebruiker) {
         this.tekst = tekst;
-        this.datum = datum;
         this.gebruiker = gebruiker;
     }
 
-
-    public Chat getChat() {
-        return chat;
+    public Kaart getKaart() {
+        return kaart;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
+    public void setKaart(Kaart kaart) {
+        this.kaart = kaart;
     }
 
     public int getId() {
@@ -68,11 +56,19 @@ public class Message {
         this.tekst = tekst;
     }
 
-    public String getDatum() {
+    public LocalDateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(String datum) {
+    public void setDatum(LocalDateTime datum) {
         this.datum = datum;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 }
