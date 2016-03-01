@@ -11,6 +11,5 @@ deploy:
     provider: heroku
     api_key:
         secure: hRFtJUoSH2/f+7tbjbo5+FymeHLhFoysScBFK4FHUPQL8zlHtN6zaRbNe//nsMgMKTZGPzUMtIDaP47n6AP1Au/qMhdf6fV9vKDfnOg80iPjXEolDYtSR0ikRvFzhrd6HdbHVrcsCNOpGTi56XTUuzIgOfkSu6QhbK/cnPUcf660phsF2g4Fup+9GSqZgyi0MBYgajLX0IVN2v4aeUaZPE0VlMedX1IaapYCp27BVSLy5UmrmuuWvCWerLcPYQ7svq5QdAiKu88f9PuPWZ9z74sEZQRdDvdjD4745xNAfU37n5jSBjdz60yI6J+qya5XAYaHiGgkhCiJ4n3qOh7DA+zVTXug7uk7xxBq6Iuu1x7ieKtlJZw5foohkhhk5tTo5u90oDE4qCo9n94PS3KxM1wcFAzkFzRWZbFrTMK0xzQDD3M4yj+XhX92z6DDZbwdk8rZiHL6CpnwcU69puRlxgx8afKqgKzYe+uvRVnroTPTFjT+9oEG/KpoZU4WCFPW3V+7n8mWIGIZOW37/XuIl0dvBatJB6YDqtu/5znpfXi38BFdT1docNAjmGXo/6PpVVegj7d8hk2nCa1er47Rj9tGSoytYoN+MX+JMoG1n0s4BpmY+Ox76Ss2mQF2B8hvopoEG4VC4nxnafoAJ8xUPVCIDOkfrOPwcrSl57ojIew=
-    app: shrouded-harbor-41030
     on:
-        repo: sliman180/IntegratieProject2_TeamH_Spring
+        repo: sliman180/teamh-spring

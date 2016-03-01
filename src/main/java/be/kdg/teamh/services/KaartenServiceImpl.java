@@ -1,6 +1,5 @@
 package be.kdg.teamh.services;
 
-
 import au.com.bytecode.opencsv.CSVReader;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
@@ -8,6 +7,7 @@ import be.kdg.teamh.exceptions.KaartNotFound;
 import be.kdg.teamh.repositories.KaartenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class KaartenServiceImpl implements KaartenService
 {
     @Autowired
