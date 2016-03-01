@@ -1,7 +1,6 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Subthema;
 import com.google.gson.Gson;
@@ -187,14 +186,14 @@ public class CirkelsessieTest {
                 .andExpect(jsonPath("$.beschrijving", is("Route 6")));
         this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",is(1)))
-                .andExpect(jsonPath("$.naam",is("Houffalize")))
-                .andExpect(jsonPath("$.beschrijving",is("Route 6")));
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Houffalize")))
+                .andExpect(jsonPath("$.beschrijving", is("Route 6")));
     }
 
     @Test
     public void cloneCirkelSessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one",5,10,subthema,gebruiker);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, subthema, gebruiker);
 //        cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
         String json = gson.toJson(cirkelsessie);
 
@@ -206,10 +205,10 @@ public class CirkelsessieTest {
 
         this.mvc.perform(get("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id",is(2)))
-                .andExpect(jsonPath("$.naam",is("Session one")))
-                .andExpect(jsonPath("$.maxAantalKaarten",is(5)))
-                .andExpect(jsonPath("$.aantalCirkels",is(10)))
-                .andExpect(jsonPath("$.deelnames",hasSize(0)));
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.naam", is("Session one")))
+                .andExpect(jsonPath("$.maxAantalKaarten", is(5)))
+                .andExpect(jsonPath("$.aantalCirkels", is(10)))
+                .andExpect(jsonPath("$.deelnames", hasSize(0)));
     }
 }
