@@ -3,6 +3,10 @@ spring:
         hibernate:
             ddl-auto: create-drop
 
+logging:
+    level:
+        root: WARN
+
 ---
 
 spring:
