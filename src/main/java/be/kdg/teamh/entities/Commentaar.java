@@ -16,7 +16,6 @@ public class Commentaar implements Serializable
     @NotNull
     private String tekst;
 
-    @NotNull
     private LocalDateTime datum;
 
     @ManyToOne(cascade = CascadeType.MERGE)
