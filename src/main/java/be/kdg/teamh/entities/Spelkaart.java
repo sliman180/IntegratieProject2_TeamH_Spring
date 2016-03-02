@@ -12,14 +12,14 @@ public class Spelkaart implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotNull
+    private int positie;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Kaart kaart;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Cirkelsessie cirkelsessie;
-
-    @NotNull
-    private Integer positie;
 
     public Spelkaart()
     {

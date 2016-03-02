@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "commentaren")
 public class Commentaar implements Serializable
 {
     @Id
@@ -16,6 +16,7 @@ public class Commentaar implements Serializable
     @NotNull
     private String tekst;
 
+    @NotNull
     private LocalDateTime datum;
 
     @ManyToOne(cascade = CascadeType.MERGE)

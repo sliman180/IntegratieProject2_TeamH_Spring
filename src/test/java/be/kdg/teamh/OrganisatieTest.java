@@ -2,7 +2,7 @@ package be.kdg.teamh;
 
 import be.kdg.teamh.configuration.JwtFilter;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.LoginResponse;
+import be.kdg.teamh.dto.Token;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Rol;
 import com.google.gson.Gson;
@@ -257,7 +257,7 @@ public class OrganisatieTest
         String json = gson.toJson(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
+        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
     }
 
     private String getAdminToken() throws Exception
@@ -265,7 +265,7 @@ public class OrganisatieTest
         String json = gson.toJson(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
+        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
     }
 
     private String getTokenAsInexistent() throws Exception
@@ -273,6 +273,6 @@ public class OrganisatieTest
         String json = gson.toJson(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
         MvcResult mvcResult = mvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), LoginResponse.class)).getToken();
+        return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
     }
 }

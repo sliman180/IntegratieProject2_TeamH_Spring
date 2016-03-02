@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.LoginResponse;
+import be.kdg.teamh.dto.Token;
 import be.kdg.teamh.entities.Rol;
 import com.google.common.hash.Hashing;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class AuthController
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final Gebruiker login) throws Exception
+    public Token login(@RequestBody final Gebruiker login) throws Exception
     {
         login.setWachtwoord(Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString());
 
@@ -46,7 +45,7 @@ public class AuthController
             throw new Exception("Invalid login");
         }
 
-        return new LoginResponse(Jwts.builder().setSubject(login.getGebruikersnaam()).claim("roles", rolnamen(login.getRollen())).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretKey").compact());
+        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam()).claim("roles", rolnamen(login.getRollen())).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretKey").compact());
     }
 
     private String[] rolnamen(List<Rol> rollen)

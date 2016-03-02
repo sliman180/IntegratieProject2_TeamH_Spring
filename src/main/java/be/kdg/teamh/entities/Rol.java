@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "rollen")
 public class Rol
 {
     @Id
@@ -14,6 +14,7 @@ public class Rol
 
     @NotNull
     private String naam;
+
     private String beschrijving;
 
     @ManyToMany
@@ -21,6 +22,7 @@ public class Rol
 
     public Rol()
     {
+        // JPA Constructor
     }
 
     public Rol(String naam, String beschrijving)

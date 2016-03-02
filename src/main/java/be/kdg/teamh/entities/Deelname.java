@@ -23,7 +23,7 @@ public class Deelname implements Serializable
 
     public Deelname()
     {
-        // JPA COnstructor
+        // JPA Constructor
     }
 
     public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie)
