@@ -27,10 +27,13 @@ public class Gebruiker implements Serializable
     private List<Kaart> kaarten = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Commentaar> commentaars = new ArrayList<>();
+    private List<Deelname> deelnames = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Bericht> berichts = new ArrayList<>();
+    private List<Commentaar> commentaren = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Bericht> berichten = new ArrayList<>();
 
     @ManyToMany
     private List<Rol> rollen = new ArrayList<>();
@@ -53,9 +56,19 @@ public class Gebruiker implements Serializable
         this.rollen = rollen;
     }
 
+    public int getId()
+    {
+        return id;
+    }
+
     public String getGebruikersnaam()
     {
         return gebruikersnaam;
+    }
+
+    public void setGebruikersnaam(String gebruikersnaam)
+    {
+        this.gebruikersnaam = gebruikersnaam;
     }
 
     public String getWachtwoord()
@@ -68,9 +81,64 @@ public class Gebruiker implements Serializable
         this.wachtwoord = wachtwoord;
     }
 
+    public List<Hoofdthema> getHoofdthemas()
+    {
+        return hoofdthemas;
+    }
+
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas)
+    {
+        this.hoofdthemas = hoofdthemas;
+    }
+
+    public List<Kaart> getKaarten()
+    {
+        return kaarten;
+    }
+
+    public void setKaarten(List<Kaart> kaarten)
+    {
+        this.kaarten = kaarten;
+    }
+
+    public List<Deelname> getDeelnames()
+    {
+        return deelnames;
+    }
+
+    public void setDeelnames(List<Deelname> deelnames)
+    {
+        this.deelnames = deelnames;
+    }
+
+    public List<Commentaar> getCommentaren()
+    {
+        return commentaren;
+    }
+
+    public void setCommentaren(List<Commentaar> commentaren)
+    {
+        this.commentaren = commentaren;
+    }
+
+    public List<Bericht> getBerichten()
+    {
+        return berichten;
+    }
+
+    public void setBerichten(List<Bericht> berichten)
+    {
+        this.berichten = berichten;
+    }
+
     public List<Rol> getRollen()
     {
         return rollen;
+    }
+
+    public void setRollen(List<Rol> rollen)
+    {
+        this.rollen = rollen;
     }
 
     @Override
@@ -96,7 +164,9 @@ public class Gebruiker implements Serializable
     public int hashCode()
     {
         int result = gebruikersnaam.hashCode();
+
         result = 31 * result + wachtwoord.hashCode();
+
         return result;
     }
 }

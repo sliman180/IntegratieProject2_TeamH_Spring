@@ -18,19 +18,23 @@ public class Deelname implements Serializable
     @NotNull
     private boolean medeorganisator;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Cirkelsessie cirkelsessie;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Gebruiker gebruiker;
 
     public Deelname()
     {
         // JPA Constructor
     }
 
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie)
+    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
     {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
         this.cirkelsessie = cirkelsessie;
+        this.gebruiker = gebruiker;
     }
 
     public int getId()
@@ -71,5 +75,15 @@ public class Deelname implements Serializable
     public void setCirkelSessie(Cirkelsessie cirkelSessie)
     {
         this.cirkelsessie = cirkelSessie;
+    }
+
+    public Gebruiker getGebruiker()
+    {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker)
+    {
+        this.gebruiker = gebruiker;
     }
 }
