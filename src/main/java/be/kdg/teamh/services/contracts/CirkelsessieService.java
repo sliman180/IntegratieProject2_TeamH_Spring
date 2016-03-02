@@ -18,4 +18,8 @@ public interface CirkelsessieService
     void delete(int id) throws CirkelsessieNotFound;
 
     void clone(int id) throws CirkelsessieNotFound;
+
+    List<Cirkelsessie> actief();
+
+    List<Cirkelsessie> gepland();
 }

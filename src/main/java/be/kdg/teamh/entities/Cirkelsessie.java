@@ -3,6 +3,7 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +24,10 @@ public class Cirkelsessie implements Serializable
     @NotNull
     private int maxAantalKaarten;
 
-    // @NotNull
-    // private LocalDateTime datum;
-    // TODO: http://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
+    @NotNull
+    private boolean isGesloten;
+
+    private LocalDateTime startDatum;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
@@ -47,20 +49,56 @@ public class Cirkelsessie implements Serializable
         // JPA Constructor
     }
 
-    public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten)
     {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.aantalCirkels = aantalCirkels;
     }
 
-    public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels, Subthema subthema, Gebruiker gebruiker)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker)
     {
         this.naam = naam;
+        this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
+    }
+
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker)
+    {
+        this.naam = naam;
         this.aantalCirkels = aantalCirkels;
+        this.maxAantalKaarten = maxAantalKaarten;
+        this.isGesloten = isGesloten;
+        this.startDatum = startDatum;
+        this.subthema = subthema;
+        this.gebruiker = gebruiker;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public String getNaam()
+    {
+        return naam;
+    }
+
+    public void setNaam(String naam)
+    {
+        this.naam = naam;
+    }
+
+    public boolean isGesloten()
+    {
+        return isGesloten;
+    }
+
+    public void setGesloten(boolean gesloten)
+    {
+        isGesloten = gesloten;
     }
 
     public int getAantalCirkels()
@@ -73,24 +111,14 @@ public class Cirkelsessie implements Serializable
         this.aantalCirkels = aantalCirkels;
     }
 
-    public int getId()
+    public LocalDateTime getStartDatum()
     {
-        return id;
+        return startDatum;
     }
 
-    public void setId(int id)
+    public void setStartDatum(LocalDateTime startDatum)
     {
-        this.id = id;
-    }
-
-    public String getNaam()
-    {
-        return naam;
-    }
-
-    public void setNaam(String naam)
-    {
-        this.naam = naam;
+        this.startDatum = startDatum;
     }
 
     public int getMaxAantalKaarten()
