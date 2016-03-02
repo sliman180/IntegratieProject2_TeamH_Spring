@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-public class Comment implements Serializable
+public class Commentaar implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,12 @@ public class Comment implements Serializable
     @ManyToOne(cascade = CascadeType.MERGE)
     private Kaart kaart;
 
-    public Comment()
+    public Commentaar()
     {
         //JPA Constructor
     }
 
-    public Comment(String tekst, Gebruiker gebruiker)
+    public Commentaar(String tekst, Gebruiker gebruiker)
     {
         this.tekst = tekst;
         this.gebruiker = gebruiker;

@@ -43,10 +43,17 @@ public class KaartTest
     @Mock
     private Hoofdthema hoofdthema;
 
+    @Mock
+    private Subthema subthema;
+
+    @Mock
+    private Cirkelsessie cirkelsessie;
+
     @Before
     public void setUp() throws Exception
     {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+        cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, subthema, gebruiker);
     }
 
     @Test
@@ -196,7 +203,7 @@ public class KaartTest
             .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
             .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
-        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+        String commentJson = gson.toJson(new Commentaar("Een comment", gebruiker));
 
         this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson))
             .andExpect(status().isCreated());
@@ -221,7 +228,7 @@ public class KaartTest
             .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
             .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
-        String commentJson = gson.toJson(new Comment("Een comment", gebruiker));
+        String commentJson = gson.toJson(new Commentaar("Een comment", gebruiker));
 
         this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson));
     }
@@ -230,7 +237,6 @@ public class KaartTest
     @Test
     public void koppelKaartAanSubthema() throws Exception
     {
-
         String kaartJson = gson.toJson(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker));
 
         this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(kaartJson))
@@ -250,41 +256,30 @@ public class KaartTest
         this.mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)));
-
-
     }
-
 
     @Test
     public void verschuifKaartMetEénStap() throws Exception
     {
-
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
-
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
 
         String spelkaartJson = gson.toJson(new Spelkaart(kaart, cirkelsessie));
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
             .andExpect(status().isCreated());
 
-
         this.mvc.perform(patch("/api/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
             .andExpect(status().isOk());
-
 
         this.mvc.perform(get("/api/spelkaarten/1").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.positie", is(1)));
-
-
     }
 
     @Test(expected = NestedServletException.class)
     public void verschuifKaartMetEénStap_maxLimitReached() throws Exception
     {
-
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
 
         Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
@@ -296,7 +291,6 @@ public class KaartTest
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
             .andExpect(status().isCreated());
 
-
         this.mvc.perform(patch("/api/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
             .andExpect(status().isConflict());
 
@@ -305,7 +299,6 @@ public class KaartTest
     @Test
     public void legKaartenBuitenDeCirkel() throws Exception
     {
-
         Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10);
         Kaart kaart;
         Spelkaart spelkaart;
@@ -313,7 +306,6 @@ public class KaartTest
 
         for (int x = 0; x < 5; x++)
         {
-
             kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
 
             spelkaart = new Spelkaart(kaart, cirkelsessie);

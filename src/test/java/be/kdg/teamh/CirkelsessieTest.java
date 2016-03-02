@@ -75,10 +75,10 @@ public class CirkelsessieTest
             .andExpect(jsonPath("$[0].maxAantalKaarten", is(10)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NestedServletException.class)
     public void createCirkelsessie_nullInput() throws Exception
     {
-        String json = gson.toJson(new Cirkelsessie(null, null, 5, subthema, gebruiker));
+        String json = gson.toJson(new Cirkelsessie(null, 5, 10, subthema, gebruiker));
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -133,7 +133,7 @@ public class CirkelsessieTest
             .andExpect(jsonPath("$.maxAantalKaarten", is(15)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nullInput() throws Exception
     {
         String json = gson.toJson(new Cirkelsessie("Session one", 5, 10, subthema, gebruiker));
@@ -141,7 +141,7 @@ public class CirkelsessieTest
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Cirkelsessie(null, null, 10, subthema, gebruiker));
+        json = gson.toJson(new Cirkelsessie(null, 5, 10, subthema, gebruiker));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -201,18 +201,13 @@ public class CirkelsessieTest
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.naam", is("Houffalize")))
             .andExpect(jsonPath("$.beschrijving", is("Route 6")));
-        this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Houffalize")))
-            .andExpect(jsonPath("$.beschrijving", is("Route 6")));
     }
 
     @Test
     public void cloneCirkelSessie() throws Exception
     {
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, subthema, gebruiker);
-//        cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
+        // cirkelsessie.addDeelname(deelname); https://github.com/google/gson/issues/440
         String json = gson.toJson(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))

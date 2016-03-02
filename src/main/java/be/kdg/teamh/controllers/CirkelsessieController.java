@@ -61,7 +61,7 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
-    public void cloneCirkelSessie(@PathVariable("id") int id) throws CirkelsessieNotFound
+    public void clone(@PathVariable("id") int id) throws CirkelsessieNotFound
     {
         service.clone(id);
     }

@@ -12,14 +12,14 @@ public class Spelkaart implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Kaart kaart;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Cirkelsessie cirkelsessie;
 
     @NotNull
-    private int positie;
+    private Integer positie;
 
     public Spelkaart()
     {
@@ -28,8 +28,8 @@ public class Spelkaart implements Serializable
 
     public Spelkaart(Kaart kaart, Cirkelsessie cirkelsessie)
     {
-        this.kaart = kaart;
         this.positie = 0;
+        this.kaart = kaart;
         this.cirkelsessie = cirkelsessie;
     }
 

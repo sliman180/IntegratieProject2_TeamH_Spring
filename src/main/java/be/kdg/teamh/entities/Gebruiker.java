@@ -27,7 +27,10 @@ public class Gebruiker implements Serializable
     private List<Kaart> kaarten = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Commentaar> commentaars = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Bericht> berichts = new ArrayList<>();
 
     @ManyToMany
     private List<Rol> rollen = new ArrayList<>();

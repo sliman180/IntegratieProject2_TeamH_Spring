@@ -1,6 +1,6 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Comment;
+import be.kdg.teamh.entities.Commentaar;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.entities.Subthema;
@@ -66,15 +66,13 @@ public class KaartenServiceImpl implements KaartenService
     }
 
     @Override
-    public List<Comment> allComments(int id) throws KaartNotFound
+    public List<Commentaar> allComments(int id) throws KaartNotFound
     {
-        Kaart kaart = find(id);
-
-        return kaart.getComments();
+        return find(id).getCommentaren();
     }
 
     @Override
-    public void createComment(int id, Comment comment) throws KaartNotFound, CommentsNotAllowed
+    public void createComment(int id, Commentaar commentaar) throws KaartNotFound, CommentsNotAllowed
     {
         Kaart kaart = find(id);
 
@@ -83,7 +81,7 @@ public class KaartenServiceImpl implements KaartenService
             throw new CommentsNotAllowed();
         }
 
-        kaart.addComment(comment);
+        kaart.addComment(commentaar);
 
         repository.save(kaart);
     }
@@ -91,9 +89,7 @@ public class KaartenServiceImpl implements KaartenService
     @Override
     public List<Subthema> getSubthemas(int id) throws KaartNotFound
     {
-        Kaart kaart = find(id);
-
-        return kaart.getSubthemas();
+        return find(id).getSubthemas();
     }
 
     @Override
@@ -109,9 +105,7 @@ public class KaartenServiceImpl implements KaartenService
     @Override
     public List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound
     {
-        Kaart kaart = find(id);
-
-        return kaart.getSpelkaarten();
+        return find(id).getSpelkaarten();
     }
 
     public void addSpelkaart(int id, Spelkaart spelkaart) throws KaartNotFound

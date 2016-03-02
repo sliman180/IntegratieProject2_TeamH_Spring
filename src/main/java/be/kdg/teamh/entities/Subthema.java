@@ -15,6 +15,7 @@ public class Subthema implements Serializable
     private int id;
 
     @NotNull
+    @Column(unique = true)
     private String naam;
 
     @NotNull

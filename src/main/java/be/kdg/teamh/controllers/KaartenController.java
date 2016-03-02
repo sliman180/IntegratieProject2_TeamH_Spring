@@ -69,14 +69,14 @@ public class KaartenController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
-    public List<Comment> comments(@PathVariable("id") int id) throws KaartNotFound
+    public List<Commentaar> comments(@PathVariable("id") int id) throws KaartNotFound
     {
         return service.allComments(id);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @RequestBody Comment comment) throws CommentsNotAllowed, KaartNotFound
+    public void createComment(@PathVariable("id") int id, @RequestBody Commentaar comment) throws CommentsNotAllowed, KaartNotFound
     {
         service.createComment(id, comment);
     }

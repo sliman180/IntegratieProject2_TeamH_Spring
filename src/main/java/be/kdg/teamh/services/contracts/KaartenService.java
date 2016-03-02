@@ -1,6 +1,6 @@
 package be.kdg.teamh.services.contracts;
 
-import be.kdg.teamh.entities.Comment;
+import be.kdg.teamh.entities.Commentaar;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.entities.Subthema;
@@ -25,9 +25,9 @@ public interface KaartenService
 
     void addSubthema(int id, Subthema subthema) throws KaartNotFound;
 
-    List<Comment> allComments(int id) throws KaartNotFound;
+    List<Commentaar> allComments(int id) throws KaartNotFound;
 
-    void createComment(int id, Comment comment) throws KaartNotFound, CommentsNotAllowed;
+    void createComment(int id, Commentaar comment) throws KaartNotFound, CommentsNotAllowed;
 
     List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound;
 

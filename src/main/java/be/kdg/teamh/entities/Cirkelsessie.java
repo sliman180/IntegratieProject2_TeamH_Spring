@@ -11,7 +11,6 @@ import java.util.List;
 public class Cirkelsessie implements Serializable
 {
     @Id
-    @Column(name = "CirkelsessieId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -28,7 +27,7 @@ public class Cirkelsessie implements Serializable
     // private LocalDateTime datum;
     // TODO: http://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -37,25 +36,16 @@ public class Cirkelsessie implements Serializable
     @OneToMany(cascade = CascadeType.ALL)
     private List<Deelname> deelnames = new ArrayList<>();
 
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Chat chat;
 
     public Cirkelsessie()
     {
         // JPA Constructor
     }
-
-    public Cirkelsessie(String naam, Integer maxAantalKaarten, int aantalCirkels, Subthema subthema, Gebruiker gebruiker)
-    {
-        this.naam = naam;
-        this.maxAantalKaarten = maxAantalKaarten;
-        this.subthema = subthema;
-        this.gebruiker = gebruiker;
-        this.aantalCirkels = aantalCirkels;
-    }
-
 
     public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels)
     {
@@ -64,6 +54,14 @@ public class Cirkelsessie implements Serializable
         this.aantalCirkels = aantalCirkels;
     }
 
+    public Cirkelsessie(String naam, int maxAantalKaarten, int aantalCirkels, Subthema subthema, Gebruiker gebruiker)
+    {
+        this.naam = naam;
+        this.maxAantalKaarten = maxAantalKaarten;
+        this.subthema = subthema;
+        this.gebruiker = gebruiker;
+        this.aantalCirkels = aantalCirkels;
+    }
 
     public int getAantalCirkels()
     {
@@ -79,7 +77,6 @@ public class Cirkelsessie implements Serializable
     {
         return id;
     }
-
 
     public void setId(int id)
     {

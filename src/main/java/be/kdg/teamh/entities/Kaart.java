@@ -23,16 +23,16 @@ public class Kaart implements Serializable
     @NotNull
     private boolean commentsToelaatbaar;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Commentaar> commentaren = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
     public Kaart()
@@ -98,24 +98,19 @@ public class Kaart implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public List<Comment> getComments()
+    public List<Commentaar> getCommentaren()
     {
-        return comments;
+        return commentaren;
     }
 
-    public void setComments(List<Comment> comments)
+    public void setCommentaren(List<Commentaar> commentaren)
     {
-        this.comments = comments;
+        this.commentaren = commentaren;
     }
 
-    public void addComment(Comment comment)
+    public void addComment(Commentaar commentaar)
     {
-        this.comments.add(comment);
-    }
-
-    public void addSubthema(Subthema subthema)
-    {
-        this.subthemas.add(subthema);
+        this.commentaren.add(commentaar);
     }
 
     public List<Subthema> getSubthemas()
@@ -128,9 +123,9 @@ public class Kaart implements Serializable
         this.subthemas = subthemas;
     }
 
-    public void addSpelkaart(Spelkaart spelkaart)
+    public void addSubthema(Subthema subthema)
     {
-        this.spelkaarten.add(spelkaart);
+        this.subthemas.add(subthema);
     }
 
     public List<Spelkaart> getSpelkaarten()
@@ -141,5 +136,10 @@ public class Kaart implements Serializable
     public void setSpelkaarten(List<Spelkaart> spelkaarten)
     {
         this.spelkaarten = spelkaarten;
+    }
+
+    public void addSpelkaart(Spelkaart spelkaart)
+    {
+        this.spelkaarten.add(spelkaart);
     }
 }
