@@ -37,7 +37,7 @@ public class AuthController
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Token login(@RequestBody final Gebruiker login) throws Exception
+    public Token login(@RequestBody Gebruiker login) throws Exception
     {
         login.setWachtwoord(Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString());
 
@@ -46,11 +46,10 @@ public class AuthController
             throw new Exception("Invalid login");
         }
 
-        return new Token(Jwts.builder()
-            .setSubject(login.getGebruikersnaam())
-            .claim("roles", login.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
-            .setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "kandoe")
-            .compact());
+        List<Rol> rollen = (userDb.get(userDb.indexOf(login))).getRollen();
+
+        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam())
+            .claim("roles", rollen.stream().map(Rol::getNaam).collect(Collectors.toList()))
+            .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 }
