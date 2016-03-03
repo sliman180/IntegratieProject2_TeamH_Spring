@@ -12,21 +12,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/gebruikers")
-public class GebruikerController {
-
+public class GebruikerController
+{
     @Autowired
     private GebruikerService service;
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Gebruiker gebruiker) {
+    public void create(@RequestBody Gebruiker gebruiker)
+    {
         service.create(gebruiker);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
-    public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound {
+    public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
+    {
         return service.showCirkelsessies(id);
     }
-
 }
