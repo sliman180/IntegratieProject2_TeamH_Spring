@@ -9,7 +9,6 @@ import be.kdg.teamh.services.contracts.GebruikerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,8 +65,6 @@ public class GebruikerServiceImpl implements GebruikerService
     @Override
     public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound
     {
-        Gebruiker gebruiker = find(id);
-
-        return gebruiker.getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
+        return find(id).getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
     }
 }
