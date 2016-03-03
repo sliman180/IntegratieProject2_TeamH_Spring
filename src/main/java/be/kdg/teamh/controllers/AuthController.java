@@ -45,7 +45,9 @@ public class AuthController
             throw new Exception("Invalid login");
         }
 
-        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam()).claim("roles", rolnamen(login.getRollen())).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
+        List<Rol> rollen = (userDb.get(userDb.indexOf(login))).getRollen();
+
+        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam()).claim("roles", rolnamen(rollen)).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 
     private String[] rolnamen(List<Rol> rollen)
