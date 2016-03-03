@@ -254,7 +254,7 @@ public class OrganisatieTest
 
     private String getUserToken() throws Exception
     {
-        String json = gson.toJson(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        String json = gson.toJson(new Gebruiker("user", "user"));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
         return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
@@ -262,7 +262,7 @@ public class OrganisatieTest
 
     private String getAdminToken() throws Exception
     {
-        String json = gson.toJson(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
+        String json = gson.toJson(new Gebruiker("admin", "admin"));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
         return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
@@ -270,7 +270,7 @@ public class OrganisatieTest
 
     private String getTokenAsInexistent() throws Exception
     {
-        String json = gson.toJson(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
+        String json = gson.toJson(new Gebruiker("wrong", "wrong"));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
         return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
