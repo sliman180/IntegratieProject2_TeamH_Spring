@@ -35,6 +35,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/cirkelsessies", {
+                templateUrl: "/dist/views/cirkelsessies/index.html",
+                controller: "CirkelsessieIndexController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
@@ -42,6 +48,63 @@
     }
 
     angular.module("kandoe").config(routes);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    CirkelsessieService.$inject = ["$http"];
+    function CirkelsessieService($http) {
+
+        var exports = {};
+
+        exports.all = function () {
+
+            return $http.get("/api/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.find = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.create = function (cirkelsessie) {
+
+            return $http.post("/api/cirkelsessies", cirkelsessie).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.update = function (cirkelsessie) {
+
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.delete = function (id) {
+
+            return $http.delete("/api/cirkelsessies/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("CirkelsessieService", CirkelsessieService);
 
 })(window.angular);
 
@@ -156,6 +219,33 @@
     }
 
     angular.module("kandoe").factory("OrganisatieService", OrganisatieService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    CirkelsessieIndexController.$inject = ["$route", "CirkelsessieService"];
+    function CirkelsessieIndexController($route, CirkelsessieService) {
+
+        var vm = this;
+
+        vm.cirkelsessies = [];
+
+        CirkelsessieService.all().then(function (data) {
+            vm.cirkelsessies = data;
+        });
+
+        vm.addCirkelsessie = function (cirkelsessie) {
+            CirkelsessieService.create(cirkelsessie).then(function () {
+                $route.reload();
+            });
+        }
+
+    }
+
+    angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);
 
 })(window.angular);
 

@@ -19,6 +19,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     @Autowired
     private CirkelsessieRepository repository;
 
+
     @Override
     public List<Cirkelsessie> all()
     {

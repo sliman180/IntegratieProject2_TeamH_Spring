@@ -18,6 +18,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/cirkelsessies", {
+                templateUrl: "/dist/views/cirkelsessies/index.html",
+                controller: "CirkelsessieIndexController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
