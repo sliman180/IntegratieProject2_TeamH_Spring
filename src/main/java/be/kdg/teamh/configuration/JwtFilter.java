@@ -28,7 +28,7 @@ public class JwtFilter extends GenericFilterBean
 
         try
         {
-            request.setAttribute("claims", Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token).getBody());
+            request.setAttribute("claims", Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token).getBody());
         }
         catch (final SignatureException e)
         {

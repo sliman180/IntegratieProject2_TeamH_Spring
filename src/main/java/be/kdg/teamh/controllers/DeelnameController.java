@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.exceptions.DeelnameNotFound;
-import be.kdg.teamh.services.DeelnameService;
+import be.kdg.teamh.services.contracts.DeelnameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

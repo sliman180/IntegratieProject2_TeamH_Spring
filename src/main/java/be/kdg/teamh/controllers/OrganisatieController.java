@@ -82,14 +82,14 @@ public class OrganisatieController
 
     private Boolean isAdmin(String token)
     {
-        Claims claims = Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token.substring(7)).getBody();
+        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
         return ((List<Rol>) claims.get("roles")).contains("admin");
     }
 
     private Boolean isRegistered(String token)
     {
-        Claims claims = Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token.substring(7)).getBody();
+        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
         return ((List<Rol>) claims.get("roles")).contains("user");
     }

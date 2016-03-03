@@ -5,36 +5,69 @@ import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
+import be.kdg.teamh.services.contracts.GebruikerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class GebruikerServiceImpl implements GebruikerService {
-
+public class GebruikerServiceImpl implements GebruikerService
+{
     @Autowired
     private GebruikerRepository repository;
 
     @Override
-    public void create(Gebruiker gebruiker) {
+    public List<Gebruiker> all()
+    {
+        return repository.findAll();
+    }
+
+    @Override
+    public void create(Gebruiker gebruiker)
+    {
         repository.save(gebruiker);
     }
 
     @Override
-    public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound {
+    public Gebruiker find(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
-        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
-        for (Deelname d : gebruiker.getDeelnames()) {
-            cirkelsessies.add(d.getCirkelsessie());
-        }
+        return gebruiker;
+    }
 
-        return cirkelsessies;
+    @Override
+    public void update(int id, Gebruiker gebruiker) throws GebruikerNotFound
+    {
+        Gebruiker old = find(id);
+
+        gebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
+        gebruiker.setWachtwoord(gebruiker.getWachtwoord());
+
+        repository.save(old);
+    }
+
+    @Override
+    public void delete(int id) throws GebruikerNotFound
+    {
+        Gebruiker gebruiker = find(id);
+
+        repository.delete(gebruiker);
+    }
+
+    @Override
+    public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound
+    {
+        Gebruiker gebruiker = find(id);
+
+        return gebruiker.getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
     }
 }
