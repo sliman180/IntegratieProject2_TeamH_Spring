@@ -1,4 +1,4 @@
-package be.kdg.teamh.configuration;
+package be.kdg.teamh;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
@@ -30,7 +30,7 @@ public class JwtFilter extends GenericFilterBean
         {
             request.setAttribute("claims", Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token).getBody());
         }
-        catch (final SignatureException e)
+        catch (SignatureException e)
         {
             throw new SignatureException("Invalid token.");
         }

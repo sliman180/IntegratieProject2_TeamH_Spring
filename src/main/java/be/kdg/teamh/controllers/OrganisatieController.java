@@ -80,17 +80,17 @@ public class OrganisatieController
         service.delete(id);
     }
 
-    private Boolean isAdmin(String token)
+    private boolean isAdmin(String token)
     {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
-        return ((List<Rol>) claims.get("roles")).contains("admin");
+        return ((List) claims.get("roles")).contains("admin");
     }
 
-    private Boolean isRegistered(String token)
+    private boolean isRegistered(String token)
     {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
-        return ((List<Rol>) claims.get("roles")).contains("user");
+        return ((List) claims.get("roles")).contains("user");
     }
 }

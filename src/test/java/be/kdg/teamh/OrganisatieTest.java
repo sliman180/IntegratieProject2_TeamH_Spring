@@ -1,10 +1,7 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.configuration.JwtFilter;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.dto.Token;
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.entities.Rol;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.ServletException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.dto.Token;
+import be.kdg.teamh.Token;
 import be.kdg.teamh.entities.Rol;
 import com.google.common.hash.Hashing;
 import io.jsonwebtoken.Jwts;
