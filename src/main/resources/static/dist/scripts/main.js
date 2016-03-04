@@ -2,7 +2,28 @@
 
     "use strict";
 
-    angular.module("kandoe", ["ngRoute"]);
+    angular.module("kandoe", ["ngRoute", "ngStorage"])
+
+        .config(["$httpProvider", "localStorageServiceProvider", function ($httpProvider, localStorageServiceProvider) {
+
+            localStorageServiceProvider.setPrefix("kandoe");
+            $httpProvider.interceptors.push("AuthInterceptor");
+
+        }])
+
+        .run(["$location", "$rootScope", "localStorageService", function ($location, $rootScope, localStorageService) {
+
+            if (localStorageService.get("auth")) {
+                $rootScope.loggedIn = true;
+            }
+
+            $rootScope.logout = function () {
+                localStorageService.remove("auth");
+                $rootScope.loggedIn = false;
+                $location.path("/");
+            };
+
+        }]);
 
 })(window.angular);
 
@@ -26,6 +47,12 @@
             .when("/", {
                 templateUrl: "/dist/views/home.html",
                 controller: "HomeController",
+                controllerAs: "vm"
+            })
+
+            .when("/auth", {
+                templateUrl: "/dist/views/auth.html",
+                controller: "AuthController",
                 controllerAs: "vm"
             })
 
@@ -54,6 +81,62 @@
     }
 
     angular.module("kandoe").config(routes);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    AuthInterceptor.$inject = ["localStorageService"];
+    function AuthInterceptor(localStorageService) {
+
+        var exports = {};
+
+        exports.request = function (config) {
+
+            config.headers = config.headers || {};
+
+            var data = localStorageService.get("auth");
+
+            if (data) {
+                config.headers.Authorization = "Bearer " + data.token;
+            }
+
+            return config;
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("AuthInterceptor", AuthInterceptor);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    AuthService.$inject = ["$http"];
+    function AuthService($http) {
+
+        var exports = {};
+
+        exports.login = function (credentials) {
+
+            return $http.post("/auth/login", credentials).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("AuthService", AuthService);
 
 })(window.angular);
 
@@ -225,6 +308,36 @@
     }
 
     angular.module("kandoe").factory("OrganisatieService", OrganisatieService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    AuthController.$inject = ["$location", "$rootScope", "AuthService", "localStorageService"];
+    function AuthController($location, $rootScope, AuthService, localStorageService) {
+
+        var vm = this;
+
+        vm.login = function(credentials) {
+
+            AuthService.login(credentials).then(function(data) {
+
+                localStorageService.set("auth", {
+                    token: data.token
+                });
+
+                $rootScope.loggedIn = true;
+                $location.path("/");
+
+            });
+
+        };
+
+    }
+
+    angular.module("kandoe").controller("AuthController", AuthController);
 
 })(window.angular);
 

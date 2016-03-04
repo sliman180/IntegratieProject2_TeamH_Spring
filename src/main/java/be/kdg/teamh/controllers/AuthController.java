@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.dto.Token;
+import be.kdg.teamh.Token;
 import be.kdg.teamh.entities.Rol;
 import com.google.common.hash.Hashing;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -36,7 +37,7 @@ public class AuthController
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Token login(@RequestBody final Gebruiker login) throws Exception
+    public Token login(@RequestBody Gebruiker login) throws Exception
     {
         login.setWachtwoord(Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString());
 
@@ -45,18 +46,10 @@ public class AuthController
             throw new Exception("Invalid login");
         }
 
-        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam()).claim("roles", rolnamen(login.getRollen())).setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
-    }
+        List<Rol> rollen = (userDb.get(userDb.indexOf(login))).getRollen();
 
-    private String[] rolnamen(List<Rol> rollen)
-    {
-        String[] _rollen = new String[rollen.size()];
-
-        for (int i = 0; i < rollen.size(); i++)
-        {
-            _rollen[i] = rollen.get(i).getNaam();
-        }
-
-        return _rollen;
+        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam())
+            .claim("roles", rollen.stream().map(Rol::getNaam).collect(Collectors.toList()))
+            .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 }

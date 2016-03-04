@@ -24,9 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.ServletException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;

@@ -92,7 +92,8 @@
                 paths.app.scripts + "/vendor/jquery.js",
                 paths.app.scripts + "/vendor/material.js",
                 paths.app.scripts + "/vendor/angular.js",
-                paths.app.scripts + "/vendor/angular-route.js"
+                paths.app.scripts + "/vendor/angular-route.js",
+                paths.app.scripts + "/vendor/angular-storage.js"
             ],
             app: [
                 paths.app.scripts + "/plugins.js",
