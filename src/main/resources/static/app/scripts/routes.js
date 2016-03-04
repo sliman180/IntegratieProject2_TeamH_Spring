@@ -12,6 +12,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/auth", {
+                templateUrl: "/dist/views/auth.html",
+                controller: "AuthController",
+                controllerAs: "vm"
+            })
+
             .when("/organisaties", {
                 templateUrl: "/dist/views/organisaties/index.html",
                 controller: "OrganisatieIndexController",

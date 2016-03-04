@@ -1,0 +1,29 @@
+<div class="mdl-cell mdl-cell--4-col">
+    <!-- Offset div -->
+</div>
+
+<div class="mdl-cell mdl-cell--6-col">
+
+    <form action="" ng-if="!$root.loggedIn" ng-submit="vm.login(credentials)">
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="gebruikersnaam" ng-model="credentials.gebruikersnaam">
+            <label class="mdl-textfield__label" for="gebruikersnaam">Gebruikersnaam</label>
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="password" id="wachtwoord" ng-model="credentials.wachtwoord">
+            <label class="mdl-textfield__label" for="wachtwoord">Wachtwoord</label>
+        </div>
+
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+            Aanmelden
+        </button>
+
+    </form>
+
+    <button class="mdl-button mdl-js-button mdl-js-ripple-effect" ng-if="$root.loggedIn" ng-click="vm.logout()">
+        Afmelden
+    </button>
+
+</div>
