@@ -3,8 +3,8 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,7 +27,8 @@ public class Cirkelsessie implements Serializable
     @NotNull
     private boolean isGesloten;
 
-    private LocalDateTime startDatum;
+    @NotNull
+    private Date startDatum;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
@@ -49,11 +50,13 @@ public class Cirkelsessie implements Serializable
         // JPA Constructor
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum)
     {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.aantalCirkels = aantalCirkels;
+        this.isGesloten = isGesloten;
+        this.startDatum = startDatum;
     }
 
     public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker)
@@ -65,7 +68,7 @@ public class Cirkelsessie implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum, Subthema subthema, Gebruiker gebruiker)
     {
         this.naam = naam;
         this.aantalCirkels = aantalCirkels;
@@ -111,12 +114,12 @@ public class Cirkelsessie implements Serializable
         this.aantalCirkels = aantalCirkels;
     }
 
-    public LocalDateTime getStartDatum()
+    public Date getStartDatum()
     {
         return startDatum;
     }
 
-    public void setStartDatum(LocalDateTime startDatum)
+    public void setStartDatum(Date startDatum)
     {
         this.startDatum = startDatum;
     }

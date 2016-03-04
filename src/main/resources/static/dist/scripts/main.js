@@ -41,6 +41,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/cirkelsessies/details/:id", {
+                templateUrl: "/dist/views/cirkelsessies/details.html",
+                controller: "CirkelsessieDetailsController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
@@ -226,6 +232,27 @@
 
     "use strict";
 
+    CirkelsessieDetailsController.$inject = ["$routeParams", "CirkelsessieService"];
+    function CirkelsessieDetailsController($routeParams, CirkelsessieService) {
+
+        var vm = this;
+
+        vm.cirkelsessie = {};
+
+        CirkelsessieService.find($routeParams.id).then(function (data) {
+            vm.cirkelsessie = data;
+        });
+
+    }
+
+    angular.module("kandoe").controller("CirkelsessieDetailsController", CirkelsessieDetailsController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     CirkelsessieIndexController.$inject = ["$route", "CirkelsessieService"];
     function CirkelsessieIndexController($route, CirkelsessieService) {
 
@@ -242,6 +269,7 @@
                 $route.reload();
             });
         }
+
 
     }
 

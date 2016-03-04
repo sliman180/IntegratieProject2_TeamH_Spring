@@ -18,6 +18,7 @@
             });
         }
 
+
     }
 
     angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);

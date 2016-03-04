@@ -24,6 +24,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/cirkelsessies/details/:id", {
+                templateUrl: "/dist/views/cirkelsessies/details.html",
+                controller: "CirkelsessieDetailsController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });

@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -59,7 +60,7 @@ public class ChatTest
     public void setUp() throws Exception
     {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-        cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, subthema, gebruiker);
+        cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), subthema, gebruiker);
         chat = new Chat("Leuke chat", cirkelsessie);
     }
 
@@ -74,8 +75,8 @@ public class ChatTest
     @Test
     public void createChat() throws Exception
     {
-        String json = gson.toJson(chat);
 
+        String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
@@ -90,14 +91,14 @@ public class ChatTest
     public void createChat_nullInput() throws Exception
     {
         chat.setNaam(null);
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
     public void showChat() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -111,7 +112,7 @@ public class ChatTest
     @Test(expected = NestedServletException.class)
     public void showChat_nonExistingChat() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -122,13 +123,13 @@ public class ChatTest
     @Test
     public void updateChat() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
         chat.setNaam("Gewijzigde chat");
-        json = gson.toJson(chat);
+        json = objectMapper.writeValueAsString(chat);
 
 
         this.mvc.perform(put("/api/chats/1").contentType(MediaType.APPLICATION_JSON).content(json))
@@ -143,13 +144,13 @@ public class ChatTest
     @Test(expected = NestedServletException.class)
     public void updateChat_nullInput() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
         chat.setNaam(null);
-        json = gson.toJson(chat);
+        json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(put("/api/chats/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -157,12 +158,12 @@ public class ChatTest
     @Test(expected = NestedServletException.class)
     public void updateChat_nonExistingChat() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
         chat.setNaam("Gewijzigde naam");
-        json = gson.toJson(chat);
+        json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(put("/api/chats/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -170,8 +171,8 @@ public class ChatTest
     @Test
     public void deleteChat() throws Exception
     {
-        String json = gson.toJson(chat);
-
+        String json = objectMapper.writeValueAsString(chat);
+        
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
@@ -186,7 +187,7 @@ public class ChatTest
     @Test(expected = NestedServletException.class)
     public void deleteChat_nonExistingChat() throws Exception
     {
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -200,7 +201,7 @@ public class ChatTest
         Bericht bericht;
         String messageJson;
 
-        String json = gson.toJson(chat);
+        String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 

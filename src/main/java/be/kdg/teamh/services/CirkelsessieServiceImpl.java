@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -70,7 +70,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     public void clone(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie old = find(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, LocalDateTime.now(), old.getSubthema(), old.getGebruiker());
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new Date(), old.getSubthema(), old.getGebruiker());
 
         clone.cloneDeelnames(old.getDeelnames());
 
@@ -82,7 +82,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
+        Date now = new Date();
 
         for (Cirkelsessie cirkelsessie : temp)
         {
@@ -101,7 +101,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
+        Date now = new Date();
 
         for (Cirkelsessie cirkelsessie : temp)
         {

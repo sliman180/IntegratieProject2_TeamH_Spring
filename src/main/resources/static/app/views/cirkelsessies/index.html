@@ -1,19 +1,37 @@
 <!-- Wide card with share menu button -->
 <style>
+
+    .mdl-card__title {
+        background-color: cornflowerblue;
+    }
+
     .demo-card-wide.mdl-card {
         width: 512px;
+        margin-bottom: 5%;
     }
 
     .demo-card-wide > .mdl-card__title {
         color: #fff;
         height: 176px;
-        /*background: url('../assets/demos/welcome_card.jpg') center / cover;*/
         background-color: cornflowerblue;
     }
 
     .demo-card-wide > .mdl-card__menu {
         color: #fff;
     }
+
+    #form {
+        height: 500px;
+    }
+
+    #form-title {
+        height: 60px;
+    }
+
+    #form-title:hover {
+        cursor: pointer;
+    }
+
 </style>
 
 <!--<div class="mdl-cell mdl-cell&#45;&#45;6-col">-->
@@ -26,60 +44,77 @@
 <!--</div>-->
 
 
-<div class="mdl-cell mdl-cell&#45;&#45;6-col">
+<div class="mdl-cell mdl-cell&#45;&#45;9-col">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp" ng-repeat="cirkelsessie in vm.cirkelsessies">
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
-        </div>
-        <div class="mdl-card__supporting-text">
-            {{cirkelsessie.startDatum}}
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                Deelnemen!
-            </a>
-        </div>
-        <div class="mdl-card__menu">
-            <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i class="material-icons">Share</i>
-            </button>
+
+        <div id="">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+                Startdatum: {{cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
+                   class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                    Deelnemen!
+                </a>
+            </div>
+            <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <i class="material-icons">Share</i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
-<div class="mdl-cell mdl-cell--6-col">
+<div>
+    <div id="form-title" class="mdl-card__title mdl-color--primary mdl-color-text--white">
+        <h2 class="mdl-card__title-text" ng-click="showForm = ! showForm">Maak een cirkelsessie aan</h2>
+    </div>
+    <div class="mdl-card mdl-shadow--6dp" id="form" ng-show="showForm">
 
-    <form ng-submit="vm.addCirkelsessie(cirkelsessie)">
+        <div class="mdl-card__supporting-text">
 
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
-            <label class="mdl-textfield__label" for="naam">Naam</label>
+            <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
+                    <label class="mdl-textfield__label" for="naam">Naam</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="number" id="aantalCirkels"
+                           ng-model="cirkelsessie.aantalCirkels">
+                    <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="number" id="maxAantalKaarten"
+                           ng-model="cirkelsessie.maxAantalKaarten">
+                    <label class="mdl-textfield__label" for="maxAantalKaarten">Maximum toegelaten
+                        kaarten</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="checkbox" id="isGesloten"
+                           ng-model="cirkelsessie.isGesloten">
+                    <label class="mdl-textfield__label" for="isGesloten">Gesloten</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" min="2016-03-04" type="date" id="datum"
+                           ng-model="cirkelsessie.startDatum">
+                    <label class="mdl-textfield__label" for="datum"></label>
+                </div>
+
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Toevoegen
+                </button>
+
+            </form>
+
         </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="number" id="aantalCirkels" ng-model="cirkelsessie.aantalCirkels">
-            <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="number" id="maxAantalKaarten"
-                   ng-model="cirkelsessie.maxAantalKaarten">
-            <label class="mdl-textfield__label" for="maxAantalKaarten">Maximum toegelaten kaarten</label>
-        </div>
-
-        <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">-->
-        <!--<input class="mdl-textfield__input" type="checkbox" id="isGesloten" ng-model="cirkelsessie.isGesloten">-->
-        <!--<label class="mdl-textfield__label" for="isGesloten">Gesloten</label>-->
-        <!--</div>-->
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="date" id="datum" ng-model="cirkelsessie.startDatum">
-            <label class="mdl-textfield__label" for="datum">Startdatum</label>
-        </div>
-
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
-            Toevoegen
-        </button>
-
-    </form>
+    </div>
 
 </div>

@@ -3,7 +3,7 @@ package be.kdg.teamh;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class HoofdthemaTest
     private WebApplicationContext context;
 
     @Autowired
-    private Gson gson;
+    private ObjectMapper objectMapper;
 
     @Mock
     private Organisatie organisatie;
@@ -63,7 +63,7 @@ public class HoofdthemaTest
     @Test
     public void createHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -79,7 +79,7 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void createHoofdthema_nullInput() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema(null, null, organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -87,7 +87,7 @@ public class HoofdthemaTest
     @Test
     public void showHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -102,7 +102,7 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void showHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -113,12 +113,12 @@ public class HoofdthemaTest
     @Test
     public void updateHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
+        json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
@@ -133,12 +133,12 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nullInput() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Hoofdthema(null, null, organisatie, gebruiker));
+        json = objectMapper.writeValueAsString(new Hoofdthema(null, null, organisatie, gebruiker));
 
         this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -146,12 +146,12 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
+        json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(put("/api/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -159,7 +159,7 @@ public class HoofdthemaTest
     @Test
     public void deleteHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -175,7 +175,7 @@ public class HoofdthemaTest
     @Test(expected = NestedServletException.class)
     public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
     {
-        String json = gson.toJson(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
+        String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", organisatie, gebruiker));
 
         this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());

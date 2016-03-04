@@ -1,6 +1,7 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -36,6 +39,9 @@ public class SpelkaartTest
 
     @Autowired
     private Gson gson;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Mock
     private Gebruiker gebruiker;
@@ -58,7 +64,7 @@ public class SpelkaartTest
     {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker);
-        cirkelsessie = new Cirkelsessie("Session one", 10, 5, subthema, gebruiker);
+        cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), subthema, gebruiker);
         spelkaart = new Spelkaart(kaart, cirkelsessie);
     }
 
@@ -73,7 +79,7 @@ public class SpelkaartTest
     @Test
     public void createSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -88,7 +94,7 @@ public class SpelkaartTest
     @Test
     public void showSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
@@ -101,7 +107,7 @@ public class SpelkaartTest
     @Test(expected = NestedServletException.class)
     public void showSpelkaart_nonExistingKaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -112,13 +118,13 @@ public class SpelkaartTest
     @Test
     public void updateSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
         spelkaart.setPositie(5);
 
-        json = gson.toJson(spelkaart);
+        json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(put("/api/spelkaarten/1").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
@@ -138,7 +144,7 @@ public class SpelkaartTest
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         spelkaart.setPositie(cirkelsessie.getAantalCirkels());
 
-        String spelkaartJson = gson.toJson(spelkaart);
+        String spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
             .andExpect(status().isCreated());
@@ -164,7 +170,7 @@ public class SpelkaartTest
 
             spelkaart = new Spelkaart(kaart, cirkelsessie);
 
-            spelkaartJson = gson.toJson(spelkaart);
+            spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
             this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
                 .andExpect(status().isCreated());
@@ -183,13 +189,13 @@ public class SpelkaartTest
     @Test(expected = NestedServletException.class)
     public void updateSpelkaart_nonExistingSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
         spelkaart.setPositie(2);
-        json = gson.toJson(spelkaart);
+        json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(put("/api/spelkaarten/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -197,7 +203,7 @@ public class SpelkaartTest
     @Test
     public void deleteSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -213,7 +219,7 @@ public class SpelkaartTest
     @Test(expected = NestedServletException.class)
     public void deleteSpelkaart_nonExistingSpelkaart() throws Exception
     {
-        String json = gson.toJson(spelkaart);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -237,7 +243,7 @@ public class SpelkaartTest
 
             spelkaart = new Spelkaart(kaart, cirkelsessie);
 
-            spelkaartJson = gson.toJson(spelkaart);
+            spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
             this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
                 .andExpect(status().isCreated());

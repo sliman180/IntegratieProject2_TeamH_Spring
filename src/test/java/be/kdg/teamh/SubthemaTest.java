@@ -2,6 +2,7 @@ package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Subthema;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,9 @@ public class SubthemaTest
     @Autowired
     private Gson gson;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Mock
     private Hoofdthema hoofdthema;
 
@@ -58,7 +62,7 @@ public class SubthemaTest
     @Test
     public void createSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -74,7 +78,7 @@ public class SubthemaTest
     @Test(expected = NestedServletException.class)
     public void createSubthema_nullInput() throws Exception
     {
-        String json = gson.toJson(new Subthema(null, null, hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema(null, null, hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -82,7 +86,7 @@ public class SubthemaTest
     @Test
     public void showSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -97,7 +101,7 @@ public class SubthemaTest
     @Test(expected = NestedServletException.class)
     public void showSubthema_nonExistingSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -108,12 +112,12 @@ public class SubthemaTest
     @Test
     public void updateSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema));
+        json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", hoofdthema));
 
         this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isOk());
@@ -128,12 +132,12 @@ public class SubthemaTest
     @Test(expected = NestedServletException.class)
     public void updateHoofdthema_nullInput() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema(null, null, hoofdthema));
+        json = objectMapper.writeValueAsString(new Subthema(null, null, hoofdthema));
 
         this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -141,12 +145,12 @@ public class SubthemaTest
     @Test(expected = NestedServletException.class)
     public void updateSubthema_nonExistingSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Subthema("Houffalize", "Route 3", hoofdthema));
+        json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", hoofdthema));
 
         this.mvc.perform(put("/api/subthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
@@ -154,7 +158,7 @@ public class SubthemaTest
     @Test
     public void deleteSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -170,7 +174,7 @@ public class SubthemaTest
     @Test(expected = NestedServletException.class)
     public void deleteSubthema_nonExistingSubthema() throws Exception
     {
-        String json = gson.toJson(new Subthema("Houffalize", "Route 6", hoofdthema));
+        String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", hoofdthema));
 
         this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
