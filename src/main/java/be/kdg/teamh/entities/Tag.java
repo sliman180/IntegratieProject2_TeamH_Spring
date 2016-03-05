@@ -5,8 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tags")
-public class Tag implements Serializable
-{
+public class Tag implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -14,8 +13,7 @@ public class Tag implements Serializable
     @ManyToOne(cascade = CascadeType.MERGE)
     private Hoofdthema hoofdthema;
 
-    public Tag()
-    {
+    public Tag() {
         // JPA constructor
     }
 }

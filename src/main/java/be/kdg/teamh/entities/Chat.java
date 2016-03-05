@@ -10,8 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "chats")
-public class Chat implements Serializable
-{
+public class Chat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,22 +25,19 @@ public class Chat implements Serializable
     private Cirkelsessie cirkelsessie;
 
 
-    public Chat(String naam, Cirkelsessie cirkelsessie)
-    {
+    public Chat(String naam, Cirkelsessie cirkelsessie) {
         this.naam = naam;
         this.cirkelsessie = cirkelsessie;
     }
 
 
-    public Chat(String naam)
-    {
+    public Chat(String naam) {
         this.naam = naam;
 
     }
 
 
-    public Chat()
-    {
+    public Chat() {
 
         //JPA
     }
@@ -55,38 +51,31 @@ public class Chat implements Serializable
         this.cirkelsessie = cirkelsessie;
     }
 
-    public List<Bericht> getBerichten()
-    {
+    public List<Bericht> getBerichten() {
         return berichten;
     }
 
-    public void setBerichten(List<Bericht> berichten)
-    {
+    public void setBerichten(List<Bericht> berichten) {
         this.berichten = berichten;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public void addBericht(Bericht bericht)
-    {
+    public void addBericht(Bericht bericht) {
         this.berichten.add(bericht);
     }
 }

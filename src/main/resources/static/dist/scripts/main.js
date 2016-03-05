@@ -31,7 +31,7 @@
 
     "use strict";
 
-    angular.module("kandoe").constant("HEADERS", { "Content-Type": "application/json" });
+    angular.module("kandoe").constant("HEADERS", {"Content-Type": "application/json"});
 
 })(window.angular);
 
@@ -284,6 +284,31 @@
 
     "use strict";
 
+    KaartService.$inject = ["$http"];
+    function KaartService($http) {
+
+        var exports = {};
+
+
+        exports.createKaart = function (cirkelsessieId, kaart) {
+
+            return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaart", kaart).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("KaartService", KaartService);
+
+})(window.angular);
+(function (angular) {
+
+    "use strict";
+
     OrganisatieService.$inject = ["$http"];
     function OrganisatieService($http) {
 
@@ -346,9 +371,9 @@
 
         var vm = this;
 
-        vm.login = function(credentials) {
+        vm.login = function (credentials) {
 
-            AuthService.login(credentials).then(function(data) {
+            AuthService.login(credentials).then(function (data) {
 
                 localStorageService.set("auth", {
                     token: data.token
@@ -372,8 +397,8 @@
     "use strict";
 
 
-    CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService"];
-    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService) {
+    CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
+    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
 
         var vm = this;
 
@@ -407,6 +432,12 @@
             });
         }
 
+        vm.createKaart = function (cirkelsessieId, kaart) {
+            KaartService.createKaart(cirkelsessieId, kaart).then(function () {
+                $route.reload();
+            });
+        }
+
 
     }
 
@@ -432,7 +463,17 @@
         vm.addCirkelsessie = function (cirkelsessie) {
             CirkelsessieService.create(cirkelsessie).then(function () {
             });
-        }
+        };
+
+        vm.showCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/details/' + id;
+        };
+
+        vm.deleteCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/delete/' + id;
+        };
 
 
     }
@@ -466,12 +507,12 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function(data) {
+        OrganisatieService.all().then(function (data) {
             vm.organisaties = data;
         });
 
-        vm.addOrganisatie = function(organisatie) {
-            OrganisatieService.create(organisatie).then(function() {
+        vm.addOrganisatie = function (organisatie) {
+            OrganisatieService.create(organisatie).then(function () {
                 $route.reload();
             });
         }

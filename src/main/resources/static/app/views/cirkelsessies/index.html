@@ -61,8 +61,14 @@
                 </a>
             </div>
             <div class="mdl-card__menu">
+                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="55">account_box</div>
+
+                <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
+
+                <i ng-if="!vm.circelsessie.isClosed" class="material-icons">lock</i></span>
+
                 <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                    <i class="material-icons">Share</i>
+                    <i class="material-icons">share</i>
                 </button>
 
                 <!-- Right aligned menu below button -->
@@ -73,9 +79,9 @@
 
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right">
-                    <li class="mdl-menu__item">Bekijk</li>
-                    <li class="mdl-menu__item">Wijzig</li>
-                    <li disabled class="mdl-menu__item">Verwijder</li>
+                    <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
+                    <li disabled class="mdl-menu__item">Wijzig</li>
+                    <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item" >Verwijder</li>
                 </ul>
             </div>
         </div>
@@ -97,9 +103,10 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="number" id="aantalCirkels"
+                    <input  class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$" id="aantalCirkels"
                            ng-model="cirkelsessie.aantalCirkels">
                     <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
+                    <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -110,7 +117,7 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="checkbox" id="isGesloten"
+                    <input class="mdl-textfield__input" type="radio" ng-value="true" id="isGesloten"
                            ng-model="cirkelsessie.isGesloten">
                     <label class="mdl-textfield__label" for="isGesloten">Gesloten</label>
                 </div>

@@ -36,8 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class OrganisatieTest
-{
+public class OrganisatieTest {
     private MockMvc mvc;
 
     @Autowired
@@ -53,118 +52,107 @@ public class OrganisatieTest
     private Gebruiker gebruiker;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter(new JwtFilter(), "/api/organisaties/*").build();
     }
 
     @Test
-    public void indexOrganisatie() throws Exception
-    {
+    public void indexOrganisatie() throws Exception {
         this.mvc.perform(get("/api/organisaties").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createOrganisatie() throws Exception
-    {
+    public void createOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/organisaties").contentType(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].naam", is("NaamOrganisatie")))
-            .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].naam", is("NaamOrganisatie")))
+                .andExpect(jsonPath("$[0].beschrijving", is("Beschrijving")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createOrganisatie_nullInput() throws Exception
-    {
+    public void createOrganisatie_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createOrganisatie_wrongRole() throws Exception
-    {
+    public void createOrganisatie_wrongRole() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("", "", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
-            .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
 
     @Test(expected = ServletException.class)
-    public void createOrganisatie_wrongCredentials() throws Exception
-    {
+    public void createOrganisatie_wrongCredentials() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("", "", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getTokenAsInexistent()))
-            .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void showOrganisatie() throws Exception
-    {
+    public void showOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
-            .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("NaamOrganisatie")))
+                .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
     }
 
     @Test(expected = ServletException.class)
-    public void showOrganisatie_wrongCredentials() throws Exception
-    {
+    public void showOrganisatie_wrongCredentials() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8).header("Authorization", getTokenAsInexistent()));
     }
 
     @Test
-    public void updateOrganisatie() throws Exception
-    {
+    public void updateOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("NaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(put("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON_UTF8).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
-            .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("NieuweNaamOrganisatie")))
+                .andExpect(jsonPath("$.beschrijving", is("Beschrijving")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateOrganisatie_nullInput() throws Exception
-    {
+    public void updateOrganisatie_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie(null, null, gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateOrganisatie_nonExistingOrganisatie() throws Exception
-    {
+    public void updateOrganisatie_nonExistingOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
@@ -175,103 +163,94 @@ public class OrganisatieTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateOrganisatie_wrongRole() throws Exception
-    {
+    public void updateOrganisatie_wrongRole() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(put("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
-            .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
 
     @Test(expected = ServletException.class)
-    public void updateOrganisatie_wrongCredentials() throws Exception
-    {
+    public void updateOrganisatie_wrongCredentials() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Organisatie("NieuweNaamOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(put("/api/organisaties/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getTokenAsInexistent()))
-            .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void deleteOrganisatie() throws Exception
-    {
+    public void deleteOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/organisaties/1").header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/organisaties").accept(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteOrganisatie_nonExistingOrganisatie() throws Exception
-    {
+    public void deleteOrganisatie_nonExistingOrganisatie() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("KdG Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/organisaties/2").header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteOrganisatie_wrongRole() throws Exception
-    {
+    public void deleteOrganisatie_wrongRole() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getUserToken()))
-            .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
     }
 
     @Test(expected = ServletException.class)
-    public void deleteOrganisatie_wrongCredentials() throws Exception
-    {
+    public void deleteOrganisatie_wrongCredentials() throws Exception {
         String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", gebruiker));
 
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getTokenAsInexistent()))
-            .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());
     }
 
-    private String getUserToken() throws Exception
-    {
+    private String getUserToken() throws Exception {
         String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
         return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
     }
 
-    private String getAdminToken() throws Exception
-    {
+    private String getAdminToken() throws Exception {
         String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
         return "Bearer " + (gson.fromJson(mvcResult.getResponse().getContentAsString(), Token.class)).getToken();
     }
 
-    private String getTokenAsInexistent() throws Exception
-    {
+    private String getTokenAsInexistent() throws Exception {
         String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 

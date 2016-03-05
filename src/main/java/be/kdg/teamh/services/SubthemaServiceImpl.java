@@ -12,30 +12,25 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SubthemaServiceImpl implements SubthemaService
-{
+public class SubthemaServiceImpl implements SubthemaService {
     @Autowired
     private SubthemaRepository repository;
 
     @Override
-    public List<Subthema> all()
-    {
+    public List<Subthema> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Subthema subthema)
-    {
+    public void create(Subthema subthema) {
         repository.save(subthema);
     }
 
     @Override
-    public Subthema find(int id) throws SubthemaNotFound
-    {
+    public Subthema find(int id) throws SubthemaNotFound {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null)
-        {
+        if (subthema == null) {
             throw new SubthemaNotFound();
         }
 
@@ -43,8 +38,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void update(int id, Subthema subthema) throws SubthemaNotFound
-    {
+    public void update(int id, Subthema subthema) throws SubthemaNotFound {
         Subthema old = find(id);
 
         old.setNaam(subthema.getNaam());
@@ -54,8 +48,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void delete(int id) throws SubthemaNotFound
-    {
+    public void delete(int id) throws SubthemaNotFound {
         Subthema subthema = find(id);
 
         repository.delete(subthema);

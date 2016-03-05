@@ -3,7 +3,7 @@
     "use strict";
 
 
-    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService) {
+    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
 
         var vm = this;
 
@@ -33,6 +33,12 @@
 
         vm.createMessage = function (chatId, bericht) {
             ChatService.createMessage(chatId, bericht).then(function () {
+                $route.reload();
+            });
+        }
+
+        vm.createKaart = function (cirkelsessieId, kaart) {
+            KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 $route.reload();
             });
         }

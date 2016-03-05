@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commentaren")
-public class Commentaar implements Serializable
-{
+public class Commentaar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,64 +23,52 @@ public class Commentaar implements Serializable
     @ManyToOne(cascade = CascadeType.MERGE)
     private Kaart kaart;
 
-    public Commentaar()
-    {
+    public Commentaar() {
         //JPA Constructor
     }
 
-    public Commentaar(String tekst, Gebruiker gebruiker)
-    {
+    public Commentaar(String tekst, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.gebruiker = gebruiker;
     }
 
-    public Kaart getKaart()
-    {
+    public Kaart getKaart() {
         return kaart;
     }
 
-    public void setKaart(Kaart kaart)
-    {
+    public void setKaart(Kaart kaart) {
         this.kaart = kaart;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTekst()
-    {
+    public String getTekst() {
         return tekst;
     }
 
-    public void setTekst(String tekst)
-    {
+    public void setTekst(String tekst) {
         this.tekst = tekst;
     }
 
-    public LocalDateTime getDatum()
-    {
+    public LocalDateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDateTime datum)
-    {
+    public void setDatum(LocalDateTime datum) {
         this.datum = datum;
     }
 
-    public Gebruiker getGebruiker()
-    {
+    public Gebruiker getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker)
-    {
+    public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

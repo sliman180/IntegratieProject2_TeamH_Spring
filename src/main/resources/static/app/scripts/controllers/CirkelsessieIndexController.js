@@ -15,7 +15,17 @@
         vm.addCirkelsessie = function (cirkelsessie) {
             CirkelsessieService.create(cirkelsessie).then(function () {
             });
-        }
+        };
+
+        vm.showCirkelsessieLink = function(id) {
+
+            window.location.href ='/#/cirkelsessies/details/'+id;
+        };
+
+        vm.deleteCirkelsessieLink = function(id) {
+
+            window.location.href ='/#/cirkelsessies/delete/'+id;
+        };
 
 
     }

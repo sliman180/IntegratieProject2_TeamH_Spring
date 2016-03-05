@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ChatServiceImpl implements ChatService
-{
+public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatRepository repository;

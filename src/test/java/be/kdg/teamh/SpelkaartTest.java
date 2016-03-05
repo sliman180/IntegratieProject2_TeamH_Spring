@@ -30,8 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SpelkaartTest
-{
+public class SpelkaartTest {
     private MockMvc mvc;
 
     @Autowired
@@ -60,8 +59,7 @@ public class SpelkaartTest
 
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker);
         cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), subthema, gebruiker);
@@ -69,75 +67,69 @@ public class SpelkaartTest
     }
 
     @Test
-    public void indexSpelkaart() throws Exception
-    {
+    public void indexSpelkaart() throws Exception {
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createSpelkaart() throws Exception
-    {
+    public void createSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].positie", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].positie", is(0)));
     }
 
     @Test
-    public void showSpelkaart() throws Exception
-    {
+    public void showSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.positie", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.positie", is(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showSpelkaart_nonExistingKaart() throws Exception
-    {
+    public void showSpelkaart_nonExistingKaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten/2").accept(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void updateSpelkaart() throws Exception
-    {
+    public void updateSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         spelkaart.setPositie(5);
 
         json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(put("/api/spelkaarten/1").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/spelkaarten/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.positie", is(5)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.positie", is(5)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception
-    {
+    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
 
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
 
@@ -147,24 +139,22 @@ public class SpelkaartTest
         String spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
 
         this.mvc.perform(patch("/api/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-            .andExpect(status().isConflict());
+                .andExpect(status().isConflict());
 
     }
 
     @Test
-    public void legKaartenBuitenDeCirkel() throws Exception
-    {
+    public void legKaartenBuitenDeCirkel() throws Exception {
 
         Kaart kaart;
         Spelkaart spelkaart;
         String spelkaartJson;
 
-        for (int x = 0; x < 5; x++)
-        {
+        for (int x = 0; x < 5; x++) {
 
             kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
 
@@ -173,26 +163,25 @@ public class SpelkaartTest
             spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
             this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                .andExpect(status().isCreated());
+                    .andExpect(status().isCreated());
         }
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(5)))
-            .andExpect(jsonPath("$[0].positie", is(0)))
-            .andExpect(jsonPath("$[1].positie", is(0)))
-            .andExpect(jsonPath("$[2].positie", is(0)))
-            .andExpect(jsonPath("$[3].positie", is(0)))
-            .andExpect(jsonPath("$[4].positie", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].positie", is(0)))
+                .andExpect(jsonPath("$[1].positie", is(0)))
+                .andExpect(jsonPath("$[2].positie", is(0)))
+                .andExpect(jsonPath("$[3].positie", is(0)))
+                .andExpect(jsonPath("$[4].positie", is(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateSpelkaart_nonExistingSpelkaart() throws Exception
-    {
+    public void updateSpelkaart_nonExistingSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         spelkaart.setPositie(2);
         json = objectMapper.writeValueAsString(spelkaart);
@@ -201,43 +190,39 @@ public class SpelkaartTest
     }
 
     @Test
-    public void deleteSpelkaart() throws Exception
-    {
+    public void deleteSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/spelkaarten/1"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteSpelkaart_nonExistingSpelkaart() throws Exception
-    {
+    public void deleteSpelkaart_nonExistingSpelkaart() throws Exception {
         String json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/spelkaarten/2"));
     }
 
     @Test
-    public void kiesKaartenUitEenVerzameling() throws Exception
-    {
+    public void kiesKaartenUitEenVerzameling() throws Exception {
 
 
         Kaart kaart;
         Spelkaart spelkaart;
         String spelkaartJson;
 
-        for (int x = 0; x < 5; x++)
-        {
+        for (int x = 0; x < 5; x++) {
 
             kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
 
@@ -246,18 +231,18 @@ public class SpelkaartTest
             spelkaartJson = objectMapper.writeValueAsString(spelkaart);
 
             this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                .andExpect(status().isCreated());
+                    .andExpect(status().isCreated());
         }
 
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(5)))
-            .andExpect(jsonPath("$[0].cirkelsessie.id", is(1)))
-            .andExpect(jsonPath("$[1].cirkelsessie.id", is(2)))
-            .andExpect(jsonPath("$[2].cirkelsessie.id", is(3)))
-            .andExpect(jsonPath("$[3].cirkelsessie.id", is(4)))
-            .andExpect(jsonPath("$[4].cirkelsessie.id", is(5)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].cirkelsessie.id", is(1)))
+                .andExpect(jsonPath("$[1].cirkelsessie.id", is(2)))
+                .andExpect(jsonPath("$[2].cirkelsessie.id", is(3)))
+                .andExpect(jsonPath("$[3].cirkelsessie.id", is(4)))
+                .andExpect(jsonPath("$[4].cirkelsessie.id", is(5)));
 
     }
 

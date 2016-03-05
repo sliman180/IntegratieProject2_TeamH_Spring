@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
@@ -28,6 +29,7 @@ public class CirkelsessieController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestBody Cirkelsessie cirkelsessie)
     {
+        System.out.println(cirkelsessie.isGesloten());
         service.create(cirkelsessie);
     }
 
@@ -78,5 +80,11 @@ public class CirkelsessieController
     public List<Cirkelsessie> actief()
     {
         return service.actief();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/spelkaart", method = RequestMethod.POST)
+    public void createKaart(@PathVariable("id") int id, @RequestBody Kaart kaart) throws CirkelsessieNotFound {
+        service.addSpelkaart(id,kaart);
     }
 }

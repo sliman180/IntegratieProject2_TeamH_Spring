@@ -2,22 +2,18 @@ package be.kdg.teamh;
 
 import java.io.Serializable;
 
-public class Token implements Serializable
-{
+public class Token implements Serializable {
     public String token;
 
-    public Token()
-    {
+    public Token() {
         // JPA Constructor
     }
 
-    public Token(final String token)
-    {
+    public Token(final String token) {
         this.token = token;
     }
 
-    public String getToken()
-    {
+    public String getToken() {
         return token;
     }
 }

@@ -8,8 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "organisaties")
-public class Organisatie implements Serializable
-{
+public class Organisatie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,55 +26,45 @@ public class Organisatie implements Serializable
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    public Organisatie()
-    {
+    public Organisatie() {
         // JPA Constructor
     }
 
-    public Organisatie(String naam, String beschrijving, Gebruiker gebruiker)
-    {
+    public Organisatie(String naam, String beschrijving, Gebruiker gebruiker) {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.gebruiker = gebruiker;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id)
-    {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public String getBeschrijving()
-    {
+    public String getBeschrijving() {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving)
-    {
+    public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
     }
 
-    public Gebruiker getOrganisator()
-    {
+    public Gebruiker getOrganisator() {
         return gebruiker;
     }
 
-    public void setOrganisator(Gebruiker gebruiker)
-    {
+    public void setOrganisator(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

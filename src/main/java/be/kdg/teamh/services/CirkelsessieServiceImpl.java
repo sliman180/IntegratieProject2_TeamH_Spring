@@ -2,6 +2,8 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Chat;
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
@@ -15,33 +17,28 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CirkelsessieServiceImpl implements CirkelsessieService
-{
+public class CirkelsessieServiceImpl implements CirkelsessieService {
     @Autowired
     private CirkelsessieRepository repository;
 
 
     @Override
-    public List<Cirkelsessie> all()
-    {
+    public List<Cirkelsessie> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Cirkelsessie cirkelsessie)
-    {
+    public void create(Cirkelsessie cirkelsessie) {
         Chat newChat = new Chat(cirkelsessie.getNaam(), cirkelsessie);
         cirkelsessie.setChat(newChat);
         repository.save(cirkelsessie);
     }
 
     @Override
-    public Cirkelsessie find(int id) throws CirkelsessieNotFound
-    {
+    public Cirkelsessie find(int id) throws CirkelsessieNotFound {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        if (cirkelsessie == null)
-        {
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
@@ -49,8 +46,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound
-    {
+    public void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
         Cirkelsessie old = find(id);
 
         old.setNaam(cirkelsessie.getNaam());
@@ -63,15 +59,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
 
     @Override
-    public void delete(int id) throws CirkelsessieNotFound
-    {
+    public void delete(int id) throws CirkelsessieNotFound {
         Cirkelsessie cirkelsessie = find(id);
 
         repository.delete(cirkelsessie);
     }
 
-    public void clone(int id) throws CirkelsessieNotFound
-    {
+    public void clone(int id) throws CirkelsessieNotFound {
         Cirkelsessie old = find(id);
         Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new Date(), old.getSubthema(), old.getGebruiker());
 
@@ -81,17 +75,31 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Cirkelsessie> gepland()
-    {
+    public void addSpelkaart(int id, Kaart kaart) throws CirkelsessieNotFound {
+
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        Spelkaart spelkaart = new Spelkaart(kaart);
+
+        cirkelsessie.addSpelkaart(spelkaart);
+
+        repository.save(cirkelsessie);
+
+    }
+
+    @Override
+    public List<Cirkelsessie> gepland() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
         Date now = new Date();
 
-        for (Cirkelsessie cirkelsessie : temp)
-        {
+        for (Cirkelsessie cirkelsessie : temp) {
 
-            if (cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) < 1))
-            {
+            if (cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) < 1)) {
                 cirkelsessies.add(cirkelsessie);
             }
         }
@@ -100,16 +108,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Cirkelsessie> actief()
-    {
+    public List<Cirkelsessie> actief() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
         Date now = new Date();
 
-        for (Cirkelsessie cirkelsessie : temp)
-        {
-            if (!cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) > 0))
-            {
+        for (Cirkelsessie cirkelsessie : temp) {
+            if (!cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) > 0)) {
                 cirkelsessies.add(cirkelsessie);
             }
         }

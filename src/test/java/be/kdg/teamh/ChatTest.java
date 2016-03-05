@@ -32,8 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 
-public class ChatTest
-{
+public class ChatTest {
     private MockMvc mvc;
 
     @Autowired
@@ -58,8 +57,7 @@ public class ChatTest
     private ObjectMapper objectMapper;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), subthema, gebruiker);
         chat = new Chat("Leuke chat");
@@ -67,89 +65,82 @@ public class ChatTest
 
     @Test
     @JsonIgnore
-    public void indexChat() throws Exception
-    {
+    public void indexChat() throws Exception {
         this.mvc.perform(get("/api/chats").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
     @JsonIgnore
-    public void createChat() throws Exception
-    {
+    public void createChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/chats").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].naam", is("Leuke chat")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createChat_nullInput() throws Exception
-    {
+    public void createChat_nullInput() throws Exception {
         chat.setNaam(null);
         String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
-    public void showChat() throws Exception
-    {
+    public void showChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/chats/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Leuke chat")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Leuke chat")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showChat_nonExistingChat() throws Exception
-    {
+    public void showChat_nonExistingChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/chats/2").accept(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void updateChat() throws Exception
-    {
+    public void updateChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         chat.setNaam("Gewijzigde chat");
         json = objectMapper.writeValueAsString(chat);
 
 
         this.mvc.perform(put("/api/chats/1").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/chats/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.naam", is("Gewijzigde chat")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.naam", is("Gewijzigde chat")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateChat_nullInput() throws Exception
-    {
+    public void updateChat_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         chat.setNaam(null);
         json = objectMapper.writeValueAsString(chat);
@@ -158,12 +149,11 @@ public class ChatTest
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateChat_nonExistingChat() throws Exception
-    {
+    public void updateChat_nonExistingChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
         chat.setNaam("Gewijzigde naam");
         json = objectMapper.writeValueAsString(chat);
 
@@ -171,52 +161,48 @@ public class ChatTest
     }
 
     @Test
-    public void deleteChat() throws Exception
-    {
+    public void deleteChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
-        
+
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/chats/1"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/chats").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteChat_nonExistingChat() throws Exception
-    {
+    public void deleteChat_nonExistingChat() throws Exception {
         String json = objectMapper.writeValueAsString(chat);
 
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/chats/2"));
     }
 
     @Test
-    public void addMessagesToChat() throws Exception
-    {
+    public void addMessagesToChat() throws Exception {
         Bericht bericht;
         String messageJson;
 
         String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
 
-        for (int x = 0; x < 5; x++)
-        {
+        for (int x = 0; x < 5; x++) {
             bericht = new Bericht("Heey" + x, gebruiker);
             messageJson = objectMapper.writeValueAsString(bericht);
             this.mvc.perform(post("/api/chats/1/messages").contentType(MediaType.APPLICATION_JSON).content(messageJson))
-                .andExpect(status().isCreated());
+                    .andExpect(status().isCreated());
         }
 
         this.mvc.perform(get("/api/chats/1").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.berichten", hasSize(5)));
+                .andExpect(jsonPath("$.berichten", hasSize(5)));
 
     }
 
