@@ -24,7 +24,6 @@ import java.util.Date;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,7 +86,7 @@ public class ChatTest
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].naam", is("Leuke chat"))).andDo(print());
+                .andExpect(jsonPath("$[0].naam", is("Leuke chat")));
     }
 
     @Test(expected = NestedServletException.class)

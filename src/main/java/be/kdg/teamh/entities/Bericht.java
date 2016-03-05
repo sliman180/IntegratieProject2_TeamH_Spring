@@ -2,12 +2,13 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "berichten")
-public class Bericht
+public class Bericht implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
