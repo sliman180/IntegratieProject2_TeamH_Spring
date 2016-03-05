@@ -1,0 +1,85 @@
+<style>
+
+    .mdl-card__title {
+        background-color: cornflowerblue;
+    }
+
+    .demo-card-wide.mdl-card {
+        width: 512px;
+        margin-bottom: 5%;
+    }
+
+    .demo-card-wide > .mdl-card__title {
+        color: #fff;
+        height: 176px;
+        background-color: cornflowerblue;
+    }
+
+    .demo-card-wide > .mdl-card__menu {
+        color: #fff;
+    }
+
+    #form {
+        height: 500px;
+    }
+
+    #form-title {
+        height: 60px;
+    }
+
+    #form-title:hover {
+        cursor: pointer;
+    }
+
+</style>
+<div class="mdl-cell mdl-cell&#45;&#45;9-col">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" data-ng-repeat="cirkelsessie in vm.cirkelsessies">
+        <div id="">
+            <div class="mdl-card__title"><h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2></div>
+            <div class="mdl-card__supporting-text"> Startdatum: {{cirkelsessie.startDatum | date:'dd-MM-yyyy'}}</div>
+            <div class="mdl-card__actions mdl-card--border"><a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
+                                                               class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Deelnemen!</a>
+            </div>
+            <div class="mdl-card__menu">
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i
+                        class="material-icons">Share</i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div id="form-title" class="mdl-card__title mdl-color--primary mdl-color-text--white"><h2
+            class="mdl-card__title-text" data-ng-click="showForm = ! showForm">Maak een cirkelsessie aan</h2></div>
+    <div class="mdl-card mdl-shadow--6dp" id="form" data-ng-show="showForm">
+        <div class="mdl-card__supporting-text">
+            <form action="" data-ng-submit="vm.addCirkelsessie(cirkelsessie)">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="text" id="naam" data-ng-model="cirkelsessie.naam"> <label
+                        class="mdl-textfield__label" for="naam">Naam</label></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="number" id="aantalCirkels"
+                        data-ng-model="cirkelsessie.aantalCirkels"> <label class="mdl-textfield__label"
+                                                                           for="aantalCirkels">Aantal cirkels</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="number" id="maxAantalKaarten"
+                        data-ng-model="cirkelsessie.maxAantalKaarten"> <label class="mdl-textfield__label"
+                                                                              for="maxAantalKaarten">Maximum toegelaten
+                    kaarten</label></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="checkbox" id="isGesloten"
+                        data-ng-model="cirkelsessie.isGesloten"> <label class="mdl-textfield__label" for="isGesloten">Gesloten</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" min="2016-03-04" type="date" id="datum"
+                        data-ng-model="cirkelsessie.startDatum"><label class="mdl-textfield__label" for="datum"></label>
+                </div>
+                <input class="mdl-textfield__input" type="tekst" value="null" hidden id="subthema"
+                       data-ng-model="cirkelsessie.subthema"> <input class="mdl-textfield__input" type="tekst"
+                                                                     value="null" hidden id="gebruiker"
+                                                                     data-ng-model="cirkelsessie.gebruiker">
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect"> Toevoegen</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<style>
+
+    .mdl-card__title {
+        background-color: royalblue;
+    }
+
+    #chat {
+        overflow-y: auto;
+    }
+
+    #chatContainer {
+        height: 500px;
+    }
+
+</style>
+<div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title"><h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2></div>
+    <div class="mdl-card__supporting-text"> Startdatum: {{vm.cirkelsessie.startDatum | date:'yyyy-MM-dd'}}</div>
+    <div class="mdl-card__actions mdl-card--border"><h6>Max aan te maken aantal kaarten per gebruiker:</h6> <span>{{vm.cirkelsessie.maxAantalKaarten}}</span>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <svg width="100%" data-ng-attr-height="{{vm.cirkelsessie.aantalCirkels * 100}}">
+            <circle style="stroke: black;fill: {{vm.setCircleColor(i)}}"
+                    data-ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)"
+                    data-ng-attr-cx="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                    data-ng-attr-cy="{{vm.cirkelsessie.aantalCirkels * 50}}" data-ng-attr-r="{{i * 50}}"/>
+        </svg>
+    </div>
+    <div class="mdl-card__menu">
+        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i
+                class="material-icons">Share</i></button>
+    </div>
+</div>
+<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp" id="chatContainer">
+    <div class="mdl-card__title"><h2 class="mdl-card__title-text">Chat</h2></div>
+    <div class="mdl-card__supporting-text"> {{vm.cirkelsessie.chat.naam}}</div>
+    <div class="mdl-card__actions mdl-card--border" id="chat">
+        <div data-ng-repeat="bericht in vm.cirkelsessie.chat.berichten"><p>{{bericht.datum | date:'dd-MM-yyyy'}}
+            {{bericht.tekst}}</p></div>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <form action="" data-ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                    class="mdl-textfield__input" type="text" id="tekst" data-ng-model="bericht.tekst"> <label
+                    class="mdl-textfield__label" for="tekst">Bericht</label></div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect"> Post</button>
+        </form>
+    </div>
+</div>
+<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title"><h2 class="mdl-card__title-text">Spelkaarten</h2></div>
+    <div class="mdl-card__supporting-text"></div>
+    <div class="mdl-card__actions mdl-card--border"><p></p></div>
+</div>
