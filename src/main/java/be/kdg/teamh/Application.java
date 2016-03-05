@@ -19,7 +19,7 @@ public class Application
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 
         registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/api/organisaties");
+        registrationBean.addUrlPatterns("/api/*");
 
         return registrationBean;
     }
