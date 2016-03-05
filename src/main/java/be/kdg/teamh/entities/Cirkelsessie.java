@@ -1,5 +1,7 @@
 package be.kdg.teamh.entities;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -42,12 +44,16 @@ public class Cirkelsessie implements Serializable
     @OneToMany(cascade = CascadeType.ALL)
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private Chat chat;
+    //private Chat chat;
 
     public Cirkelsessie()
     {
         // JPA Constructor
+
     }
 
     public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum)
@@ -57,6 +63,7 @@ public class Cirkelsessie implements Serializable
         this.aantalCirkels = aantalCirkels;
         this.isGesloten = isGesloten;
         this.startDatum = startDatum;
+        this.chat = new Chat("Chat: " + naam);
     }
 
     public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker)
@@ -66,6 +73,7 @@ public class Cirkelsessie implements Serializable
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
+        this.chat = new Chat("Chat: " + naam);
     }
 
     public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum, Subthema subthema, Gebruiker gebruiker)
@@ -77,11 +85,17 @@ public class Cirkelsessie implements Serializable
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
+        this.chat = new Chat("Chat: " + naam);
     }
+
 
     public int getId()
     {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNaam()
@@ -192,4 +206,14 @@ public class Cirkelsessie implements Serializable
             this.deelnames.add(deelname);
         }
     }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+
 }

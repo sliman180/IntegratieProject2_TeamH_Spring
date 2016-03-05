@@ -1,5 +1,6 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.entities.Chat;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
@@ -29,6 +30,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     @Override
     public void create(Cirkelsessie cirkelsessie)
     {
+        Chat newChat = new Chat(cirkelsessie.getNaam(), cirkelsessie);
+        cirkelsessie.setChat(newChat);
         repository.save(cirkelsessie);
     }
 

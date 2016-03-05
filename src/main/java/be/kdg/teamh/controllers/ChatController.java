@@ -41,6 +41,7 @@ public class ChatController {
         service.update(id, chat);
     }
 
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id) throws ChatNotFound {

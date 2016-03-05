@@ -2,7 +2,8 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Entity
 @Table(name = "berichten")
@@ -16,7 +17,7 @@ public class Bericht
     private String tekst;
 
     @NotNull
-    private LocalDateTime datum;
+    private Date datum = new Date();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Chat chat;
@@ -29,10 +30,9 @@ public class Bericht
         // JPA Constructor
     }
 
-    public Bericht(String tekst, LocalDateTime datum, Gebruiker gebruiker)
+    public Bericht(String tekst, Gebruiker gebruiker)
     {
         this.tekst = tekst;
-        this.datum = datum;
         this.gebruiker = gebruiker;
     }
 
@@ -77,12 +77,12 @@ public class Bericht
         this.tekst = tekst;
     }
 
-    public LocalDateTime getDatum()
+    public Date getDatum()
     {
         return datum;
     }
 
-    public void setDatum(LocalDateTime datum)
+    public void setDatum(Date datum)
     {
         this.datum = datum;
     }

@@ -1,26 +1,42 @@
 <style>
 
     .mdl-card__title {
-        background-color: blanchedalmond;
+        background-color: royalblue;
+    }
+
+    #chat {
+        overflow-y: auto;
+    }
+
+    #chatContainer {
+        height: 500px;
     }
 
 </style>
 
 
-<div class="mdl-cell mdl-cell--6-col demo-card-wide mdl-card mdl-shadow--2dp">
+<div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        {{vm.cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
+        Startdatum: {{vm.cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <p>Aantal cirkels: {{vm.cirkelsessies.aantalCirkels}}</p>
+        <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
+        <span>{{vm.cirkelsessie.maxAantalKaarten}}</span>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <svg ng-attr-height="{{vm.cirkelsessie.aantalCirkels * 100}}"
+             width="100%">
 
-        <p>Max aan te maken aantal kaarten per gebruiker: {{vm.cirkelsessies.maxAantalKaarten}}</p>
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <p>Hier komt de cirkel</p>
+            <circle ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)"
+                    ng-attr-cx="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                    ng-attr-cy="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                    ng-attr-r="{{i * 50}}"
+                    style="stroke: black;fill: {{vm.setCircleColor(i)}}">
+            </circle>
+        </svg>
     </div>
     <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
@@ -30,17 +46,35 @@
 </div>
 
 
-<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
+<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp" id="chatContainer">
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Chat</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Datum
+        {{vm.cirkelsessie.chat.naam}}
     </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <p>Moussa: Ewa</p>
+    <div class="mdl-card__actions mdl-card--border" id="chat">
+        <div ng-repeat="bericht in vm.cirkelsessie.chat.berichten">
+            <p>{{bericht.datum | date:'dd-MM-yyyy'}} {{bericht.tekst}}</p>
+
+        </div>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <form ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)" action="">
+
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
+                <label class="mdl-textfield__label" for="tekst">Bericht</label>
+            </div>
+
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                Post
+            </button>
+
+        </form>
     </div>
 </div>
+
 
 <div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title">

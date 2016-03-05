@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieIndexController($route, CirkelsessieService) {
+    function CirkelsessieIndexController(CirkelsessieService) {
 
         var vm = this;
 
@@ -14,7 +14,6 @@
 
         vm.addCirkelsessie = function (cirkelsessie) {
             CirkelsessieService.create(cirkelsessie).then(function () {
-                $route.reload();
             });
         }
 

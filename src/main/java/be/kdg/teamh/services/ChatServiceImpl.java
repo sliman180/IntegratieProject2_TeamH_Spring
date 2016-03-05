@@ -78,4 +78,5 @@ public class ChatServiceImpl implements ChatService
         chat.addBericht(bericht);
         repository.save(chat);
     }
+
 }

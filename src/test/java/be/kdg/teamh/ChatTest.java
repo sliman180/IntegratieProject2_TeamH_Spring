@@ -1,6 +1,7 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.Before;
@@ -18,12 +19,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+
 public class ChatTest
 {
     private MockMvc mvc;
@@ -61,10 +63,11 @@ public class ChatTest
     {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
         cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), subthema, gebruiker);
-        chat = new Chat("Leuke chat", cirkelsessie);
+        chat = new Chat("Leuke chat");
     }
 
     @Test
+    @JsonIgnore
     public void indexChat() throws Exception
     {
         this.mvc.perform(get("/api/chats").accept(MediaType.APPLICATION_JSON))
@@ -73,9 +76,9 @@ public class ChatTest
     }
 
     @Test
+    @JsonIgnore
     public void createChat() throws Exception
     {
-
         String json = objectMapper.writeValueAsString(chat);
         this.mvc.perform(post("/api/chats").contentType(MediaType.APPLICATION_JSON).content(json))
             .andExpect(status().isCreated());
@@ -84,7 +87,7 @@ public class ChatTest
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].naam", is("Leuke chat")));
+                .andExpect(jsonPath("$[0].naam", is("Leuke chat"))).andDo(print());
     }
 
     @Test(expected = NestedServletException.class)
@@ -207,7 +210,7 @@ public class ChatTest
 
         for (int x = 0; x < 5; x++)
         {
-            bericht = new Bericht("Heey" + x, LocalDateTime.now(), gebruiker);
+            bericht = new Bericht("Heey" + x, gebruiker);
             messageJson = objectMapper.writeValueAsString(bericht);
             this.mvc.perform(post("/api/chats/1/messages").contentType(MediaType.APPLICATION_JSON).content(messageJson))
                 .andExpect(status().isCreated());

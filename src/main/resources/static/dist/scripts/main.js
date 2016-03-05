@@ -144,6 +144,32 @@
 
     "use strict";
 
+    ChatService.$inject = ["$http"];
+    function ChatService($http) {
+
+        var exports = {};
+
+
+        exports.createMessage = function (chatId, bericht) {
+
+            return $http.post("/api/chats/" + chatId + "/messages", bericht).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("ChatService", ChatService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     CirkelsessieService.$inject = ["$http"];
     function CirkelsessieService($http) {
 
@@ -345,16 +371,42 @@
 
     "use strict";
 
-    CirkelsessieDetailsController.$inject = ["$routeParams", "CirkelsessieService"];
-    function CirkelsessieDetailsController($routeParams, CirkelsessieService) {
+
+    CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService"];
+    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService) {
 
         var vm = this;
+
+        vm.getTimes = function (n) {
+
+            var numbers = [];
+            for (var i = n; i > 0; i--) {
+                numbers.push(i);
+            }
+
+            return numbers;
+        };
+
+        vm.setCircleColor = function (number) {
+            if (number % 2 == 0) {
+                return "#4985B9"
+            } else {
+                return "white"
+            }
+        };
 
         vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
         });
+
+        vm.createMessage = function (chatId, bericht) {
+            ChatService.createMessage(chatId, bericht).then(function () {
+                $route.reload();
+            });
+        }
+
 
     }
 
@@ -366,8 +418,8 @@
 
     "use strict";
 
-    CirkelsessieIndexController.$inject = ["$route", "CirkelsessieService"];
-    function CirkelsessieIndexController($route, CirkelsessieService) {
+    CirkelsessieIndexController.$inject = ["CirkelsessieService"];
+    function CirkelsessieIndexController(CirkelsessieService) {
 
         var vm = this;
 
@@ -379,7 +431,6 @@
 
         vm.addCirkelsessie = function (cirkelsessie) {
             CirkelsessieService.create(cirkelsessie).then(function () {
-                $route.reload();
             });
         }
 
