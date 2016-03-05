@@ -10,6 +10,7 @@
 
     #chatContainer {
         height: 500px;
+        margin-top: 10%;
     }
 
 </style>
@@ -29,26 +30,45 @@
     <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i
                 class="material-icons">Share</i></button>
-    </div>
-</div>
-<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp" id="chatContainer">
-    <div class="mdl-card__title"><h2 class="mdl-card__title-text">Chat</h2></div>
-    <div class="mdl-card__supporting-text"> {{vm.cirkelsessie.chat.naam}}</div>
-    <div class="mdl-card__actions mdl-card--border" id="chat">
-        <div data-ng-repeat="bericht in vm.cirkelsessie.chat.berichten"><p>{{bericht.datum | date:'dd-MM-yyyy'}}
-            {{bericht.tekst}}</p></div>
-    </div>
-    <div class="mdl-card__supporting-text">
-        <form action="" data-ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
-                    class="mdl-textfield__input" type="text" id="tekst" data-ng-model="bericht.tekst"> <label
-                    class="mdl-textfield__label" for="tekst">Bericht</label></div>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect"> Post</button>
-        </form>
+        <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+            <li class="mdl-menu__item">Wijzig</li>
+            <li disabled class="mdl-menu__item">Verwijder</li>
+        </ul>
     </div>
 </div>
 <div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
-    <div class="mdl-card__title"><h2 class="mdl-card__title-text">Spelkaarten</h2></div>
-    <div class="mdl-card__supporting-text"></div>
-    <div class="mdl-card__actions mdl-card--border"><p></p></div>
+    <div>
+        <div class="mdl-card__title"><h2 class="mdl-card__title-text">Spelkaarten</h2></div>
+        <div class="mdl-card__supporting-text"></div>
+        <div class="mdl-card__actions mdl-card--border"><p></p></div>
+        <div class="mdl-card__supporting-text">
+            <form action="" data-ng-submit="vm.createMessage(vm.cirkelsessie.id, kaart)">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="text" id="kaartTekst" data-ng-model="kaart.tekst"> <label
+                        class="mdl-textfield__label" for="tekst">Kaart tekst</label></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="text" id="imageUrl" data-ng-model="kaart.imageUrl"> <label
+                        class="mdl-textfield__label" for="imageUrl">Afbeelding urlt</label></div>
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect"> Toevoegen</button>
+            </form>
+        </div>
+    </div>
+    <div id="chatContainer">
+        <div class="mdl-card__title"><h2 class="mdl-card__title-text">Chat</h2></div>
+        <div class="mdl-card__supporting-text"> {{vm.cirkelsessie.chat.naam}}</div>
+        <div class="mdl-card__actions mdl-card--border" id="chat">
+            <div data-ng-repeat="bericht in vm.cirkelsessie.chat.berichten"><p>{{bericht.datum | date:'dd-MM-yyyy'}}
+                {{bericht.tekst}}</p></div>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <form action="" data-ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input
+                        class="mdl-textfield__input" type="text" id="tekst" data-ng-model="bericht.tekst"> <label
+                        class="mdl-textfield__label" for="tekst">Bericht</label></div>
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect"> Post</button>
+            </form>
+        </div>
+    </div>
 </div>
