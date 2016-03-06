@@ -11,9 +11,13 @@
             AuthService.login(credentials).then(function(data) {
 
                 localStorageService.set("auth", {
+                    id: data.id,
+                    naam: data.naam,
                     token: data.token
                 });
 
+                $rootScope.id = data.id;
+                $rootScope.naam = data.naam;
                 $rootScope.loggedIn = true;
                 $location.path("/");
 

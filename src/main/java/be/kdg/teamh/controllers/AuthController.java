@@ -1,6 +1,6 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.Token;
+import be.kdg.teamh.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import com.google.common.hash.Hashing;
@@ -19,10 +19,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
-    private final List<Gebruiker> userDb = new ArrayList<>();
+public class AuthController
+{
+    private List<Gebruiker> userDb = new ArrayList<>();
 
-    public AuthController() {
+    public AuthController()
+    {
         List<Rol> user = new ArrayList<>();
         List<Rol> admin = new ArrayList<>();
 
@@ -35,17 +37,19 @@ public class AuthController {
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Token login(@RequestBody Gebruiker login) throws Exception {
+    public LoginResponse login(@RequestBody Gebruiker login) throws Exception
+    {
         login.setWachtwoord(Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString());
 
-        if (!userDb.contains(login)) {
+        if (!userDb.contains(login))
+        {
             throw new Exception("Invalid login");
         }
 
-        List<Rol> rollen = (userDb.get(userDb.indexOf(login))).getRollen();
+        Gebruiker gebruiker = userDb.get(userDb.indexOf(login));
 
-        return new Token(Jwts.builder().setSubject(login.getGebruikersnaam())
-                .claim("roles", rollen.stream().map(Rol::getNaam).collect(Collectors.toList()))
-                .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
+        return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(gebruiker.getGebruikersnaam())
+            .claim("roles", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
+            .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 }

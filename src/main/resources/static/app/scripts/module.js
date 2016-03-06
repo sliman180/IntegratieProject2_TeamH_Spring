@@ -13,12 +13,18 @@
 
         .run(function ($location, $rootScope, localStorageService) {
 
-            if (localStorageService.get("auth")) {
+            var data = localStorageService.get("auth");
+
+            if (data) {
+                $rootScope.id = data.id;
+                $rootScope.naam = data.naam;
                 $rootScope.loggedIn = true;
             }
 
             $rootScope.logout = function () {
                 localStorageService.remove("auth");
+                $rootScope.id = null;
+                $rootScope.naam = null;
                 $rootScope.loggedIn = false;
                 $location.path("/");
             };

@@ -13,12 +13,18 @@
 
         .run(["$location", "$rootScope", "localStorageService", function ($location, $rootScope, localStorageService) {
 
-            if (localStorageService.get("auth")) {
+            var data = localStorageService.get("auth");
+
+            if (data) {
+                $rootScope.id = data.id;
+                $rootScope.naam = data.naam;
                 $rootScope.loggedIn = true;
             }
 
             $rootScope.logout = function () {
                 localStorageService.remove("auth");
+                $rootScope.id = null;
+                $rootScope.naam = null;
                 $rootScope.loggedIn = false;
                 $location.path("/");
             };
@@ -292,7 +298,7 @@
 
         exports.createKaart = function (cirkelsessieId, kaart) {
 
-            return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaart", kaart).then(function (response) {
+            return $http.post("/api/cirkelsessies/"+cirkelsessieId+"/spelkaart", kaart).then(function (response) {
                 return response.data;
             });
 
@@ -371,14 +377,18 @@
 
         var vm = this;
 
-        vm.login = function (credentials) {
+        vm.login = function(credentials) {
 
-            AuthService.login(credentials).then(function (data) {
+            AuthService.login(credentials).then(function(data) {
 
                 localStorageService.set("auth", {
+                    id: data.id,
+                    naam: data.naam,
                     token: data.token
                 });
 
+                $rootScope.id = data.id;
+                $rootScope.naam = data.naam;
                 $rootScope.loggedIn = true;
                 $location.path("/");
 
@@ -465,14 +475,14 @@
             });
         };
 
-        vm.showCirkelsessieLink = function (id) {
+        vm.showCirkelsessieLink = function(id) {
 
-            window.location.href = '/#/cirkelsessies/details/' + id;
+            window.location.href ='/#/cirkelsessies/details/'+id;
         };
 
-        vm.deleteCirkelsessieLink = function (id) {
+        vm.deleteCirkelsessieLink = function(id) {
 
-            window.location.href = '/#/cirkelsessies/delete/' + id;
+            window.location.href ='/#/cirkelsessies/delete/'+id;
         };
 
 
@@ -507,12 +517,12 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function (data) {
+        OrganisatieService.all().then(function(data) {
             vm.organisaties = data;
         });
 
-        vm.addOrganisatie = function (organisatie) {
-            OrganisatieService.create(organisatie).then(function () {
+        vm.addOrganisatie = function(organisatie) {
+            OrganisatieService.create(organisatie).then(function() {
                 $route.reload();
             });
         }
