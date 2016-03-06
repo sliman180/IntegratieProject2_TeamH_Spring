@@ -145,15 +145,26 @@
                     }
 
                     if (notify.setItem) {
-                        $rootScope.$broadcast('ngStorage.notification.setitem', { key: key, newvalue: value, storageType: 'cookie' });
+                        $rootScope.$broadcast('ngStorage.notification.setitem', {
+                            key: key,
+                            newvalue: value,
+                            storageType: 'cookie'
+                        });
                     }
                     return addToCookies(key, value);
                 }
 
                 try {
-                    if (webStorage) { webStorage.setItem(deriveQualifiedKey(key), value) };
+                    if (webStorage) {
+                        webStorage.setItem(deriveQualifiedKey(key), value)
+                    }
+                    ;
                     if (notify.setItem) {
-                        $rootScope.$broadcast('ngStorage.notification.setitem', { key: key, newvalue: value, storageType: self.storageType });
+                        $rootScope.$broadcast('ngStorage.notification.setitem', {
+                            key: key,
+                            newvalue: value,
+                            storageType: self.storageType
+                        });
                     }
                 } catch (e) {
                     $rootScope.$broadcast('ngStorage.notification.error', e.message);
@@ -196,7 +207,10 @@
                         }
 
                         if (notify.removeItem) {
-                            $rootScope.$broadcast('ngStorage.notification.removeitem', { key: key, storageType: 'cookie' });
+                            $rootScope.$broadcast('ngStorage.notification.removeitem', {
+                                key: key,
+                                storageType: 'cookie'
+                            });
                         }
                         removeFromCookies(key);
                     }

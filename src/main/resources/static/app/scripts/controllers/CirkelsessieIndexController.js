@@ -17,14 +17,14 @@
             });
         };
 
-        vm.showCirkelsessieLink = function(id) {
+        vm.showCirkelsessieLink = function (id) {
 
-            window.location.href ='/#/cirkelsessies/details/'+id;
+            window.location.href = '/#/cirkelsessies/details/' + id;
         };
 
-        vm.deleteCirkelsessieLink = function(id) {
+        vm.deleteCirkelsessieLink = function (id) {
 
-            window.location.href ='/#/cirkelsessies/delete/'+id;
+            window.location.href = '/#/cirkelsessies/delete/' + id;
         };
 
 

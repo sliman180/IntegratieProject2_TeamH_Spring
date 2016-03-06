@@ -8,12 +8,12 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function(data) {
+        OrganisatieService.all().then(function (data) {
             vm.organisaties = data;
         });
 
-        vm.addOrganisatie = function(organisatie) {
-            OrganisatieService.create(organisatie).then(function() {
+        vm.addOrganisatie = function (organisatie) {
+            OrganisatieService.create(organisatie).then(function () {
                 $route.reload();
             });
         }

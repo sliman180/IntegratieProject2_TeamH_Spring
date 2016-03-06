@@ -39,8 +39,14 @@
             </circle>
 
 
-            <line ng-attr-x1="0" ng-attr-y1="{{vm.cirkelsessie.aantalCirkels * 50}}" ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 100}}" ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 50}}" style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5" />
-            <line ng-attr-x1="{{vm.cirkelsessie.aantalCirkels * 50}}" ng-attr-y1="0" ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 50}}" ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 100}}" style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5" />
+            <line ng-attr-x1="0" ng-attr-y1="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                  ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 100}}"
+                  ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 50}}" style="stroke:white;stroke-width:2"
+                  stroke-linecap="round" stroke-dasharray="1, 5"/>
+            <line ng-attr-x1="{{vm.cirkelsessie.aantalCirkels * 50}}" ng-attr-y1="0"
+                  ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                  ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 100}}" style="stroke:white;stroke-width:2"
+                  stroke-linecap="round" stroke-dasharray="1, 5"/>
 
         </svg>
     </div>
@@ -65,7 +71,7 @@
             for="demo-menu-lower-right d">
             <li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
             <li disabled class="mdl-menu__item">Wijzig</li>
-            <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item" >Verwijder</li>
+            <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
         </ul>
     </div>
 </div>
@@ -77,37 +83,43 @@
         height: 20px;
         background: #3E4EB8;
     }
+
     .demo-card-event > .mdl-card__actions {
         border-color: rgba(255, 255, 255, 0.2);
     }
+
     .demo-card-event > .mdl-card__title {
         align-items: flex-start;
     }
+
     .demo-card-event > .mdl-card__title > h4 {
         margin-top: 0;
     }
+
     .demo-card-event > .mdl-card__actions {
         display: flex;
-        box-sizing:border-box;
+        box-sizing: border-box;
         align-items: center;
     }
+
     .demo-card-event > .mdl-card__actions > .material-icons {
         padding-right: 10px;
     }
+
     .demo-card-event > .mdl-card__title,
     .demo-card-event > .mdl-card__actions,
     .demo-card-event > .mdl-card__actions > .mdl-button {
         color: #fff;
     }
 
-    .mdl-badge{
+    .mdl-badge {
         margin-bottom: 4%;
     }
 
-    #kaart{
-        margin:1%;
+    #kaart {
+        margin: 1%;
         height: 70px;
-        min-height:0;
+        min-height: 0;
         width: 100%;
     }
 </style>

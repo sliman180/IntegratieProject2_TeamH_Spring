@@ -9,7 +9,7 @@
 
         exports.createKaart = function (cirkelsessieId, kaart) {
 
-            return $http.post("/api/cirkelsessies/"+cirkelsessieId+"/spelkaart", kaart).then(function (response) {
+            return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaart", kaart).then(function (response) {
                 return response.data;
             });
 

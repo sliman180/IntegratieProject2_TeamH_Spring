@@ -1,4 +1,4 @@
-;(function() {
+;(function () {
     "use strict";
 
     /**
@@ -39,7 +39,8 @@
          * @param {string=} optCssClass the name of the CSS class elements of this
          * type will have.
          */
-        upgradeDom: function(optJsClass, optCssClass) {},
+        upgradeDom: function (optJsClass, optCssClass) {
+        },
         /**
          * Upgrades a specific element rather than all in the DOM.
          *
@@ -47,19 +48,22 @@
          * @param {string=} optJsClass Optional name of the class we want to upgrade
          * the element to.
          */
-        upgradeElement: function(element, optJsClass) {},
+        upgradeElement: function (element, optJsClass) {
+        },
         /**
          * Upgrades a specific list of elements rather than all in the DOM.
          *
          * @param {!Element|!Array<!Element>|!NodeList|!HTMLCollection} elements
          * The elements we wish to upgrade.
          */
-        upgradeElements: function(elements) {},
+        upgradeElements: function (elements) {
+        },
         /**
          * Upgrades all registered components found in the current DOM. This is
          * automatically called on window load.
          */
-        upgradeAllRegistered: function() {},
+        upgradeAllRegistered: function () {
+        },
         /**
          * Allows user to be alerted to any upgrades that are performed for a given
          * component type
@@ -70,22 +74,25 @@
          * upgrade. This function should expect 1 parameter - the HTMLElement which
          * got upgraded.
          */
-        registerUpgradedCallback: function(jsClass, callback) {},
+        registerUpgradedCallback: function (jsClass, callback) {
+        },
         /**
          * Registers a class for future use and attempts to upgrade existing DOM.
          *
          * @param {componentHandler.ComponentConfigPublic} config the registration configuration
          */
-        register: function(config) {},
+        register: function (config) {
+        },
         /**
          * Downgrade either a given node, an array of nodes, or a NodeList.
          *
          * @param {!Node|!Array<!Node>|!NodeList} nodes
          */
-        downgradeElements: function(nodes) {}
+        downgradeElements: function (nodes) {
+        }
     };
 
-    componentHandler = (function() {
+    componentHandler = (function () {
         'use strict';
 
         /** @type {!Array<componentHandler.ComponentConfig>} */
@@ -194,11 +201,10 @@
             // ones matching the element's CSS classList.
             if (!optJsClass) {
                 var classList = element.classList;
-                registeredComponents_.forEach(function(component) {
+                registeredComponents_.forEach(function (component) {
                     // Match CSS & Not to be upgraded & Not upgraded.
                     if (classList.contains(component.cssClass) &&
-                        classesToUpgrade.indexOf(component) === -1 &&
-                        !isElementUpgraded_(element, component.className)) {
+                        classesToUpgrade.indexOf(component) === -1 && !isElementUpgraded_(element, component.className)) {
                         classesToUpgrade.push(component);
                     }
                 });
@@ -287,7 +293,7 @@
                 callbacks: []
             });
 
-            registeredComponents_.forEach(function(item) {
+            registeredComponents_.forEach(function (item) {
                 if (item.cssClass === newConfig.cssClass) {
                     throw new Error('The provided cssClass has already been registered: ' + item.cssClass);
                 }
@@ -368,8 +374,8 @@
              * Auxiliary function to downgrade a single node.
              * @param  {!Node} node the node to be downgraded
              */
-            var downgradeNode = function(node) {
-                createdComponents_.filter(function(item) {
+            var downgradeNode = function (node) {
+                createdComponents_.filter(function (item) {
                     return item.element_ === node;
                 }).forEach(deconstructComponentInternal);
             };
@@ -452,7 +458,7 @@
     window.componentHandler = componentHandler;
     window['componentHandler'] = componentHandler;
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         'use strict';
 
         /**
@@ -469,11 +475,13 @@
             /**
              * Dummy function to avoid JS errors.
              */
-            componentHandler.upgradeElement = function() {};
+            componentHandler.upgradeElement = function () {
+            };
             /**
              * Dummy function to avoid JS errors.
              */
-            componentHandler.register = function() {};
+            componentHandler.register = function () {
+            };
         }
     });
 
@@ -665,7 +673,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialCheckbox.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+    MaterialCheckbox.prototype.Constant_ = {TINY_TIMEOUT: 0.001};
     /**
      * Store strings for class names defined by this component that are used in
      * JavaScript. This allows us to simply change it in one place should we
@@ -897,7 +905,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialIconToggle.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+    MaterialIconToggle.prototype.Constant_ = {TINY_TIMEOUT: 0.001};
     /**
      * Store strings for class names defined by this component that are used in
      * JavaScript. This allows us to simply change it in one place should we
@@ -1542,7 +1550,7 @@
      * @enum {string}
      * @private
      */
-    MaterialProgress.prototype.CssClasses_ = { INDETERMINATE_CLASS: 'mdl-progress__indeterminate' };
+    MaterialProgress.prototype.CssClasses_ = {INDETERMINATE_CLASS: 'mdl-progress__indeterminate'};
     /**
      * Set the current progress of the progressbar.
      *
@@ -1634,7 +1642,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialRadio.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+    MaterialRadio.prototype.Constant_ = {TINY_TIMEOUT: 0.001};
     /**
      * Store strings for class names defined by this component that are used in
      * JavaScript. This allows us to simply change it in one place should we
@@ -2259,7 +2267,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialSpinner.prototype.Constant_ = { MDL_SPINNER_LAYER_COUNT: 4 };
+    MaterialSpinner.prototype.Constant_ = {MDL_SPINNER_LAYER_COUNT: 4};
     /**
      * Store strings for class names defined by this component that are used in
      * JavaScript. This allows us to simply change it in one place should we
@@ -2386,7 +2394,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialSwitch.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+    MaterialSwitch.prototype.Constant_ = {TINY_TIMEOUT: 0.001};
     /**
      * Store strings for class names defined by this component that are used in
      * JavaScript. This allows us to simply change it in one place should we
@@ -2711,6 +2719,7 @@
             });
         }
     }
+
 // The component registers itself. It can assume componentHandler is available
 // in the global scope.
     componentHandler.register({
@@ -3526,6 +3535,7 @@
             tab.classList.add(layout.CssClasses_.IS_ACTIVE);
             panel.classList.add(layout.CssClasses_.IS_ACTIVE);
         }
+
         if (layout.tabBar_.classList.contains(layout.CssClasses_.JS_RIPPLE_EFFECT)) {
             var rippleContainer = document.createElement('span');
             rippleContainer.classList.add(layout.CssClasses_.RIPPLE_CONTAINER);
@@ -3552,6 +3562,7 @@
             panel.classList.add(layout.CssClasses_.IS_ACTIVE);
         });
     }
+
     window['MaterialLayoutTab'] = MaterialLayoutTab;
 // The component registers itself. It can assume componentHandler is available
 // in the global scope.

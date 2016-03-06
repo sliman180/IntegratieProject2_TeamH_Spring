@@ -6,9 +6,9 @@
 
         var vm = this;
 
-        vm.login = function(credentials) {
+        vm.login = function (credentials) {
 
-            AuthService.login(credentials).then(function(data) {
+            AuthService.login(credentials).then(function (data) {
 
                 localStorageService.set("auth", {
                     token: data.token
