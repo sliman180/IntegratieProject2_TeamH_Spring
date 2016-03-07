@@ -13,10 +13,40 @@
         margin-top: 10%;
     }
 
+    #cirkelsessie-header {
+        width: 100%;
+        padding: 2% 1%;
+    }
+
+    #cirkelsessie-begroeting {
+        width: 20%;
+        font-size: 3em;
+    }
+
+    #header-buttons {
+        float: right;
+    }
+
 </style>
 
 
+<div id="cirkelsessie-header">
+    <span id="cirkelsessie-begroeting">Welkom {{vm.getUsername()}}</span>
+
+    <div id="header-buttons">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Deelnemen
+        </button>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Mijn cirkelsessies
+        </button>
+    </div>
+
+</div>
+
 <div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
+
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
@@ -121,6 +151,8 @@
         height: 70px;
         min-height: 0;
         width: 100%;
+        position: inherit;
+        z-index: 0;
     }
 </style>
 
@@ -206,6 +238,7 @@
                 </button>
 
             </form>
+
         </div>
     </div>
 

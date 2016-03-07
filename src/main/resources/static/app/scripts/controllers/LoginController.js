@@ -26,6 +26,7 @@
 
         };
 
+
     }
 
     angular.module("kandoe").controller("LoginController", LoginController);
