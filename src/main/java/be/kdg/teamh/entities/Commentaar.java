@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Commentaar implements Serializable
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @NotNull
