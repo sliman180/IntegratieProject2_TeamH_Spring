@@ -13,24 +13,29 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SpelkaartenServiceImpl implements SpelkaartenService {
+public class SpelkaartenServiceImpl implements SpelkaartenService
+{
     @Autowired
-    SpelkaartenRepository repository;
+    private SpelkaartenRepository repository;
 
-    public List<Spelkaart> all() {
+    public List<Spelkaart> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(Spelkaart spelkaart) {
+    public void create(Spelkaart spelkaart)
+    {
         repository.save(spelkaart);
     }
 
     @Override
-    public Spelkaart find(int id) throws SpelkaartNotFound {
+    public Spelkaart find(int id) throws SpelkaartNotFound
+    {
         Spelkaart spelkaart = repository.findOne(id);
 
-        if (spelkaart == null) {
+        if (spelkaart == null)
+        {
             throw new SpelkaartNotFound();
         }
 
@@ -38,10 +43,12 @@ public class SpelkaartenServiceImpl implements SpelkaartenService {
     }
 
     @Override
-    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
+    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
+    {
         Spelkaart spelkaart = find(id);
 
-        if (spelkaart.getPositie() == spelkaart.getCirkelsessie().getAantalCirkels()) {
+        if (spelkaart.getPositie() == spelkaart.getCirkelsessie().getAantalCirkels())
+        {
             throw new SpelkaartMaxPositionReached();
         }
 
@@ -51,7 +58,8 @@ public class SpelkaartenServiceImpl implements SpelkaartenService {
     }
 
     @Override
-    public void update(int id, Spelkaart spelkaart) throws SpelkaartNotFound {
+    public void update(int id, Spelkaart spelkaart) throws SpelkaartNotFound
+    {
         Spelkaart old = find(id);
 
         old.setCirkelsessie(spelkaart.getCirkelsessie());
@@ -62,7 +70,8 @@ public class SpelkaartenServiceImpl implements SpelkaartenService {
     }
 
     @Override
-    public void delete(int id) throws SpelkaartNotFound {
+    public void delete(int id) throws SpelkaartNotFound
+    {
         Spelkaart spelkaart = find(id);
 
         repository.delete(spelkaart);

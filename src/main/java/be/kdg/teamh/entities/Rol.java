@@ -6,7 +6,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "rollen")
-public class Rol {
+public class Rol
+{
     @Id
     @GeneratedValue
     private int id;
@@ -19,30 +20,37 @@ public class Rol {
     @ManyToMany
     private List<Gebruiker> gebruikers;
 
-    public Rol() {
-        // JPA Constructor
+    public Rol()
+    {
+        //
     }
 
-    public Rol(String naam, String beschrijving) {
+    public Rol(String naam, String beschrijving)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
     }
 
-    public String getNaam() {
+    public String getNaam()
+    {
         return naam;
     }
 
-    public String getBeschrijving() {
+    public String getBeschrijving()
+    {
         return beschrijving;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
+        {
             return false;
         }
 
@@ -52,7 +60,8 @@ public class Rol {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return naam.hashCode();
     }
 }

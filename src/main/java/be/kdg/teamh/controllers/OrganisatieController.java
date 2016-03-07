@@ -1,7 +1,6 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.OrganisatieService;

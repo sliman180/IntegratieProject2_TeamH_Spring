@@ -12,24 +12,29 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrganisatieServiceImpl implements OrganisatieService {
+public class OrganisatieServiceImpl implements OrganisatieService
+{
     @Autowired
-    OrganisatieRepository repository;
+    private OrganisatieRepository repository;
 
-    public List<Organisatie> all() {
+    public List<Organisatie> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(Organisatie organisatie) {
+    public void create(Organisatie organisatie)
+    {
         repository.save(organisatie);
     }
 
     @Override
-    public Organisatie find(int id) throws OrganisatieNotFound {
+    public Organisatie find(int id) throws OrganisatieNotFound
+    {
         Organisatie organisatie = repository.findOne(id);
 
-        if (organisatie == null) {
+        if (organisatie == null)
+        {
             throw new OrganisatieNotFound();
         }
 
@@ -37,7 +42,8 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public void update(int id, Organisatie organisatie) throws OrganisatieNotFound {
+    public void update(int id, Organisatie organisatie) throws OrganisatieNotFound
+    {
         Organisatie old = find(id);
 
         old.setNaam(organisatie.getNaam());
@@ -48,7 +54,8 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public void delete(int id) throws OrganisatieNotFound {
+    public void delete(int id) throws OrganisatieNotFound
+    {
         Organisatie organisatie = find(id);
 
         repository.delete(organisatie);

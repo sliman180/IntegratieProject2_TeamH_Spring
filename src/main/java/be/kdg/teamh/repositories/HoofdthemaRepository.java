@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HoofdthemaRepository extends JpaRepository<Hoofdthema, Integer>
 {
-
+    //
 }

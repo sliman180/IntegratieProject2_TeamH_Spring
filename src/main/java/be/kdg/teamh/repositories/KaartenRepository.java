@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface KaartenRepository extends JpaRepository<Kaart, Integer>
 {
-
+    //
 }

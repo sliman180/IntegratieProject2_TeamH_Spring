@@ -12,25 +12,30 @@ import java.util.List;
 
 @Service
 @Transactional
-public class HoofdthemaServiceImpl implements HoofdthemaService {
+public class HoofdthemaServiceImpl implements HoofdthemaService
+{
     @Autowired
     private HoofdthemaRepository repository;
 
     @Override
-    public List<Hoofdthema> all() {
+    public List<Hoofdthema> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(Hoofdthema hoofdthema) {
+    public void create(Hoofdthema hoofdthema)
+    {
         repository.save(hoofdthema);
     }
 
     @Override
-    public Hoofdthema find(int id) throws HoofdthemaNotFound {
+    public Hoofdthema find(int id) throws HoofdthemaNotFound
+    {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null) {
+        if (hoofdthema == null)
+        {
             throw new HoofdthemaNotFound();
         }
 
@@ -38,7 +43,8 @@ public class HoofdthemaServiceImpl implements HoofdthemaService {
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFound {
+    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFound
+    {
         Hoofdthema old = find(id);
 
         old.setNaam(hoofdthema.getNaam());
@@ -50,7 +56,8 @@ public class HoofdthemaServiceImpl implements HoofdthemaService {
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFound {
+    public void delete(int id) throws HoofdthemaNotFound
+    {
         Hoofdthema hoofdthema = find(id);
 
         repository.delete(hoofdthema);

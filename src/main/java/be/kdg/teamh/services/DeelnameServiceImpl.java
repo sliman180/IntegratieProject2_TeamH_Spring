@@ -6,29 +6,36 @@ import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.services.contracts.DeelnameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class DeelnameServiceImpl implements DeelnameService {
+@Transactional
+public class DeelnameServiceImpl implements DeelnameService
+{
     @Autowired
     private DeelnameRepository repository;
 
     @Override
-    public List<Deelname> all() {
+    public List<Deelname> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(Deelname deelname) {
+    public void create(Deelname deelname)
+    {
         repository.save(deelname);
     }
 
     @Override
-    public Deelname find(int id) throws DeelnameNotFound {
+    public Deelname find(int id) throws DeelnameNotFound
+    {
         Deelname deelname = repository.findOne(id);
 
-        if (deelname == null) {
+        if (deelname == null)
+        {
             throw new DeelnameNotFound();
         }
 
@@ -36,7 +43,8 @@ public class DeelnameServiceImpl implements DeelnameService {
     }
 
     @Override
-    public void update(int id, Deelname deelname) throws DeelnameNotFound {
+    public void update(int id, Deelname deelname) throws DeelnameNotFound
+    {
         Deelname old = find(id);
 
         old.setCirkelsessie(deelname.getCirkelsessie());
@@ -48,7 +56,8 @@ public class DeelnameServiceImpl implements DeelnameService {
     }
 
     @Override
-    public void delete(int id) throws DeelnameNotFound {
+    public void delete(int id) throws DeelnameNotFound
+    {
         Deelname deelname = find(id);
 
         repository.delete(id);

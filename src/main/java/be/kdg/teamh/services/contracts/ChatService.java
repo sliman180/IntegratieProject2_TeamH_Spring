@@ -6,8 +6,8 @@ import be.kdg.teamh.exceptions.ChatNotFound;
 
 import java.util.List;
 
-public interface ChatService {
-
+public interface ChatService
+{
     List<Chat> all();
 
     void create(Chat chat);
@@ -19,5 +19,4 @@ public interface ChatService {
     void delete(int id) throws ChatNotFound;
 
     void createMessage(int id, Bericht bericht) throws ChatNotFound;
-
 }

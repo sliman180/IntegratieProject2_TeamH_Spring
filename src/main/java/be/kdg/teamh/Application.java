@@ -6,13 +6,16 @@ import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Application {
-    public static void main(String[] args) {
+public class Application
+{
+    public static void main(String[] args)
+    {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean
-    public FilterRegistrationBean jwtFilter() {
+    public FilterRegistrationBean jwtFilter()
+    {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 
         registrationBean.setFilter(new JwtFilter());

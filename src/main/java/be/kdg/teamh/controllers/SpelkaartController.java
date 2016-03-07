@@ -52,9 +52,8 @@ public class SpelkaartController
         service.delete(id);
     }
 
-
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/verschuif/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}/verschuif", method = RequestMethod.POST)
     public void verschuifKaart(@PathVariable("id") int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
     {
         service.verschuif(id);

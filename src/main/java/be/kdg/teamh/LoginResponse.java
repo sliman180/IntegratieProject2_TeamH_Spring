@@ -8,6 +8,11 @@ public class LoginResponse implements Serializable
     private String naam;
     private String token;
 
+    public LoginResponse()
+    {
+        //
+    }
+
     public LoginResponse(int id, String naam, String token)
     {
         this.id = id;
@@ -20,13 +25,28 @@ public class LoginResponse implements Serializable
         return id;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
     public String getNaam()
     {
         return naam;
     }
 
+    public void setNaam(String naam)
+    {
+        this.naam = naam;
+    }
+
     public String getToken()
     {
         return token;
+    }
+
+    public void setToken(String token)
+    {
+        this.token = token;
     }
 }
