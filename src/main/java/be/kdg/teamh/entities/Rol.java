@@ -2,6 +2,7 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +19,7 @@ public class Rol
     private String beschrijving;
 
     @ManyToMany
-    private List<Gebruiker> gebruikers;
+    private List<Gebruiker> gebruikers = new ArrayList<>();
 
     public Rol()
     {
@@ -29,6 +30,11 @@ public class Rol
     {
         this.naam = naam;
         this.beschrijving = beschrijving;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 
     public String getNaam()
