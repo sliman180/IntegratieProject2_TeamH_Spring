@@ -79,7 +79,6 @@ public class ChatServiceImpl implements ChatService
     {
         Chat chat = repository.findOne(id);
 
-
         if (chat == null)
         {
             throw new ChatNotFound();

@@ -146,6 +146,7 @@
 
         return exports;
 
+
     }
 
     angular.module("kandoe").factory("AuthService", AuthService);
@@ -169,6 +170,7 @@
             });
 
         };
+
 
         return exports;
 
@@ -402,6 +404,7 @@
 
         };
 
+
     }
 
     angular.module("kandoe").controller("AuthController", AuthController);
@@ -413,8 +416,8 @@
     "use strict";
 
 
-    CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
-    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
+    CirkelsessieDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
+    function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, ChatService, KaartService) {
 
         var vm = this;
 
@@ -436,6 +439,10 @@
             }
         };
 
+        vm.getUsername = function () {
+            return $rootScope.naam;
+        };
+
         vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
@@ -446,13 +453,13 @@
             ChatService.createMessage(chatId, bericht).then(function () {
                 $route.reload();
             });
-        }
+        };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 $route.reload();
             });
-        }
+        };
 
 
     }
