@@ -16,7 +16,7 @@ public interface SpelkaartenService
 
     Spelkaart find(int id) throws SpelkaartNotFound;
 
-    void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached;
+    void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached;
 
     void delete(int id) throws SpelkaartNotFound;
 }
