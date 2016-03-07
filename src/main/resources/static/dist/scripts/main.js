@@ -62,9 +62,15 @@
                 controllerAs: "vm"
             })
 
-            .when("/auth", {
-                templateUrl: "/dist/views/auth.html",
-                controller: "AuthController",
+            .when("/auth/login", {
+                templateUrl: "/dist/views/auth/login.html",
+                controller: "LoginController",
+                controllerAs: "vm"
+            })
+
+            .when("/auth/register", {
+                templateUrl: "/dist/views/auth/register.html",
+                controller: "RegisterController",
                 controllerAs: "vm"
             })
 
@@ -139,6 +145,14 @@
         exports.login = function (credentials) {
 
             return $http.post("/auth/login", credentials).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.register = function (credentials) {
+
+            return $http.post("/auth/register", credentials).then(function (response) {
                 return response.data;
             });
 
@@ -378,40 +392,6 @@
 
     "use strict";
 
-    AuthController.$inject = ["$location", "$rootScope", "AuthService", "localStorageService"];
-    function AuthController($location, $rootScope, AuthService, localStorageService) {
-
-        var vm = this;
-
-        vm.login = function (credentials) {
-
-            AuthService.login(credentials).then(function (data) {
-
-                localStorageService.set("auth", {
-                    id: data.id,
-                    naam: data.naam,
-                    token: data.token
-                });
-
-                $rootScope.id = data.id;
-                $rootScope.naam = data.naam;
-                $rootScope.loggedIn = true;
-                $location.path("/");
-
-            });
-
-        };
-
-    }
-
-    angular.module("kandoe").controller("AuthController", AuthController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
 
     CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
     function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
@@ -516,6 +496,41 @@
 
     "use strict";
 
+    LoginController.$inject = ["$location", "$rootScope", "AuthService", "localStorageService"];
+    function LoginController($location, $rootScope, AuthService, localStorageService) {
+
+        var vm = this;
+
+        vm.login = function (credentials) {
+
+            AuthService.login(credentials).then(function (data) {
+
+                localStorageService.set("auth", {
+                    id: data.id,
+                    naam: data.naam,
+                    token: data.token
+                });
+
+                $rootScope.id = data.id;
+                $rootScope.naam = data.naam;
+                $rootScope.loggedIn = true;
+
+                $location.path("/");
+
+            });
+
+        };
+
+    }
+
+    angular.module("kandoe").controller("LoginController", LoginController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     OrganisatieIndexController.$inject = ["$route", "OrganisatieService"];
     function OrganisatieIndexController($route, OrganisatieService) {
 
@@ -536,5 +551,30 @@
     }
 
     angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    RegisterController.$inject = ["$location", "AuthService"];
+    function RegisterController($location, AuthService) {
+
+        var vm = this;
+
+        vm.register = function (credentials) {
+
+            AuthService.register(credentials).then(function () {
+
+                $location.path("/auth/login");
+
+            });
+
+        };
+
+    }
+
+    angular.module("kandoe").controller("RegisterController", RegisterController);
 
 })(window.angular);

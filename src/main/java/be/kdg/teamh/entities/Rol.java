@@ -36,9 +36,19 @@ public class Rol
         return naam;
     }
 
+    public void setNaam(String naam)
+    {
+        this.naam = naam;
+    }
+
     public String getBeschrijving()
     {
         return beschrijving;
+    }
+
+    public void setBeschrijving(String beschrijving)
+    {
+        this.beschrijving = beschrijving;
     }
 
     @Override

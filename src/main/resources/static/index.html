@@ -25,8 +25,8 @@
 
                 <div class="mdl-layout-spacer"></div>
                 <nav ng-if="!$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="/#/auth">Aanmelden</a>
-                    <a class="mdl-navigation__link" href="/#/">Registreren</a>
+                    <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
+                    <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
                 </nav>
                 <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
                     <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>
@@ -38,8 +38,8 @@
 
         <div class="mdl-layout__drawer">
             <nav ng-if="!$root.loggedIn" class="mdl-navigation">
-                <a class="mdl-navigation__link" href="/#/auth">Aanmelden</a>
-                <a class="mdl-navigation__link" href="/#/">Registreren</a>
+                <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
+                <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
             </nav>
             <nav ng-if="$root.loggedIn" class="mdl-navigation">
                 <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>

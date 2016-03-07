@@ -14,6 +14,14 @@
 
         };
 
+        exports.register = function (credentials) {
+
+            return $http.post("/auth/register", credentials).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }

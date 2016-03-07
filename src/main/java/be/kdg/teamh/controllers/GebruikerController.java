@@ -17,6 +17,13 @@ public class GebruikerController
     @Autowired
     private GebruikerService service;
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<Gebruiker> index()
+    {
+        return service.all();
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestBody Gebruiker gebruiker)

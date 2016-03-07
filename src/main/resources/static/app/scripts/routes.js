@@ -12,9 +12,15 @@
                 controllerAs: "vm"
             })
 
-            .when("/auth", {
-                templateUrl: "/dist/views/auth.html",
-                controller: "AuthController",
+            .when("/auth/login", {
+                templateUrl: "/dist/views/auth/login.html",
+                controller: "LoginController",
+                controllerAs: "vm"
+            })
+
+            .when("/auth/register", {
+                templateUrl: "/dist/views/auth/register.html",
+                controller: "RegisterController",
                 controllerAs: "vm"
             })
 

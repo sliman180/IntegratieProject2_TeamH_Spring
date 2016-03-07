@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function AuthController($location, $rootScope, AuthService, localStorageService) {
+    function LoginController($location, $rootScope, AuthService, localStorageService) {
 
         var vm = this;
 
@@ -19,6 +19,7 @@
                 $rootScope.id = data.id;
                 $rootScope.naam = data.naam;
                 $rootScope.loggedIn = true;
+
                 $location.path("/");
 
             });
@@ -27,6 +28,6 @@
 
     }
 
-    angular.module("kandoe").controller("AuthController", AuthController);
+    angular.module("kandoe").controller("LoginController", LoginController);
 
 })(window.angular);

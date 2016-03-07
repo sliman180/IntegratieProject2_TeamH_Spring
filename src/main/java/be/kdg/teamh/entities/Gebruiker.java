@@ -15,6 +15,7 @@ public class Gebruiker implements Serializable
     private int id;
 
     @NotNull
+    @Column(unique = true)
     private String gebruikersnaam;
 
     @NotNull
