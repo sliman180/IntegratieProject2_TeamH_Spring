@@ -105,6 +105,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
+                    <profiles>
+                        <profile>development</profile>
+                    </profiles>
                 </configuration>
             </plugin>
         </plugins>

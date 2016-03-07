@@ -11,12 +11,20 @@ logging:
 ---
 
 spring:
+    profiles: development
+
+logging:
+    level:
+        root: INFO
+---
+
+spring:
     profiles: production
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL82Dialect
         show-sql: false
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: update
     datasource:
         url: ${JDBC_DATABASE_URL}
         driverClassName: org.postgresql.Driver
