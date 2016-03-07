@@ -4,12 +4,15 @@ import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
+import be.kdg.teamh.services.contracts.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -18,6 +21,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 {
     @Autowired
     private CirkelsessieRepository repository;
+
+    @Autowired
+    private MailService mailService;
 
     @Override
     public List<Cirkelsessie> all()
@@ -93,6 +99,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         }
 
         return cirkelsessies;
+    }
+
+    @Override
+    public void invite(List<String> emails) throws MessagingException {
+
+        Iterator<String> iterator = emails.iterator();
+
+        while (iterator.hasNext()){
+            String email = iterator.next();
+            mailService.send(email,"Invite for a session","Uncle Sam wants you, to take part in a session");
+        }
     }
 
     @Override

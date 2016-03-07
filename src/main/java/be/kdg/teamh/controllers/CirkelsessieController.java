@@ -4,16 +4,21 @@ import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/cirkelsessies")
 public class CirkelsessieController
 {
+
+    public final static Logger logger = Logger.getLogger(CirkelsessieController.class);
+
     @Autowired
     private CirkelsessieService service;
 
@@ -78,5 +83,18 @@ public class CirkelsessieController
     public List<Cirkelsessie> actief()
     {
         return service.actief();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/invite",method = RequestMethod.POST)
+    public String invite(@RequestBody List<String> emails){
+        try {
+//            System.out.println("CONTROLLER_EMAILS:"+emails);
+            service.invite(emails);
+            return "Guests invited!";
+        } catch (MessagingException e) {
+            logger.error("*********ERROR inviting guests: "+e);
+            return "Error inviting guests";
+        }
     }
 }

@@ -20,6 +20,9 @@ public class Gebruiker implements Serializable
     @NotNull
     private String wachtwoord;
 
+    @NotNull
+    private String email;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
@@ -47,6 +50,12 @@ public class Gebruiker implements Serializable
     {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
+    }
+
+    public Gebruiker(String gebruikersnaam, String wachtwoord, String email) {
+        this.gebruikersnaam = gebruikersnaam;
+        this.wachtwoord = wachtwoord;
+        this.email = email;
     }
 
     public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen)
@@ -79,6 +88,14 @@ public class Gebruiker implements Serializable
     public void setWachtwoord(String wachtwoord)
     {
         this.wachtwoord = wachtwoord;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<Hoofdthema> getHoofdthemas()

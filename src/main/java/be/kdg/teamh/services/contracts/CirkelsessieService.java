@@ -3,6 +3,7 @@ package be.kdg.teamh.services.contracts;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface CirkelsessieService
@@ -22,4 +23,6 @@ public interface CirkelsessieService
     List<Cirkelsessie> actief();
 
     List<Cirkelsessie> gepland();
+
+    void invite(List<String> emails) throws MessagingException;
 }

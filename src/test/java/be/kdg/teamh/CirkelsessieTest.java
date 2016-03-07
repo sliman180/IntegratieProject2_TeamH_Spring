@@ -5,6 +5,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Subthema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -35,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CirkelsessieTest
 {
+
+    public final static Logger logger = Logger.getLogger(CirkelsessieTest.class);
+
     private MockMvc mvc;
 
     @Autowired
@@ -272,5 +279,34 @@ public class CirkelsessieTest
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].naam", is("Session two")))
             .andExpect(jsonPath("$[1].naam", is("Session three")));
+    }
+
+    @Test
+    public void inviteRegisterdUsersForCirculeSession() throws Exception{
+
+        Gebruiker organisator = new Gebruiker("user","user","email");
+        String[] emailstemp = {"georgy.bagramyan@student.kdg.be","ali.bayraktar@student.kdg.be","kenneth.dewin@student.kdg.be","moussa.elbaroudi@student.kdg.be","sliman.said@student.kdg.be"};
+        Gebruiker georgy = new Gebruiker("user","user","georgy.bagramyan@student.kdg.be");
+        Gebruiker ali = new Gebruiker("user","user","ali.bayraktar@student.kdg.be");
+        Gebruiker kenneth = new Gebruiker("user","user","kenneth.dewin@student.kdg.be");
+        Gebruiker moussa = new Gebruiker("user","user","moussa.elbaroudi@student.kdg.be");
+        Gebruiker sliman = new Gebruiker("user","user","sliman.said@student.kdg.be");
+
+        List<String> gebruikers = new ArrayList();
+        gebruikers.addAll(Arrays.asList(emailstemp));
+        String emails = objectMapper.writeValueAsString(gebruikers);
+
+        System.out.println("EMAILS:"+emails);
+
+        String org = objectMapper.writeValueAsString(organisator);
+        this.mvc.perform(post("/api/gebruikers").contentType(MediaType.APPLICATION_JSON).content(org)).andExpect(status().isCreated());
+
+        String json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, LocalDateTime.now(), subthema, organisator));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+
+        this.mvc.perform(get("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
+        this.mvc.perform(post("/api/cirkelsessies/1/invite").contentType(MediaType.APPLICATION_JSON).content(emails)).andExpect(status().isOk());
+
     }
 }

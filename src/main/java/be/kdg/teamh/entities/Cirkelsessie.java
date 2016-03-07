@@ -32,7 +32,7 @@ public class Cirkelsessie implements Serializable
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
