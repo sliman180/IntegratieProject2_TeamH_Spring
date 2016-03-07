@@ -58,6 +58,16 @@ public class Rol implements Serializable
         this.beschrijving = beschrijving;
     }
 
+    public List<Gebruiker> getGebruikers()
+    {
+        return gebruikers;
+    }
+
+    public void setGebruikers(List<Gebruiker> gebruikers)
+    {
+        this.gebruikers = gebruikers;
+    }
+
     @Override
     public boolean equals(Object o)
     {
