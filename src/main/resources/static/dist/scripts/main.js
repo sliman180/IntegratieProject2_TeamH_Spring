@@ -11,7 +11,13 @@
 
         }])
 
-        .run(["$location", "$rootScope", "localStorageService", function ($location, $rootScope, localStorageService) {
+        .run(["$location", "$rootScope", "$timeout", "localStorageService", function ($location, $rootScope, $timeout, localStorageService) {
+
+            $rootScope.$on('$viewContentLoaded', function(event) {
+                $timeout(function() {
+                    componentHandler.upgradeAllRegistered();
+                }, 0);
+            });
 
             var data = localStorageService.get("auth");
 

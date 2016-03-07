@@ -426,7 +426,7 @@ p {
 }
 
 a {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   font-weight: 500;
 }
 
@@ -3003,7 +3003,7 @@ ul, ol {
 }
 
 .mdl-color--accent {
-  background-color: rgb(255,82,82) !important;
+  background-color: rgb(255,23,68) !important;
 }
 
 .mdl-color--accent-contrast {
@@ -3023,7 +3023,7 @@ ul, ol {
 }
 
 .mdl-color-text--accent {
-  color: rgb(255,82,82) !important;
+  color: rgb(255,23,68) !important;
 }
 
 .mdl-color-text--accent-contrast {
@@ -3106,7 +3106,7 @@ ul, ol {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   color: rgb(255,255,255);
 }
 .mdl-button .mdl-badge[data-badge]:after {
@@ -3114,7 +3114,7 @@ ul, ol {
   right: -5px;
 }
 .mdl-badge.mdl-badge--no-background[data-badge]:after {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   background: rgba(255,255,255,0.2);
   box-shadow: 0 0 1px gray;
 }
@@ -3245,17 +3245,17 @@ input.mdl-button[type="submit"] {
   background-color: rgba(158,158,158, 0.40);
 }
 .mdl-button--fab.mdl-button--colored {
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   color: rgb(255,255,255);
 }
 .mdl-button--fab.mdl-button--colored:hover {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored:focus:not(:active) {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored:active {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored .mdl-ripple {
   background: rgb(255,255,255);
@@ -3323,14 +3323,14 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-button--accent.mdl-button--accent {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
 }
 .mdl-button--accent.mdl-button--accent .mdl-ripple {
   background: rgb(255,255,255);
 }
 .mdl-button--accent.mdl-button--accent.mdl-button--raised, .mdl-button--accent.mdl-button--accent.mdl-button--fab {
   color: rgb(255,255,255);
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 
 .mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled {
@@ -3375,7 +3375,7 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-card__media {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
   background-repeat: repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -3753,7 +3753,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 .mdl-mega-footer {
   padding: 24px 40px;
   color: rgb(224,224,224);
-  background-color: rgb(48,63,159);
+  background-color: rgb(26,35,126);
 }
 
 .mdl-mega-footer--top-section:after,
@@ -4023,7 +4023,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
           justify-content: space-between;
   padding: 32px 16px;
   color: rgb(224,224,224);
-  background-color: rgb(48,63,159);
+  background-color: rgb(26,35,126);
 }
 .mdl-mini-footer:after {
   content: '';
@@ -5273,7 +5273,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   bottom: 0;
   left: 0;
   position: absolute;
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   -webkit-animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
           animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
   transition: all 1s cubic-bezier(0.4, 0, 1, 1);
@@ -5746,7 +5746,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 .mdl-snackbar__action {
   background: transparent;
   border: none;
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   text-transform: uppercase;
   padding: 14px 24px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
