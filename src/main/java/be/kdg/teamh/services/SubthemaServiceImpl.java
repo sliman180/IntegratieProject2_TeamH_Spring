@@ -50,7 +50,7 @@ public class SubthemaServiceImpl implements SubthemaService
         old.setNaam(subthema.getNaam());
         old.setBeschrijving(subthema.getBeschrijving());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

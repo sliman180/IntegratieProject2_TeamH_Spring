@@ -52,7 +52,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
         old.setOrganisatie(hoofdthema.getOrganisatie());
         old.setGebruiker(hoofdthema.getGebruiker());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         old.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
         old.setAantalCirkels(cirkelsessie.getAantalCirkels());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
 

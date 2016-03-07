@@ -50,7 +50,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
         old.setBeschrijving(organisatie.getBeschrijving());
         old.setOrganisator(organisatie.getOrganisator());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

@@ -46,30 +46,19 @@ public class ChatServiceImpl implements ChatService
     @Override
     public void update(int id, Chat chat) throws ChatNotFound
     {
-        Chat old = repository.findOne(id);
-
-        if (old == null)
-        {
-            throw new ChatNotFound();
-        }
+        Chat old = find(id);
 
         old.setNaam(chat.getNaam());
         old.setCirkelsessie(chat.getCirkelsessie());
         old.setBerichten(chat.getBerichten());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override
     public void delete(int id) throws ChatNotFound
     {
-
-        Chat old = repository.findOne(id);
-
-        if (old == null)
-        {
-            throw new ChatNotFound();
-        }
+        Chat old = find(id);
 
         repository.delete(id);
     }
@@ -77,14 +66,10 @@ public class ChatServiceImpl implements ChatService
     @Override
     public void createMessage(int id, Bericht bericht) throws ChatNotFound
     {
-        Chat chat = repository.findOne(id);
-
-        if (chat == null)
-        {
-            throw new ChatNotFound();
-        }
+        Chat chat = find(id);
 
         chat.addBericht(bericht);
+
         repository.save(chat);
     }
 }

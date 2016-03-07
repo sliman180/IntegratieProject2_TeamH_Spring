@@ -23,6 +23,7 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
     @Autowired
     private CirkelsessieRepository cirkelsessieRepository;
 
+    @Override
     public List<Spelkaart> all()
     {
         return repository.findAll();
@@ -48,9 +49,29 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
     }
 
     @Override
+    public void update(int id, Spelkaart spelkaart) throws SpelkaartNotFound
+    {
+        Spelkaart old = find(id);
+
+        old.setCirkelsessie(spelkaart.getCirkelsessie());
+        old.setKaart(spelkaart.getKaart());
+        old.setPositie(spelkaart.getPositie());
+
+        repository.saveAndFlush(old);
+    }
+
+    @Override
+    public void delete(int id) throws SpelkaartNotFound
+    {
+        Spelkaart spelkaart = find(id);
+
+        repository.delete(spelkaart);
+    }
+
+    @Override
     public void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached
     {
-//        Spelkaart spelkaart = find(id);
+        // Spelkaart spelkaart = find(id);
 
         Cirkelsessie cirkelsessie = cirkelsessieRepository.findOne(id);
 
@@ -62,25 +83,5 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
         spelkaart.setPositie(spelkaart.getPositie() + 1);
 
         repository.save(spelkaart);
-    }
-
-    @Override
-    public void update(int id, Spelkaart spelkaart) throws SpelkaartNotFound
-    {
-        Spelkaart old = find(id);
-
-        old.setCirkelsessie(spelkaart.getCirkelsessie());
-        old.setKaart(spelkaart.getKaart());
-        old.setPositie(spelkaart.getPositie());
-
-        repository.save(old);
-    }
-
-    @Override
-    public void delete(int id) throws SpelkaartNotFound
-    {
-        Spelkaart spelkaart = find(id);
-
-        repository.delete(spelkaart);
     }
 }

@@ -1,4 +1,4 @@
-package be.kdg.teamh;
+package be.kdg.teamh.filters;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
