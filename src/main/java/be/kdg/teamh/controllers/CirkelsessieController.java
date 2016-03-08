@@ -5,6 +5,8 @@ import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +29,10 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Cirkelsessie cirkelsessie)
+    public void create(@RequestBody Cirkelsessie cirkelsessie, @RequestHeader(name = "Authorization") String token)
     {
-        service.create(cirkelsessie);
+        int userId = getUserId(token);
+        service.create(userId, cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -86,5 +89,11 @@ public class CirkelsessieController
     public void createKaart(@PathVariable("id") int id, @RequestBody Kaart kaart) throws CirkelsessieNotFound
     {
         service.addSpelkaart(id, kaart);
+    }
+
+    private int getUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey("kandoe")
+                .parseClaimsJws(token.substring(7)).getBody();
+        return Integer.parseInt(claims.getSubject());
     }
 }

@@ -52,7 +52,8 @@
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                Startdatum: {{cirkelsessie.startDatum | date:'dd-MM-yyyy'}}
+                Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{cirkelsessie.startDatum |
+                date:'yyyy-MM-dd'}}
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"

@@ -114,7 +114,7 @@ public class KaartenServiceImpl implements KaartenService
 
         kaart.addSpelkaart(spelkaart);
 
-        repository.save(kaart);
+        repository.saveAndFlush(kaart);
     }
 }
 

@@ -83,7 +83,7 @@ public class ChatServiceImpl implements ChatService
     public void createMessage(int id, int userId, Bericht bericht) throws ChatNotFound
     {
         Chat chat = repository.findOne(id);
-        Gebruiker gebruiker = gebruikerRepository.findOne(id);
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
 
         bericht.setGebruiker(gebruiker);
 
