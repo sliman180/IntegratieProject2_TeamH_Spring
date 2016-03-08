@@ -7,9 +7,12 @@
 
         var vm = this;
 
+        vm.cirkelsessie = {};
+
         vm.getTimes = function (n) {
 
             var numbers = [];
+
             for (var i = n; i > 0; i--) {
                 numbers.push(i);
             }
@@ -18,14 +21,16 @@
         };
 
         vm.setCircleColor = function (number) {
+
             if (number % 2 == 0) {
+
                 return "#4985B9"
+
             } else {
+
                 return "white"
             }
         };
-
-        vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;

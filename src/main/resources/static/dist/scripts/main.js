@@ -86,6 +86,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/auth/profile", {
+                templateUrl: "/dist/views/auth/profile.html",
+                controller: "ProfileController",
+                controllerAs: "vm"
+            })
+
             .when("/organisaties", {
                 templateUrl: "/dist/views/organisaties/index.html",
                 controller: "OrganisatieIndexController",
@@ -280,14 +286,6 @@
 
         };
 
-        exports.find = function (id) {
-
-            return $http.get("/api/gebruikers/" + id).then(function (response) {
-                return response.data;
-            });
-
-        };
-
         exports.create = function (gebruiker) {
 
             return $http.post("/api/gebruikers", gebruiker).then(function (response) {
@@ -296,9 +294,17 @@
 
         };
 
-        exports.update = function (gebruiker) {
+        exports.find = function (id) {
 
-            return $http.put("/api/gebruikers/" + gebruiker.id, gebruiker).then(function (response) {
+            return $http.get("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.update = function (id, gebruiker) {
+
+            return $http.put("/api/gebruikers/" + id, gebruiker).then(function (response) {
                 return response.data;
             });
 
@@ -540,9 +546,12 @@
 
         var vm = this;
 
+        vm.cirkelsessie = {};
+
         vm.getTimes = function (n) {
 
             var numbers = [];
+
             for (var i = n; i > 0; i--) {
                 numbers.push(i);
             }
@@ -551,14 +560,16 @@
         };
 
         vm.setCircleColor = function (number) {
+
             if (number % 2 == 0) {
+
                 return "#4985B9"
+
             } else {
+
                 return "white"
             }
         };
-
-        vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
@@ -697,6 +708,48 @@
     }
 
     angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    ProfileController.$inject = ["$location", "$rootScope", "GebruikerService"];
+    function ProfileController($location, $rootScope, GebruikerService) {
+
+        var vm = this;
+
+        vm.updateProfile = function (credentials) {
+
+            if (credentials.wachtwoord == null)
+            {
+                credentials.wachtwoord = "";
+            }
+
+            GebruikerService.update($rootScope.id, credentials).then(function() {
+
+                GebruikerService.find($rootScope.id).then(function(data) {
+
+                    console.log(credentials);
+                    console.log(data);
+
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+
+                    $location.path("/");
+
+                });
+
+            });
+
+        };
+
+
+    }
+
+    angular.module("kandoe").controller("ProfileController", ProfileController);
 
 })(window.angular);
 

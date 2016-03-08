@@ -14,14 +14,6 @@
 
         };
 
-        exports.find = function (id) {
-
-            return $http.get("/api/gebruikers/" + id).then(function (response) {
-                return response.data;
-            });
-
-        };
-
         exports.create = function (gebruiker) {
 
             return $http.post("/api/gebruikers", gebruiker).then(function (response) {
@@ -30,9 +22,17 @@
 
         };
 
-        exports.update = function (gebruiker) {
+        exports.find = function (id) {
 
-            return $http.put("/api/gebruikers/" + gebruiker.id, gebruiker).then(function (response) {
+            return $http.get("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.update = function (id, gebruiker) {
+
+            return $http.put("/api/gebruikers/" + id, gebruiker).then(function (response) {
                 return response.data;
             });
 

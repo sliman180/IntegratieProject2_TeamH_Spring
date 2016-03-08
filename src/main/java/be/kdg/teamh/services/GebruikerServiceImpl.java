@@ -75,8 +75,12 @@ public class GebruikerServiceImpl implements GebruikerService
     {
         Gebruiker old = find(id);
 
-        gebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        gebruiker.setWachtwoord(gebruiker.getWachtwoord());
+        old.setGebruikersnaam(gebruiker.getGebruikersnaam());
+
+        if (gebruiker.getWachtwoord().isEmpty())
+        {
+            old.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        }
 
         repository.saveAndFlush(old);
     }

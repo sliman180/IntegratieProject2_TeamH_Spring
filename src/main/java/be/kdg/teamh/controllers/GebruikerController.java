@@ -38,6 +38,20 @@ public class GebruikerController
         return service.find(id);
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable("id") int id, @RequestBody Gebruiker gebruiker) throws GebruikerNotFound
+    {
+        service.update(id, gebruiker);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") int id) throws GebruikerNotFound
+    {
+        service.delete(id);
+    }
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
     public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
