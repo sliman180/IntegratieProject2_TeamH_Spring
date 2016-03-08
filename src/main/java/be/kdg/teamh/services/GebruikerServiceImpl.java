@@ -77,7 +77,7 @@ public class GebruikerServiceImpl implements GebruikerService
 
         old.setGebruikersnaam(gebruiker.getGebruikersnaam());
 
-        if (gebruiker.getWachtwoord().isEmpty())
+        if (!gebruiker.getWachtwoord().isEmpty())
         {
             old.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
         }
