@@ -1,10 +1,9 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
+import be.kdg.teamh.exceptions.OrganisatieNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -25,6 +24,9 @@ public class GebruikerServiceImpl implements GebruikerService
     @Autowired
     private GebruikerRepository repository;
 
+    @Autowired
+    private RolRepository rolRepository;
+
     @Override
     public List<Gebruiker> all()
     {
@@ -35,7 +37,7 @@ public class GebruikerServiceImpl implements GebruikerService
     public void create(Gebruiker gebruiker)
     {
         gebruiker.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
-
+        gebruiker.addRol(rolRepository.findOne(1));
         repository.save(gebruiker);
     }
 
@@ -88,7 +90,14 @@ public class GebruikerServiceImpl implements GebruikerService
     @Override
     public void delete(int id) throws GebruikerNotFound
     {
+
         Gebruiker gebruiker = find(id);
+
+        if(gebruiker!=null){
+
+            throw new GebruikerNotFound();
+        }
+
 
         repository.delete(gebruiker);
     }
@@ -98,4 +107,6 @@ public class GebruikerServiceImpl implements GebruikerService
     {
         return find(id).getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
     }
+
+
 }

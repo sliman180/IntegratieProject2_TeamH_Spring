@@ -6,9 +6,9 @@
 
         var exports = {};
 
-        exports.all = function () {
+        exports.myOrganisaties = function () {
 
-            return $http.get("/api/organisaties").then(function (response) {
+            return $http.get("/api/organisaties/my").then(function (response) {
                 return response.data;
             });
 

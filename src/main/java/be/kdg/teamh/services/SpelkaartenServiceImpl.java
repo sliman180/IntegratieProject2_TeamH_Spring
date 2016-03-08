@@ -69,13 +69,12 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
     }
 
     @Override
-    public void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached
+    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
     {
-        // Spelkaart spelkaart = find(id);
+        Spelkaart spelkaart = find(id);
 
-        Cirkelsessie cirkelsessie = cirkelsessieRepository.findOne(id);
 
-        if (spelkaart.getPositie() == cirkelsessie.getAantalCirkels())
+        if (spelkaart.getPositie() == spelkaart.getCirkelsessie().getAantalCirkels())
         {
             throw new SpelkaartMaxPositionReached();
         }
