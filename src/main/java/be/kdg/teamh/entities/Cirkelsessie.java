@@ -1,7 +1,5 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -37,14 +35,14 @@ public class Cirkelsessie implements Serializable
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Deelname> deelnames = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

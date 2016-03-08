@@ -10,7 +10,7 @@ public interface CirkelsessieService
 {
     List<Cirkelsessie> all();
 
-    void create(Cirkelsessie hoofdthema);
+    void create(int userId, Cirkelsessie hoofdthema);
 
     Cirkelsessie find(int id) throws CirkelsessieNotFound;
 

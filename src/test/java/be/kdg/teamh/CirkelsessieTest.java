@@ -1,6 +1,9 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.dtos.LoginResponse;
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.entities.Subthema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -13,10 +16,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -59,7 +66,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON))
@@ -76,7 +83,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie(null, 0, 0, false, null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test
@@ -85,7 +92,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +109,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON))
@@ -119,7 +126,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 8, 15, false, new Date(), null, null));
@@ -141,7 +148,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Cirkelsessie(null, 0, 0, false, new Date(), null, null));
@@ -155,7 +162,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null));
@@ -170,7 +177,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/cirkelsessies/1"))
@@ -194,7 +201,7 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), subthema, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/1/subthema").contentType(MediaType.APPLICATION_JSON))
@@ -210,10 +217,10 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(post("/api/cirkelsessies/1/clone").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(post("/api/cirkelsessies/1/clone").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON))
@@ -231,12 +238,12 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new Date(new Date().getTime() + 3000), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
         cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new Date(), null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/gepland").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -250,21 +257,43 @@ public class CirkelsessieTest
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new Date(new Date().getTime() + 1000), null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
         cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new Date(new Date().getTime() - 1000), null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
         cirkelsessie = new Cirkelsessie("Session three", 5, 10, false, new Date(new Date().getTime() - 1000), null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isCreated());
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/cirkelsessies/actief").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].naam", is("Session two")))
             .andExpect(jsonPath("$[1].naam", is("Session three")));
     }
+
+    private String getUserToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
+    private String getAdminToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
+    private String getTokenAsInexistent() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
 }

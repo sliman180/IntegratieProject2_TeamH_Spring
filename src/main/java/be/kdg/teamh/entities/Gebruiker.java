@@ -43,6 +43,10 @@ public class Gebruiker implements Serializable
     @ManyToMany
     private List<Rol> rollen = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<Cirkelsessie> cirkelsessies;
+
     public Gebruiker()
     {
         //
@@ -61,9 +65,16 @@ public class Gebruiker implements Serializable
         this.rollen = rollen;
     }
 
+    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessies.add(cirkelsessie);
+    }
     public int getId()
     {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getGebruikersnaam()
@@ -144,6 +155,14 @@ public class Gebruiker implements Serializable
     public void setRollen(List<Rol> rollen)
     {
         this.rollen = rollen;
+    }
+
+    public List<Cirkelsessie> getCirkelsessies() {
+        return cirkelsessies;
+    }
+
+    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
+        this.cirkelsessies = cirkelsessies;
     }
 
     @Override

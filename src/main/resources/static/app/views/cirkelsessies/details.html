@@ -51,7 +51,8 @@
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Startdatum: {{vm.cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
+        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{vm.cirkelsessie.startDatum |
+        date:'yyyy-MM-dd'}}
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
