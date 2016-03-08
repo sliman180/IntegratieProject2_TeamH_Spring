@@ -1,6 +1,6 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.dtos.LoginResponse;
+import be.kdg.teamh.dtos.Token;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
@@ -25,12 +25,12 @@ public class AuthController
     private GebruikerService service;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials
+    public Token login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials
     {
         Gebruiker gebruiker = service.findByLogin(credentials);
 
 
-        return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
+        return new Token(Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
             .claim("rollen", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
             .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }

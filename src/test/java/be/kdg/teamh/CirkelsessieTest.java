@@ -1,6 +1,6 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.dtos.LoginResponse;
+import be.kdg.teamh.dtos.Token;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
@@ -279,21 +279,21 @@ public class CirkelsessieTest
         String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
     }
 
     private String getAdminToken() throws Exception {
         String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
     }
 
     private String getTokenAsInexistent() throws Exception {
         String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
         MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
     }
 
 }
