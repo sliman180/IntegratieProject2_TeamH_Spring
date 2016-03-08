@@ -221,7 +221,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border" id="chat">
             <div ng-repeat="bericht in vm.cirkelsessie.chat.berichten">
-                <p>{{bericht.datum | date:'dd-MM-yyyy'}} {{bericht.tekst}}</p>
+                <p>{{bericht.datum | date:'dd-MM-yyyy'}} | {{bericht.gebruiker.gebruikersnaam}}: {{bericht.tekst}}</p>
 
             </div>
         </div>

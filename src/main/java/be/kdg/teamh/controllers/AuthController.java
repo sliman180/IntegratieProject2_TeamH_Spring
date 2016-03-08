@@ -5,9 +5,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
-import be.kdg.teamh.exceptions.RolNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
-import be.kdg.teamh.services.contracts.RolService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,7 +29,7 @@ public class AuthController
     {
         Gebruiker gebruiker = service.findByLogin(credentials);
 
-        return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(gebruiker.getGebruikersnaam())
+        return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
             .claim("roles", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
             .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }

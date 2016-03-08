@@ -2,6 +2,8 @@ package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
+import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Rol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -14,9 +16,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -200,11 +207,33 @@ public class ChatTest
         {
             json = objectMapper.writeValueAsString(new Bericht("Hey " + i, null));
 
-            this.mvc.perform(post("/api/chats/1/messages").contentType(MediaType.APPLICATION_JSON).content(json))
+            this.mvc.perform(post("/api/chats/1/messages").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
         }
 
         this.mvc.perform(get("/api/chats/1").contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.berichten", hasSize(5)));
     }
+
+    private String getUserToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
+    private String getAdminToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
+    private String getTokenAsInexistent() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), LoginResponse.class).getToken();
+    }
+
 }

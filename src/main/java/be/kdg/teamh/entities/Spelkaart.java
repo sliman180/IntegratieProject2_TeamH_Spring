@@ -21,6 +21,7 @@ public class Spelkaart implements Serializable
     @ManyToOne(cascade = CascadeType.ALL)
     private Cirkelsessie cirkelsessie;
 
+
     public Spelkaart()
     {
         //

@@ -91,7 +91,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             throw new CirkelsessieNotFound();
         }
 
-        cirkelsessie.addSpelkaart(new Spelkaart(kaart));
+        cirkelsessie.addSpelkaart(new Spelkaart(kaart, cirkelsessie));
 
         repository.save(cirkelsessie);
 
