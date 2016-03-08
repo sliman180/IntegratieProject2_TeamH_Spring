@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function LoginController($location, $rootScope, AuthService, JwtService, localStorageService) {
+    function LoginController($location, $rootScope, AuthService, GebruikerService, JwtService, localStorageService) {
 
         var vm = this;
 
@@ -10,17 +10,20 @@
 
             AuthService.login(credentials).then(function (data) {
 
-                var claims = JwtService.decodeToken(data.token);
-
                 localStorageService.set("auth", {
                     token: data.token
                 });
 
-                $rootScope.naam = claims.sub;
-                $rootScope.roles = claims.roles;
-                $rootScope.loggedIn = true;
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
 
-                $location.path("/");
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                    $location.path("/");
+
+                });
 
             });
 

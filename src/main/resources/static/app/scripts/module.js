@@ -11,7 +11,7 @@
 
         })
 
-        .run(function ($location, $rootScope, $timeout, JwtService, localStorageService) {
+        .run(function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
             $rootScope.$on('$viewContentLoaded', function() {
                 $timeout(function() {
@@ -23,8 +23,9 @@
 
                 localStorageService.remove("auth");
 
+                $rootScope.id = null;
                 $rootScope.naam = null;
-                $rootScope.roles = null;
+                $rootScope.rollen = null;
                 $rootScope.loggedIn = false;
 
                 $location.path("/");
@@ -35,11 +36,14 @@
 
             if (data) {
 
-                var claims = JwtService.decodeToken(data.token);
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
 
-                $rootScope.naam = claims.naam;
-                $rootScope.roles = claims.roles;
-                $rootScope.loggedIn = true;
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                });
 
             }
 

@@ -11,7 +11,7 @@
 
         }])
 
-        .run(["$location", "$rootScope", "$timeout", "JwtService", "localStorageService", function ($location, $rootScope, $timeout, JwtService, localStorageService) {
+        .run(["$location", "$rootScope", "$timeout", "GebruikerService", "JwtService", "localStorageService", function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
             $rootScope.$on('$viewContentLoaded', function() {
                 $timeout(function() {
@@ -23,8 +23,9 @@
 
                 localStorageService.remove("auth");
 
+                $rootScope.id = null;
                 $rootScope.naam = null;
-                $rootScope.roles = null;
+                $rootScope.rollen = null;
                 $rootScope.loggedIn = false;
 
                 $location.path("/");
@@ -35,11 +36,14 @@
 
             if (data) {
 
-                var claims = JwtService.decodeToken(data.token);
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
 
-                $rootScope.naam = claims.naam;
-                $rootScope.roles = claims.roles;
-                $rootScope.loggedIn = true;
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                });
 
             }
 
@@ -256,6 +260,63 @@
     }
 
     angular.module("kandoe").factory("CirkelsessieService", CirkelsessieService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    GebruikerService.$inject = ["$http"];
+    function GebruikerService($http) {
+
+        var exports = {};
+
+        exports.all = function () {
+
+            return $http.get("/api/gebruikers").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.find = function (id) {
+
+            return $http.get("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.create = function (gebruiker) {
+
+            return $http.post("/api/gebruikers", gebruiker).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.update = function (gebruiker) {
+
+            return $http.put("/api/gebruikers/" + gebruiker.id, gebruiker).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.delete = function (id) {
+
+            return $http.delete("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("GebruikerService", GebruikerService);
 
 })(window.angular);
 
@@ -497,10 +558,6 @@
             }
         };
 
-        vm.getUsername = function () {
-            return $rootScope.naam;
-        };
-
         vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
@@ -581,8 +638,8 @@
 
     "use strict";
 
-    LoginController.$inject = ["$location", "$rootScope", "AuthService", "JwtService", "localStorageService"];
-    function LoginController($location, $rootScope, AuthService, JwtService, localStorageService) {
+    LoginController.$inject = ["$location", "$rootScope", "AuthService", "GebruikerService", "JwtService", "localStorageService"];
+    function LoginController($location, $rootScope, AuthService, GebruikerService, JwtService, localStorageService) {
 
         var vm = this;
 
@@ -590,17 +647,20 @@
 
             AuthService.login(credentials).then(function (data) {
 
-                var claims = JwtService.decodeToken(data.token);
-
                 localStorageService.set("auth", {
                     token: data.token
                 });
 
-                $rootScope.naam = claims.sub;
-                $rootScope.roles = claims.roles;
-                $rootScope.loggedIn = true;
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
 
-                $location.path("/");
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                    $location.path("/");
+
+                });
 
             });
 

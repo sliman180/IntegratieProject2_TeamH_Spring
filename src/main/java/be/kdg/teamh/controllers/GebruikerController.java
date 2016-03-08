@@ -31,6 +31,13 @@ public class GebruikerController
         service.create(gebruiker);
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Gebruiker show(@PathVariable("id") int id) throws GebruikerNotFound
+    {
+        return service.find(id);
+    }
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
     public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
