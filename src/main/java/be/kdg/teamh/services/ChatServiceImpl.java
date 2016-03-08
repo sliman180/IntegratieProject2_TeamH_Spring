@@ -62,7 +62,7 @@ public class ChatServiceImpl implements ChatService
         old.setCirkelsessie(chat.getCirkelsessie());
         old.setBerichten(chat.getBerichten());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override
@@ -93,6 +93,7 @@ public class ChatServiceImpl implements ChatService
         }
 
         chat.addBericht(bericht);
+
         repository.save(chat);
     }
 }

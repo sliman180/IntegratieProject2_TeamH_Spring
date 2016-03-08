@@ -54,7 +54,7 @@ public class KaartenServiceImpl implements KaartenService
         old.setTekst(kaart.getTekst());
         old.setGebruiker(kaart.getGebruiker());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

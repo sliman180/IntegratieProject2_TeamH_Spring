@@ -78,7 +78,7 @@ public class GebruikerServiceImpl implements GebruikerService
         gebruiker.setGebruikersnaam(gebruiker.getGebruikersnaam());
         gebruiker.setWachtwoord(gebruiker.getWachtwoord());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

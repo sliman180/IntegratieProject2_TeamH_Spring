@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface SpelkaartenService
 {
-    void create(Spelkaart spelkaart);
-
-    void update(int id, Spelkaart kaart) throws SpelkaartNotFound;
-
     List<Spelkaart> all();
+
+    void create(Spelkaart spelkaart);
 
     Spelkaart find(int id) throws SpelkaartNotFound;
 
-    void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached;
+    void update(int id, Spelkaart kaart) throws SpelkaartNotFound;
 
     void delete(int id) throws SpelkaartNotFound;
+
+    void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached;
 }

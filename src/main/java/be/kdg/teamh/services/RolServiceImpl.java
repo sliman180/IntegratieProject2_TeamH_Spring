@@ -50,7 +50,7 @@ public class RolServiceImpl implements RolService
         old.setNaam(rol.getNaam());
         old.setBeschrijving(rol.getBeschrijving());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

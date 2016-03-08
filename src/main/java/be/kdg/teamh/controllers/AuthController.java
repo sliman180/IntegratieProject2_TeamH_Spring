@@ -1,6 +1,6 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.LoginResponse;
+import be.kdg.teamh.dtos.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.GebruikerNotFound;

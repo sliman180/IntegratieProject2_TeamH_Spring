@@ -52,7 +52,7 @@ public class DeelnameServiceImpl implements DeelnameService
         old.setMedeorganisator(deelname.isMedeorganisator());
         old.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

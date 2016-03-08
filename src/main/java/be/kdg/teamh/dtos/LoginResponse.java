@@ -1,4 +1,4 @@
-package be.kdg.teamh;
+package be.kdg.teamh.dtos;
 
 import java.io.Serializable;
 

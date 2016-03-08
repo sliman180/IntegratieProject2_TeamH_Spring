@@ -1,8 +1,10 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.dtos.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Rol;
+import be.kdg.teamh.filters.JwtFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
