@@ -731,9 +731,6 @@
 
                 GebruikerService.find($rootScope.id).then(function(data) {
 
-                    console.log(credentials);
-                    console.log(data);
-
                     $rootScope.id = data.id;
                     $rootScope.naam = data.gebruikersnaam;
                     $rootScope.rollen = data.rollen;
