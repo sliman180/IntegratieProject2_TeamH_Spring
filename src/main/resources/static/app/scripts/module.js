@@ -11,29 +11,37 @@
 
         })
 
-        .run(function ($location, $rootScope, $timeout, localStorageService) {
+        .run(function ($location, $rootScope, $timeout, JwtService, localStorageService) {
 
-            $rootScope.$on('$viewContentLoaded', function(event) {
+            $rootScope.$on('$viewContentLoaded', function() {
                 $timeout(function() {
                     componentHandler.upgradeAllRegistered();
                 }, 0);
             });
 
+            $rootScope.logout = function () {
+
+                localStorageService.remove("auth");
+
+                $rootScope.naam = null;
+                $rootScope.roles = null;
+                $rootScope.loggedIn = false;
+
+                $location.path("/");
+
+            };
+
             var data = localStorageService.get("auth");
 
             if (data) {
-                $rootScope.id = data.id;
-                $rootScope.naam = data.naam;
-                $rootScope.loggedIn = true;
-            }
 
-            $rootScope.logout = function () {
-                localStorageService.remove("auth");
-                $rootScope.id = null;
-                $rootScope.naam = null;
-                $rootScope.loggedIn = false;
-                $location.path("/");
-            };
+                var claims = JwtService.decodeToken(data.token);
+
+                $rootScope.naam = claims.naam;
+                $rootScope.roles = claims.roles;
+                $rootScope.loggedIn = true;
+
+            }
 
         });
 

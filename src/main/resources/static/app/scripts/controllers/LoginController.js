@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function LoginController($location, $rootScope, AuthService, localStorageService) {
+    function LoginController($location, $rootScope, AuthService, JwtService, localStorageService) {
 
         var vm = this;
 
@@ -10,14 +10,14 @@
 
             AuthService.login(credentials).then(function (data) {
 
+                var claims = JwtService.decodeToken(data.token);
+
                 localStorageService.set("auth", {
-                    id: data.id,
-                    naam: data.naam,
                     token: data.token
                 });
 
-                $rootScope.id = data.id;
-                $rootScope.naam = data.naam;
+                $rootScope.naam = claims.sub;
+                $rootScope.roles = claims.roles;
                 $rootScope.loggedIn = true;
 
                 $location.path("/");
