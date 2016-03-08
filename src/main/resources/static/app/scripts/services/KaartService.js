@@ -15,6 +15,14 @@
 
         };
 
+        exports.verschuifKaart = function (spelkaartId) {
+
+            return $http.post("/api/spelkaarten/" + spelkaartId + "/verschuif").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }

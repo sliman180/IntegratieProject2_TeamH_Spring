@@ -472,6 +472,14 @@
 
         };
 
+        exports.verschuifKaart = function (spelkaartId) {
+
+            return $http.post("/api/spelkaarten/" + spelkaartId + "/verschuif").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }
@@ -488,9 +496,9 @@
 
         var exports = {};
 
-        exports.all = function () {
+        exports.myOrganisaties = function () {
 
-            return $http.get("/api/organisaties").then(function (response) {
+            return $http.get("/api/organisaties/my").then(function (response) {
                 return response.data;
             });
 
@@ -583,6 +591,12 @@
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
+                $route.reload();
+            });
+        };
+
+        vm.verschuifKaart = function (spelkaartId){
+            KaartService.verschuifKaart(spelkaartId).then(function(){
                 $route.reload();
             });
         };
@@ -695,7 +709,7 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function (data) {
+        OrganisatieService.myOrganisaties().then(function (data) {
             vm.organisaties = data;
         });
 

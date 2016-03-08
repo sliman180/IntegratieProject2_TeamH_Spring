@@ -36,6 +36,9 @@ public class Gebruiker implements Serializable
     @OneToMany(cascade = CascadeType.ALL)
     private List<Commentaar> commentaren = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Organisatie> organisaties = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Bericht> berichten = new ArrayList<>();
@@ -165,6 +168,22 @@ public class Gebruiker implements Serializable
         this.cirkelsessies = cirkelsessies;
     }
 
+
+    public List<Organisatie> getOrganisaties() {
+        return organisaties;
+    }
+
+    public void setOrganisaties(List<Organisatie> organisaties) {
+        this.organisaties = organisaties;
+    }
+
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
+        this.cirkelsessies = cirkelsessies;
+    }
+
+    public void addRol(Rol rol){
+        rollen.add(rol);
+    }
     @Override
     public boolean equals(Object o)
     {

@@ -48,6 +48,12 @@
             });
         };
 
+        vm.verschuifKaart = function (spelkaartId){
+            KaartService.verschuifKaart(spelkaartId).then(function(){
+                $route.reload();
+            });
+        };
+
 
     }
 

@@ -8,7 +8,7 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function (data) {
+        OrganisatieService.myOrganisaties().then(function (data) {
             vm.organisaties = data;
         });
 
