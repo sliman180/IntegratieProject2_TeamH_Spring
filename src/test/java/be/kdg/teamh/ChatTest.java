@@ -1,5 +1,6 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.dtos.LoginResponse;
 import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
 import be.kdg.teamh.entities.Gebruiker;
