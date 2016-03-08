@@ -23,7 +23,8 @@ describe("From the home page", function(){
         element(by.tagName("form")).element(by.tagName("button")).click();
 
         expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/?#/cirkelsessies")
+        //<div class="demo-card-wide"></div> is de sessioncontainer
+        expect(element.all(by.css("")).count()).toBe(1);
 
-        //expect(element.all(by.css(".demo-card-wide")).count()).toEqual(1);
     });
 });
