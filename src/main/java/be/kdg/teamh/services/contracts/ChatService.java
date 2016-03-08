@@ -18,5 +18,5 @@ public interface ChatService
 
     void delete(int id) throws ChatNotFound;
 
-    void createMessage(int id, Bericht bericht) throws ChatNotFound;
+    void createMessage(int id, int userId, Bericht bericht) throws ChatNotFound;
 }

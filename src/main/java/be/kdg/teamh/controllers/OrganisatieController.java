@@ -92,4 +92,7 @@ public class OrganisatieController
 
         return ((List) claims.get("roles")).contains("user");
     }
+
+
 }
+

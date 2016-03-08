@@ -4,6 +4,8 @@ import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
 import be.kdg.teamh.exceptions.ChatNotFound;
 import be.kdg.teamh.services.contracts.ChatService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +57,15 @@ public class ChatController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "{id}/messages", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @RequestBody Bericht bericht) throws ChatNotFound
+    public void createComment(@PathVariable("id") int id, @RequestBody Bericht bericht, @RequestHeader(name = "Authorization") String token) throws ChatNotFound
     {
-        service.createMessage(id, bericht);
+        int userId = getUserId(token);
+        service.createMessage(id, userId, bericht);
+    }
+
+    private int getUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey("kandoe")
+                .parseClaimsJws(token.substring(7)).getBody();
+        return Integer.parseInt(claims.getSubject());
     }
 }
