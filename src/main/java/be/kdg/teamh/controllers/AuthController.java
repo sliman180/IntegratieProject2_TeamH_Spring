@@ -31,7 +31,7 @@ public class AuthController
 
 
         return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
-            .claim("roles", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
+            .claim("rollen", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
             .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 

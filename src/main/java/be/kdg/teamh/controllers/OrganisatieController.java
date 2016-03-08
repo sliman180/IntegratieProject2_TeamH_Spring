@@ -83,14 +83,14 @@ public class OrganisatieController
     {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
-        return ((List) claims.get("roles")).contains("admin");
+        return ((List) claims.get("rollen")).contains("admin");
     }
 
     private boolean isRegistered(String token)
     {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
-        return ((List) claims.get("roles")).contains("user");
+        return ((List) claims.get("rollen")).contains("user");
     }
 
 

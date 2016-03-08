@@ -25,10 +25,6 @@
             }
         };
 
-        vm.getUsername = function () {
-            return $rootScope.naam;
-        };
-
         vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
