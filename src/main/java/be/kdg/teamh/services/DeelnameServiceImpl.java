@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.services.contracts.DeelnameService;
 import org.springframework.beans.factory.annotation.Autowired;

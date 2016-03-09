@@ -2,8 +2,8 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Chat;
-import be.kdg.teamh.exceptions.ChatNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.ChatNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.ChatService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;

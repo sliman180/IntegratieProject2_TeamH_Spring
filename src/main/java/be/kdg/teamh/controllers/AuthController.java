@@ -3,7 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.dtos.Token;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import io.jsonwebtoken.Jwts;

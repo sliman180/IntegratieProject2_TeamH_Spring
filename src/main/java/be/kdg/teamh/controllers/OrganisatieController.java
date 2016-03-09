@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.IsForbidden;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -92,7 +92,4 @@ public class OrganisatieController
 
         return ((List) claims.get("rollen")).contains("user");
     }
-
-
 }
-

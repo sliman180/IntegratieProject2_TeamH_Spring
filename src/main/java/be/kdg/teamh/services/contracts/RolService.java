@@ -1,7 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.RolNotFound;
+import be.kdg.teamh.exceptions.notfound.RolNotFound;
 
 import java.util.List;
 

@@ -3,19 +3,8 @@ package be.kdg.teamh;
 import be.kdg.teamh.entities.Commentaar;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -24,30 +13,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class KaartTest
+public class KaartTest extends ApiTest
 {
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Before
-    public void setUp() throws Exception
-    {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-    }
-
     @Test
     public void indexKaarten() throws Exception
     {
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -57,10 +28,10 @@ public class KaartTest
     {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null));
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
@@ -72,7 +43,7 @@ public class KaartTest
     {
         String json = objectMapper.writeValueAsString(new Kaart(null, null, true, null));
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json));
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -80,10 +51,10 @@ public class KaartTest
     {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null));
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.imageUrl", is("http://www.afbeeldingurl.be")))
             .andExpect(jsonPath("$.tekst", is("Een kaartje")));
@@ -92,7 +63,7 @@ public class KaartTest
     @Test(expected = NestedServletException.class)
     public void showKaart_nonExistingKaart() throws Exception
     {
-        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isNotFound());
     }
 
@@ -102,16 +73,16 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         kaart = new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.tekst", is("Een gewijzigde kaartje")))
             .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeeldingurl.be")));
@@ -123,13 +94,13 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         kaart = new Kaart(null, null, true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -138,13 +109,13 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         kaart = new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(put("/api/kaarten/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        mvc.perform(put("/api/kaarten/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -153,17 +124,17 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)));
 
-        this.mvc.perform(delete("/api/kaarten/1"))
+        mvc.perform(delete("/api/kaarten/1").header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -174,10 +145,10 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/kaarten/2"));
+        mvc.perform(delete("/api/kaarten/2").header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -186,10 +157,10 @@ public class KaartTest
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
@@ -197,10 +168,10 @@ public class KaartTest
 
         String commentJson = objectMapper.writeValueAsString(new Commentaar("Een comment", null));
 
-        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson))
+        mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -210,10 +181,10 @@ public class KaartTest
     {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null));
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
@@ -221,7 +192,7 @@ public class KaartTest
 
         json = objectMapper.writeValueAsString(new Commentaar("Een comment", null));
 
-        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(json));
+        mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test // TODO: change url
@@ -229,20 +200,20 @@ public class KaartTest
     {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null));
 
-        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Een subthema", "beschrijving", null));
 
-        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Een subthema 2", "beschrijving", null));
 
-        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)));
     }

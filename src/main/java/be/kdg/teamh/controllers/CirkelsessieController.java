@@ -3,7 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -91,9 +91,8 @@ public class CirkelsessieController
         service.addSpelkaart(id, kaart);
     }
 
-    private int getUserId(String token) {
-        Claims claims = Jwts.parser().setSigningKey("kandoe")
-                .parseClaimsJws(token.substring(7)).getBody();
-        return Integer.parseInt(claims.getSubject());
+    private int getUserId(String token)
+    {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

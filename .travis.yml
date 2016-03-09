@@ -3,6 +3,9 @@ language: java
 jdk:
 - oraclejdk8
 
+script:
+- mvn test -Dspring.profiles.active=travis -Dmaven.javadoc.skip=true
+
 notifications:
     slack: integratieproject2:JhoQxoRUfWvTPc7y5JTq18FN
     email: false

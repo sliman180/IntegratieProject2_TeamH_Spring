@@ -3,7 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
-import be.kdg.teamh.exceptions.SpelkaartNotFound;
+import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.SpelkaartenRepository;
 import be.kdg.teamh.services.contracts.SpelkaartenService;

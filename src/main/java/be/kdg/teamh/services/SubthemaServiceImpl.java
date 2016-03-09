@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.exceptions.SubthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 import be.kdg.teamh.repositories.SubthemaRepository;
 import be.kdg.teamh.services.contracts.SubthemaService;
 import org.springframework.beans.factory.annotation.Autowired;

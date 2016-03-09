@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;

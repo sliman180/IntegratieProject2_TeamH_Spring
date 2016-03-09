@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
