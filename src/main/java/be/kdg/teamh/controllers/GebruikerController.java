@@ -4,6 +4,8 @@ import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +59,24 @@ public class GebruikerController
     public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
     {
         return service.showCirkelsessies(id);
+    }
+
+    private boolean isAdmin(String token)
+    {
+        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
+
+        return ((List) claims.get("rollen")).contains("admin");
+    }
+
+    private boolean isRegistered(String token)
+    {
+        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
+
+        return ((List) claims.get("rollen")).contains("user");
+    }
+
+    private int getUserId(String token)
+    {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

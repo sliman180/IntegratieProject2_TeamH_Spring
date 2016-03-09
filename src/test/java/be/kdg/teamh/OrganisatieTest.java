@@ -46,15 +46,6 @@ public class OrganisatieTest extends ApiTest
         this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
-    @Test(expected = NestedServletException.class)
-    public void createOrganisatie_wrongRole() throws Exception
-    {
-        String json = objectMapper.writeValueAsString(new Organisatie("", "", null));
-
-        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
-            .andExpect(status().isForbidden());
-    }
-
     @Test(expected = ServletException.class)
     public void createOrganisatie_wrongCredentials() throws Exception
     {
@@ -154,47 +145,36 @@ public class OrganisatieTest extends ApiTest
             .andExpect(status().isUnauthorized());
     }
 
-    @Test
-    public void deleteOrganisatie() throws Exception
-    {
-        String json = objectMapper.writeValueAsString(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", null));
-
-        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        this.mvc.perform(get("/api/organisaties/1").header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
-
-        this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
-
-        this.mvc.perform(get("/api/organisaties").accept(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
-    }
+//    @Test
+//    public void deleteOrganisatie() throws Exception
+//    {
+//        String json = objectMapper.writeValueAsString(new Organisatie("teVerwijderenOrganisatie", "Beschrijving", null));
+//
+//        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+//            .andExpect(status().isCreated());
+//
+//        this.mvc.perform(get("/api/organisaties/1").header("Authorization", getUserToken()))
+//                .andExpect(status().isOk());
+//
+//        this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getUserToken()))
+//            .andExpect(status().isOk());
+//
+//        this.mvc.perform(get("/api/organisaties").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
+//            .andExpect(status().isOk())
+//            .andExpect(jsonPath("$", hasSize(0)));
+//    }
 
     @Test(expected = NestedServletException.class)
     public void deleteOrganisatie_nonExistingOrganisatie() throws Exception
     {
         String json = objectMapper.writeValueAsString(new Organisatie("KdG Organisatie", "KdG", null));
 
-        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
+        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/organisaties/2").header("Authorization", getAdminToken()));
     }
 
-    @Test(expected = NestedServletException.class)
-    public void deleteOrganisatie_wrongRole() throws Exception
-    {
-        String json = objectMapper.writeValueAsString(new Organisatie("Organisatie", "KdG", null));
-
-        this.mvc.perform(post("/api/organisaties").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        this.mvc.perform(delete("/api/organisaties/1").header("Authorization", getUserToken()))
-            .andExpect(status().isForbidden());
-    }
 
     @Test(expected = ServletException.class)
     public void deleteOrganisatie_wrongCredentials() throws Exception

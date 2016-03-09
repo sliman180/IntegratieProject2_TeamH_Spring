@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.OrganisatieService;
@@ -35,13 +36,16 @@ public class OrganisatieController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws IsForbidden
     {
-        if (!isAdmin(token))
+        if (!isRegistered(token))
         {
             throw new IsForbidden();
         }
 
-        service.create(organisatie);
+        int userId = getUserId(token);
+
+        service.create(userId, organisatie);
     }
+
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -71,13 +75,29 @@ public class OrganisatieController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
     {
-        if (!isAdmin(token))
+        if (!isRegistered(token))
         {
             throw new IsForbidden();
         }
 
         service.delete(id);
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public List<Organisatie> getOrganisaties(@RequestHeader(name = "Authorization") String token) throws IsForbidden, GebruikerNotFound
+    {
+
+        if (!isRegistered(token))
+        {
+            throw new IsForbidden();
+        }
+
+        int userId = getUserId(token);
+
+        return service.getMyOrganisaties(userId);
+    }
+
 
     private boolean isAdmin(String token)
     {
@@ -91,5 +111,10 @@ public class OrganisatieController
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
         return ((List) claims.get("rollen")).contains("user");
+    }
+
+    private int getUserId(String token)
+    {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

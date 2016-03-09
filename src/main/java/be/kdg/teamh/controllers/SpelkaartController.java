@@ -54,8 +54,8 @@ public class SpelkaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/{id}/verschuif", method = RequestMethod.POST)
-    public void verschuifKaart(@PathVariable("id") int id, @RequestBody Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached
+    public void verschuifKaart(@PathVariable("id") int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
     {
-        service.verschuif(id,spelkaart);
+        service.verschuif(id);
     }
 }

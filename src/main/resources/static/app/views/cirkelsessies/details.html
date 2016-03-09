@@ -76,7 +76,7 @@
     </div>
 
     <div class="mdl-card__menu">
-        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="55">account_box</div>
+        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.cirkelsessie.deelnames.length}}">account_box</div>
 
                 <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
 
@@ -175,7 +175,7 @@
 
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                         for="demo-menu-lower-right {{spelkaart.id}}">
-                        <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verplaats</li>
+                        <li ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar [{{spelkaart.positie + 1}}]</li>
                         <li disabled class="mdl-menu__item">Verwijder</li>
                     </ul>
                 </div>

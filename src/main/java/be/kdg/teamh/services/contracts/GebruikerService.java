@@ -2,8 +2,8 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 
 import java.util.List;
 
