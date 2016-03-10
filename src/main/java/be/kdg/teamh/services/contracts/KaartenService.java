@@ -5,7 +5,7 @@ import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
-import be.kdg.teamh.exceptions.KaartNotFound;
+import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 
 import java.util.List;
 

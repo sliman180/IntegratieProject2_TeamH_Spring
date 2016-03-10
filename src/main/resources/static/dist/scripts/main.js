@@ -11,29 +11,41 @@
 
         }])
 
-        .run(["$location", "$rootScope", "$timeout", "localStorageService", function ($location, $rootScope, $timeout, localStorageService) {
+        .run(["$location", "$rootScope", "$timeout", "GebruikerService", "JwtService", "localStorageService", function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
-            $rootScope.$on('$viewContentLoaded', function(event) {
+            $rootScope.$on('$viewContentLoaded', function() {
                 $timeout(function() {
                     componentHandler.upgradeAllRegistered();
                 }, 0);
             });
 
+            $rootScope.logout = function () {
+
+                localStorageService.remove("auth");
+
+                $rootScope.id = null;
+                $rootScope.naam = null;
+                $rootScope.rollen = null;
+                $rootScope.loggedIn = false;
+
+                $location.path("/");
+
+            };
+
             var data = localStorageService.get("auth");
 
             if (data) {
-                $rootScope.id = data.id;
-                $rootScope.naam = data.naam;
-                $rootScope.loggedIn = true;
-            }
 
-            $rootScope.logout = function () {
-                localStorageService.remove("auth");
-                $rootScope.id = null;
-                $rootScope.naam = null;
-                $rootScope.loggedIn = false;
-                $location.path("/");
-            };
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
+
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                });
+
+            }
 
         }]);
 
@@ -71,6 +83,12 @@
             .when("/auth/register", {
                 templateUrl: "/dist/views/auth/register.html",
                 controller: "RegisterController",
+                controllerAs: "vm"
+            })
+
+            .when("/auth/profile", {
+                templateUrl: "/dist/views/auth/profile.html",
+                controller: "ProfileController",
                 controllerAs: "vm"
             })
 
@@ -160,6 +178,7 @@
 
         return exports;
 
+
     }
 
     angular.module("kandoe").factory("AuthService", AuthService);
@@ -183,6 +202,7 @@
             });
 
         };
+
 
         return exports;
 
@@ -253,6 +273,63 @@
 
     "use strict";
 
+    GebruikerService.$inject = ["$http"];
+    function GebruikerService($http) {
+
+        var exports = {};
+
+        exports.all = function () {
+
+            return $http.get("/api/gebruikers").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.create = function (gebruiker) {
+
+            return $http.post("/api/gebruikers", gebruiker).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.find = function (id) {
+
+            return $http.get("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.update = function (id, gebruiker) {
+
+            return $http.put("/api/gebruikers/" + id, gebruiker).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.delete = function (id) {
+
+            return $http.delete("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("GebruikerService", GebruikerService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     HoofdthemaService.$inject = ["$http"];
     function HoofdthemaService($http) {
 
@@ -310,6 +387,77 @@
 
     "use strict";
 
+    function JwtService() {
+
+        this.urlBase64Decode = function(str) {
+
+            var output = str.replace(/-/g, '+').replace(/_/g, '/');
+
+            switch (output.length % 4) {
+                case 0: { break; }
+                case 2: { output += '=='; break; }
+                case 3: { output += '='; break; }
+                default: {
+                    throw 'Illegal base64url string!';
+                }
+            }
+
+            return decodeURIComponent(escape(window.atob(output)));
+        };
+
+        this.decodeToken = function(token) {
+
+            var parts = token.split('.');
+
+            if (parts.length !== 3) {
+                throw new Error('JWT must have 3 parts');
+            }
+
+            var decoded = this.urlBase64Decode(parts[1]);
+
+            if (!decoded) {
+                throw new Error('Cannot decode the token');
+            }
+
+            return JSON.parse(decoded);
+        };
+
+        this.getTokenExpirationDate = function(token) {
+
+            var decoded = this.decodeToken(token);
+            var d = new Date(0);
+
+            if(typeof decoded.exp === "undefined") {
+                return null;
+            }
+
+            d.setUTCSeconds(decoded.exp);
+
+            return d;
+        };
+
+        this.isTokenExpired = function(token, offsetSeconds) {
+
+            var d = this.getTokenExpirationDate(token);
+            offsetSeconds = offsetSeconds || 0;
+
+            if (d === null) {
+                return false;
+            }
+
+            return !(d.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)));
+        };
+
+    }
+
+    angular.module("kandoe").service("JwtService", JwtService);
+
+}(window.angular));
+
+(function (angular) {
+
+    "use strict";
+
     KaartService.$inject = ["$http"];
     function KaartService($http) {
 
@@ -319,6 +467,14 @@
         exports.createKaart = function (cirkelsessieId, kaart) {
 
             return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaart", kaart).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.verschuifKaart = function (spelkaartId) {
+
+            return $http.post("/api/spelkaarten/" + spelkaartId + "/verschuif").then(function (response) {
                 return response.data;
             });
 
@@ -340,9 +496,9 @@
 
         var exports = {};
 
-        exports.all = function () {
+        exports.myOrganisaties = function () {
 
-            return $http.get("/api/organisaties").then(function (response) {
+            return $http.get("/api/organisaties/my").then(function (response) {
                 return response.data;
             });
 
@@ -393,14 +549,17 @@
     "use strict";
 
 
-    CirkelsessieDetailsController.$inject = ["$route", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
-    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
+    CirkelsessieDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "CirkelsessieService", "ChatService", "KaartService"];
+    function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, ChatService, KaartService) {
 
         var vm = this;
+
+        vm.cirkelsessie = {};
 
         vm.getTimes = function (n) {
 
             var numbers = [];
+
             for (var i = n; i > 0; i--) {
                 numbers.push(i);
             }
@@ -409,14 +568,16 @@
         };
 
         vm.setCircleColor = function (number) {
+
             if (number % 2 == 0) {
+
                 return "#4985B9"
+
             } else {
+
                 return "white"
             }
         };
-
-        vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
@@ -426,13 +587,19 @@
             ChatService.createMessage(chatId, bericht).then(function () {
                 $route.reload();
             });
-        }
+        };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 $route.reload();
             });
-        }
+        };
+
+        vm.verschuifKaart = function (spelkaartId){
+            KaartService.verschuifKaart(spelkaartId).then(function(){
+                $route.reload();
+            });
+        };
 
 
     }
@@ -496,8 +663,8 @@
 
     "use strict";
 
-    LoginController.$inject = ["$location", "$rootScope", "AuthService", "localStorageService"];
-    function LoginController($location, $rootScope, AuthService, localStorageService) {
+    LoginController.$inject = ["$location", "$rootScope", "AuthService", "GebruikerService", "JwtService", "localStorageService"];
+    function LoginController($location, $rootScope, AuthService, GebruikerService, JwtService, localStorageService) {
 
         var vm = this;
 
@@ -506,20 +673,24 @@
             AuthService.login(credentials).then(function (data) {
 
                 localStorageService.set("auth", {
-                    id: data.id,
-                    naam: data.naam,
                     token: data.token
                 });
 
-                $rootScope.id = data.id;
-                $rootScope.naam = data.naam;
-                $rootScope.loggedIn = true;
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
 
-                $location.path("/");
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+                    $rootScope.loggedIn = true;
+
+                    $location.path("/");
+
+                });
 
             });
 
         };
+
 
     }
 
@@ -538,7 +709,7 @@
 
         vm.organisaties = [];
 
-        OrganisatieService.all().then(function (data) {
+        OrganisatieService.myOrganisaties().then(function (data) {
             vm.organisaties = data;
         });
 
@@ -551,6 +722,45 @@
     }
 
     angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    ProfileController.$inject = ["$location", "$rootScope", "GebruikerService"];
+    function ProfileController($location, $rootScope, GebruikerService) {
+
+        var vm = this;
+
+        vm.updateProfile = function (credentials) {
+
+            if (credentials.wachtwoord == null)
+            {
+                credentials.wachtwoord = "";
+            }
+
+            GebruikerService.update($rootScope.id, credentials).then(function() {
+
+                GebruikerService.find($rootScope.id).then(function(data) {
+
+                    $rootScope.id = data.id;
+                    $rootScope.naam = data.gebruikersnaam;
+                    $rootScope.rollen = data.rollen;
+
+                    $location.path("/");
+
+                });
+
+            });
+
+        };
+
+
+    }
+
+    angular.module("kandoe").controller("ProfileController", ProfileController);
 
 })(window.angular);
 

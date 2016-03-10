@@ -13,45 +13,70 @@
         margin-top: 10%;
     }
 
+    #cirkelsessie-header {
+        width: 100%;
+        padding: 2% 1%;
+    }
+
+    #cirkelsessie-begroeting {
+        width: 20%;
+        font-size: 3em;
+    }
+
+    #header-buttons {
+        float: right;
+    }
+
 </style>
 
 
+<div id="cirkelsessie-header">
+    <span id="cirkelsessie-begroeting">Welkom {{ $root.naam }}</span>
+
+    <div id="header-buttons">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Deelnemen
+        </button>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Mijn cirkelsessies
+        </button>
+    </div>
+
+</div>
+
 <div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
+
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Startdatum: {{vm.cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
+        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{vm.cirkelsessie.startDatum |
+        date:'yyyy-MM-dd'}}
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
         <span>{{vm.cirkelsessie.maxAantalKaarten}}</span>
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <svg ng-attr-height="{{vm.cirkelsessie.aantalCirkels * 100}}"
-             width="100%">
 
-            <circle ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)"
-                    ng-attr-cx="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                    ng-attr-cy="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                    ng-attr-r="{{i * 50}}"
-                    style="stroke: black;fill: {{vm.setCircleColor(i)}}">
-            </circle>
+        <svg height="{{vm.cirkelsessie.aantalCirkels * 100}}" width="100%">
 
+            <circle ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)" ng-style="{ stroke: black, fill: vm.setCircleColor(i) }"
+                    ng-attr-cx="{{ vm.cirkelsessie.aantalCirkels * 50 }}" ng-attr-cy="{{ vm.cirkelsessie.aantalCirkels * 50 }}" r="{{i * 50}}"></circle>
 
-            <line ng-attr-x1="0" ng-attr-y1="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                  ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 100}}"
-                  ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 50}}" style="stroke:white;stroke-width:2"
-                  stroke-linecap="round" stroke-dasharray="1, 5"/>
-            <line ng-attr-x1="{{vm.cirkelsessie.aantalCirkels * 50}}" ng-attr-y1="0"
-                  ng-attr-x2="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                  ng-attr-y2="{{vm.cirkelsessie.aantalCirkels * 100}}" style="stroke:white;stroke-width:2"
-                  stroke-linecap="round" stroke-dasharray="1, 5"/>
+            <line x1="0" y1="{{vm.cirkelsessie.aantalCirkels * 50}}" x2="{{vm.cirkelsessie.aantalCirkels * 100}}" y2="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
+
+            <line x1="{{vm.cirkelsessie.aantalCirkels * 50}}" y1="0" x2="{{vm.cirkelsessie.aantalCirkels * 50}}" y2="{{vm.cirkelsessie.aantalCirkels * 100}}"
+                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
 
         </svg>
+
     </div>
+
     <div class="mdl-card__menu">
-        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="55">account_box</div>
+        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.cirkelsessie.deelnames.length}}">account_box</div>
 
                 <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
 
@@ -67,8 +92,7 @@
             <i class="material-icons">more_vert</i>
         </button>
 
-        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-            for="demo-menu-lower-right d">
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect">
             <li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
             <li disabled class="mdl-menu__item">Wijzig</li>
             <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
@@ -121,6 +145,8 @@
         height: 70px;
         min-height: 0;
         width: 100%;
+        position: inherit;
+        z-index: 0;
     }
 </style>
 
@@ -142,14 +168,14 @@
                         {{spelkaart.kaart.tekst}} [{{spelkaart.positie}}]
                     </a>
                     <!-- Right aligned menu below button -->
-                    <button id="demo-menu-lower-right"
+                    <button id="demo-menu-lower-right {{spelkaart.id}}"
                             class="mdl-button mdl-js-button mdl-button--icon">
                         <i class="material-icons">more_vert</i>
                     </button>
 
                     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="demo-menu-lower-right">
-                        <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verplaats</li>
+                        for="demo-menu-lower-right {{spelkaart.id}}">
+                        <li ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar [{{spelkaart.positie + 1}}]</li>
                         <li disabled class="mdl-menu__item">Verwijder</li>
                     </ul>
                 </div>
@@ -189,7 +215,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border" id="chat">
             <div ng-repeat="bericht in vm.cirkelsessie.chat.berichten">
-                <p>{{bericht.datum | date:'dd-MM-yyyy'}} {{bericht.tekst}}</p>
+                <p>{{bericht.datum | date:'dd-MM-yyyy'}} | {{bericht.gebruiker.gebruikersnaam}}: {{bericht.tekst}}</p>
 
             </div>
         </div>
@@ -206,6 +232,7 @@
                 </button>
 
             </form>
+
         </div>
     </div>
 

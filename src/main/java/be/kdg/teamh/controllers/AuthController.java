@@ -1,13 +1,11 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.LoginResponse;
+import be.kdg.teamh.dtos.Token;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
-import be.kdg.teamh.exceptions.RolNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
-import be.kdg.teamh.services.contracts.RolService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,12 +25,13 @@ public class AuthController
     private GebruikerService service;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials
+    public Token login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials
     {
         Gebruiker gebruiker = service.findByLogin(credentials);
 
-        return new LoginResponse(gebruiker.getId(), gebruiker.getGebruikersnaam(), Jwts.builder().setSubject(gebruiker.getGebruikersnaam())
-            .claim("roles", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
+
+        return new Token(Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
+            .claim("rollen", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
             .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 

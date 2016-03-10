@@ -301,6 +301,13 @@ a, .mdl-accordion, .mdl-button, .mdl-card, .mdl-checkbox, .mdl-dropdown-menu,
 }
 
 /*
+ * Hide all ng-cloak elements
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/*
  * Make html take up the entire screen
  * Then set touch-action to avoid touch delay on mobile IE
  */

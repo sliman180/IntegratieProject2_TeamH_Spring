@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.RolNotFound;
+import be.kdg.teamh.exceptions.notfound.RolNotFound;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class RolServiceImpl implements RolService
         old.setNaam(rol.getNaam());
         old.setBeschrijving(rol.getBeschrijving());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override

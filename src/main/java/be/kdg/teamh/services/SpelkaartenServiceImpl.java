@@ -3,7 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
-import be.kdg.teamh.exceptions.SpelkaartNotFound;
+import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.SpelkaartenRepository;
 import be.kdg.teamh.services.contracts.SpelkaartenService;
@@ -23,6 +23,7 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
     @Autowired
     private CirkelsessieRepository cirkelsessieRepository;
 
+    @Override
     public List<Spelkaart> all()
     {
         return repository.findAll();
@@ -48,23 +49,6 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
     }
 
     @Override
-    public void verschuif(int id,Spelkaart spelkaart) throws SpelkaartNotFound, SpelkaartMaxPositionReached
-    {
-//        Spelkaart spelkaart = find(id);
-
-        Cirkelsessie cirkelsessie = cirkelsessieRepository.findOne(id);
-
-        if (spelkaart.getPositie() == cirkelsessie.getAantalCirkels())
-        {
-            throw new SpelkaartMaxPositionReached();
-        }
-
-        spelkaart.setPositie(spelkaart.getPositie() + 1);
-
-        repository.save(spelkaart);
-    }
-
-    @Override
     public void update(int id, Spelkaart spelkaart) throws SpelkaartNotFound
     {
         Spelkaart old = find(id);
@@ -73,7 +57,7 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
         old.setKaart(spelkaart.getKaart());
         old.setPositie(spelkaart.getPositie());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override
@@ -82,5 +66,21 @@ public class SpelkaartenServiceImpl implements SpelkaartenService
         Spelkaart spelkaart = find(id);
 
         repository.delete(spelkaart);
+    }
+
+    @Override
+    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
+    {
+        Spelkaart spelkaart = find(id);
+
+
+        if (spelkaart.getPositie() == spelkaart.getCirkelsessie().getAantalCirkels())
+        {
+            throw new SpelkaartMaxPositionReached();
+        }
+
+        spelkaart.setPositie(spelkaart.getPositie() + 1);
+
+        repository.save(spelkaart);
     }
 }

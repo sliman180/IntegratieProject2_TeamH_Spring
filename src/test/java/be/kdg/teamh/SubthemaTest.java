@@ -1,19 +1,8 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Subthema;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -22,30 +11,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SubthemaTest
+public class SubthemaTest extends ApiTest
 {
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Before
-    public void setUp()
-    {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-    }
-
     @Test
     public void indexSubthema() throws Exception
     {
-        this.mvc.perform(get("/api/subthemas").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/subthemas").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -55,10 +26,10 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/subthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/subthemas").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].naam", is("Houffalize")))
@@ -70,7 +41,7 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema(null, null, null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test
@@ -78,10 +49,10 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.naam", is("Houffalize")))
             .andExpect(jsonPath("$.beschrijving", is("Route 6")));
@@ -92,10 +63,10 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/subthemas/2").accept(MediaType.APPLICATION_JSON));
+        this.mvc.perform(get("/api/subthemas/2").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()));
     }
 
     @Test
@@ -103,15 +74,15 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", null));
 
-        this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.naam", is("Houffalize")))
             .andExpect(jsonPath("$.beschrijving", is("Route 3")));
@@ -122,12 +93,12 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema(null, null, null));
 
-        this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -135,12 +106,12 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", null));
 
-        this.mvc.perform(put("/api/subthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/subthemas/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -148,13 +119,13 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/subthemas/1"))
+        this.mvc.perform(delete("/api/subthemas/1").header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/subthemas").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/subthemas").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -164,9 +135,9 @@ public class SubthemaTest
     {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/subthemas/2"));
+        this.mvc.perform(delete("/api/subthemas/2").header("Authorization", getAdminToken()));
     }
 }

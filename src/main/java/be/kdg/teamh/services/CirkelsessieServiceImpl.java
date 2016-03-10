@@ -1,11 +1,9 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Chat;
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Spelkaart;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
+import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
+import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     @Autowired
     private CirkelsessieRepository repository;
 
+    @Autowired
+    private GebruikerRepository gebruikerRepository;
+
     @Override
     public List<Cirkelsessie> all()
     {
@@ -29,11 +30,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void create(Cirkelsessie cirkelsessie)
+    public void create(int userId, Cirkelsessie cirkelsessie)
     {
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+
+        gebruiker.addCirkelsessie(cirkelsessie);
+        cirkelsessie.setGebruiker(gebruiker);
         cirkelsessie.setChat(new Chat(cirkelsessie.getNaam(), cirkelsessie));
 
         repository.save(cirkelsessie);
+
+
     }
 
     @Override
@@ -59,7 +66,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         old.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
         old.setAantalCirkels(cirkelsessie.getAantalCirkels());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
 
@@ -91,9 +98,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             throw new CirkelsessieNotFound();
         }
 
-        cirkelsessie.addSpelkaart(new Spelkaart(kaart));
+        cirkelsessie.addSpelkaart(new Spelkaart(kaart, cirkelsessie));
 
-        repository.save(cirkelsessie);
+        repository.saveAndFlush(cirkelsessie);
 
     }
 

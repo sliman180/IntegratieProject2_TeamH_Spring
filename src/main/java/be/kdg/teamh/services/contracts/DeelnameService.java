@@ -1,7 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
 
 import java.util.List;
 

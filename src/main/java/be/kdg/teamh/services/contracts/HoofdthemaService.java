@@ -1,7 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.exceptions.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 
 import java.util.List;
 

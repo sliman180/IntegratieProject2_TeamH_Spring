@@ -29,8 +29,9 @@
                     <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
                 </nav>
                 <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>
+                    <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
                     <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
+                    <a class="mdl-navigation__link" href="/#/auth/profile">Mijn Profiel</a>
                     <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
                 </nav>
             </div>
@@ -42,8 +43,9 @@
                 <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
             </nav>
             <nav ng-if="$root.loggedIn" class="mdl-navigation">
-                <a class="mdl-navigation__link" href="/#/organisaties">Organisaties</a>
+                <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
                 <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
+                <a class="mdl-navigation__link" href="/#/auth/profile">Mijn Profiel</a>
                 <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
             </nav>
         </div>
@@ -52,63 +54,12 @@
 
             <div class="mdl-grid" ng-view></div>
 
-            <!--
-
-            <footer class="mdl-mega-footer">
-                <div class="mdl-mega-footer__middle-section">
-
-                    <div class="mdl-mega-footer__drop-down-section">
-                        <label><input class="mdl-mega-footer__heading-checkbox" type="checkbox" checked></label>
-                        <h1 class="mdl-mega-footer__heading">Info</h1>
-                        <ul class="mdl-mega-footer__link-list">
-                            <li><a href="/#/">Over ons</a></li>
-                            <li><a href="/#/">Spelregels</a></li>
-                            <li><a href="/#/">Partners</a></li>
-                            <li><a href="/#/">Updates</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mdl-mega-footer__drop-down-section">
-                        <label><input class="mdl-mega-footer__heading-checkbox" type="checkbox" checked></label>
-                        <h1 class="mdl-mega-footer__heading">Cirkelsessies</h1>
-                        <ul class="mdl-mega-footer__link-list">
-                            <li><a href="/#/cirkelsessies">Alle sessies</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mdl-mega-footer__drop-down-section">
-                        <label><input class="mdl-mega-footer__heading-checkbox" type="checkbox" checked></label>
-                        <h1 class="mdl-mega-footer__heading">Account</h1>
-                        <ul class="mdl-mega-footer__link-list">
-                            <li ng-if="!$root.loggedIn"><a href="/#/auth">Aanmelden</a></li>
-                            <li ng-if="!$root.loggedIn"><a href="/#/">Registreren</a></li>
-                            <li ng-if="$root.loggedIn"><a href="/#/">Mijn profiel</a></li>
-                            <li ng-if="$root.loggedIn"><a href="" ng-click="logout()">Afmelden</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="mdl-mega-footer__drop-down-section">
-                        <label><input class="mdl-mega-footer__heading-checkbox" type="checkbox" checked></label>
-                        <h1 class="mdl-mega-footer__heading">FAQ</h1>
-                        <ul class="mdl-mega-footer__link-list">
-                            <li><a href="/#/">Vragen</a></li>
-                            <li><a href="/#/">Antwoorden</a></li>
-                            <li><a href="/#/">Contacteer ons</a></li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </footer>
-
-            -->
-
         </main>
 
     </div>
 
-    <script src="dist/scripts/vendor.min.js"></script>
-    <script src="dist/scripts/main.min.js"></script>
+    <script src="dist/scripts/vendor.js"></script>
+    <script src="dist/scripts/main.js"></script>
 
 </body>
 </html>

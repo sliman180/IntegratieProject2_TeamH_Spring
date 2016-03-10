@@ -24,6 +24,12 @@
                 controllerAs: "vm"
             })
 
+            .when("/auth/profile", {
+                templateUrl: "/dist/views/auth/profile.html",
+                controller: "ProfileController",
+                controllerAs: "vm"
+            })
+
             .when("/organisaties", {
                 templateUrl: "/dist/views/organisaties/index.html",
                 controller: "OrganisatieIndexController",

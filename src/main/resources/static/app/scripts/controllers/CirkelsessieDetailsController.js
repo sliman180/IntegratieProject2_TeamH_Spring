@@ -3,13 +3,16 @@
     "use strict";
 
 
-    function CirkelsessieDetailsController($route, $routeParams, CirkelsessieService, ChatService, KaartService) {
+    function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, ChatService, KaartService) {
 
         var vm = this;
+
+        vm.cirkelsessie = {};
 
         vm.getTimes = function (n) {
 
             var numbers = [];
+
             for (var i = n; i > 0; i--) {
                 numbers.push(i);
             }
@@ -18,14 +21,16 @@
         };
 
         vm.setCircleColor = function (number) {
+
             if (number % 2 == 0) {
+
                 return "#4985B9"
+
             } else {
+
                 return "white"
             }
         };
-
-        vm.cirkelsessie = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
@@ -35,13 +40,19 @@
             ChatService.createMessage(chatId, bericht).then(function () {
                 $route.reload();
             });
-        }
+        };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 $route.reload();
             });
-        }
+        };
+
+        vm.verschuifKaart = function (spelkaartId){
+            KaartService.verschuifKaart(spelkaartId).then(function(){
+                $route.reload();
+            });
+        };
 
 
     }

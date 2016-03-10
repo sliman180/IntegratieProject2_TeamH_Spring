@@ -1,19 +1,8 @@
 package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Hoofdthema;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -22,30 +11,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class HoofdthemaTest
+public class HoofdthemaTest extends ApiTest
 {
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Before
-    public void setUp() throws Exception
-    {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-    }
-
     @Test
     public void indexHoofdthema() throws Exception
     {
-        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -55,10 +26,10 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].naam", is("Voetbal")))
@@ -70,7 +41,7 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema(null, null, null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -78,10 +49,10 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/hoofdthemas/1").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/hoofdthemas/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.naam", is("Voetbal")))
             .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
@@ -92,10 +63,10 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/hoofdthemas/2").accept(MediaType.APPLICATION_JSON));
+        this.mvc.perform(get("/api/hoofdthemas/2").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()));
     }
 
     @Test
@@ -103,15 +74,15 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", null, null));
 
-        this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/hoofdthemas/1").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/hoofdthemas/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.naam", is("Voetbal")))
             .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
@@ -122,12 +93,12 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Hoofdthema(null, null, null, null));
 
-        this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/hoofdthemas/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -135,12 +106,12 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Vernieuwd voetbalveld", null, null));
 
-        this.mvc.perform(put("/api/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/hoofdthemas/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test
@@ -148,13 +119,13 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/hoofdthemas/1"))
+        this.mvc.perform(delete("/api/hoofdthemas/1").header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/hoofdthemas").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -164,9 +135,9 @@ public class HoofdthemaTest
     {
         String json = objectMapper.writeValueAsString(new Hoofdthema("Voetbal", "Nieuw voetbalveld", null, null));
 
-        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/hoofdthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/hoofdthemas/2"));
+        this.mvc.perform(delete("/api/hoofdthemas/2").header("Authorization", getAdminToken()));
     }
 }
