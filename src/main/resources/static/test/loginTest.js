@@ -15,8 +15,9 @@ describe("On the home page", function(){
 
 
     it("user should be able to login", function(){
-        browser.get('http://localhost:8080');
+        browser.get('http://teamh-spring.herokuapp.com/#/');
+
         login("user","user");
-        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/");
+        expect(browser.getCurrentUrl()).toEqual('http://teamh-spring.herokuapp.com/#/');
     });
 });
