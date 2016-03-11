@@ -1,4 +1,9 @@
+
 <style>
+
+    .tooltip{
+        font-size: 12px;
+    }
 
     .mdl-card__title {
         background-color: royalblue;
@@ -6,6 +11,7 @@
 
     #chat {
         overflow-y: auto;
+        height: 300px;
     }
 
     #chatContainer {
@@ -31,16 +37,38 @@
 
 
 <div id="cirkelsessie-header">
-    <span id="cirkelsessie-begroeting">Welkom {{ $root.naam }}</span>
+    <span id="cirkelsessie-begroeting">Welkom {{ $root.naam }} </span>
 
     <div id="header-buttons">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-            Deelnemen
-        </button>
+        <div ng-if="vm.cirkelsessie.deelnames.length > 0">
 
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-            Mijn cirkelsessies
-        </button>
+            <button ng-if="vm.isDeelnemer(vm.deelnames)"
+                    class="mdl-button mdl-js-button mdl-button--raised" disabled>
+                U hebt deelgenomen
+            </button>
+
+            <button ng-if="!vm.isDeelnemer(vm.deelnames)"
+                    ng-click="vm.doeDeelname()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                <span>Deelnemen</span>
+            </button>
+
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Mijn cirkelsessies
+            </button>
+        </div>
+
+        <div ng-if="vm.cirkelsessie.deelnames.length == 0">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                    ng-click="vm.doeDeelname()">
+                <span>Deelnemen</span>
+            </button>
+
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Mijn cirkelsessies
+            </button>
+        </div>
+
+
     </div>
 
 </div>
@@ -60,23 +88,217 @@
     </div>
     <div class="mdl-card__actions mdl-card--border">
 
-        <svg height="{{vm.cirkelsessie.aantalCirkels * 100}}" width="100%">
+            <svg    xmlns="http://www.w3.org/2000/svg" version="1.0"
+                    height="{{vm.cirkelsessie.aantalCirkels * 100}}" width="100%">
+                <g ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)">
+                    <circle stroke="black" stroke-width="2"
+                            ng-style="{ fill: vm.setCircleColor(i) }"
+                            ng-attr-cx="{{ vm.cirkelsessie.aantalCirkels * 50 }}"
+                            ng-attr-cy="{{ vm.cirkelsessie.aantalCirkels * 50 }}" r="{{i * 50}}">
+                    </circle>
+                </g>
+                <line x1="0" y1="{{vm.cirkelsessie.aantalCirkels * 50}}" x2="{{vm.cirkelsessie.aantalCirkels * 100}}"
+                      y2="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                      style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
 
-            <circle ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)" ng-style="{ stroke: black, fill: vm.setCircleColor(i) }"
-                    ng-attr-cx="{{ vm.cirkelsessie.aantalCirkels * 50 }}" ng-attr-cy="{{ vm.cirkelsessie.aantalCirkels * 50 }}" r="{{i * 50}}"></circle>
+                <line x1="{{vm.cirkelsessie.aantalCirkels * 50}}" y1="0" x2="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                      y2="{{vm.cirkelsessie.aantalCirkels * 100}}"
+                      style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
 
-            <line x1="0" y1="{{vm.cirkelsessie.aantalCirkels * 50}}" x2="{{vm.cirkelsessie.aantalCirkels * 100}}" y2="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:1}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            ng-attr-id="{{spelkaart.kaart.tekst}}"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                            y="10"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2}}"
+                            y="30"
+                            fill="white"
+                            stroke="w">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
 
-            <line x1="{{vm.cirkelsessie.aantalCirkels * 50}}" y1="0" x2="{{vm.cirkelsessie.aantalCirkels * 50}}" y2="{{vm.cirkelsessie.aantalCirkels * 100}}"
-                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:2}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                            y="60"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2}}"
+                            y="80"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
 
-        </svg>
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:3}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                            y="110"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="130"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:4}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                            y="160"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="180"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:5}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="210"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="230"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:6}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="260"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="280"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:7}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="310"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="330"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:8}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="360"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="380"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:9}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="410"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="430"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:10}">
+                    <rect    ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
+                             ng-mouseleave="vm.HideTooltip()"
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                            y="460"
+                            width="40" height="30" style="fill:#9C9C9C;"
+                            stroke="black" stroke-width="2">
+                    </rect>
+                    <text
+                            transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                            ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
+                            y="480"
+                            fill="white">
+                        {{spelkaart.kaart.tekst}}
+                    </text>
+                </g>
+
+                <!--tooltip-->
+
+                <text x="0" y="0" width="20" height="10" fill="black" id="tooltip" font-size="10"  visibility="hidden">Tooltip</text>
+
+            </svg>
 
     </div>
 
     <div class="mdl-card__menu">
-        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.cirkelsessie.deelnames.length}}">account_box</div>
+        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.cirkelsessie.deelnames.length}}">
+            account_box
+        </div>
 
                 <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
 
@@ -87,12 +309,13 @@
         </button>
 
         <!-- Right aligned menu below button -->
-        <button id="demo-menu-lower-right d"
+        <button id="demo-menu-lower-right-d"
                 class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">more_vert</i>
         </button>
 
-        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect">
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+            for="demo-menu-lower-right-d">
             <li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
             <li disabled class="mdl-menu__item">Wijzig</li>
             <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
@@ -140,47 +363,122 @@
         margin-bottom: 4%;
     }
 
-    #kaart {
-        margin: 1%;
-        height: 70px;
+    .kaart {
         min-height: 0;
         width: 100%;
-        position: inherit;
-        z-index: 0;
+        overflow: visible;
+        margin-bottom: 1%;
+        position: inherit !important;
+        border:1px solid black;
     }
+
+    .kaart-titel {
+        background-color:#9C9C9C;
+    }
+
+    .mdl-card__supporting-text{
+        overflow: visible !important;
+    }
+
+    /*dropdown voor kaart*/
+    .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        float:right;
+        position: relative;
+        display: inline-block;
+    }
+
+
+    .dropdown-content {
+        right:0;
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 999;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {background-color: #f1f1f1}
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #3e8e41;
+    }
+
+    .dropdown-menu{
+        top:5px !important;
+        position: inherit !important;
+        background-color: aliceblue;
+        text-align: center;
+    }
+
+    .dropdown-content{
+        cursor: pointer;
+    }
+
 </style>
 
+
+
 <div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
-    <div>
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">
-                <!-- Number badge -->Spelkaarten
-            </h2>
-            <span class="mdl-badge" data-badge="{{vm.cirkelsessie.spelkaarten.length}}"></span>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <div ng-repeat="spelkaart in vm.cirkelsessie.spelkaarten"
-                 class="demo-card-event mdl-card mdl-shadow--2dp" id="kaart">
+        <div>
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">
+                    <!-- Number badge -->Spelkaarten
+                </h2>
+                <span class="mdl-badge" data-badge="{{vm.spelkaarten.length}}"></span>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <div ng-repeat="spelkaart in  vm.spelkaarten | orderBy:'positie':true"
+                     class="mdl-card mdl-shadow--2dp kaart">
 
+                    <div class="mdl-card__title kaart-titel">
+                        <h2 class="mdl-card__title-text">
+                            {{spelkaart.kaart.tekst}} [{{spelkaart.positie}}]
+                        </h2>
+                    </div>
+                    <div class="mdl-card__menu dropdown-menu">
 
-                <div class="mdl-card__actions mdl-card--border">
-                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                        {{spelkaart.kaart.tekst}} [{{spelkaart.positie}}]
-                    </a>
-                    <!-- Right aligned menu below button -->
-                    <button id="demo-menu-lower-right {{spelkaart.id}}"
-                            class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons">more_vert</i>
-                    </button>
+                        <span>Positie: <b>{{spelkaart.positie}}</b> | <span ng-if="spelkaart.id>1">Aangemaakt door: <b>{{spelkaart.kaart.gebruiker}}</b></span></span>
+                        <div class="dropdown">
+                            <button class="dropbtn">Instellingen</button>
+                            <!--<ul class="dropdown-content">-->
+                                <!--<li ng-if="!vm.isDeelnemer(vm.deelnames)" disabled class="mdl-menu__item">Verplaats naar[{{spelkaart.positie + 1}}]</li>-->
+                                <!--<li ng-if="vm.isDeelnemer(vm.deelnames)" ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar[{{spelkaart.positie + 1}}]</li>-->
+                                <!--<li disabled class="mdl-menu__item">Meer informatie</li>-->
+                            <!--</ul>-->
+                            <div class="dropdown-content">
+                                <a ng-if="!vm.isDeelnemer(vm.deelnames)" disabled>Verplaats naar[{{spelkaart.positie + 1}}]</a>
+                                <a ng-if="vm.isDeelnemer(vm.deelnames)" ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats naar[{{spelkaart.positie + 1}}]</a>
+                                <a>Meer informatie</a>
+                            </div>
+                        </div>
 
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="demo-menu-lower-right {{spelkaart.id}}">
-                        <li ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar [{{spelkaart.positie + 1}}]</li>
-                        <li disabled class="mdl-menu__item">Verwijder</li>
-                    </ul>
+                    </div>
                 </div>
+
             </div>
         </div>
+
         <div class="mdl-card__actions mdl-card--border">
             <p></p>
         </div>
@@ -197,37 +495,50 @@
                     <label class="mdl-textfield__label" for="imageUrl">Afbeelding urlt</label>
                 </div>
 
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                <button
+                        ng-if="!vm.isDeelnemer(vm.deelnames)"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
+                    Kaart toevoegen
+                </button>
+                <button
+                        ng-if="vm.isDeelnemer(vm.deelnames)"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
                     Kaart toevoegen
                 </button>
             </form>
         </div>
-    </div>
     <div id="chatContainer">
         <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">
                 <!-- Number badge -->Chat
             </h2>
-            <span class="mdl-badge" data-badge="{{vm.cirkelsessie.chat.berichten.length}}"></span>
+            <span class="mdl-badge" data-badge="{{vm.chat.berichten.length}}"></span>
         </div>
         <div class="mdl-card__supporting-text">
-            {{vm.cirkelsessie.chat.naam}}
+            {{vm.chat.naam}}
         </div>
         <div class="mdl-card__actions mdl-card--border" id="chat">
-            <div ng-repeat="bericht in vm.cirkelsessie.chat.berichten">
+            <div ng-repeat="bericht in  vm.chat.berichten | orderBy:'datum'">
                 <p>{{bericht.datum | date:'dd-MM-yyyy'}} | {{bericht.gebruiker.gebruikersnaam}}: {{bericht.tekst}}</p>
 
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            <form ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)" action="">
+            <form ng-submit="vm.createMessage(vm.chat.id, bericht)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
                     <label class="mdl-textfield__label" for="tekst">Bericht</label>
                 </div>
 
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                <button
+                        ng-if="vm.isDeelnemer(vm.deelnames)"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Post
+                </button>
+                <button
+                        ng-if="!vm.isDeelnemer(vm.deelnames)"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
                     Post
                 </button>
 
@@ -235,6 +546,7 @@
 
         </div>
     </div>
-
+    </div>
 </div>
+
 

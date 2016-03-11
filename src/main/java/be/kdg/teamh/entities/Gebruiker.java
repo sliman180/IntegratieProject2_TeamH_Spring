@@ -11,8 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "gebruikers")
-public class Gebruiker implements Serializable
-{
+public class Gebruiker implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,18 +24,21 @@ public class Gebruiker implements Serializable
     private String wachtwoord;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Kaart> kaarten = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Deelname.class, property = "id")
     private List<Deelname> deelnames = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Commentaar> commentaren = new ArrayList<>();
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Organisatie> organisaties = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -48,21 +50,18 @@ public class Gebruiker implements Serializable
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<Cirkelsessie> cirkelsessies;
+    private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    public Gebruiker()
-    {
+    public Gebruiker() {
         //
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord)
-    {
+    public Gebruiker(String gebruikersnaam, String wachtwoord) {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen)
-    {
+    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen) {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.rollen = rollen;
@@ -71,8 +70,8 @@ public class Gebruiker implements Serializable
     public void addCirkelsessie(Cirkelsessie cirkelsessie) {
         this.cirkelsessies.add(cirkelsessie);
     }
-    public int getId()
-    {
+
+    public int getId() {
         return id;
     }
 
@@ -80,83 +79,67 @@ public class Gebruiker implements Serializable
         this.id = id;
     }
 
-    public String getGebruikersnaam()
-    {
+    public String getGebruikersnaam() {
         return gebruikersnaam;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam)
-    {
+    public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public String getWachtwoord()
-    {
+    public String getWachtwoord() {
         return wachtwoord;
     }
 
-    public void setWachtwoord(String wachtwoord)
-    {
+    public void setWachtwoord(String wachtwoord) {
         this.wachtwoord = wachtwoord;
     }
 
-    public List<Hoofdthema> getHoofdthemas()
-    {
+    public List<Hoofdthema> getHoofdthemas() {
         return hoofdthemas;
     }
 
-    public void setHoofdthemas(List<Hoofdthema> hoofdthemas)
-    {
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
         this.hoofdthemas = hoofdthemas;
     }
 
-    public List<Kaart> getKaarten()
-    {
+    public List<Kaart> getKaarten() {
         return kaarten;
     }
 
-    public void setKaarten(List<Kaart> kaarten)
-    {
+    public void setKaarten(List<Kaart> kaarten) {
         this.kaarten = kaarten;
     }
 
-    public List<Deelname> getDeelnames()
-    {
+    public List<Deelname> getDeelnames() {
         return deelnames;
     }
 
-    public void setDeelnames(List<Deelname> deelnames)
-    {
+    public void setDeelnames(List<Deelname> deelnames) {
         this.deelnames = deelnames;
     }
 
-    public List<Commentaar> getCommentaren()
-    {
+    public List<Commentaar> getCommentaren() {
         return commentaren;
     }
 
-    public void setCommentaren(List<Commentaar> commentaren)
-    {
+    public void setCommentaren(List<Commentaar> commentaren) {
         this.commentaren = commentaren;
     }
 
-    public List<Bericht> getBerichten()
-    {
+    public List<Bericht> getBerichten() {
         return berichten;
     }
 
-    public void setBerichten(List<Bericht> berichten)
-    {
+    public void setBerichten(List<Bericht> berichten) {
         this.berichten = berichten;
     }
 
-    public List<Rol> getRollen()
-    {
+    public List<Rol> getRollen() {
         return rollen;
     }
 
-    public void setRollen(List<Rol> rollen)
-    {
+    public void setRollen(List<Rol> rollen) {
         this.rollen = rollen;
     }
 
@@ -164,10 +147,13 @@ public class Gebruiker implements Serializable
         return cirkelsessies;
     }
 
-    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
     }
 
+    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
+        this.cirkelsessies = cirkelsessies;
+    }
 
     public List<Organisatie> getOrganisaties() {
         return organisaties;
@@ -177,23 +163,34 @@ public class Gebruiker implements Serializable
         this.organisaties = organisaties;
     }
 
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
-        this.cirkelsessies = cirkelsessies;
-    }
-
-    public void addRol(Rol rol){
+    public void addRol(Rol rol) {
         rollen.add(rol);
     }
+
+    public void addDeelname(Deelname deelname) {
+        this.deelnames.add(deelname);
+    }
+
+    public void addOrganisatie(Organisatie organisatie) {
+        this.organisaties.add(organisatie);
+    }
+
+    public void addKaart(Kaart kaart) {
+        this.kaarten.add(kaart);
+    }
+
+    public void addBericht(Bericht bericht) {
+        this.berichten.add(bericht);
+    }
+
+
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
@@ -204,8 +201,7 @@ public class Gebruiker implements Serializable
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = gebruikersnaam.hashCode();
 
         result = 31 * result + wachtwoord.hashCode();

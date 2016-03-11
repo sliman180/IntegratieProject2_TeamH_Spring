@@ -13,8 +13,8 @@
 
         .run(function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
-            $rootScope.$on('$viewContentLoaded', function() {
-                $timeout(function() {
+            $rootScope.$on('$viewContentLoaded', function () {
+                $timeout(function () {
                     componentHandler.upgradeAllRegistered();
                 }, 0);
             });
@@ -36,7 +36,7 @@
 
             if (data) {
 
-                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (data) {
 
                     $rootScope.id = data.id;
                     $rootScope.naam = data.gebruikersnaam;
@@ -49,4 +49,6 @@
 
         });
 
+
 })(window.angular);
+

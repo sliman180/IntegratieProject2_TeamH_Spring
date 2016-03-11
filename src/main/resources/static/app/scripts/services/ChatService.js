@@ -15,6 +15,14 @@
 
         };
 
+        exports.getChat = function (cirkelsessieId) {
+
+            return $http.get("/api/cirkelsessies/" + cirkelsessieId + "/chat").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         return exports;
 

@@ -5,8 +5,7 @@ import be.kdg.teamh.exceptions.HoofdthemaNotFound;
 
 import java.util.List;
 
-public interface HoofdthemaService
-{
+public interface HoofdthemaService {
     List<Hoofdthema> all();
 
     void create(Hoofdthema hoofdthema);

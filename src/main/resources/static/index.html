@@ -8,58 +8,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic">
+    <link rel="stylesheet"
+          href="//fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="dist/styles/main.min.css">
 
 </head>
 <body ng-cloak>
 
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-        <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
                     <span class="mdl-layout-title">
                         <a class="mdl-navigation__header" href="/#/">Kandoe</a>
                     </span>
 
-                <div class="mdl-layout-spacer"></div>
-                <nav ng-if="!$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
-                    <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
-                </nav>
-                <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                    <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
-                    <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
-                    <a class="mdl-navigation__link" href="/#/auth/profile">Mijn Profiel</a>
-                    <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
-                </nav>
-            </div>
-        </header>
-
-        <div class="mdl-layout__drawer">
-            <nav ng-if="!$root.loggedIn" class="mdl-navigation">
+            <div class="mdl-layout-spacer"></div>
+            <nav ng-if="!$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
                 <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
             </nav>
-            <nav ng-if="$root.loggedIn" class="mdl-navigation">
+            <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
                 <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
                 <a class="mdl-navigation__link" href="/#/auth/profile">Mijn Profiel</a>
                 <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
             </nav>
         </div>
+    </header>
 
-        <main class="mdl-layout__content">
-
-            <div class="mdl-grid" ng-view></div>
-
-        </main>
-
+    <div class="mdl-layout__drawer">
+        <nav ng-if="!$root.loggedIn" class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
+            <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
+        </nav>
+        <nav ng-if="$root.loggedIn" class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
+            <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
+            <a class="mdl-navigation__link" href="/#/auth/profile">Mijn Profiel</a>
+            <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
+        </nav>
     </div>
 
-    <script src="dist/scripts/vendor.js"></script>
-    <script src="dist/scripts/main.js"></script>
+    <main class="mdl-layout__content">
+
+        <div class="mdl-grid" ng-view></div>
+
+    </main>
+
+</div>
+
+<script src="dist/scripts/vendor.js"></script>
+<script src="dist/scripts/main.js"></script>
 
 </body>
 </html>

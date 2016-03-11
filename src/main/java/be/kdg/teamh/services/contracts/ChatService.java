@@ -7,8 +7,7 @@ import be.kdg.teamh.exceptions.GebruikerNotFound;
 
 import java.util.List;
 
-public interface ChatService
-{
+public interface ChatService {
     List<Chat> all();
 
     void create(Chat chat);

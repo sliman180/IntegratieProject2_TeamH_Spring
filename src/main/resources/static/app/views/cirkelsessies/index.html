@@ -32,22 +32,51 @@
         cursor: pointer;
     }
 
-</style>
+    #cirkelsessie-title{
+        font-size: 2.5em;
+        border-bottom: 2px solid gray;
+        padding-bottom: 3%;
+    }
 
-<!--<div class="mdl-cell mdl-cell&#45;&#45;6-col">-->
-<!--<ul class="mdl-list">-->
-<!--<li class="mdl-list__item" ng-repeat="cirkelsessie in vm.cirkelsessies">-->
-<!--<span class="mdl-list__item-primary-content">{{ cirkelsessie.naam }}</span>-->
-<!--<span class="mdl-list__item-primary-content">{{ cirkelsessie.aantalCirkels }}</span>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</div>-->
+    #header-buttons{
+        float: right;
+    }
+
+    #cirkelsessie-filter{
+        border-bottom: 2px solid gray;
+        margin: 1% 0;
+        padding: 1%;
+    }
+
+    .demo-card-wide{
+        margin-right: 1%;
+        width: 350px !important;
+        float: left;
+    }
+
+</style>
 
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp" ng-repeat="cirkelsessie in vm.cirkelsessies">
+    <div id="cirkelsessie-title" class="mdl-card__title-text">
+        <span>Alle cirkelsessies({{vm.cirkelsessies.length}})</span>
+        <!--<div id="header-buttons">-->
+            <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
+                <!--Mijn cirkelsessies-->
+            <!--</button>-->
+        <!--</div>-->
+    </div>
+    <div id="cirkelsessie-filter" class="mdl-card__title-text">
+        <span>filter</span>
+        <!--<div id="header-buttons">-->
+        <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
+        <!--Mijn cirkelsessies-->
+        <!--</button>-->
+        <!--</div>-->
+    </div>
 
-        <div id="">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" ng-repeat="cirkelsessie in vm.cirkelsessies | orderBy:'startDatum'">
+        <div class="">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>

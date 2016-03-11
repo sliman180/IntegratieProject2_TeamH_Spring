@@ -5,8 +5,7 @@ import be.kdg.teamh.exceptions.SubthemaNotFound;
 
 import java.util.List;
 
-public interface SubthemaService
-{
+public interface SubthemaService {
     List<Subthema> all();
 
     void create(Subthema subthema);

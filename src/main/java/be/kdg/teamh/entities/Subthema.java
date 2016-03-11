@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -8,8 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "subthemas")
-public class Subthema implements Serializable
-{
+public class Subthema implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,85 +23,73 @@ public class Subthema implements Serializable
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Hoofdthema hoofdthema;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Cirkelsessie.class, property = "id")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Kaart> kaarten = new ArrayList<>();
 
-    public Subthema()
-    {
+    public Subthema() {
         //
     }
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema)
-    {
+    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema) {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
 
     }
 
-    public int getId()
-    {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public String getBeschrijving()
-    {
+    public String getBeschrijving() {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving)
-    {
+    public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
     }
 
-    public Hoofdthema getHoofdthema()
-    {
+    public Hoofdthema getHoofdthema() {
         return hoofdthema;
     }
 
-    public void setHoofdthema(Hoofdthema hoofdthema)
-    {
+    public void setHoofdthema(Hoofdthema hoofdthema) {
         this.hoofdthema = hoofdthema;
     }
 
-    public List<Cirkelsessie> getCirkelsessies()
-    {
+    public List<Cirkelsessie> getCirkelsessies() {
         return cirkelsessies;
     }
 
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies)
-    {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public List<Kaart> getKaarten()
-    {
+    public List<Kaart> getKaarten() {
         return kaarten;
     }
 
-    public void setKaarten(List<Kaart> kaarten)
-    {
+    public void setKaarten(List<Kaart> kaarten) {
         this.kaarten = kaarten;
     }
 }

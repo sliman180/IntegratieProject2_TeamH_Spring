@@ -19,25 +19,22 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController
-{
+public class AuthController {
     @Autowired
     private GebruikerService service;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Token login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials
-    {
+    public Token login(@RequestBody Gebruiker credentials) throws GebruikerNotFound, InvalidCredentials {
         Gebruiker gebruiker = service.findByLogin(credentials);
 
 
         return new Token(Jwts.builder().setSubject(String.valueOf(gebruiker.getId()))
-            .claim("rollen", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
-            .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
+                .claim("rollen", gebruiker.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))
+                .setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "kandoe").compact());
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public void register(@RequestBody Gebruiker credentials)
-    {
+    public void register(@RequestBody Gebruiker credentials) {
         service.create(credentials);
     }
 }
