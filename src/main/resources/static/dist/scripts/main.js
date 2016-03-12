@@ -112,6 +112,13 @@
                 controllerAs: "vm"
             })
 
+            .when ("/deelnames", {
+                templateUrl: "/dist/views/deelnames/index.html",
+                controller: "DeelnameIndexController",
+                controllerAs: "vm"
+            })
+
+
             .otherwise({
                 redirectTo: "/"
             });
@@ -357,6 +364,14 @@
         exports.delete = function (id) {
 
             return $http.delete("/api/gebruikers/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getMijnDeelnames = function () {
+
+            return $http.get("/api/gebruikers/deelnames").then(function (response) {
                 return response.data;
             });
 
@@ -777,6 +792,29 @@
     }
 
     angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    DeelnameIndexController.$inject = ["GebruikerService"];
+    function DeelnameIndexController(GebruikerService) {
+
+        var vm = this;
+
+        vm.deelnames = [];
+
+
+            GebruikerService.getMijnDeelnames().then(function (data) {
+                vm.deelnames=data;
+            });
+
+
+    }
+
+    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
 
 })(window.angular);
 

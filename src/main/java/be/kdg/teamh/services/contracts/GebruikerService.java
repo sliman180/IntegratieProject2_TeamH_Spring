@@ -1,6 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
@@ -21,5 +22,7 @@ public interface GebruikerService {
     void delete(int id) throws GebruikerNotFound;
 
     List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound;
+
+    List<Deelname> findDeelnames(int userId) throws GebruikerNotFound;
 
 }

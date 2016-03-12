@@ -48,6 +48,13 @@
                 controllerAs: "vm"
             })
 
+            .when ("/deelnames", {
+                templateUrl: "/dist/views/deelnames/index.html",
+                controller: "DeelnameIndexController",
+                controllerAs: "vm"
+            })
+
+
             .otherwise({
                 redirectTo: "/"
             });

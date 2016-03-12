@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -53,6 +54,14 @@ public class GebruikerController {
     public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound {
         return service.showCirkelsessies(id);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/deelnames", method = RequestMethod.GET)
+    public List<Deelname> getDeelnames(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
+
+        return service.findDeelnames(getUserId(token));
+    }
+
 
 
     private boolean isAdmin(String token) {

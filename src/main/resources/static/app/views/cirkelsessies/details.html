@@ -55,6 +55,12 @@
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                 Mijn cirkelsessies
             </button>
+
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Mijn Deelnames
+            </button>
+
+
         </div>
 
         <div ng-if="vm.cirkelsessie.deelnames.length == 0">
@@ -65,6 +71,10 @@
 
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                 Mijn cirkelsessies
+            </button>
+
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Mijn Deelnames
             </button>
         </div>
 
@@ -112,7 +122,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
                             y="10"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -121,7 +131,7 @@
                             y="30"
                             fill="white"
                             stroke="w">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -131,7 +141,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
                             y="60"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -139,7 +149,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2}}"
                             y="80"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -149,7 +159,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
                             y="110"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -157,7 +167,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="130"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -167,7 +177,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
                             y="160"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -175,7 +185,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="180"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -185,7 +195,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="210"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -193,7 +203,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="230"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -203,7 +213,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="260"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -211,7 +221,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="280"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -221,7 +231,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="310"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -229,7 +239,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="330"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -239,7 +249,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="360"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -247,7 +257,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="380"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -257,7 +267,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="410"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -265,7 +275,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="430"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                        {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -275,7 +285,7 @@
                             transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
                             y="460"
-                            width="40" height="30" style="fill:#9C9C9C;"
+                            width="50" height="30" style="fill:#9C9C9C;"
                             stroke="black" stroke-width="2">
                     </rect>
                     <text
@@ -283,7 +293,7 @@
                             ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 + 2 }}"
                             y="480"
                             fill="white">
-                        {{spelkaart.kaart.tekst}}
+                       {{spelkaart.kaart.tekst | limitTo: 4}}..
                     </text>
                 </g>
 
@@ -467,7 +477,7 @@
                                 <!--<li disabled class="mdl-menu__item">Meer informatie</li>-->
                             <!--</ul>-->
                             <div class="dropdown-content">
-                                <a ng-if="!vm.isDeelnemer(vm.deelnames)" disabled>Verplaats naar[{{spelkaart.positie + 1}}]</a>
+                                <a ng-if="!vm.isDeelnemer(vm.deelnames)" disabled>Verplaats naar [{{spelkaart.positie + 1}}]</a>
                                 <a ng-if="vm.isDeelnemer(vm.deelnames)" ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats naar[{{spelkaart.positie + 1}}]</a>
                                 <a>Meer informatie</a>
                             </div>

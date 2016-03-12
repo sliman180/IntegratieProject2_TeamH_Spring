@@ -92,6 +92,14 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
+    public List<Deelname> findDeelnames(int userId) throws GebruikerNotFound {
+
+        Gebruiker gebruiker = find(userId);
+
+        return gebruiker.getDeelnames();
+    }
+
+    @Override
     public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound {
         return find(id).getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
     }
