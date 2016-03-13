@@ -1,5 +1,8 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.dtos.Token;
+import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.entities.Subthema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -12,9 +15,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -51,7 +58,7 @@ public class SubthemaTest {
     public void createSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/subthemas").contentType(MediaType.APPLICATION_JSON))
@@ -65,14 +72,14 @@ public class SubthemaTest {
     public void createSubthema_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema(null, null, null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test
     public void showSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/subthemas/1").contentType(MediaType.APPLICATION_JSON))
@@ -85,7 +92,7 @@ public class SubthemaTest {
     public void showSubthema_nonExistingSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/subthemas/2").accept(MediaType.APPLICATION_JSON));
@@ -95,7 +102,7 @@ public class SubthemaTest {
     public void updateSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", null));
@@ -113,7 +120,7 @@ public class SubthemaTest {
     public void updateHoofdthema_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema(null, null, null));
@@ -125,7 +132,7 @@ public class SubthemaTest {
     public void updateSubthema_nonExistingSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 3", null));
@@ -137,7 +144,7 @@ public class SubthemaTest {
     public void deleteSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/subthemas/1"))
@@ -152,9 +159,17 @@ public class SubthemaTest {
     public void deleteSubthema_nonExistingSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Subthema("Houffalize", "Route 6", null));
 
-        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/subthemas/2"));
     }
+
+    private String getUserToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
+    }
+
 }

@@ -51,30 +51,12 @@
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                 <span>Deelnemen</span>
             </button>
-
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Mijn cirkelsessies
-            </button>
-
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Mijn Deelnames
-            </button>
-
-
         </div>
 
         <div ng-if="vm.cirkelsessie.deelnames.length == 0">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                     ng-click="vm.doeDeelname()">
                 <span>Deelnemen</span>
-            </button>
-
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Mijn cirkelsessies
-            </button>
-
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                Mijn Deelnames
             </button>
         </div>
 
@@ -89,8 +71,9 @@
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{vm.cirkelsessie.startDatum |
-        date:'dd/MM/yyyy HH:mm'}}
+        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: <b>{{vm.cirkelsessie.startDatum
+        |
+        date:'dd/MM/yyyy HH:mm'}}</b> <span ng-if="vm.cirkelsessie.subthema!=null"> | Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
@@ -470,7 +453,7 @@
                 </div>
                 <div class="mdl-card__menu dropdown-menu">
 
-                    <span>Positie: <b>{{spelkaart.positie}}</b> | <span ng-if="spelkaart.id>1">Aangemaakt door: <b>{{spelkaart.kaart.gebruiker}}</b></span></span>
+                    <span>Positie: <b>{{spelkaart.positie}}</b>  <span ng-if="spelkaart.id>1"> | Aangemaakt door: <b>{{spelkaart.kaart.gebruiker}}</b></span></span>
 
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>

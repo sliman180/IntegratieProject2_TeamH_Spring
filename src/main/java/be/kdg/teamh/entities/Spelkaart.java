@@ -73,5 +73,4 @@ public class Spelkaart implements Serializable {
         this.positie = positie;
     }
 
-
 }

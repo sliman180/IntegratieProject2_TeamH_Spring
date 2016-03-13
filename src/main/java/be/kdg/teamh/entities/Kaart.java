@@ -29,11 +29,12 @@ public class Kaart implements Serializable {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "gebruikersnaam")
     private Gebruiker gebruiker;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
+    private Subthema subthema;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Commentaar> commentaren = new ArrayList<>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Subthema> subthemas = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -102,18 +103,6 @@ public class Kaart implements Serializable {
         this.commentaren.add(commentaar);
     }
 
-    public List<Subthema> getSubthemas() {
-        return subthemas;
-    }
-
-    public void setSubthemas(List<Subthema> subthemas) {
-        this.subthemas = subthemas;
-    }
-
-    public void addSubthema(Subthema subthema) {
-        this.subthemas.add(subthema);
-    }
-
     public List<Spelkaart> getSpelkaarten() {
         return spelkaarten;
     }
@@ -124,5 +113,13 @@ public class Kaart implements Serializable {
 
     public void addSpelkaart(Spelkaart spelkaart) {
         this.spelkaarten.add(spelkaart);
+    }
+
+    public Subthema getSubthema() {
+        return subthema;
+    }
+
+    public void setSubthema(Subthema subthema) {
+        this.subthema = subthema;
     }
 }

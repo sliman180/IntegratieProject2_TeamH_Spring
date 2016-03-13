@@ -3,6 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.SubthemaNotFound;
 import be.kdg.teamh.repositories.*;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.joda.time.DateTime;
@@ -31,6 +32,9 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     @Autowired
     private ChatRepository chatRepository;
 
+    @Autowired
+    private SubthemaRepository subthemaRepository;
+
     @Override
     public List<Cirkelsessie> all() {
         return repository.findAll();
@@ -56,6 +60,35 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         gebruikerRepository.save(gebruiker);
 
 
+    }
+
+    @Override
+    public void create(int userId, int subthemaId, Cirkelsessie cirkelsessie) throws SubthemaNotFound, GebruikerNotFound {
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+        Subthema subthema = subthemaRepository.findOne(subthemaId);
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        Chat chat = new Chat((cirkelsessie.getNaam()), cirkelsessie);
+        Chat savedChat = chatRepository.save(chat);
+
+
+        cirkelsessie.setGebruiker(gebruiker);
+        cirkelsessie.setChat(savedChat);
+        cirkelsessie.setSubthema(subthema);
+        Cirkelsessie savedCirkelsessie = repository.save(cirkelsessie);
+
+        subthema.addCirkelsessie(savedCirkelsessie);
+        subthemaRepository.save(subthema);
+
+        gebruiker.addCirkelsessie(savedCirkelsessie);
+        gebruikerRepository.save(gebruiker);
     }
 
     @Override

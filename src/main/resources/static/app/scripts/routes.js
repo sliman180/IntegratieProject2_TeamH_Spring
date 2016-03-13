@@ -60,6 +60,17 @@
                 controllerAs: "vm"
             })
 
+            .when ("/subthemas", {
+                templateUrl: "/dist/views/subthemas/index.html",
+                controller: "SubthemaIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas/details/:id", {
+                templateUrl: "/dist/views/subthemas/details.html",
+                controller: "SubthemaDetailsController",
+                controllerAs: "vm"
+            })
 
             .otherwise({
                 redirectTo: "/"

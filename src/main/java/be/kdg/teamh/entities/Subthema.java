@@ -26,11 +26,15 @@ public class Subthema implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Hoofdthema hoofdthema;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Gebruiker gebruiker;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Cirkelsessie.class, property = "id")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Kaart.class, property = "id")
     private List<Kaart> kaarten = new ArrayList<>();
 
     public Subthema() {
@@ -91,5 +95,21 @@ public class Subthema implements Serializable {
 
     public void setKaarten(List<Kaart> kaarten) {
         this.kaarten = kaarten;
+    }
+
+    public void addKaart(Kaart kaart) {
+        kaarten.add(kaart);
+    }
+
+    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+        cirkelsessies.add(cirkelsessie);
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 }

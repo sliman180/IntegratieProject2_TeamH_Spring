@@ -1,9 +1,6 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.Hoofdthema;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import io.jsonwebtoken.Claims;
@@ -68,6 +65,13 @@ public class GebruikerController {
     public List<Hoofdthema> getHoofdthemas(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
 
         return service.find(getUserId(token)).getHoofdthemas();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/subthemas", method = RequestMethod.GET)
+    public List<Subthema> getSubthemas(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
+
+        return service.find(getUserId(token)).getSubthemas();
     }
 
 

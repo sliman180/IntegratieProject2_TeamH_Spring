@@ -104,4 +104,8 @@ public class Hoofdthema implements Serializable {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+
+    public void addSubthema(Subthema subthema) {
+        this.subthemas.add(subthema);
+    }
 }

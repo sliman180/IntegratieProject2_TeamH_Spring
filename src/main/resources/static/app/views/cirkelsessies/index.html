@@ -125,8 +125,10 @@
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{cirkelsessie.startDatum |
-                date:'dd/MM/yyyy HH:mm'}}
+                Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: <b>{{cirkelsessie.startDatum
+                |
+                date:'dd/MM/yyyy HH:mm'}}</b>
+                <!--<span ng-if="cirkelsessie.subthema!=null"> | Subthema: <b ng-init="vm.getSubthema(cirkelsessie.subthema)">{{subthema.naam}}</b></span>-->
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
@@ -171,7 +173,7 @@
 
         <div class="mdl-card__supporting-text">
 
-            <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="">
+            <form ng-submit="vm.addCirkelsessie(cirkelsessie,subthemaId)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
@@ -202,6 +204,16 @@
                     <input class="mdl-textfield__input" min="2016-03-04" type="datetime-local" id="datum"
                            ng-model="cirkelsessie.startDatum">
                     <label class="mdl-textfield__label" for="datum"></label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <label>Subthema</label>
+                    <select ng-model="subthemaId">
+                        <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}">
+                            {{subthema.naam}}
+                        </option>
+                    </select>
+
                 </div>
 
                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect">

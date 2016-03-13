@@ -25,7 +25,6 @@ import org.springframework.web.util.NestedServletException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -49,7 +48,7 @@ public class CirkelsessieTest {
     @Before
     public void setUp() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-       //objectMapper.registerModule(new JodaModule());
+        //objectMapper.registerModule(new JodaModule());
     }
 
     @Test

@@ -3,6 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.SubthemaNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -27,9 +28,15 @@ public class CirkelsessieController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestBody Cirkelsessie cirkelsessie, @RequestHeader(name = "Authorization") String token) {
-        int userId = getUserId(token);
-        service.create(userId, cirkelsessie);
+        service.create(getUserId(token), cirkelsessie);
     }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(value = "subthema={id}", method = RequestMethod.POST)
+    public void create(@RequestBody Cirkelsessie cirkelsessie, @PathVariable("id") int subthemaId, @RequestHeader(name = "Authorization") String token) throws GebruikerNotFound, SubthemaNotFound {
+        service.create(getUserId(token), subthemaId, cirkelsessie);
+    }
+
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)

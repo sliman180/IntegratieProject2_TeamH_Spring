@@ -91,15 +91,15 @@ public class KaartenServiceImpl implements KaartenService {
     }
 
     @Override
-    public List<Subthema> getSubthemas(int id) throws KaartNotFound {
-        return find(id).getSubthemas();
+    public Subthema getSubthema(int id) throws KaartNotFound {
+        return find(id).getSubthema();
     }
 
     @Override
     public void addSubthema(int id, Subthema subthema) throws KaartNotFound {
         Kaart kaart = find(id);
 
-        kaart.addSubthema(subthema);
+        kaart.setSubthema(subthema);
 
         repository.save(kaart);
     }

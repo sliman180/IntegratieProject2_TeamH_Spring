@@ -21,7 +21,7 @@ public interface KaartenService {
 
     void delete(int id) throws KaartNotFound;
 
-    List<Subthema> getSubthemas(int id) throws KaartNotFound;
+    Subthema getSubthema(int id) throws KaartNotFound;
 
     void addSubthema(int id, Subthema subthema) throws KaartNotFound;
 

@@ -226,14 +226,10 @@ public class KaartTest {
         this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
-        json = objectMapper.writeValueAsString(new Subthema("Een subthema 2", "beschrijving", null));
-
-        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
-                .andExpect(status().isCreated());
-
-        this.mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].subthema", is(1)));
     }
 
     private String getUserToken() throws Exception {

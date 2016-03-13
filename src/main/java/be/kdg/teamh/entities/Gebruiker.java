@@ -28,6 +28,11 @@ public class Gebruiker implements Serializable {
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
+    private List<Subthema> subthemas = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Kaart.class, property = "id")
     private List<Kaart> kaarten = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -163,6 +168,14 @@ public class Gebruiker implements Serializable {
         this.organisaties = organisaties;
     }
 
+    public List<Subthema> getSubthemas() {
+        return subthemas;
+    }
+
+    public void setSubthemas(List<Subthema> subthemas) {
+        this.subthemas = subthemas;
+    }
+
     public void addRol(Rol rol) {
         rollen.add(rol);
     }
@@ -185,6 +198,10 @@ public class Gebruiker implements Serializable {
 
     public void addHoofdthema(Hoofdthema hoofdthema) {
         this.hoofdthemas.add(hoofdthema);
+    }
+
+    public void addSubthema(Subthema subthema) {
+        this.subthemas.add(subthema);
     }
 
 

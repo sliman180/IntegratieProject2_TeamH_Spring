@@ -54,9 +54,9 @@ public class KaartenController {
     }
 
     @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "{id}/subthemas", method = RequestMethod.GET)
-    public List<Subthema> subthemas(@PathVariable("id") int id) throws KaartNotFound {
-        return service.getSubthemas(id);
+    @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
+    public Subthema getSubthema(@PathVariable("id") int id) throws KaartNotFound {
+        return service.getSubthema(id);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
