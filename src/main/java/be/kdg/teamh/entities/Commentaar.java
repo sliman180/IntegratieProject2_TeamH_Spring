@@ -2,11 +2,12 @@ package be.kdg.teamh.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commentaren")
@@ -18,7 +19,9 @@ public class Commentaar implements Serializable {
     @NotNull
     private String tekst;
 
-    private LocalDateTime datum;
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime datum;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -35,6 +38,7 @@ public class Commentaar implements Serializable {
     public Commentaar(String tekst, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.gebruiker = gebruiker;
+        this.datum = new DateTime();
     }
 
     public Kaart getKaart() {
@@ -61,14 +65,6 @@ public class Commentaar implements Serializable {
         this.tekst = tekst;
     }
 
-    public LocalDateTime getDatum() {
-        return datum;
-    }
-
-    public void setDatum(LocalDateTime datum) {
-        this.datum = datum;
-    }
-
     public Gebruiker getGebruiker() {
         return gebruiker;
     }
@@ -77,5 +73,11 @@ public class Commentaar implements Serializable {
         this.gebruiker = gebruiker;
     }
 
+    public DateTime getDatum() {
+        return datum;
+    }
 
+    public void setDatum(DateTime datum) {
+        this.datum = datum;
+    }
 }

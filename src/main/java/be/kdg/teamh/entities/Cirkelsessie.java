@@ -3,12 +3,13 @@ package be.kdg.teamh.entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,8 @@ public class Cirkelsessie implements Serializable {
     private boolean isGesloten;
 
     @NotNull
-    private Date startDatum;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime startDatum;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
@@ -58,7 +60,7 @@ public class Cirkelsessie implements Serializable {
         //
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum, Chat chat) {
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, DateTime startDatum, Chat chat) {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.aantalCirkels = aantalCirkels;
@@ -76,7 +78,7 @@ public class Cirkelsessie implements Serializable {
         this.chat = chat;
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum, Subthema subthema, Gebruiker gebruiker, Chat chat) {
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, DateTime startDatum, Subthema subthema, Gebruiker gebruiker, Chat chat) {
         this.naam = naam;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
@@ -120,11 +122,11 @@ public class Cirkelsessie implements Serializable {
         this.aantalCirkels = aantalCirkels;
     }
 
-    public Date getStartDatum() {
+    public DateTime getStartDatum() {
         return startDatum;
     }
 
-    public void setStartDatum(Date startDatum) {
+    public void setStartDatum(DateTime startDatum) {
         this.startDatum = startDatum;
     }
 

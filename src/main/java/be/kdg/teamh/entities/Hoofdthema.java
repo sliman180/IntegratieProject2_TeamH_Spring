@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "hoofdthemas")
 public class Hoofdthema implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

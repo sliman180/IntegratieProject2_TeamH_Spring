@@ -5,12 +5,12 @@ import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.repositories.*;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -91,7 +91,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
 
     public void clone(int id) throws CirkelsessieNotFound {
         Cirkelsessie old = find(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new Date(), old.getSubthema(), old.getGebruiker(), old.getChat());
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new DateTime(), old.getSubthema(), old.getGebruiker(), old.getChat());
 
         clone.cloneDeelnames(old.getDeelnames());
 
@@ -133,7 +133,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     public List<Cirkelsessie> gepland() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        Date now = new Date();
+        DateTime now = new DateTime();
 
         for (Cirkelsessie cirkelsessie : temp) {
             if (cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) < 1)) {
@@ -148,7 +148,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     public List<Cirkelsessie> actief() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        Date now = new Date();
+        DateTime now = new DateTime();
 
         for (Cirkelsessie cirkelsessie : temp) {
             if (!cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) > 0)) {

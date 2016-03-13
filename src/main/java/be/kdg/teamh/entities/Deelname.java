@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -23,6 +26,10 @@ public class Deelname implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     private Gebruiker gebruiker;
 
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime datum;
+
     public Deelname() {
         //
     }
@@ -32,11 +39,13 @@ public class Deelname implements Serializable {
         this.medeorganisator = medeorganisator;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
+        this.datum = new DateTime();
     }
 
     public Deelname(int aangemaakteKaarten, boolean medeorganisator) {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
+        this.datum = new DateTime();
     }
 
 
@@ -78,5 +87,13 @@ public class Deelname implements Serializable {
 
     public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
+    }
+
+    public DateTime getDatum() {
+        return datum;
+    }
+
+    public void setDatum(DateTime datum) {
+        this.datum = datum;
     }
 }

@@ -32,28 +32,38 @@
         cursor: pointer;
     }
 
-    #cirkelsessie-title{
+    #cirkelsessie-title {
         font-size: 2.5em;
         border-bottom: 2px solid gray;
         padding-bottom: 3%;
     }
 
-    #header-buttons{
+    #header-buttons {
         float: right;
     }
 
-    #cirkelsessie-filter{
+    #cirkelsessie-filter {
         border-bottom: 2px solid gray;
         margin: 1% 0;
         padding: 1%;
     }
 
-    .demo-card-wide{
+    .demo-card-wide {
         margin-right: 1%;
         width: 350px !important;
         float: left;
     }
 
+    .type-cirkelsessie {
+        border: 1px solid black;
+        width: 100%;
+        padding: 1%;
+    }
+
+    .type-cirkelsessie div {
+        width: 31%;
+        float: left;
+    }
 </style>
 
 
@@ -61,28 +71,62 @@
     <div id="cirkelsessie-title" class="mdl-card__title-text">
         <span>Alle cirkelsessies({{vm.cirkelsessies.length}})</span>
         <!--<div id="header-buttons">-->
-            <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
-                <!--Mijn cirkelsessies-->
-            <!--</button>-->
-        <!--</div>-->
-    </div>
-    <div id="cirkelsessie-filter" class="mdl-card__title-text">
-        <span>filter</span>
-        <!--<div id="header-buttons">-->
         <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
         <!--Mijn cirkelsessies-->
         <!--</button>-->
         <!--</div>-->
     </div>
+    <div id="cirkelsessie-filter" class="mdl-card__title-text">
+        <div class="type-cirkelsessie">
+            <div>
+                <h4>Toon cirkelsessies</h4>
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                    <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" checked>
+                    <span class="mdl-radio__label">Alle</span>
+                </label>
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+                    <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2">
+                    <span class="mdl-radio__label">Actief</span>
+                </label>
 
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp" ng-repeat="cirkelsessie in vm.cirkelsessies | orderBy:'startDatum'">
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
+                    <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="2">
+                    <span class="mdl-radio__label">Gepland</span>
+                </label>
+            </div>
+            <div>
+                <h4>Sorteer op</h4>
+                <select>
+                    <option value="Startdatum">Startdatum</option>
+                    <option value="Aantal deelnemers">Aantal deelnemers</option>
+                </select>
+            </div>
+        </div>
+
+        <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label getmdl-select">-->
+        <!--<input class="mdl-textfield__input" type="text" id="sample2" value="Sorteer op" readonly tabIndex="-1">-->
+        <!--<label for="sample2">-->
+        <!--<i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>-->
+        <!--</label>-->
+        <!--<label for="sample2" class="mdl-textfield__label">Sorteer op</label>-->
+        <!--<ul for="sample2" class="mdl-menu mdl-menu&#45;&#45;bottom-left mdl-js-menu">-->
+        <!--<li class="mdl-menu__item">Startdatum</li>-->
+        <!--<li class="mdl-menu__item">Aantal deelnemers</li>-->
+        <!--</ul>-->
+        <!--</div>-->
+
+
+    </div>
+
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp"
+         ng-repeat="cirkelsessie in vm.cirkelsessies | orderBy:'startDatum'">
         <div class="">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
                 Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{cirkelsessie.startDatum |
-                date:'yyyy-MM-dd'}}
+                date:'dd/MM/yyyy HH:mm'}}
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
@@ -91,7 +135,9 @@
                 </a>
             </div>
             <div class="mdl-card__menu">
-                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{cirkelsessie.deelnames.length}}">account_box</div>
+                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{cirkelsessie.deelnames.length}}">
+                    account_box
+                </div>
 
                 <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
 
@@ -153,7 +199,7 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" min="2016-03-04" type="date" id="datum"
+                    <input class="mdl-textfield__input" min="2016-03-04" type="datetime-local" id="datum"
                            ng-model="cirkelsessie.startDatum">
                     <label class="mdl-textfield__label" for="datum"></label>
                 </div>

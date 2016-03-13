@@ -6,6 +6,7 @@ import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,7 +60,7 @@ public class DeelnameTest {
 
     @Test
     public void createDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -71,7 +72,7 @@ public class DeelnameTest {
 
     @Test
     public void showDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -91,7 +92,7 @@ public class DeelnameTest {
 
     @Test(expected = NestedServletException.class)
     public void showDeelname_nonExistingDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -107,7 +108,7 @@ public class DeelnameTest {
 
     @Test
     public void updateDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -132,7 +133,7 @@ public class DeelnameTest {
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -148,7 +149,7 @@ public class DeelnameTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
@@ -167,7 +168,7 @@ public class DeelnameTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteDeelname_nonExistingDeelname() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new DateTime(), null, null, null);
         String cirkelsessieJson = objectMapper.writeValueAsString(cirkelsessie);
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(cirkelsessieJson).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());

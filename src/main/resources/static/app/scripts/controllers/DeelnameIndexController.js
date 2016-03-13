@@ -9,9 +9,9 @@
         vm.deelnames = [];
 
 
-            GebruikerService.getMijnDeelnames().then(function (data) {
-                vm.deelnames=data;
-            });
+        GebruikerService.getMijnDeelnames().then(function (data) {
+            vm.deelnames = data;
+        });
 
 
     }

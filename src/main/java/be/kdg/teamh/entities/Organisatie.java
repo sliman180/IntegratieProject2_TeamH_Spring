@@ -80,4 +80,8 @@ public class Organisatie implements Serializable {
     public void setOrganisator(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
+
+    public void addHoofdthema(Hoofdthema hoofdthema) {
+        this.hoofdthemas.add(hoofdthema);
+    }
 }

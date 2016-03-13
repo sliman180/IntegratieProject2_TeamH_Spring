@@ -118,6 +118,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/hoofdthemas", {
+                templateUrl: "/dist/views/hoofdthemas/index.html",
+                controller: "HoofdthemaIndexController",
+                controllerAs: "vm"
+            })
+
 
             .otherwise({
                 redirectTo: "/"
@@ -394,6 +400,14 @@
 
         var exports = {};
 
+        exports.myHoofdthemas = function () {
+
+            return $http.get("/api/gebruikers/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.all = function () {
 
             return $http.get("/api/hoofdthemas").then(function (response) {
@@ -410,12 +424,19 @@
 
         };
 
+        exports.createWithOrganisation = function (hoofdthema, organisatieId) {
+
+            return $http.post("/api/hoofdthemas/organisatie=" + organisatieId, hoofdthema).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.create = function (hoofdthema) {
 
             return $http.post("/api/hoofdthemas", hoofdthema).then(function (response) {
                 return response.data;
             });
-
         };
 
         exports.update = function (hoofdthema) {
@@ -807,9 +828,9 @@
         vm.deelnames = [];
 
 
-            GebruikerService.getMijnDeelnames().then(function (data) {
-                vm.deelnames=data;
-            });
+        GebruikerService.getMijnDeelnames().then(function (data) {
+            vm.deelnames = data;
+        });
 
 
     }
@@ -829,6 +850,47 @@
     }
 
     angular.module("kandoe").controller("HomeController", HomeController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    HoofdthemaIndexController.$inject = ["$route", "HoofdthemaService", "OrganisatieService"];
+    function HoofdthemaIndexController($route, HoofdthemaService, OrganisatieService) {
+
+        var vm = this;
+
+        vm.hoofdthemas = [];
+
+        vm.organisaties = [];
+
+
+        HoofdthemaService.myHoofdthemas().then(function (data) {
+            vm.hoofdthemas = data;
+        });
+
+        OrganisatieService.myOrganisaties().then(function (data) {
+            vm.organisaties = data;
+        });
+
+
+        vm.addHoofdthema = function (hoofdthema, organisatieId) {
+            if (organisatieId > 0) {
+                HoofdthemaService.createWithOrganisation(hoofdthema, organisatieId).then(function () {
+                    $route.reload();
+                });
+            } else {
+                HoofdthemaService.create(hoofdthema).then(function () {
+                    $route.reload();
+                });
+            }
+        }
+
+    }
+
+    angular.module("kandoe").controller("HoofdthemaIndexController", HoofdthemaIndexController);
 
 })(window.angular);
 

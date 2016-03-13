@@ -183,6 +183,10 @@ public class Gebruiker implements Serializable {
         this.berichten.add(bericht);
     }
 
+    public void addHoofdthema(Hoofdthema hoofdthema) {
+        this.hoofdthemas.add(hoofdthema);
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -3,6 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import io.jsonwebtoken.Claims;
@@ -62,6 +63,12 @@ public class GebruikerController {
         return service.findDeelnames(getUserId(token));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/hoofdthemas", method = RequestMethod.GET)
+    public List<Hoofdthema> getHoofdthemas(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
+
+        return service.find(getUserId(token)).getHoofdthemas();
+    }
 
 
     private boolean isAdmin(String token) {

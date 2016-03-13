@@ -6,6 +6,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.entities.Subthema;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,7 @@ public class CirkelsessieTest {
     @Before
     public void setUp() {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+       //objectMapper.registerModule(new JodaModule());
     }
 
     @Test
@@ -59,7 +61,7 @@ public class CirkelsessieTest {
 
     @Test
     public void createCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -83,7 +85,7 @@ public class CirkelsessieTest {
 
     @Test
     public void showCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -99,7 +101,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void showCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -115,13 +117,13 @@ public class CirkelsessieTest {
 
     @Test
     public void updateCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
-        json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 8, 15, false, new Date(), null, null, null));
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 8, 15, false, new DateTime(), null, null, null));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
@@ -136,26 +138,26 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nullInput() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
-        json = objectMapper.writeValueAsString(new Cirkelsessie(null, 0, 0, false, new Date(), null, null, null));
+        json = objectMapper.writeValueAsString(new Cirkelsessie(null, 0, 0, false, new DateTime(), null, null, null));
 
         this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
-        json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null));
+        json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null));
 
         this.mvc.perform(put("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk());
@@ -163,7 +165,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -185,7 +187,7 @@ public class CirkelsessieTest {
     @Test
     public void checkCirkelsessieLinkedToSubthema() throws Exception {
         Subthema subthema = new Subthema("Houffalize", "Route 6", null);
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), subthema, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), subthema, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -200,7 +202,7 @@ public class CirkelsessieTest {
 
     @Test
     public void cloneCirkelSessie() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new Date(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -220,12 +222,12 @@ public class CirkelsessieTest {
 
     @Test
     public void showGeplandeCirkelSessies() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new Date(new Date().getTime() + 3000), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new DateTime().plusMonths(2), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
-        cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new Date(), null, null, null);
+        cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new DateTime(), null, null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
@@ -238,17 +240,17 @@ public class CirkelsessieTest {
 
     @Test
     public void showActieveCirkelSessies() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new Date(new Date().getTime() + 1000), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, true, new DateTime().plusMonths(2), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
-        cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new Date(new Date().getTime() - 1000), null, null, null);
+        cirkelsessie = new Cirkelsessie("Session two", 5, 10, false, new DateTime().minusMonths(2), null, null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());
 
-        cirkelsessie = new Cirkelsessie("Session three", 5, 10, false, new Date(new Date().getTime() - 1000), null, null, null);
+        cirkelsessie = new Cirkelsessie("Session three", 5, 10, false, new DateTime().minusMonths(2), null, null, null);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken())).andExpect(status().isCreated());

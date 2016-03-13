@@ -54,6 +54,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/hoofdthemas", {
+                templateUrl: "/dist/views/hoofdthemas/index.html",
+                controller: "HoofdthemaIndexController",
+                controllerAs: "vm"
+            })
+
 
             .otherwise({
                 redirectTo: "/"

@@ -1,8 +1,11 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Hoofdthema;
+import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.HoofdthemaService;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,14 @@ public class HoofdthemaController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Hoofdthema hoofdthema) {
-        service.create(hoofdthema);
+    public void create(@RequestBody Hoofdthema hoofdthema, @RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
+        service.create(getUserId(token), hoofdthema);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(value = "organisatie={id}", method = RequestMethod.POST)
+    public void create(@RequestBody Hoofdthema hoofdthema, @PathVariable("id") int organisatieId, @RequestHeader(name = "Authorization") String token) throws GebruikerNotFound, OrganisatieNotFound {
+        service.create(getUserId(token), organisatieId, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -43,5 +52,9 @@ public class HoofdthemaController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id) throws HoofdthemaNotFound {
         service.delete(id);
+    }
+
+    private int getUserId(String token) {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

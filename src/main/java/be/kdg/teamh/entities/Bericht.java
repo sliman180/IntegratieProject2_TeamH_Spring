@@ -2,11 +2,12 @@ package be.kdg.teamh.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "berichten")
@@ -19,7 +20,8 @@ public class Bericht implements Serializable {
     private String tekst;
 
     @NotNull
-    private Date datum = new Date();
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime datum;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -30,11 +32,14 @@ public class Bericht implements Serializable {
 
     public Bericht() {
         //
+
+        this.datum = new DateTime();
     }
 
     public Bericht(String tekst, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.gebruiker = gebruiker;
+        this.datum = new DateTime();
     }
 
     public Chat getChat() {
@@ -69,13 +74,11 @@ public class Bericht implements Serializable {
         this.tekst = tekst;
     }
 
-    public Date getDatum() {
+    public DateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(DateTime datum) {
         this.datum = datum;
     }
-
-
 }
