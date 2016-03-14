@@ -1,8 +1,9 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
+import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
+import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,6 +28,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     @Autowired
     private JavaMailSender javaMailSender;
 
+    private GebruikerRepository gebruikerRepository;
+
     @Override
     public List<Cirkelsessie> all()
     {
@@ -34,9 +37,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void create(Cirkelsessie cirkelsessie)
+    public void create(int userId, Cirkelsessie cirkelsessie)
     {
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+
+        gebruiker.addCirkelsessie(cirkelsessie);
+        cirkelsessie.setGebruiker(gebruiker);
+        cirkelsessie.setChat(new Chat(cirkelsessie.getNaam(), cirkelsessie));
+
         repository.save(cirkelsessie);
+
+
     }
 
     @Override
@@ -62,7 +73,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         old.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
         old.setAantalCirkels(cirkelsessie.getAantalCirkels());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
 
@@ -77,7 +88,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     public void clone(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie old = find(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, LocalDateTime.now(), old.getSubthema(), old.getGebruiker());
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new Date(), old.getSubthema(), old.getGebruiker());
 
         clone.cloneDeelnames(old.getDeelnames());
 
@@ -85,15 +96,30 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
+    public void addSpelkaart(int id, Kaart kaart) throws CirkelsessieNotFound
+    {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null)
+        {
+            throw new CirkelsessieNotFound();
+        }
+
+        cirkelsessie.addSpelkaart(new Spelkaart(kaart, cirkelsessie));
+
+        repository.saveAndFlush(cirkelsessie);
+
+    }
+
+    @Override
     public List<Cirkelsessie> gepland()
     {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
+        Date now = new Date();
 
         for (Cirkelsessie cirkelsessie : temp)
         {
-
             if (cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) < 1))
             {
                 cirkelsessies.add(cirkelsessie);
@@ -102,18 +128,6 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
         return cirkelsessies;
     }
-
-/*    @Override
-    public void invite(List<String> emails) throws MessagingException {
-
-        Iterator<String> iterator = emails.iterator();
-
-        while (iterator.hasNext()){
-            String email = iterator.next();
-//            mailService.send(email,"Invite for a session","Uncle Sam wants you, to take part in a session");
-            mailService.invite(emails);
-        }
-    }*/
 
     @Override
     public void invite(List<String> emails) throws MessagingException {
@@ -144,7 +158,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
+        Date now = new Date();
 
         for (Cirkelsessie cirkelsessie : temp)
         {

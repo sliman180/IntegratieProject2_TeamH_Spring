@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,6 +18,7 @@ public class Gebruiker implements Serializable
     private int id;
 
     @NotNull
+    @Column(unique = true)
     private String gebruikersnaam;
 
     @NotNull
@@ -35,15 +39,23 @@ public class Gebruiker implements Serializable
     @OneToMany(cascade = CascadeType.ALL)
     private List<Commentaar> commentaren = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Organisatie> organisaties = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Bericht> berichten = new ArrayList<>();
 
     @ManyToMany
     private List<Rol> rollen = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private List<Cirkelsessie> cirkelsessies;
+
     public Gebruiker()
     {
-        // JPA Constructor
+        //
     }
 
     public Gebruiker(String gebruikersnaam, String wachtwoord)
@@ -65,9 +77,16 @@ public class Gebruiker implements Serializable
         this.rollen = rollen;
     }
 
+    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessies.add(cirkelsessie);
+    }
     public int getId()
     {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getGebruikersnaam()
@@ -158,6 +177,30 @@ public class Gebruiker implements Serializable
         this.rollen = rollen;
     }
 
+    public List<Cirkelsessie> getCirkelsessies() {
+        return cirkelsessies;
+    }
+
+    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
+        this.cirkelsessies = cirkelsessies;
+    }
+
+
+    public List<Organisatie> getOrganisaties() {
+        return organisaties;
+    }
+
+    public void setOrganisaties(List<Organisatie> organisaties) {
+        this.organisaties = organisaties;
+    }
+
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
+        this.cirkelsessies = cirkelsessies;
+    }
+
+    public void addRol(Rol rol){
+        rollen.add(rol);
+    }
     @Override
     public boolean equals(Object o)
     {

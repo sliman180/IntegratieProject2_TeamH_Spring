@@ -2,22 +2,11 @@ package be.kdg.teamh;
 
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gebruiker;
-import com.google.gson.Gson;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.Date;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -25,36 +14,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Application.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class DeelnameTest
+public class DeelnameTest extends ApiTest
 {
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
-    @Autowired
-    private Gson gson;
-
-    @Mock
-    private Gebruiker gebruiker;
-
-    private Cirkelsessie cirkelsessie;
-
-    @Before
-    public void setUp()
-    {
-        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-        this.cirkelsessie = new Cirkelsessie("Session one", 15, 5);
-    }
-
     @Test
     public void indexDeelname() throws Exception
     {
-        this.mvc.perform(get("/api/deelnames").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/deelnames").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -62,67 +27,63 @@ public class DeelnameTest
     @Test
     public void createDeelname() throws Exception
     {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        Deelname deelname = new Deelname(15, false, cirkelsessie, null);
+        String json = objectMapper.writeValueAsString(deelname);
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
-
-        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.aangemaakteKaarten", is(15)))
-            .andExpect(jsonPath("$.medeorganisator", is(false)))
-            .andExpect(jsonPath("$.cirkelsessie.id", is(1)))
-            .andExpect(jsonPath("$.cirkelsessie.naam", is("Session one")));
     }
 
     @Test
     public void showDeelname() throws Exception
     {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        Deelname deelname = new Deelname(15, false, cirkelsessie, null);
+        String json = objectMapper.writeValueAsString(deelname);
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.aangemaakteKaarten", is(15)))
             .andExpect(jsonPath("$.medeorganisator", is(false)))
             .andExpect(jsonPath("$.cirkelsessie.id", is(1)))
-            .andExpect(jsonPath("$.cirkelsessie.naam", is("Session one")));
+            .andExpect(jsonPath("$.cirkelsessie.naam", is("Een circelsessie")));
     }
 
     @Test(expected = NestedServletException.class)
     public void showDeelname_nonExistingDeelname() throws Exception
     {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        Deelname deelname = new Deelname(15, false, cirkelsessie, null);
+        String json = objectMapper.writeValueAsString(deelname);
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(get("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
     }
 
     @Test
     public void updateDeelname() throws Exception
     {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        Deelname deelname = new Deelname(15, false, cirkelsessie, null);
+        String json = objectMapper.writeValueAsString(deelname);
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Deelname(20, true, cirkelsessie, gebruiker));
+        json = objectMapper.writeValueAsString(new Deelname(20, true, cirkelsessie, null));
 
-        this.mvc.perform(put("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id", is(1)))
             .andExpect(jsonPath("$.aangemaakteKaarten", is(20)))
@@ -132,61 +93,43 @@ public class DeelnameTest
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingDeelname() throws Exception
     {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        Deelname deelname = new Deelname(15, false, cirkelsessie, null);
+        String json = objectMapper.writeValueAsString(deelname);
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        json = gson.toJson(new Deelname(20, true, cirkelsessie, gebruiker));
+        json = objectMapper.writeValueAsString(new Deelname(20, true, cirkelsessie, null));
 
-        this.mvc.perform(put("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
     }
 
     @Test(expected = NestedServletException.class)
     public void deleteDeelname() throws Exception
     {
-        String json = gson.toJson(new Deelname(15, false, cirkelsessie, gebruiker));
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        String json = objectMapper.writeValueAsString(new Deelname(15, false, cirkelsessie, null));
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(delete("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()))
             .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
+        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
-
     }
 
     @Test(expected = NestedServletException.class)
     public void deleteDeelname_nonExistingDeelname() throws Exception
     {
-        String json = gson.toJson(new Deelname(15, false, cirkelsessie, gebruiker));
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een circelsessie", 10, 10, false, new Date(), null, null);
+        String json = objectMapper.writeValueAsString(new Deelname(15, false, cirkelsessie, null));
 
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-
-    }
-
-    @Test
-    public void deelNemenAanCirkelsessie() throws Exception
-    {
-        Deelname deelname = new Deelname(15, false, cirkelsessie, gebruiker);
-        String json = gson.toJson(deelname);
-
-        this.mvc.perform(post("/api/deelnames").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
-
-        this.mvc.perform(get("/api/deelnames/1").contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.aangemaakteKaarten", is(15)))
-            .andExpect(jsonPath("$.medeorganisator", is(false)))
-            .andExpect(jsonPath("$.cirkelsessie.id", is(1)))
-            .andExpect(jsonPath("$.cirkelsessie.naam", is("Session one")));
+        this.mvc.perform(delete("/api/deelnames/2").contentType(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()));
     }
 }

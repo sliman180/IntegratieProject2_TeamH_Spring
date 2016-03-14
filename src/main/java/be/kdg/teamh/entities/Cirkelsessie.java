@@ -1,10 +1,14 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,33 +31,39 @@ public class Cirkelsessie implements Serializable
     @NotNull
     private boolean isGesloten;
 
-    private LocalDateTime startDatum;
+    @NotNull
+    private Date startDatum;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Deelname> deelnames = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private Chat chat;
 
     public Cirkelsessie()
     {
-        // JPA Constructor
+        //
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum)
     {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.aantalCirkels = aantalCirkels;
+        this.isGesloten = isGesloten;
+        this.startDatum = startDatum;
+        this.chat = new Chat("Chat: " + naam);
     }
 
     public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker)
@@ -63,9 +73,10 @@ public class Cirkelsessie implements Serializable
         this.maxAantalKaarten = maxAantalKaarten;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
+        this.chat = new Chat("Chat: " + naam);
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, Date startDatum, Subthema subthema, Gebruiker gebruiker)
     {
         this.naam = naam;
         this.aantalCirkels = aantalCirkels;
@@ -74,11 +85,18 @@ public class Cirkelsessie implements Serializable
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
+        this.chat = new Chat("Chat: " + naam);
     }
+
 
     public int getId()
     {
         return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public String getNaam()
@@ -111,12 +129,12 @@ public class Cirkelsessie implements Serializable
         this.aantalCirkels = aantalCirkels;
     }
 
-    public LocalDateTime getStartDatum()
+    public Date getStartDatum()
     {
         return startDatum;
     }
 
-    public void setStartDatum(LocalDateTime startDatum)
+    public void setStartDatum(Date startDatum)
     {
         this.startDatum = startDatum;
     }
@@ -189,4 +207,16 @@ public class Cirkelsessie implements Serializable
             this.deelnames.add(deelname);
         }
     }
+
+    public Chat getChat()
+    {
+        return chat;
+    }
+
+    public void setChat(Chat chat)
+    {
+        this.chat = chat;
+    }
+
+
 }

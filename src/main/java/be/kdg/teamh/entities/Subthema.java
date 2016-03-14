@@ -32,7 +32,7 @@ public class Subthema implements Serializable
 
     public Subthema()
     {
-        // JPA Constructor
+        //
     }
 
     public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema)

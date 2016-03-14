@@ -1,17 +1,17 @@
-package be.kdg.teamh.dto;
+package be.kdg.teamh.dtos;
 
 import java.io.Serializable;
 
 public class Token implements Serializable
 {
-    public String token;
+    private String token;
 
     public Token()
     {
-        // JPA Constructor
+        //
     }
 
-    public Token(final String token)
+    public Token(String token)
     {
         this.token = token;
     }
@@ -19,5 +19,10 @@ public class Token implements Serializable
     public String getToken()
     {
         return token;
+    }
+
+    public void setToken(String token)
+    {
+        this.token = token;
     }
 }

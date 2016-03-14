@@ -3,7 +3,8 @@
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function (window, angular, undefined) {
+    'use strict';
 
     /**
      * @ngdoc module
@@ -157,7 +158,7 @@
          * @description
          * Adds a new route definition to the `$route` service.
          */
-        this.when = function(path, route) {
+        this.when = function (path, route) {
             //copy original route object to preserve params inherited from proto chain
             var routeCopy = angular.copy(route);
             if (angular.isUndefined(routeCopy.reloadOnSearch)) {
@@ -218,10 +219,10 @@
 
             path = path
                 .replace(/([().])/g, '\\$1')
-                .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option) {
+                .replace(/(\/)?:(\w+)([\?\*])?/g, function (_, slash, key, option) {
                     var optional = option === '?' ? option : null;
                     var star = option === '*' ? option : null;
-                    keys.push({ name: key, optional: !!optional });
+                    keys.push({name: key, optional: !!optional});
                     slash = slash || '';
                     return ''
                         + (optional ? '' : slash)
@@ -250,7 +251,7 @@
          * If called with a string, the value maps to `redirectTo`.
          * @returns {Object} self
          */
-        this.otherwise = function(params) {
+        this.otherwise = function (params) {
             if (typeof params === 'string') {
                 params = {redirectTo: params};
             }
@@ -266,7 +267,7 @@
             '$injector',
             '$templateRequest',
             '$sce',
-            function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
+            function ($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
 
                 /**
                  * @ngdoc service
@@ -482,7 +483,7 @@
                          * As a result of that, {@link ngRoute.directive:ngView ngView}
                          * creates new scope and reinstantiates the controller.
                          */
-                        reload: function() {
+                        reload: function () {
                             forceReload = true;
 
                             var fakeLocationEvent = {
@@ -493,7 +494,7 @@
                                 }
                             };
 
-                            $rootScope.$evalAsync(function() {
+                            $rootScope.$evalAsync(function () {
                                 prepareRoute(fakeLocationEvent);
                                 if (!fakeLocationEvent.defaultPrevented) commitRoute();
                             });
@@ -512,7 +513,7 @@
                          *
                          * @param {!Object<string, string>} newParams mapping of URL parameter names to values
                          */
-                        updateParams: function(newParams) {
+                        updateParams: function (newParams) {
                             if (this.current && this.current.$$route) {
                                 newParams = angular.extend({}, this.current.params, newParams);
                                 $location.path(interpolate(this.current.$$route.originalPath, newParams));
@@ -604,12 +605,12 @@
                         }
 
                         $q.when(nextRoute).
-                        then(function() {
+                        then(function () {
                             if (nextRoute) {
                                 var locals = angular.extend({}, nextRoute.resolve),
                                     template, templateUrl;
 
-                                angular.forEach(locals, function(value, key) {
+                                angular.forEach(locals, function (value, key) {
                                     locals[key] = angular.isString(value) ?
                                         $injector.get(value) : $injector.invoke(value, null, null, key);
                                 });
@@ -633,7 +634,7 @@
                                 return $q.all(locals);
                             }
                         }).
-                        then(function(locals) {
+                        then(function (locals) {
                             // after route change
                             if (nextRoute == $route.current) {
                                 if (nextRoute) {
@@ -642,7 +643,7 @@
                                 }
                                 $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
                             }
-                        }, function(error) {
+                        }, function (error) {
                             if (nextRoute == $route.current) {
                                 $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
                             }
@@ -657,16 +658,17 @@
                 function parseRoute() {
                     // Match a route
                     var params, match;
-                    angular.forEach(routes, function(route, path) {
+                    angular.forEach(routes, function (route, path) {
                         if (!match && (params = switchRouteMatcher($location.path(), route))) {
                             match = inherit(route, {
                                 params: angular.extend({}, $location.search(), params),
-                                pathParams: params});
+                                pathParams: params
+                            });
                             match.$$route = route;
                         }
                     });
                     // No route matched; fallback to "otherwise" route
-                    return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
+                    return match || routes[null] && inherit(routes[null], {params: {}, pathParams: {}});
                 }
 
                 /**
@@ -674,7 +676,7 @@
                  */
                 function interpolate(string, params) {
                     var result = [];
-                    angular.forEach((string || '').split(':'), function(segment, i) {
+                    angular.forEach((string || '').split(':'), function (segment, i) {
                         if (i === 0) {
                             result.push(segment);
                         } else {
@@ -727,7 +729,9 @@
      * ```
      */
     function $RouteParamsProvider() {
-        this.$get = function() { return {}; };
+        this.$get = function () {
+            return {};
+        };
     }
 
     ngRouteModule.directive('ngView', ngViewFactory);
@@ -913,7 +917,7 @@
             terminal: true,
             priority: 400,
             transclude: 'element',
-            link: function(scope, $element, attr, ctrl, $transclude) {
+            link: function (scope, $element, attr, ctrl, $transclude) {
                 var currentScope,
                     currentElement,
                     previousLeaveAnimation,
@@ -935,7 +939,7 @@
                     }
                     if (currentElement) {
                         previousLeaveAnimation = $animate.leave(currentElement);
-                        previousLeaveAnimation.then(function() {
+                        previousLeaveAnimation.then(function () {
                             previousLeaveAnimation = null;
                         });
                         currentElement = null;
@@ -956,7 +960,7 @@
                         // Note: We can't remove them in the cloneAttchFn of $transclude as that
                         // function is called before linking the content, which would apply child
                         // directives to non existing elements.
-                        var clone = $transclude(newScope, function(clone) {
+                        var clone = $transclude(newScope, function (clone) {
                             $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter() {
                                 if (angular.isDefined(autoScrollExp)
                                     && (!autoScrollExp || scope.$eval(autoScrollExp))) {
@@ -988,7 +992,7 @@
         return {
             restrict: 'ECA',
             priority: -400,
-            link: function(scope, $element) {
+            link: function (scope, $element) {
                 var current = $route.current,
                     locals = current.locals;
 

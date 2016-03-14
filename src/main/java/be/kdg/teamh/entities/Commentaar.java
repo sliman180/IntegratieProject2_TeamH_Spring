@@ -26,7 +26,7 @@ public class Commentaar implements Serializable
 
     public Commentaar()
     {
-        //JPA Constructor
+        //
     }
 
     public Commentaar(String tekst, Gebruiker gebruiker)

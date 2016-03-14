@@ -2,14 +2,16 @@ package be.kdg.teamh.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "rollen")
-public class Rol
+public class Rol implements Serializable
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
@@ -18,11 +20,11 @@ public class Rol
     private String beschrijving;
 
     @ManyToMany
-    private List<Gebruiker> gebruikers;
+    private List<Gebruiker> gebruikers = new ArrayList<>();
 
     public Rol()
     {
-        // JPA Constructor
+        //
     }
 
     public Rol(String naam, String beschrijving)
@@ -31,14 +33,39 @@ public class Rol
         this.beschrijving = beschrijving;
     }
 
+    public int getId()
+    {
+        return id;
+    }
+
     public String getNaam()
     {
         return naam;
     }
 
+    public void setNaam(String naam)
+    {
+        this.naam = naam;
+    }
+
     public String getBeschrijving()
     {
         return beschrijving;
+    }
+
+    public void setBeschrijving(String beschrijving)
+    {
+        this.beschrijving = beschrijving;
+    }
+
+    public List<Gebruiker> getGebruikers()
+    {
+        return gebruikers;
+    }
+
+    public void setGebruikers(List<Gebruiker> gebruikers)
+    {
+        this.gebruikers = gebruikers;
     }
 
     @Override

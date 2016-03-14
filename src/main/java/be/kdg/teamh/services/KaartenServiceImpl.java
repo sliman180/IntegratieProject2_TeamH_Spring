@@ -5,7 +5,7 @@ import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
-import be.kdg.teamh.exceptions.KaartNotFound;
+import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.repositories.KaartenRepository;
 import be.kdg.teamh.services.contracts.KaartenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class KaartenServiceImpl implements KaartenService
 {
     @Autowired
-    KaartenRepository repository;
+    private KaartenRepository repository;
 
     public List<Kaart> all()
     {
@@ -54,7 +54,7 @@ public class KaartenServiceImpl implements KaartenService
         old.setTekst(kaart.getTekst());
         old.setGebruiker(kaart.getGebruiker());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class KaartenServiceImpl implements KaartenService
 
         kaart.addSpelkaart(spelkaart);
 
-        repository.save(kaart);
+        repository.saveAndFlush(kaart);
     }
 }
 

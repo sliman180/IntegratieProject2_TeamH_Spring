@@ -1,0 +1,240 @@
+<style>
+
+    .mdl-card__title {
+        background-color: royalblue;
+    }
+
+    #chat {
+        overflow-y: auto;
+    }
+
+    #chatContainer {
+        height: 500px;
+        margin-top: 10%;
+    }
+
+    #cirkelsessie-header {
+        width: 100%;
+        padding: 2% 1%;
+    }
+
+    #cirkelsessie-begroeting {
+        width: 20%;
+        font-size: 3em;
+    }
+
+    #header-buttons {
+        float: right;
+    }
+
+</style>
+
+
+<div id="cirkelsessie-header">
+    <span id="cirkelsessie-begroeting">Welkom {{ $root.naam }}</span>
+
+    <div id="header-buttons">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Deelnemen
+        </button>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Mijn cirkelsessies
+        </button>
+    </div>
+
+</div>
+
+<div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
+
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: {{vm.cirkelsessie.startDatum |
+        date:'yyyy-MM-dd'}}
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
+        <span>{{vm.cirkelsessie.maxAantalKaarten}}</span>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+
+        <svg height="{{vm.cirkelsessie.aantalCirkels * 100}}" width="100%">
+
+            <circle ng-repeat="i in vm.getTimes(vm.cirkelsessie.aantalCirkels)" ng-style="{ stroke: black, fill: vm.setCircleColor(i) }"
+                    ng-attr-cx="{{ vm.cirkelsessie.aantalCirkels * 50 }}" ng-attr-cy="{{ vm.cirkelsessie.aantalCirkels * 50 }}" r="{{i * 50}}"></circle>
+
+            <line x1="0" y1="{{vm.cirkelsessie.aantalCirkels * 50}}" x2="{{vm.cirkelsessie.aantalCirkels * 100}}" y2="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
+
+            <line x1="{{vm.cirkelsessie.aantalCirkels * 50}}" y1="0" x2="{{vm.cirkelsessie.aantalCirkels * 50}}" y2="{{vm.cirkelsessie.aantalCirkels * 100}}"
+                  style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
+
+        </svg>
+
+    </div>
+
+    <div class="mdl-card__menu">
+        <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.cirkelsessie.deelnames.length}}">account_box</div>
+
+                <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
+
+                <i ng-if="!vm.circelsessie.isClosed" class="material-icons">lock</i></span>
+
+        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+            <i class="material-icons">share</i>
+        </button>
+
+        <!-- Right aligned menu below button -->
+        <button id="demo-menu-lower-right d"
+                class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect">
+            <li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
+            <li disabled class="mdl-menu__item">Wijzig</li>
+            <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Event card -->
+<style>
+    .demo-card-event.mdl-card {
+        width: 256px;
+        height: 20px;
+        background: #3E4EB8;
+    }
+
+    .demo-card-event > .mdl-card__actions {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-card-event > .mdl-card__title {
+        align-items: flex-start;
+    }
+
+    .demo-card-event > .mdl-card__title > h4 {
+        margin-top: 0;
+    }
+
+    .demo-card-event > .mdl-card__actions {
+        display: flex;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    .demo-card-event > .mdl-card__actions > .material-icons {
+        padding-right: 10px;
+    }
+
+    .demo-card-event > .mdl-card__title,
+    .demo-card-event > .mdl-card__actions,
+    .demo-card-event > .mdl-card__actions > .mdl-button {
+        color: #fff;
+    }
+
+    .mdl-badge {
+        margin-bottom: 4%;
+    }
+
+    #kaart {
+        margin: 1%;
+        height: 70px;
+        min-height: 0;
+        width: 100%;
+        position: inherit;
+        z-index: 0;
+    }
+</style>
+
+<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
+    <div>
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">
+                <!-- Number badge -->Spelkaarten
+            </h2>
+            <span class="mdl-badge" data-badge="{{vm.cirkelsessie.spelkaarten.length}}"></span>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <div ng-repeat="spelkaart in vm.cirkelsessie.spelkaarten"
+                 class="demo-card-event mdl-card mdl-shadow--2dp" id="kaart">
+
+
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                        {{spelkaart.kaart.tekst}} [{{spelkaart.positie}}]
+                    </a>
+                    <!-- Right aligned menu below button -->
+                    <button id="demo-menu-lower-right {{spelkaart.id}}"
+                            class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="demo-menu-lower-right {{spelkaart.id}}">
+                        <li ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar [{{spelkaart.positie + 1}}]</li>
+                        <li disabled class="mdl-menu__item">Verwijder</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <p></p>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <form ng-submit="vm.createKaart(vm.cirkelsessie.id, kaart)" action="">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst">
+                    <label class="mdl-textfield__label" for="kaartTekst">Kaart tekst</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="imageUrl" ng-model="kaart.imageUrl">
+                    <label class="mdl-textfield__label" for="imageUrl">Afbeelding urlt</label>
+                </div>
+
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Kaart toevoegen
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="chatContainer">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">
+                <!-- Number badge -->Chat
+            </h2>
+            <span class="mdl-badge" data-badge="{{vm.cirkelsessie.chat.berichten.length}}"></span>
+        </div>
+        <div class="mdl-card__supporting-text">
+            {{vm.cirkelsessie.chat.naam}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border" id="chat">
+            <div ng-repeat="bericht in vm.cirkelsessie.chat.berichten">
+                <p>{{bericht.datum | date:'dd-MM-yyyy'}} | {{bericht.gebruiker.gebruikersnaam}}: {{bericht.tekst}}</p>
+
+            </div>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <form ng-submit="vm.createMessage(vm.cirkelsessie.chat.id, bericht)" action="">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
+                    <label class="mdl-textfield__label" for="tekst">Bericht</label>
+                </div>
+
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Post
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+

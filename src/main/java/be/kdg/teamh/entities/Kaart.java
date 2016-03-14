@@ -32,12 +32,12 @@ public class Kaart implements Serializable
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
     public Kaart()
     {
-        //JPA Constructor
+        //
     }
 
     public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Gebruiker gebruiker)

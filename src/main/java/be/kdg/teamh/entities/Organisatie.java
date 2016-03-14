@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -21,7 +24,8 @@ public class Organisatie implements Serializable
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Gebruiker gebruiker;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -29,7 +33,7 @@ public class Organisatie implements Serializable
 
     public Organisatie()
     {
-        // JPA Constructor
+        //
     }
 
     public Organisatie(String naam, String beschrijving, Gebruiker gebruiker)

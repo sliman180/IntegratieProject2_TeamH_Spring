@@ -1,9 +1,10 @@
-package be.kdg.teamh.configuration;
+package be.kdg.teamh.filters;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -30,7 +31,7 @@ public class JwtFilter extends GenericFilterBean
         {
             request.setAttribute("claims", Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token).getBody());
         }
-        catch (final SignatureException e)
+        catch (SignatureException e)
         {
             throw new SignatureException("Invalid token.");
         }

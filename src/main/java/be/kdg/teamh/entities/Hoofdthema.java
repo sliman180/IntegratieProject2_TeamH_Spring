@@ -35,7 +35,7 @@ public class Hoofdthema implements Serializable
 
     private Hoofdthema()
     {
-        // JPA constructor
+        //
     }
 
     public Hoofdthema(String naam, String beschrijving, Organisatie organisatie, Gebruiker gebruiker)

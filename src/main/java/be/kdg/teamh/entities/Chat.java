@@ -1,13 +1,16 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "chats")
-public class Chat
+public class Chat implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,24 +19,29 @@ public class Chat
     @NotNull
     private String naam;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Bericht> berichten = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cirkelsessie cirkelsessie;
-
-
-    public Chat(String naam, Cirkelsessie cirkelsessie)
-    {
-        this.naam = naam;
-        this.cirkelsessie = cirkelsessie;
-    }
 
     public Chat()
     {
-        //JPA
+        //
     }
 
+    public Chat(String naam)
+    {
+        this.naam = naam;
+    }
+
+    public Chat(String naam, Cirkelsessie cirkelsessie)
+    {
+        //JPA
+        this.naam = naam;
+        this.cirkelsessie = cirkelsessie;
+    }
 
     public Cirkelsessie getCirkelsessie()
     {

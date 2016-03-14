@@ -26,7 +26,7 @@ public class Deelname implements Serializable
 
     public Deelname()
     {
-        // JPA Constructor
+        //
     }
 
     public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker)

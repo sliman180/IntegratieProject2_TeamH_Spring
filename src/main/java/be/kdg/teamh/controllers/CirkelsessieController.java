@@ -1,10 +1,13 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.apache.log4j.Logger;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +34,10 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Cirkelsessie cirkelsessie)
+    public void create(@RequestBody Cirkelsessie cirkelsessie, @RequestHeader(name = "Authorization") String token)
     {
-        service.create(cirkelsessie);
+        int userId = getUserId(token);
+        service.create(userId, cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -87,11 +91,23 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/invite",method = RequestMethod.POST)
-    public void invite(@RequestBody List<String> emails){
+    public void invite(@RequestBody List<String> emails) {
         try {
             service.invite(emails);
         } catch (MessagingException e) {
             logger.error("*********ERROR inviting guests: " + e);
         }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/spelkaart", method = RequestMethod.POST)
+    public void createKaart(@PathVariable("id") int id, @RequestBody Kaart kaart) throws CirkelsessieNotFound
+    {
+        service.addSpelkaart(id, kaart);
+    }
+
+    private int getUserId(String token)
+    {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

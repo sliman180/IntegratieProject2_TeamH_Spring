@@ -1,15 +1,17 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.services.contracts.DeelnameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class DeelnameServiceImpl implements DeelnameService
 {
     @Autowired
@@ -50,7 +52,7 @@ public class DeelnameServiceImpl implements DeelnameService
         old.setMedeorganisator(deelname.isMedeorganisator());
         old.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
 
-        repository.save(old);
+        repository.saveAndFlush(old);
     }
 
     @Override
