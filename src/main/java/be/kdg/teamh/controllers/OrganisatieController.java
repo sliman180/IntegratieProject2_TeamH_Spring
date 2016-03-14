@@ -15,17 +15,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/organisaties")
-public class OrganisatieController
-{
+public class OrganisatieController {
     @Autowired
     private OrganisatieService service;
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Organisatie> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public List<Organisatie> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -34,10 +31,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public void create(@RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -49,10 +44,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Organisatie show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public Organisatie show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -61,10 +54,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isAdmin(token))
-        {
+    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isAdmin(token)) {
             throw new IsForbidden();
         }
 
@@ -73,10 +64,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -88,8 +77,7 @@ public class OrganisatieController
     public List<Organisatie> getOrganisaties(@RequestHeader(name = "Authorization") String token) throws IsForbidden, GebruikerNotFound
     {
 
-        if (!isRegistered(token))
-        {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -99,22 +87,19 @@ public class OrganisatieController
     }
 
 
-    private boolean isAdmin(String token)
-    {
+    private boolean isAdmin(String token) {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
         return ((List) claims.get("rollen")).contains("admin");
     }
 
-    private boolean isRegistered(String token)
-    {
+    private boolean isRegistered(String token) {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
         return ((List) claims.get("rollen")).contains("user");
     }
 
-    private int getUserId(String token)
-    {
+    private int getUserId(String token) {
         return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
     }
 }

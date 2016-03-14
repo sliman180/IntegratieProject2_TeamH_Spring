@@ -1,11 +1,26 @@
 package be.kdg.teamh;
 
-import be.kdg.teamh.entities.Commentaar;
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.dtos.Token;
+import be.kdg.teamh.entities.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -13,208 +28,228 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class KaartTest extends ApiTest
-{
-    @Test
-    public void indexKaarten() throws Exception
-    {
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(Application.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+public class KaartTest {
+    private MockMvc mvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Before
+    public void setUp() throws Exception {
+        this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     @Test
-    public void createKaart() throws Exception
-    {
+    public void indexKaarten() throws Exception {
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void createKaart() throws Exception {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null));
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
-            .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
+                .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void createKaart_nullInput() throws Exception
-    {
+    public void createKaart_nullInput() throws Exception {
         String json = objectMapper.writeValueAsString(new Kaart(null, null, true, null));
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test
-    public void showKaart() throws Exception
-    {
+    public void showKaart() throws Exception {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null));
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.imageUrl", is("http://www.afbeeldingurl.be")))
-            .andExpect(jsonPath("$.tekst", is("Een kaartje")));
+        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.imageUrl", is("http://www.afbeeldingurl.be")))
+                .andExpect(jsonPath("$.tekst", is("Een kaartje")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showKaart_nonExistingKaart() throws Exception
-    {
-        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isNotFound());
+    public void showKaart_nonExistingKaart() throws Exception {
+        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    public void updateKaart() throws Exception
-    {
+    public void updateKaart() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         kaart = new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
+        this.mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk());
 
-        mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.tekst", is("Een gewijzigde kaartje")))
-            .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeeldingurl.be")));
+        this.mvc.perform(get("/api/kaarten/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.tekst", is("Een gewijzigde kaartje")))
+                .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeeldingurl.be")));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateKaart_nullInput() throws Exception
-    {
+    public void updateKaart_nullInput() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         kaart = new Kaart(null, null, true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
+        this.mvc.perform(put("/api/kaarten/1").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateKaart_nonExistingKaart() throws Exception
-    {
+    public void updateKaart_nonExistingKaart() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         kaart = new Kaart("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, null);
         json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(put("/api/kaarten/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
+        this.mvc.perform(put("/api/kaarten/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
-    public void deleteKaart() throws Exception
-    {
+    public void deleteKaart() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
 
-        mvc.perform(delete("/api/kaarten/1").header("Authorization", getAdminToken()))
-            .andExpect(status().isOk());
+        this.mvc.perform(delete("/api/kaarten/1"))
+                .andExpect(status().isOk());
 
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteKaart_nonExistingKaart() throws Exception
-    {
+    public void deleteKaart_nonExistingKaart() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(delete("/api/kaarten/2").header("Authorization", getAdminToken()));
+        this.mvc.perform(delete("/api/kaarten/2"));
     }
 
     @Test
-    public void commentToevoegenAanKaart() throws Exception
-    {
+    public void commentToevoegenAanKaart() throws Exception {
         Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
         String json = objectMapper.writeValueAsString(kaart);
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
-            .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
+                .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
         String commentJson = objectMapper.writeValueAsString(new Commentaar("Een comment", null));
 
-        mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(commentJson).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)));
+        this.mvc.perform(get("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void commentToevoegenAanKaart_nietToegelaten() throws Exception
-    {
+    public void commentToevoegenAanKaart_nietToegelaten() throws Exception {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null));
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
-            .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
+                .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
 
         json = objectMapper.writeValueAsString(new Commentaar("Een comment", null));
 
-        mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()));
+        this.mvc.perform(post("/api/kaarten/1/comments").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test // TODO: change url
-    public void koppelKaartAanSubthema() throws Exception
-    {
+    public void koppelKaartAanSubthema() throws Exception {
         String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null));
 
-        mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Subthema("Een subthema", "beschrijving", null));
 
-        mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
-        json = objectMapper.writeValueAsString(new Subthema("Een subthema 2", "beschrijving", null));
+        this.mvc.perform(get("/api/kaarten").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].subthema", is(1)));
+    }
 
-        mvc.perform(post("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+    private String getUserToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-        mvc.perform(get("/api/kaarten/1/subthemas").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(2)));
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
+    }
+
+    private String getAdminToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
+    }
+
+    private String getTokenAsInexistent() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
     }
 }

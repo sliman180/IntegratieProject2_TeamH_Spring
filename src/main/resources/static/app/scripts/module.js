@@ -13,8 +13,8 @@
 
         .run(function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
-            $rootScope.$on('$viewContentLoaded', function() {
-                $timeout(function() {
+            $rootScope.$on('$viewContentLoaded', function () {
+                $timeout(function () {
                     componentHandler.upgradeAllRegistered();
                 }, 0);
             });
@@ -27,6 +27,10 @@
                 $rootScope.naam = null;
                 $rootScope.rollen = null;
                 $rootScope.loggedIn = false;
+                $rootScope.aantalDeelnames = null;
+                $rootScope.aantalHoofdthemas = null;
+                $rootScope.aantalOrganisaties = null;
+                $rootScope.aantalSubthemas = null;
 
                 $location.path("/");
 
@@ -36,12 +40,16 @@
 
             if (data) {
 
-                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (data) {
 
                     $rootScope.id = data.id;
                     $rootScope.naam = data.gebruikersnaam;
                     $rootScope.rollen = data.rollen;
                     $rootScope.loggedIn = true;
+                    $rootScope.aantalDeelnames = data.deelnames.length;
+                    $rootScope.aantalHoofdthemas = data.hoofdthemas.length;
+                    $rootScope.aantalOrganisaties = data.organisaties.length;
+                    $rootScope.aantalSubthemas = data.subthemas.length;
 
                 });
 
@@ -49,4 +57,6 @@
 
         });
 
+
 })(window.angular);
+

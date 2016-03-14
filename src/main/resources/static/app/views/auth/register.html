@@ -9,16 +9,19 @@
         <form action="">
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="gebruikersnaam" ng-model="credentials.gebruikersnaam">
+                    <input class="mdl-textfield__input" type="text" id="gebruikersnaam"
+                           ng-model="credentials.gebruikersnaam">
                     <label class="mdl-textfield__label" for="gebruikersnaam">Gebruikersnaam</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="password" id="wachtwoord" ng-model="credentials.wachtwoord">
+                    <input class="mdl-textfield__input" type="password" id="wachtwoord"
+                           ng-model="credentials.wachtwoord">
                     <label class="mdl-textfield__label" for="wachtwoord">Wachtwoord</label>
                 </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="vm.register(credentials)">
+                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                        ng-click="vm.register(credentials)">
                     Registreren
                 </button>
             </div>

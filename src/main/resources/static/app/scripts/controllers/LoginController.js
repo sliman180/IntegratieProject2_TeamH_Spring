@@ -14,7 +14,7 @@
                     token: data.token
                 });
 
-                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function(data) {
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (data) {
 
                     $rootScope.id = data.id;
                     $rootScope.naam = data.gebruikersnaam;

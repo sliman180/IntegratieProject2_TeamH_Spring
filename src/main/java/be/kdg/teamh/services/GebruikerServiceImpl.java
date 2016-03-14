@@ -3,8 +3,8 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class GebruikerServiceImpl implements GebruikerService
-{
+public class GebruikerServiceImpl implements GebruikerService {
     @Autowired
     private GebruikerRepository repository;
 
@@ -28,26 +27,22 @@ public class GebruikerServiceImpl implements GebruikerService
     private RolRepository rolRepository;
 
     @Override
-    public List<Gebruiker> all()
-    {
+    public List<Gebruiker> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(Gebruiker gebruiker)
-    {
+    public void create(Gebruiker gebruiker) {
         gebruiker.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
         gebruiker.addRol(rolRepository.findOne(1));
         repository.save(gebruiker);
     }
 
     @Override
-    public Gebruiker find(int id) throws GebruikerNotFound
-    {
+    public Gebruiker find(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
@@ -55,17 +50,14 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public Gebruiker findByLogin(Gebruiker login) throws GebruikerNotFound, InvalidCredentials
-    {
+    public Gebruiker findByLogin(Gebruiker login) throws GebruikerNotFound, InvalidCredentials {
         Gebruiker gebruiker = repository.findByGebruikersnaam(login.getGebruikersnaam());
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord()))
-        {
+        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord())) {
             throw new InvalidCredentials();
         }
 
@@ -73,14 +65,12 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void update(int id, Gebruiker gebruiker) throws GebruikerNotFound
-    {
+    public void update(int id, Gebruiker gebruiker) throws GebruikerNotFound {
         Gebruiker old = find(id);
 
         old.setGebruikersnaam(gebruiker.getGebruikersnaam());
 
-        if (!gebruiker.getWachtwoord().isEmpty())
-        {
+        if (!gebruiker.getWachtwoord().isEmpty()) {
             old.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
         }
 
@@ -88,21 +78,31 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void delete(int id) throws GebruikerNotFound
-    {
+    public void delete(int id) throws GebruikerNotFound {
+
         Gebruiker gebruiker = find(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker != null) {
+
             throw new GebruikerNotFound();
         }
+
 
         repository.delete(gebruiker);
     }
 
     @Override
-    public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound
-    {
+    public List<Deelname> findDeelnames(int userId) throws GebruikerNotFound {
+
+        Gebruiker gebruiker = find(userId);
+
+        return gebruiker.getDeelnames();
+    }
+
+    @Override
+    public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound {
         return find(id).getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
     }
+
+
 }

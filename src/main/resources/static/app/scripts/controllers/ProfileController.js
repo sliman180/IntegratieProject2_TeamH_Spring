@@ -8,14 +8,13 @@
 
         vm.updateProfile = function (credentials) {
 
-            if (credentials.wachtwoord == null)
-            {
+            if (credentials.wachtwoord == null) {
                 credentials.wachtwoord = "";
             }
 
-            GebruikerService.update($rootScope.id, credentials).then(function() {
+            GebruikerService.update($rootScope.id, credentials).then(function () {
 
-                GebruikerService.find($rootScope.id).then(function(data) {
+                GebruikerService.find($rootScope.id).then(function (data) {
 
                     $rootScope.id = data.id;
                     $rootScope.naam = data.gebruikersnaam;

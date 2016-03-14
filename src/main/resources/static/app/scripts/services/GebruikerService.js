@@ -46,6 +46,14 @@
 
         };
 
+        exports.getMijnDeelnames = function () {
+
+            return $http.get("/api/gebruikers/deelnames").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }

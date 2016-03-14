@@ -4,15 +4,27 @@
 
     function JwtService() {
 
-        this.urlBase64Decode = function(str) {
+        this.urlBase64Decode = function (str) {
 
             var output = str.replace(/-/g, '+').replace(/_/g, '/');
 
             switch (output.length % 4) {
-                case 0: { break; }
-                case 2: { output += '=='; break; }
-                case 3: { output += '='; break; }
-                default: {
+                case 0:
+                {
+                    break;
+                }
+                case 2:
+                {
+                    output += '==';
+                    break;
+                }
+                case 3:
+                {
+                    output += '=';
+                    break;
+                }
+                default:
+                {
                     throw 'Illegal base64url string!';
                 }
             }
@@ -20,7 +32,7 @@
             return decodeURIComponent(escape(window.atob(output)));
         };
 
-        this.decodeToken = function(token) {
+        this.decodeToken = function (token) {
 
             var parts = token.split('.');
 
@@ -37,12 +49,12 @@
             return JSON.parse(decoded);
         };
 
-        this.getTokenExpirationDate = function(token) {
+        this.getTokenExpirationDate = function (token) {
 
             var decoded = this.decodeToken(token);
             var d = new Date(0);
 
-            if(typeof decoded.exp === "undefined") {
+            if (typeof decoded.exp === "undefined") {
                 return null;
             }
 
@@ -51,7 +63,7 @@
             return d;
         };
 
-        this.isTokenExpired = function(token, offsetSeconds) {
+        this.isTokenExpired = function (token, offsetSeconds) {
 
             var d = this.getTokenExpirationDate(token);
             offsetSeconds = offsetSeconds || 0;

@@ -6,6 +6,14 @@
 
         var exports = {};
 
+        exports.myHoofdthemas = function () {
+
+            return $http.get("/api/gebruikers/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.all = function () {
 
             return $http.get("/api/hoofdthemas").then(function (response) {
@@ -22,12 +30,19 @@
 
         };
 
+        exports.createWithOrganisation = function (hoofdthema, organisatieId) {
+
+            return $http.post("/api/hoofdthemas/organisatie=" + organisatieId, hoofdthema).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.create = function (hoofdthema) {
 
             return $http.post("/api/hoofdthemas", hoofdthema).then(function (response) {
                 return response.data;
             });
-
         };
 
         exports.update = function (hoofdthema) {

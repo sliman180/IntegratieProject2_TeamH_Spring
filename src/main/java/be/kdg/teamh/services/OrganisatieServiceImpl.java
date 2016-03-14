@@ -16,34 +16,33 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrganisatieServiceImpl implements OrganisatieService
-{
+public class OrganisatieServiceImpl implements OrganisatieService {
     @Autowired
     private OrganisatieRepository repository;
 
     @Autowired
     private GebruikerRepository gebruikerRepository;
 
-    public List<Organisatie> all()
-    {
+    public List<Organisatie> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(int userId, Organisatie organisatie)
-    {
-        organisatie.setOrganisator(gebruikerRepository.findOne(userId));
+    public void create(int userId, Organisatie organisatie) {
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
 
-        repository.save(organisatie);
+        organisatie.setOrganisator(gebruiker);
+        Organisatie savedOrganisatie = repository.save(organisatie);
+        gebruiker.addOrganisatie(savedOrganisatie);
+
+        gebruikerRepository.save(gebruiker);
     }
 
     @Override
-    public Organisatie find(int id) throws OrganisatieNotFound
-    {
+    public Organisatie find(int id) throws OrganisatieNotFound {
         Organisatie organisatie = repository.findOne(id);
 
-        if (organisatie == null)
-        {
+        if (organisatie == null) {
             throw new OrganisatieNotFound();
         }
 
@@ -51,9 +50,8 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void update(int id, Organisatie organisatie) throws OrganisatieNotFound
-    {
-        Organisatie old = find(id);
+    public void update(int id, Organisatie organisatie) throws OrganisatieNotFound {
+        Organisatie old = repository.findOne(id);
 
         old.setNaam(organisatie.getNaam());
         old.setBeschrijving(organisatie.getBeschrijving());
@@ -63,29 +61,25 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void delete(int id) throws OrganisatieNotFound
-    {
+    public void delete(int id) throws OrganisatieNotFound {
         Organisatie organisatie = find(id);
+
 
         repository.delete(organisatie);
     }
 
 
     @Override
-    public List<Organisatie> getMyOrganisaties(int userId) throws GebruikerNotFound
-    {
+    public List<Organisatie> getMyOrganisaties(int userId) throws GebruikerNotFound {
         Gebruiker gebruiker = gebruikerRepository.findOne(userId);
         List<Organisatie> myOrganisaties = new ArrayList<>();
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
 
             throw new GebruikerNotFound();
         }
 
-        for (Organisatie organisatie : repository.findAll())
-        {
-            if (organisatie.getOrganisator().getId() == userId)
-            {
+        for (Organisatie organisatie : repository.findAll()) {
+            if (organisatie.getOrganisator().getId() == userId) {
                 myOrganisaties.add(organisatie);
             }
 

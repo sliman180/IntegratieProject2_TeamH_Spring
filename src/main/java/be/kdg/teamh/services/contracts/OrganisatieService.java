@@ -6,11 +6,10 @@ import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 
 import java.util.List;
 
-public interface OrganisatieService
-{
+public interface OrganisatieService {
     List<Organisatie> all();
 
-    void create(int userId,Organisatie organisatie);
+    void create(int userId, Organisatie organisatie);
 
     Organisatie find(int id) throws OrganisatieNotFound;
 

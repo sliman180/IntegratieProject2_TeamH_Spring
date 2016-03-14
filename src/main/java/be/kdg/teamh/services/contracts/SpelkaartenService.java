@@ -6,8 +6,7 @@ import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 
 import java.util.List;
 
-public interface SpelkaartenService
-{
+public interface SpelkaartenService {
     List<Spelkaart> all();
 
     void create(Spelkaart spelkaart);
