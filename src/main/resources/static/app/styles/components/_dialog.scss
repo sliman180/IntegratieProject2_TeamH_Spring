@@ -1,46 +1,46 @@
 .mdl-dialog {
 
-    border: none;
-    @include shadow-24dp;
-    @include dialog-width;
+  border: none;
+  @include shadow-24dp;
+  @include dialog-width;
 
-    &__title {
-        padding: 24px 24px 0;
-        margin: 0;
-        font-size: 2.5rem;
+  &__title {
+    padding: 24px 24px 0;
+    margin: 0;
+    font-size: 2.5rem;
+  }
+
+  &__actions {
+
+    padding: 8px 8px 8px 24px;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+
+    > * {
+      margin-right: 8px;
+      height: 36px;
+      &:first-child {
+        margin-right: 0;
+      }
     }
 
-    &__actions {
+    &--full-width {
 
-        padding: 8px 8px 8px 24px;
-        display: flex;
-        flex-direction: row-reverse;
-        flex-wrap: wrap;
+      padding: 0 0 8px 0;
 
-        > * {
-            margin-right: 8px;
-            height: 36px;
-            &:first-child {
-                margin-right: 0;
-            }
-        }
-
-        &--full-width {
-
-            padding: 0 0 8px 0;
-
-            > * {
-                height: 48px;
-                flex: 0 0 100%;
-                padding-right: 16px;
-                margin-right: 0;
-                text-align: right;
-            }
-        }
+      > * {
+        height: 48px;
+        flex: 0 0 100%;
+        padding-right: 16px;
+        margin-right: 0;
+        text-align: right;
+      }
     }
+  }
 
-    &__content {
-        padding: 20px 24px 24px 24px;
-        color: $dialog-content-color;
-    }
+  &__content {
+    padding: 20px 24px 24px 24px;
+    color: $dialog-content-color;
+  }
 }

@@ -1,9 +1,9 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.entities.Rol;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.IsForbidden;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,17 +15,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/organisaties")
-public class OrganisatieController
-{
+public class OrganisatieController {
     @Autowired
     private OrganisatieService service;
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Organisatie> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public List<Organisatie> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -34,22 +31,21 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws IsForbidden
-    {
-        if (!isAdmin(token))
-        {
+    public void create(@RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
-        service.create(organisatie);
+        int userId = getUserId(token);
+
+        service.create(userId, organisatie);
     }
+
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Organisatie show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isRegistered(token))
-        {
+    public Organisatie show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
@@ -58,10 +54,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isAdmin(token))
-        {
+    public void update(@PathVariable("id") int id, @RequestBody Organisatie organisatie, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isAdmin(token)) {
             throw new IsForbidden();
         }
 
@@ -70,27 +64,43 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
-    {
-        if (!isAdmin(token))
-        {
+    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden {
+        if (!isRegistered(token)) {
             throw new IsForbidden();
         }
 
         service.delete(id);
     }
 
-    private Boolean isAdmin(String token)
-    {
-        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public List<Organisatie> getOrganisaties(@RequestHeader(name = "Authorization") String token) throws IsForbidden, GebruikerNotFound {
 
-        return ((List<Rol>) claims.get("roles")).contains("admin");
+        if (!isRegistered(token)) {
+            throw new IsForbidden();
+        }
+
+        int userId = getUserId(token);
+
+        return service.getMyOrganisaties(userId);
     }
 
-    private Boolean isRegistered(String token)
-    {
+
+    private boolean isAdmin(String token) {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
 
-        return ((List<Rol>) claims.get("roles")).contains("user");
+        return ((List) claims.get("rollen")).contains("admin");
     }
+
+    private boolean isRegistered(String token) {
+        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
+
+        return ((List) claims.get("rollen")).contains("user");
+    }
+
+    private int getUserId(String token) {
+        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
+    }
+
 }
+

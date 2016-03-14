@@ -1,11 +1,12 @@
 package be.kdg.teamh;
 
+import be.kdg.teamh.dtos.Token;
 import be.kdg.teamh.entities.*;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
@@ -13,9 +14,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -27,232 +33,172 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class SpelkaartTest
-{
+public class SpelkaartTest {
     private MockMvc mvc;
 
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
-    private Gson gson;
-
-    @Mock
-    private Gebruiker gebruiker;
-
-    @Mock
-    private Cirkelsessie cirkelsessie;
-
-    @Mock
-    private Kaart kaart;
-
-    @Mock
-    private Subthema subthema;
-
-    @Mock
-    private Spelkaart spelkaart;
-
+    private ObjectMapper objectMapper;
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         this.mvc = MockMvcBuilders.webAppContextSetup(this.context).build();
-        kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, gebruiker);
-        cirkelsessie = new Cirkelsessie("Session one", 10, 5, subthema, gebruiker);
-        spelkaart = new Spelkaart(kaart, cirkelsessie);
     }
 
     @Test
-    public void indexSpelkaart() throws Exception
-    {
+    public void indexSpelkaart() throws Exception {
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
-    public void createSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
+    public void createSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].id", is(1)))
-            .andExpect(jsonPath("$[0].positie", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].positie", is(0)));
     }
 
     @Test
-    public void showSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+    public void showSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
+
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.positie", is(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.positie", is(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void showSpelkaart_nonExistingKaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
+    public void showSpelkaart_nonExistingKaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(get("/api/spelkaarten/2").accept(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void updateSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+    public void updateSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
+
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         spelkaart.setPositie(5);
-
-        json = gson.toJson(spelkaart);
+        json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(put("/api/spelkaarten/1").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/spelkaarten/1").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.positie", is(5)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.positie", is(5)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception
-    {
-
-        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, gebruiker);
-
+    public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         spelkaart.setPositie(cirkelsessie.getAantalCirkels());
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        String spelkaartJson = gson.toJson(spelkaart);
-
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-            .andExpect(status().isCreated());
-
-
-        this.mvc.perform(patch("/api/spelkaarten/verschuif/1").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-            .andExpect(status().isConflict());
-
-    }
-
-    @Test
-    public void legKaartenBuitenDeCirkel() throws Exception
-    {
-
-        Kaart kaart;
-        Spelkaart spelkaart;
-        String spelkaartJson;
-
-        for (int x = 0; x < 5; x++)
-        {
-
-            kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
-
-            spelkaart = new Spelkaart(kaart, cirkelsessie);
-
-            spelkaartJson = gson.toJson(spelkaart);
-
-            this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
-        }
 
-        this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(5)))
-            .andExpect(jsonPath("$[0].positie", is(0)))
-            .andExpect(jsonPath("$[1].positie", is(0)))
-            .andExpect(jsonPath("$[2].positie", is(0)))
-            .andExpect(jsonPath("$[3].positie", is(0)))
-            .andExpect(jsonPath("$[4].positie", is(0)));
+        this.mvc.perform(post("/api/spelkaarten/1/verschuif").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isConflict());
     }
 
     @Test(expected = NestedServletException.class)
-    public void updateSpelkaart_nonExistingSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
+    public void updateSpelkaart_nonExistingSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         spelkaart.setPositie(2);
-        json = gson.toJson(spelkaart);
+        json = objectMapper.writeValueAsString(spelkaart);
 
         this.mvc.perform(put("/api/spelkaarten/2").contentType(MediaType.APPLICATION_JSON).content(json));
     }
 
     @Test
-    public void deleteSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
+    public void deleteSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/spelkaarten/1"))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test(expected = NestedServletException.class)
-    public void deleteSpelkaart_nonExistingSpelkaart() throws Exception
-    {
-        String json = gson.toJson(spelkaart);
+    public void deleteSpelkaart_nonExistingSpelkaart() throws Exception {
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        String json = objectMapper.writeValueAsString(spelkaart);
 
-        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json))
-            .andExpect(status().isCreated());
+        this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+                .andExpect(status().isCreated());
 
         this.mvc.perform(delete("/api/spelkaarten/2"));
     }
 
-    @Test
-    public void kiesKaartenUitEenVerzameling() throws Exception
-    {
+    private String getUserToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("user", "user", new ArrayList<>(Collections.singletonList(new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
 
-
-        Kaart kaart;
-        Spelkaart spelkaart;
-        String spelkaartJson;
-
-        for (int x = 0; x < 5; x++)
-        {
-
-            kaart = new Kaart("Een kaartje" + x, "http://www.afbeeldingurl.be", false, gebruiker);
-
-            spelkaart = new Spelkaart(kaart, cirkelsessie);
-
-            spelkaartJson = gson.toJson(spelkaart);
-
-            this.mvc.perform(post("/api/spelkaarten").contentType(MediaType.APPLICATION_JSON).content(spelkaartJson))
-                .andExpect(status().isCreated());
-        }
-
-
-        this.mvc.perform(get("/api/spelkaarten").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(5)))
-            .andExpect(jsonPath("$[0].cirkelsessie.id", is(1)))
-            .andExpect(jsonPath("$[1].cirkelsessie.id", is(2)))
-            .andExpect(jsonPath("$[2].cirkelsessie.id", is(3)))
-            .andExpect(jsonPath("$[3].cirkelsessie.id", is(4)))
-            .andExpect(jsonPath("$[4].cirkelsessie.id", is(5)));
-
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
     }
 
+    private String getAdminToken() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("admin", "admin", new ArrayList<>(Arrays.asList(new Rol("admin", "admin"), new Rol("user", "user")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
+    }
+
+    private String getTokenAsInexistent() throws Exception {
+        String json = objectMapper.writeValueAsString(new Gebruiker("wrong", "wrong", new ArrayList<>(Collections.singletonList(new Rol("wrong", "wrong")))));
+        MvcResult mvcResult = mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content(json)).andReturn();
+
+        return "Bearer " + objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Token.class).getToken();
+    }
 }

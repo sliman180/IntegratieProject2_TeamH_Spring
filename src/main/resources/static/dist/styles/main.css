@@ -301,6 +301,13 @@ a, .mdl-accordion, .mdl-button, .mdl-card, .mdl-checkbox, .mdl-dropdown-menu,
 }
 
 /*
+ * Hide all ng-cloak elements
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/*
  * Make html take up the entire screen
  * Then set touch-action to avoid touch delay on mobile IE
  */
@@ -426,7 +433,7 @@ p {
 }
 
 a {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   font-weight: 500;
 }
 
@@ -3003,7 +3010,7 @@ ul, ol {
 }
 
 .mdl-color--accent {
-  background-color: rgb(255,82,82) !important;
+  background-color: rgb(255,23,68) !important;
 }
 
 .mdl-color--accent-contrast {
@@ -3023,7 +3030,7 @@ ul, ol {
 }
 
 .mdl-color-text--accent {
-  color: rgb(255,82,82) !important;
+  color: rgb(255,23,68) !important;
 }
 
 .mdl-color-text--accent-contrast {
@@ -3106,7 +3113,7 @@ ul, ol {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   color: rgb(255,255,255);
 }
 .mdl-button .mdl-badge[data-badge]:after {
@@ -3114,7 +3121,7 @@ ul, ol {
   right: -5px;
 }
 .mdl-badge.mdl-badge--no-background[data-badge]:after {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   background: rgba(255,255,255,0.2);
   box-shadow: 0 0 1px gray;
 }
@@ -3245,17 +3252,17 @@ input.mdl-button[type="submit"] {
   background-color: rgba(158,158,158, 0.40);
 }
 .mdl-button--fab.mdl-button--colored {
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   color: rgb(255,255,255);
 }
 .mdl-button--fab.mdl-button--colored:hover {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored:focus:not(:active) {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored:active {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 .mdl-button--fab.mdl-button--colored .mdl-ripple {
   background: rgb(255,255,255);
@@ -3323,14 +3330,14 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-button--accent.mdl-button--accent {
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
 }
 .mdl-button--accent.mdl-button--accent .mdl-ripple {
   background: rgb(255,255,255);
 }
 .mdl-button--accent.mdl-button--accent.mdl-button--raised, .mdl-button--accent.mdl-button--accent.mdl-button--fab {
   color: rgb(255,255,255);
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
 }
 
 .mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled {
@@ -3375,7 +3382,7 @@ input.mdl-button[type="submit"] {
 }
 
 .mdl-card__media {
-  background-color: rgb(255,82,82);
+  background-color: rgb(255,23,68);
   background-repeat: repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -3751,9 +3758,9 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 }
 
 .mdl-mega-footer {
-  padding: 16px 40px;
-  color: rgb(158,158,158);
-  background-color: rgb(66,66,66);
+  padding: 24px 40px;
+  color: rgb(224,224,224);
+  background-color: rgb(26,35,126);
 }
 
 .mdl-mega-footer--top-section:after,
@@ -3769,18 +3776,18 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 
 .mdl-mega-footer--left-section,
 .mdl-mega-footer__left-section {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .mdl-mega-footer--right-section,
 .mdl-mega-footer__right-section {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .mdl-mega-footer--right-section a,
 .mdl-mega-footer__right-section a {
   display: block;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   color: inherit;
   text-decoration: none;
 }
@@ -3799,7 +3806,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   .mdl-mega-footer--right-section a,
   .mdl-mega-footer__right-section a {
     display: inline-block;
-    margin-left: 16px;
+    margin-left: 24px;
     line-height: 36px;
     vertical-align: middle;
   }
@@ -3810,7 +3817,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   height: 36px;
   padding: 0;
   margin: 0;
-  background-color: rgb(158,158,158);
+  background-color: rgb(224,224,224);
   border: none;
 }
 
@@ -3875,10 +3882,10 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 .mdl-mega-footer__heading-checkbox {
   position: absolute;
   width: 100%;
-  height: 55.8px;
-  padding: 32px;
+  height: 71.8px;
+  padding: 48px;
   margin: 0;
-  margin-top: -16px;
+  margin-top: -24px;
   cursor: pointer;
   z-index: 1;
   opacity: 0;
@@ -3908,8 +3915,8 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 .mdl-mega-footer__heading {
   position: relative;
   width: 100%;
-  padding-right: 39.8px;
-  margin-bottom: 16px;
+  padding-right: 47.8px;
+  margin-bottom: 24px;
   box-sizing: border-box;
   font-size: 14px;
   line-height: 23.8px;
@@ -3917,7 +3924,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: rgb(224,224,224);
+  color: rgb(238,238,238);
 }
 
 .mdl-mega-footer--heading:after,
@@ -3937,7 +3944,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   list-style: none;
   margin: 0;
   padding: 0;
-  margin-bottom: 32px;
+  margin-bottom: 48px;
 }
 .mdl-mega-footer--link-list:after,
 .mdl-mega-footer__link-list:after {
@@ -3988,12 +3995,12 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 }
 .mdl-mega-footer--bottom-section,
 .mdl-mega-footer__bottom-section {
-  padding-top: 16px;
-  margin-bottom: 16px;
+  padding-top: 24px;
+  margin-bottom: 24px;
 }
 
 .mdl-logo {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   color: white;
 }
 
@@ -4001,14 +4008,14 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
 .mdl-mega-footer__bottom-section .mdl-mega-footer__link-list li {
   float: left;
   margin-bottom: 0;
-  margin-right: 16px;
+  margin-right: 24px;
 }
 
 @media screen and (min-width: 760px) {
   .mdl-logo {
     float: left;
     margin-bottom: 0;
-    margin-right: 16px;
+    margin-right: 24px;
   }
 }
 .mdl-mini-footer {
@@ -4022,8 +4029,8 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 32px 16px;
-  color: rgb(158,158,158);
-  background-color: rgb(66,66,66);
+  color: rgb(224,224,224);
+  background-color: rgb(26,35,126);
 }
 .mdl-mini-footer:after {
   content: '';
@@ -4085,7 +4092,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   height: 36px;
   padding: 0;
   margin: 0;
-  background-color: rgb(158,158,158);
+  background-color: rgb(224,224,224);
   border: none;
 }
 
@@ -5273,7 +5280,7 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   bottom: 0;
   left: 0;
   position: absolute;
-  background: rgb(255,82,82);
+  background: rgb(255,23,68);
   -webkit-animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
           animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
   transition: all 1s cubic-bezier(0.4, 0, 1, 1);
@@ -5746,7 +5753,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
 .mdl-snackbar__action {
   background: transparent;
   border: none;
-  color: rgb(255,82,82);
+  color: rgb(255,23,68);
   text-transform: uppercase;
   padding: 14px 24px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
