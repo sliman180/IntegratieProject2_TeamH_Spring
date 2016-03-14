@@ -31,7 +31,6 @@ public class Chat
 
     public Chat()
     {
-
         //JPA
     }
 

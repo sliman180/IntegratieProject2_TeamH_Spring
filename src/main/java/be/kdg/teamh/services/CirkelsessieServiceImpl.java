@@ -4,12 +4,14 @@ import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.CirkelsessieNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
-import be.kdg.teamh.services.contracts.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +25,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     private CirkelsessieRepository repository;
 
     @Autowired
-    private MailService mailService;
+    private JavaMailSender javaMailSender;
 
     @Override
     public List<Cirkelsessie> all()
@@ -101,14 +103,39 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         return cirkelsessies;
     }
 
-    @Override
+/*    @Override
     public void invite(List<String> emails) throws MessagingException {
 
         Iterator<String> iterator = emails.iterator();
 
         while (iterator.hasNext()){
             String email = iterator.next();
-            mailService.send(email,"Invite for a session","Uncle Sam wants you, to take part in a session");
+//            mailService.send(email,"Invite for a session","Uncle Sam wants you, to take part in a session");
+            mailService.invite(emails);
+        }
+    }*/
+
+    @Override
+    public void invite(List<String> emails) throws MessagingException {
+
+        String subject="Invite for a session";
+        String body="You have been invited to take part in a session";
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        Iterator<String> iterator = emails.iterator();
+
+        while (iterator.hasNext()){
+            String email = iterator.next();
+
+            helper.setSubject(subject);
+            helper.setTo(email);
+            helper.setText(body);
+
+            javaMailSender.send(message);
+
+            helper = new MimeMessageHelper(message);
         }
     }
 
