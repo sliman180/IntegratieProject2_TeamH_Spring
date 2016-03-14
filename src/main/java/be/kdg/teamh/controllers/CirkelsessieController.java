@@ -87,14 +87,11 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/invite",method = RequestMethod.POST)
-    public String invite(@RequestBody List<String> emails){
+    public void invite(@RequestBody List<String> emails){
         try {
-//            System.out.println("CONTROLLER_EMAILS:"+emails);
             service.invite(emails);
-            return "Guests invited!";
         } catch (MessagingException e) {
             logger.error("*********ERROR inviting guests: "+e);
-            return "Error inviting guests";
         }
     }
 }

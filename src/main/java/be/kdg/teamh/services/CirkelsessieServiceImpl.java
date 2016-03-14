@@ -108,7 +108,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
         while (iterator.hasNext()){
             String email = iterator.next();
-            mailService.send(email,"Invite for a session","Uncle Sam wants you, to take part in a session");
+            mailService.send(email,"Invite for a session","You have been invited to take part in a session");
         }
     }
 

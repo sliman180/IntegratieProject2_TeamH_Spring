@@ -285,12 +285,8 @@ public class CirkelsessieTest
     public void inviteRegisterdUsersForCirculeSession() throws Exception{
 
         Gebruiker organisator = new Gebruiker("user","user","email");
-        String[] emailstemp = {"georgy.bagramyan@student.kdg.be","ali.bayraktar@student.kdg.be","kenneth.dewin@student.kdg.be","moussa.elbaroudi@student.kdg.be","sliman.said@student.kdg.be"};
-        Gebruiker georgy = new Gebruiker("user","user","georgy.bagramyan@student.kdg.be");
-        Gebruiker ali = new Gebruiker("user","user","ali.bayraktar@student.kdg.be");
-        Gebruiker kenneth = new Gebruiker("user","user","kenneth.dewin@student.kdg.be");
-        Gebruiker moussa = new Gebruiker("user","user","moussa.elbaroudi@student.kdg.be");
-        Gebruiker sliman = new Gebruiker("user","user","sliman.said@student.kdg.be");
+//        String[] emailstemp = {"georgy.bagramyan@student.kdg.be","ali.bayraktar@student.kdg.be","kenneth.dewin@student.kdg.be","moussa.elbaroudi@student.kdg.be","sliman.said@student.kdg.be"};
+        String[] emailstemp = {"georgy.bagramyan@student.kdg.be"};
 
         List<String> gebruikers = new ArrayList();
         gebruikers.addAll(Arrays.asList(emailstemp));
