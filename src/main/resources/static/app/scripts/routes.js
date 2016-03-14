@@ -72,6 +72,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/kaarten/details/:id", {
+                templateUrl: "/dist/views/kaarten/details.html",
+                controller: "KaartDetailsController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });

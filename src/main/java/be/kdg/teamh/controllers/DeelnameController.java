@@ -2,9 +2,9 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.DeelnameService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

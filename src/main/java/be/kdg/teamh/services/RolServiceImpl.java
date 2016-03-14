@@ -1,7 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.RolNotFound;
+import be.kdg.teamh.exceptions.notfound.RolNotFound;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.RolService;
 import org.springframework.beans.factory.annotation.Autowired;

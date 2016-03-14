@@ -2,8 +2,8 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.KaartNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.KaartenRepository;
 import be.kdg.teamh.services.contracts.KaartenService;

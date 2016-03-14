@@ -2,9 +2,9 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.SubthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
 import java.util.List;
 

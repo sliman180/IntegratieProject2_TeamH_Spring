@@ -52,8 +52,8 @@
     <ul class="demo-list-two mdl-list lijst">
         <li ng-repeat="subthema in vm.subthemas" class="mdl-list__item mdl-list__item--two-line lijst-item">
             <span class="mdl-list__item-primary-content lijst-content">
-              <i class="material-icons mdl-list__item-avatar">account_balance</i>
-                <span>Subthema naam: <a href="/#/subthemas/details/{{subthema.id}}">{{subthema.naam}}</a></span>
+              <i class="material-icons mdl-list__item-avatar">style</i>
+                <span>Subthema: <a href="/#/subthemas/details/{{subthema.id}}">{{subthema.naam}}</a></span>
                 <span class="mdl-list__item-sub-title">Beschrijving: {{subthema.beschrijving}}</span>
                 <span class="mdl-list__item-sub-title">Organisatie: {{subthema.hoofdthema.organisatie.naam}}</span>
                 <span class="mdl-list__item-sub-title">Hoofdthema: {{subthema.hoofdthema.naam}}</span>
@@ -62,9 +62,14 @@
             <span class="mdl-list__item-secondary-content">
               <span id="subthema-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
                 <p>
-                    <a class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">details</i></a>
-                    <a class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">delete</i></a>
-                    <a class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">save</i></a>
+                    <div>
+                        <a id="details" class="mdl-list__item-secondary-action blueIcon" href="/#/"><i class="material-icons">info_outline</i></a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="details">Bekijk subthema</div>
+                        <a id="wijzig" class="mdl-list__item-secondary-action blackIcon" href="/#/"><i class="material-icons">mode_edit</i></a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="wijzig">Wijzig subthema</div>
+                        <a id="verwijder" class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">delete</i></a>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="verwijder">Verwijder subthema</div>
+                    </div>
                 </p>
             </span>
         </li>

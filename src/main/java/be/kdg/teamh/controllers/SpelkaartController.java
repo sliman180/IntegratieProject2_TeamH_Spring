@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
-import be.kdg.teamh.exceptions.SpelkaartNotFound;
+import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 import be.kdg.teamh.services.contracts.SpelkaartenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

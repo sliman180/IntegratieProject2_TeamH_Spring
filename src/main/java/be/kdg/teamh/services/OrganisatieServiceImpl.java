@@ -2,8 +2,8 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.services.contracts.OrganisatieService;

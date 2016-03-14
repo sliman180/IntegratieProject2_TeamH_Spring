@@ -7,6 +7,14 @@
         var exports = {};
 
 
+        exports.find = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.createKaart = function (cirkelsessieId, kaart) {
 
             return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaart", kaart).then(function (response) {

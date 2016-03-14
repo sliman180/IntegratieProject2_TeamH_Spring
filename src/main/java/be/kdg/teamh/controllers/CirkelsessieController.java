@@ -1,9 +1,9 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.SubthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

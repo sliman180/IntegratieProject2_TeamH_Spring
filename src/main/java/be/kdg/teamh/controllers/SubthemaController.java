@@ -2,10 +2,10 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.IsForbidden;
-import be.kdg.teamh.exceptions.SubthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 import be.kdg.teamh.services.contracts.SubthemaService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
-import be.kdg.teamh.exceptions.SpelkaartNotFound;
+import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 
 import java.util.List;
 

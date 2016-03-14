@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

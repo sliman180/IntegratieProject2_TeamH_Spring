@@ -144,6 +144,12 @@
                 controllerAs: "vm"
             })
 
+            .when ("/kaarten/details/:id", {
+                templateUrl: "/dist/views/kaarten/details.html",
+                controller: "KaartDetailsController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });
@@ -582,6 +588,14 @@
 
         var exports = {};
 
+
+        exports.find = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId).then(function (response) {
+                return response.data;
+            });
+
+        };
 
         exports.createKaart = function (cirkelsessieId, kaart) {
 
@@ -1031,6 +1045,36 @@
     }
 
     angular.module("kandoe").controller("HoofdthemaIndexController", HoofdthemaIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+
+    KaartDetailsController.$inject = ["$route", "$routeParams", "KaartService"];
+    function KaartDetailsController($route, $routeParams, KaartService) {
+
+        var vm = this;
+
+        vm.kaart = {};
+
+        KaartService.find($routeParams.id).then(function (data) {
+                vm.kaart = data;
+        });
+
+
+
+        //vm.createComment = function (kaartId, kaart) {
+        //    KaartService.createKaartComment(kaartId, kaart).then(function () {
+        //        $route.reload();
+        //    });
+        //};
+    }
+
+
+    angular.module("kandoe").controller("KaartDetailsController", KaartDetailsController);
 
 })(window.angular);
 

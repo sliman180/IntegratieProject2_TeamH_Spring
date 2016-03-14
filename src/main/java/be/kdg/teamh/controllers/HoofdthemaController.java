@@ -1,9 +1,9 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
-import be.kdg.teamh.exceptions.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.HoofdthemaService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
