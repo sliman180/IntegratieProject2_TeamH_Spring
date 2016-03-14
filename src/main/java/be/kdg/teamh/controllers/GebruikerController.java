@@ -74,6 +74,13 @@ public class GebruikerController {
         return service.find(getUserId(token)).getSubthemas();
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound
+    {
+        return service.find(getUserId(token));
+    }
+
 
     private boolean isAdmin(String token) {
         Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
