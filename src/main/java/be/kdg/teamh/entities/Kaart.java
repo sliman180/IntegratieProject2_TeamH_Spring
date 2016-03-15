@@ -34,6 +34,7 @@ public class Kaart implements Serializable {
     private Subthema subthema;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Commentaar> commentaren = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)

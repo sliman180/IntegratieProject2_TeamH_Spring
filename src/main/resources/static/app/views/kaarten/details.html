@@ -191,6 +191,14 @@
         max-height: 300px;
     }
 
+    .comment-item {
+        border: 1px solid black;
+        padding: 1%;
+        margin-top: 1%;
+        background-color: gray;
+        color: white;
+    }
+
 </style>
 
 
@@ -213,13 +221,21 @@
             <h2 class="mdl-card__title-text">
                 Comments
             </h2>
-            <span class="mdl-badge" data-badge="{{vm.kaart.commentaren.length}}"></span>
+            <span class="mdl-badge" data-badge="{{vm.comments.length}}"></span>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="comment-item" ng-repeat="comment in  vm.comments | orderBy:'datum'">
+                <!--<p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}} | Gebruiker: {{comment.gebruiker}}</p>-->
+                <p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+
+                <p> Commentaar: {{comment.tekst}}</p>
+            </div>
         </div>
         <div class="mdl-card__supporting-text">
-            <form ng-submit="vm.createComment(vm.kaart.id, commentaart)" action="">
+            <form ng-submit="vm.createComment(vm.kaart.id, commentaar)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaart.tekst">
+                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst">
                     <label class="mdl-textfield__label" for="commentaartTekst">Inhoud</label>
                 </div>
 

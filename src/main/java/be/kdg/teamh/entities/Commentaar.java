@@ -24,7 +24,7 @@ public class Commentaar implements Serializable {
     private DateTime datum;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = Gebruiker.class, property = "gebruikersnaam")
     private Gebruiker gebruiker;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -33,6 +33,8 @@ public class Commentaar implements Serializable {
 
     public Commentaar() {
         //
+
+        this.datum = new DateTime();
     }
 
     public Commentaar(String tekst, Gebruiker gebruiker) {
@@ -80,4 +82,6 @@ public class Commentaar implements Serializable {
     public void setDatum(DateTime datum) {
         this.datum = datum;
     }
+
+
 }

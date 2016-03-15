@@ -174,7 +174,7 @@ public class KaartTest {
 
     @Test
     public void commentToevoegenAanKaart() throws Exception {
-        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null);
+        Kaart kaart = new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null);
         String json = objectMapper.writeValueAsString(kaart);
 
         this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
@@ -198,7 +198,7 @@ public class KaartTest {
 
     @Test(expected = NestedServletException.class)
     public void commentToevoegenAanKaart_nietToegelaten() throws Exception {
-        String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", false, null));
+        String json = objectMapper.writeValueAsString(new Kaart("Een kaartje", "http://www.afbeeldingurl.be", true, null));
 
         this.mvc.perform(post("/api/kaarten").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());

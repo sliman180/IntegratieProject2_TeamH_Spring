@@ -27,7 +27,7 @@ public interface KaartenService {
 
     List<Commentaar> allComments(int id) throws KaartNotFound;
 
-    void createComment(int id, Commentaar comment) throws KaartNotFound, CommentsNotAllowed;
+    void createComment(int id,int userId, Commentaar commentaar) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound;
 
     List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound;
 

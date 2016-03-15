@@ -208,9 +208,12 @@
                     </h2>
                 </div>
                 <div class="mdl-card__menu dropdown-menu">
-                    <span>Afbeelding url: <b><a ng-href="{{kaart.imageUrl}}"
-                                                target="_blank">Kaart afbeelding</a></b></span></span>
+                    <p>Afbeelding url:
+                        <b><a ng-href="{{kaart.imageUrl}}" target="_blank">Kaart afbeelding</a></b>
+                    </p>
 
+                    <p>Aaantal comments: <b>{{kaart.commentaren.length}}</b>
+                    </p>
 
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>

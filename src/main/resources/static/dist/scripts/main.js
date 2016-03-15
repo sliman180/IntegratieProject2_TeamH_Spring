@@ -629,6 +629,23 @@
 
         };
 
+        exports.getComments = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId + "/comments").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+
+        exports.createComment = function (kaartId, comment) {
+
+            return $http.post("/api/kaarten/" + kaartId + "/comments", comment).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }
@@ -829,8 +846,8 @@
 
         });
 
-        vm.isActive= function(date){
-            return new Date()>new Date(date);
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
         };
 
         vm.getTimes = function (n) {
@@ -920,7 +937,7 @@
 
         var vm = this;
 
-        vm.nowDate=new Date();
+        vm.nowDate = new Date();
 
 
         vm.cirkelsessies = [];
@@ -934,8 +951,8 @@
             vm.cirkelsessies = data;
         });
 
-        vm.isActive= function(date){
-            return new Date()>new Date(date);
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
         };
 
         SubthemaService.mySubthemas().then(function (data) {
@@ -1069,11 +1086,25 @@
         var vm = this;
 
         vm.kaart = {};
+        vm.comments=[];
 
         KaartService.find($routeParams.id).then(function (data) {
-                vm.kaart = data;
+            vm.kaart = data;
+
+            KaartService.getComments($routeParams.id).then(function (commentsdata){
+
+                vm.comments=commentsdata;
+            })
         });
 
+
+
+
+        vm.createComment= function(kaartId, comment){
+            KaartService.createComment(kaartId, comment).then(function () {
+                $route.reload;
+            });
+        };
 
 
         //vm.createComment = function (kaartId, kaart) {
