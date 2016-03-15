@@ -29,7 +29,7 @@ public class Cirkelsessie implements Serializable {
     private int maxAantalKaarten;
 
     @NotNull
-    private boolean isGesloten;
+    private CirkelsessieSatus status;
 
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -60,11 +60,11 @@ public class Cirkelsessie implements Serializable {
         //
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, DateTime startDatum, Chat chat) {
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, CirkelsessieSatus status, DateTime startDatum, Chat chat) {
         this.naam = naam;
         this.maxAantalKaarten = maxAantalKaarten;
         this.aantalCirkels = aantalCirkels;
-        this.isGesloten = isGesloten;
+        this.status = status;
         this.startDatum = startDatum;
         this.chat = chat;
     }
@@ -78,11 +78,11 @@ public class Cirkelsessie implements Serializable {
         this.chat = chat;
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, DateTime startDatum, Subthema subthema, Gebruiker gebruiker, Chat chat) {
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, CirkelsessieSatus status, DateTime startDatum, Subthema subthema, Gebruiker gebruiker, Chat chat) {
         this.naam = naam;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
-        this.isGesloten = isGesloten;
+        this.status = status;
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
@@ -106,12 +106,12 @@ public class Cirkelsessie implements Serializable {
         this.naam = naam;
     }
 
-    public boolean isGesloten() {
-        return isGesloten;
+    public CirkelsessieSatus getStatus() {
+        return status;
     }
 
-    public void setGesloten(boolean gesloten) {
-        isGesloten = gesloten;
+    public void setStatus(CirkelsessieSatus status) {
+        this.status = status;
     }
 
     public int getAantalCirkels() {

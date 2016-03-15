@@ -64,6 +64,27 @@
         width: 31%;
         float: left;
     }
+
+    .status-open {
+        color: green !important;
+    }
+
+    .status-gesloten {
+        color: black !important;
+    }
+
+    .status-beeindigd {
+        color: red !important;
+    }
+
+    .status-gestart {
+        color: green !important;
+    }
+
+    .color-blue {
+        color: blue !important;
+    }
+
 </style>
 
 
@@ -79,56 +100,65 @@
     <div id="cirkelsessie-filter" class="mdl-card__title-text">
         <div class="type-cirkelsessie">
             <div>
-                <h4>Toon cirkelsessies</h4>
-                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
-                    <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" checked>
-                    <span class="mdl-radio__label">Alle</span>
-                </label>
+                <h4>Filter cirkelsessies op status</h4>
+                <!--<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">-->
+                <!--<input ng-model="statusFilter" type="radio" id="option-1" class="mdl-radio__button" name="options" value="ALLES" checked>-->
+                <!--<span class="mdl-radio__label">ALLES</span>-->
+                <!--</label>-->
                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
-                    <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="2">
-                    <span class="mdl-radio__label">Actief</span>
+                    <input ng-model="filter.status" type="radio" id="option-2" class="mdl-radio__button" name="options"
+                           value="OPEN">
+                    <span class="mdl-radio__label">OPEN</span>
                 </label>
 
                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
-                    <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="2">
-                    <span class="mdl-radio__label">Gepland</span>
+                    <input ng-model="filter.status" type="radio" id="option-3" class="mdl-radio__button" name="options"
+                           value="GESLOTEN">
+                    <span class="mdl-radio__label">GESLOTEN</span>
+                </label>
+
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-4">
+                    <input ng-model="filter.status" type="radio" id="option-4" class="mdl-radio__button" name="options"
+                           value="GESTART">
+                    <span class="mdl-radio__label">GESTART</span>
+                </label>
+
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-5">
+                    <input ng-model="filter.status" type="radio" id="option-5" class="mdl-radio__button" name="options"
+                           value="BEEINDIGD">
+                    <span class="mdl-radio__label">BEEINDIGD</span>
                 </label>
             </div>
             <div>
                 <h4>Sorteer op</h4>
-                <select>
-                    <option value="Startdatum">Startdatum</option>
-                    <option value="Aantal deelnemers">Aantal deelnemers</option>
+                <select required ng-model="sortorder">
+                    <option value="+startDatum" selected>Startdatum</option>
+                    <option value="-deelnames.length">Aantal deelnemers</option>
                 </select>
             </div>
         </div>
 
-        <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label getmdl-select">-->
-        <!--<input class="mdl-textfield__input" type="text" id="sample2" value="Sorteer op" readonly tabIndex="-1">-->
-        <!--<label for="sample2">-->
-        <!--<i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>-->
-        <!--</label>-->
-        <!--<label for="sample2" class="mdl-textfield__label">Sorteer op</label>-->
-        <!--<ul for="sample2" class="mdl-menu mdl-menu&#45;&#45;bottom-left mdl-js-menu">-->
-        <!--<li class="mdl-menu__item">Startdatum</li>-->
-        <!--<li class="mdl-menu__item">Aantal deelnemers</li>-->
-        <!--</ul>-->
-        <!--</div>-->
-
-
     </div>
 
     <div class="demo-card-wide mdl-card mdl-shadow--2dp"
-         ng-repeat="cirkelsessie in vm.cirkelsessies | orderBy:'startDatum'">
+         ng-repeat="cirkelsessie in vm.cirkelsessies | filter:filter | orderBy:sortorder">
         <div class="">
             <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: <b>{{cirkelsessie.startDatum
-                |
-                date:'dd/MM/yyyy HH:mm'}}</b>
-                <!--<span ng-if="cirkelsessie.subthema!=null"> | Subthema: <b ng-init="vm.getSubthema(cirkelsessie.subthema)">{{subthema.naam}}</b></span>-->
+                <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
+
+                <p>Startdatum: <b>{{cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b></p>
+
+                <p>Status:
+                    <b class="status-open" ng-if="!vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status=='OPEN'">{{cirkelsessie.status}}</b>
+                    <b class="status-gesloten"
+                       ng-if="!vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status=='GESLOTEN'">{{cirkelsessie.status}}</b>
+                    <b class="status-beeindigd"
+                       ng-if="!vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status=='BEEINDIGD'">{{cirkelsessie.status}}</b>
+                    <b class="status-gestart" ng-if="vm.isActive(cirkelsessie.startDatum)">GESTART</b>
+                </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
@@ -141,9 +171,11 @@
                     account_box
                 </div>
 
-                <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
+                <span>
+                    <i ng-if="cirkelsessie.status=='OPEN'" class="material-icons status-open">lock_open</i>
 
-                <i ng-if="!vm.circelsessie.isClosed" class="material-icons">lock</i></span>
+                <i ng-if="cirkelsessie.status=='GESLOTEN'" class="material-icons status-gesloten">lock</i></span>
+                <i ng-if="cirkelsessie.status=='BEEINDIGD'" class="material-icons status-beeindigd">lock</i></span>
 
                 <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                     <i class="material-icons">share</i>
@@ -195,9 +227,15 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="radio" ng-value="true" id="isGesloten"
-                           ng-model="cirkelsessie.isGesloten">
-                    <label class="mdl-textfield__label" for="isGesloten">Gesloten</label>
+                    <label>Status </label>
+                    <select ng-model="cirkelsessie.status">
+                        <option value="OPEN">
+                            OPEN
+                        </option>
+                        <option value="GESLOTEN">
+                            GESLOTEN
+                        </option>
+                    </select>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -207,7 +245,7 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <label>Subthema</label>
+                    <label>Subthema </label>
                     <select ng-model="subthemaId">
                         <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}">
                             {{subthema.naam}}

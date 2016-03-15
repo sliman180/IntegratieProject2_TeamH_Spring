@@ -25,8 +25,11 @@ public interface CirkelsessieService {
 
     void addSpelkaart(int id, int userId, Kaart kaart) throws CirkelsessieNotFound, GebruikerNotFound;
 
+    List<Cirkelsessie> gesloten();
 
-    List<Cirkelsessie> actief();
+    List<Cirkelsessie> gestart();
 
-    List<Cirkelsessie> gepland();
+    List<Cirkelsessie> open();
+
+    List<Cirkelsessie> beeindigd();
 }

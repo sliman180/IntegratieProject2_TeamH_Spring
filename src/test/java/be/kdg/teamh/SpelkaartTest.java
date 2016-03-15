@@ -56,7 +56,7 @@ public class SpelkaartTest {
 
     @Test
     public void createSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -72,7 +72,7 @@ public class SpelkaartTest {
 
     @Test
     public void showSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -87,7 +87,7 @@ public class SpelkaartTest {
 
     @Test(expected = NestedServletException.class)
     public void showSpelkaart_nonExistingKaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -100,7 +100,7 @@ public class SpelkaartTest {
 
     @Test
     public void updateSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -121,7 +121,7 @@ public class SpelkaartTest {
 
     @Test(expected = NestedServletException.class)
     public void verschuifKaartMetEénStap_maxLimitReached() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         spelkaart.setPositie(cirkelsessie.getAantalCirkels());
@@ -136,7 +136,7 @@ public class SpelkaartTest {
 
     @Test(expected = NestedServletException.class)
     public void updateSpelkaart_nonExistingSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -152,7 +152,7 @@ public class SpelkaartTest {
 
     @Test
     public void deleteSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
@@ -170,7 +170,7 @@ public class SpelkaartTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteSpelkaart_nonExistingSpelkaart() throws Exception {
-        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, false, new DateTime(), null, null, null);
+        Cirkelsessie cirkelsessie = new Cirkelsessie("Een cirkelsessie", 10, 10, CirkelsessieSatus.OPEN, new DateTime(), null, null, null);
         Kaart kaart = new Kaart("Een kaart", "http://www.afbeeldingurl.be", true, null);
         Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
         String json = objectMapper.writeValueAsString(spelkaart);
