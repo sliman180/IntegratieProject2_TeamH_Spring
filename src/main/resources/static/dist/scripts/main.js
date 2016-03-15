@@ -829,8 +829,8 @@
 
         });
 
-        vm.isActive= function(date){
-            return new Date()>new Date(date);
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
         };
 
         vm.getTimes = function (n) {
@@ -920,7 +920,7 @@
 
         var vm = this;
 
-        vm.nowDate=new Date();
+        vm.nowDate = new Date();
 
 
         vm.cirkelsessies = [];
@@ -934,8 +934,8 @@
             vm.cirkelsessies = data;
         });
 
-        vm.isActive= function(date){
-            return new Date()>new Date(date);
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
         };
 
         SubthemaService.mySubthemas().then(function (data) {
@@ -1071,9 +1071,8 @@
         vm.kaart = {};
 
         KaartService.find($routeParams.id).then(function (data) {
-                vm.kaart = data;
+            vm.kaart = data;
         });
-
 
 
         //vm.createComment = function (kaartId, kaart) {

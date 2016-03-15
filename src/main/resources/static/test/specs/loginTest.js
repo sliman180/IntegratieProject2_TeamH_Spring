@@ -24,5 +24,7 @@ describe("On the home page", function(){
         expect(isPresent).toBe(false);
 
         element(by.css(".nav-logoff-btn")).click();
+
+
     });
 });
