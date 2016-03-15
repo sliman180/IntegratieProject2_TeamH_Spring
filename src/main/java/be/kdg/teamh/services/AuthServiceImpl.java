@@ -67,6 +67,12 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
+    public boolean isGuest(String token)
+    {
+        return hasRole(token, "guest");
+    }
+
+    @Override
     public boolean isRegistered(String token)
     {
         return hasRole(token, "user");

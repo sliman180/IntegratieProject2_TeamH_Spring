@@ -1,6 +1,7 @@
 package be.kdg.teamh.dtos.response;
 
 import be.kdg.teamh.entities.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class GebruikerResponse implements Serializable
     private String gebruikersnaam;
     private List<Organisatie> organisaties = new ArrayList<>();
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
+    private List<Subthema> subthemas = new ArrayList<>();
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
     private List<Kaart> kaarten = new ArrayList<>();
     private List<Deelname> deelnames = new ArrayList<>();
@@ -70,6 +72,16 @@ public class GebruikerResponse implements Serializable
         this.hoofdthemas = hoofdthemas;
     }
 
+    public List<Subthema> getSubthemas()
+    {
+        return subthemas;
+    }
+
+    public void setSubthemas(List<Subthema> subthemas)
+    {
+        this.subthemas = subthemas;
+    }
+
     public List<Cirkelsessie> getCirkelsessies()
     {
         return cirkelsessies;
@@ -120,6 +132,7 @@ public class GebruikerResponse implements Serializable
         this.berichten = berichten;
     }
 
+    @JsonBackReference
     public List<Rol> getRollen()
     {
         return rollen;

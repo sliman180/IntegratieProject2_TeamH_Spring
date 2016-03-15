@@ -17,7 +17,7 @@ public class Rol implements Serializable
     @NotNull
     private String naam;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "rollen")
     private List<Gebruiker> gebruikers = new ArrayList<>();
 
     public Rol()

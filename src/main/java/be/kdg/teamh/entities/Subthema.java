@@ -24,10 +24,13 @@ public class Subthema implements Serializable
     @ManyToOne
     private Hoofdthema hoofdthema;
 
+    @ManyToOne
+    private Gebruiker gebruiker;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "subthema")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "subthemas")
     private List<Kaart> kaarten = new ArrayList<>();
 
     public Subthema()
@@ -35,12 +38,12 @@ public class Subthema implements Serializable
         //
     }
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema)
+    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema, Gebruiker gebruiker)
     {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
-
+        this.gebruiker = gebruiker;
     }
 
     public int getId()
@@ -81,6 +84,16 @@ public class Subthema implements Serializable
     public void setHoofdthema(Hoofdthema hoofdthema)
     {
         this.hoofdthema = hoofdthema;
+    }
+
+    public Gebruiker getGebruiker()
+    {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker)
+    {
+        this.gebruiker = gebruiker;
     }
 
     public List<Cirkelsessie> getCirkelsessies()

@@ -1,8 +1,8 @@
 package be.kdg.teamh.dtos.response;
 
 import be.kdg.teamh.entities.Gebruiker;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +44,7 @@ public class RolResponse implements Serializable
         this.naam = naam;
     }
 
+    @JsonManagedReference
     public List<Gebruiker> getGebruikers()
     {
         return gebruikers;

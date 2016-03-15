@@ -33,6 +33,10 @@
                     $rootScope.naam = gebruiker.gebruikersnaam;
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
+                    $rootScope.aantalDeelnames = data.deelnames.length;
+                    $rootScope.aantalHoofdthemas = data.hoofdthemas.length;
+                    $rootScope.aantalOrganisaties = data.organisaties.length;
+                    $rootScope.aantalSubthemas = data.subthemas.length;
 
                 });
 

@@ -36,7 +36,7 @@ public class SubthemaApiTest extends ApiTest
         http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
@@ -52,7 +52,7 @@ public class SubthemaApiTest extends ApiTest
     @Test(expected = NestedServletException.class)
     public void createSubthema_nullInput() throws Exception
     {
-        SubthemaRequest subthema = new SubthemaRequest(null, null, 0);
+        SubthemaRequest subthema = new SubthemaRequest(null, null, 0, 0);
         String json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getUserToken()));
@@ -73,7 +73,7 @@ public class SubthemaApiTest extends ApiTest
         http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
@@ -106,13 +106,13 @@ public class SubthemaApiTest extends ApiTest
         this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        subthema = new SubthemaRequest("Houffalize", "Route 3", 1);
+        subthema = new SubthemaRequest("Houffalize", "Route 3", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(put("/api/subthemas/1", json).header("Authorization", getAdminToken()))
@@ -139,13 +139,13 @@ public class SubthemaApiTest extends ApiTest
         this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        subthema = new SubthemaRequest(null, null, 1);
+        subthema = new SubthemaRequest(null, null, 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(put("/api/subthemas/1", json).header("Authorization", getAdminToken()));
@@ -154,7 +154,7 @@ public class SubthemaApiTest extends ApiTest
     @Test(expected = NestedServletException.class)
     public void updateSubthema_nonExistingSubthema() throws Exception
     {
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         String json = objectMapper.writeValueAsString(subthema);
 
         http.perform(put("/api/subthemas/1", json).header("Authorization", getAdminToken()));
@@ -175,7 +175,7 @@ public class SubthemaApiTest extends ApiTest
         this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))

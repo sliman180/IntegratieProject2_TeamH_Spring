@@ -1,0 +1,253 @@
+<style>
+
+    .tooltip {
+        font-size: 12px;
+    }
+
+    .mdl-card__title {
+        background-color: royalblue;
+    }
+
+    #chat {
+        overflow-y: auto;
+        height: 300px;
+    }
+
+    #chatContainer {
+        height: 500px;
+        margin-top: 10%;
+    }
+
+    #kaart-header {
+        width: 100%;
+        padding: 2% 1%;
+    }
+
+    #kaart-begroeting {
+        width: 20%;
+        font-size: 3em;
+    }
+
+    #header-buttons {
+        float: right;
+    }
+
+</style>
+
+
+<div id="kaart-header">
+    <span id="kaart-begroeting">Kaart details</span>
+</div>
+
+<div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
+
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{vm.kaart.tekst}}</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        Aangemaakt door: <b>{{vm.kaart.gebruiker.gebruikersnaam}} </b>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+              <span>Afbeelding url:
+                        <b>
+                            <a ng-href="{{vm.kaart.imageUrl}}" target="_blank">Kaart afbeelding</a>
+                        </b>
+              </span>
+    </div>
+
+    <div class="mdl-card__menu">
+        <!-- Right aligned menu below button -->
+        <button id="demo-menu-lower-right-d"
+                class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+            for="demo-menu-lower-right-d">
+            <!--<li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>-->
+            <!--<li disabled class="mdl-menu__item">Wijzig</li>-->
+            <!--<li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>-->
+
+            <li disabled class="mdl-menu__item">Verwijder</li>
+
+        </ul>
+    </div>
+</div>
+
+<!-- Event card -->
+<style>
+    .demo-card-event.mdl-card {
+        width: 256px;
+        height: 20px;
+        background: #3E4EB8;
+    }
+
+    .demo-card-event > .mdl-card__actions {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-card-event > .mdl-card__title {
+        align-items: flex-start;
+    }
+
+    .demo-card-event > .mdl-card__title > h4 {
+        margin-top: 0;
+    }
+
+    .demo-card-event > .mdl-card__actions {
+        display: flex;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    .demo-card-event > .mdl-card__actions > .material-icons {
+        padding-right: 10px;
+    }
+
+    .demo-card-event > .mdl-card__title,
+    .demo-card-event > .mdl-card__actions,
+    .demo-card-event > .mdl-card__actions > .mdl-button {
+        color: #fff;
+    }
+
+    .mdl-badge {
+        margin-bottom: 4%;
+    }
+
+    .kaart {
+        min-height: 0;
+        width: 100%;
+        overflow: visible;
+        margin-bottom: 1%;
+        position: inherit !important;
+        border: 1px solid black;
+    }
+
+    .kaart-titel {
+        background-color: #9C9C9C;
+    }
+
+    .mdl-card__supporting-text {
+        overflow: visible !important;
+    }
+
+    /*dropdown voor kaart*/
+    .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        float: right;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        right: 0;
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #3e8e41;
+    }
+
+    .dropdown-menu {
+        top: 5px !important;
+        position: inherit !important;
+        background-color: aliceblue;
+        text-align: center;
+    }
+
+    .dropdown-content {
+        cursor: pointer;
+    }
+
+    .kaartAfbeelding {
+        max-height: 300px;
+    }
+
+    .comment-item {
+        border: 1px solid black;
+        padding: 1%;
+        margin-top: 1%;
+        background-color: gray;
+        color: white;
+    }
+
+</style>
+
+
+<div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
+    <div>
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">
+                Kaart afbeelding
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <div class="mdl-card mdl-shadow--2dp kaart">
+                <img class="kaartAfbeelding" src="{{vm.kaart.imageUrl}}" alt="{{vm.kaart.tekst}}-afbeelding"/>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">
+                Comments
+            </h2>
+            <span class="mdl-badge" data-badge="{{vm.comments.length}}"></span>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="comment-item" ng-repeat="comment in  vm.comments | orderBy:'datum'">
+                <!--<p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}} | Gebruiker: {{comment.gebruiker}}</p>-->
+                <p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+
+                <p> Commentaar: {{comment.tekst}}</p>
+            </div>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <form ng-submit="vm.createComment(vm.kaart.id, commentaar)" action="">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst">
+                    <label class="mdl-textfield__label" for="commentaartTekst">Inhoud</label>
+                </div>
+
+
+                <button
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Commentaar toevoegen
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+

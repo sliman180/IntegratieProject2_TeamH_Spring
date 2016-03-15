@@ -4,7 +4,6 @@ import be.kdg.teamh.dtos.request.BerichtRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.response.*;
-import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -39,17 +38,31 @@ public class CirkelsessieController
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "gepland", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> gepland()
-    {
-        return service.gepland();
-    }
-
-    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "actief", method = RequestMethod.GET)
     public List<CirkelsessieResponse> actief()
     {
         return service.actief();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "gesloten", method = RequestMethod.GET)
+    public List<CirkelsessieResponse> gesloten()
+    {
+        return service.gesloten();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "beindigd", method = RequestMethod.GET)
+    public List<CirkelsessieResponse> beindigd()
+    {
+        return service.beindigd();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "gepland", method = RequestMethod.GET)
+    public List<CirkelsessieResponse> gepland()
+    {
+        return service.gepland();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

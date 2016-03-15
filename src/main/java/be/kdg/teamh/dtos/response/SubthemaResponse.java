@@ -13,6 +13,7 @@ public class SubthemaResponse implements Serializable
     private String naam;
     private String beschrijving;
     private int hoofdthema;
+    private int gebruiker;
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
     private List<Kaart> kaarten = new ArrayList<>();
 
@@ -21,12 +22,13 @@ public class SubthemaResponse implements Serializable
         //
     }
 
-    public SubthemaResponse(int id, String naam, String beschrijving, int hoofdthema)
+    public SubthemaResponse(int id, String naam, String beschrijving, int hoofdthema, int gebruiker)
     {
         this.id = id;
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
+        this.gebruiker = gebruiker;
     }
 
     public int getId()
@@ -67,6 +69,16 @@ public class SubthemaResponse implements Serializable
     public void setHoofdthema(int hoofdthema)
     {
         this.hoofdthema = hoofdthema;
+    }
+
+    public int getGebruiker()
+    {
+        return gebruiker;
+    }
+
+    public void setGebruiker(int gebruiker)
+    {
+        this.gebruiker = gebruiker;
     }
 
     public List<Cirkelsessie> getCirkelsessies()

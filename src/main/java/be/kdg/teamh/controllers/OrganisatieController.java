@@ -2,7 +2,6 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.dtos.response.OrganisatieResponse;
-import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;

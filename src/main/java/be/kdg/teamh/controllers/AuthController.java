@@ -4,7 +4,6 @@ import be.kdg.teamh.dtos.request.LoginRequest;
 import be.kdg.teamh.dtos.request.RegistratieRequest;
 import be.kdg.teamh.dtos.response.GebruikerResponse;
 import be.kdg.teamh.dtos.response.LoginResponse;
-import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.exceptions.PasswordsDoNotMatch;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;

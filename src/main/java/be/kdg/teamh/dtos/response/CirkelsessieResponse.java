@@ -1,6 +1,7 @@
 package be.kdg.teamh.dtos.response;
 
 import be.kdg.teamh.entities.Bericht;
+import be.kdg.teamh.entities.Status;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Spelkaart;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -17,9 +18,9 @@ public class CirkelsessieResponse implements Serializable
 {
     private int id;
     private String naam;
+    private Status status;
     private int aantalCirkels;
     private int maxAantalKaarten;
-    private boolean isGesloten;
     private LocalDateTime startDatum;
     private int subthema;
     private int gebruiker;
@@ -32,13 +33,13 @@ public class CirkelsessieResponse implements Serializable
         //
     }
 
-    public CirkelsessieResponse(int id, String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, int subthema, int gebruiker)
+    public CirkelsessieResponse(int id, String naam, Status status, int aantalCirkels, int maxAantalKaarten, LocalDateTime startDatum, int subthema, int gebruiker)
     {
         this.id = id;
         this.naam = naam;
+        this.status = status;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
-        this.isGesloten = isGesloten;
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
@@ -64,6 +65,16 @@ public class CirkelsessieResponse implements Serializable
         this.naam = naam;
     }
 
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    }
+
     public int getAantalCirkels()
     {
         return aantalCirkels;
@@ -82,16 +93,6 @@ public class CirkelsessieResponse implements Serializable
     public void setMaxAantalKaarten(int maxAantalKaarten)
     {
         this.maxAantalKaarten = maxAantalKaarten;
-    }
-
-    public boolean isGesloten()
-    {
-        return isGesloten;
-    }
-
-    public void setGesloten(boolean gesloten)
-    {
-        isGesloten = gesloten;
     }
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)

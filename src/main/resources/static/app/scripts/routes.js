@@ -54,6 +54,30 @@
                 controllerAs: "vm"
             })
 
+            .when ("/hoofdthemas", {
+                templateUrl: "/dist/views/hoofdthemas/index.html",
+                controller: "HoofdthemaIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas", {
+                templateUrl: "/dist/views/subthemas/index.html",
+                controller: "SubthemaIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas/details/:id", {
+                templateUrl: "/dist/views/subthemas/details.html",
+                controller: "SubthemaDetailsController",
+                controllerAs: "vm"
+            })
+
+            .when ("/kaarten/details/:id", {
+                templateUrl: "/dist/views/kaarten/details.html",
+                controller: "KaartDetailsController",
+                controllerAs: "vm"
+            })
+
             .otherwise({
                 redirectTo: "/"
             });

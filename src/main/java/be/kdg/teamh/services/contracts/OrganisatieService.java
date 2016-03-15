@@ -12,8 +12,6 @@ public interface OrganisatieService
 {
     List<OrganisatieResponse> all();
 
-    List<OrganisatieResponse> allOfGebruiker(int id) throws GebruikerNotFound;
-
     void create(OrganisatieRequest organisatie) throws GebruikerNotFound;
 
     OrganisatieResponse find(int id) throws OrganisatieNotFound;

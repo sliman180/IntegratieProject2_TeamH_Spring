@@ -19,13 +19,13 @@ public class Cirkelsessie implements Serializable
     private String naam;
 
     @NotNull
+    private Status status;
+
+    @NotNull
     private int aantalCirkels;
 
     @NotNull
     private int maxAantalKaarten;
-
-    @NotNull
-    private boolean isGesloten;
 
     @NotNull
     private LocalDateTime startDatum;
@@ -50,12 +50,12 @@ public class Cirkelsessie implements Serializable
         //
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker)
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Status status, LocalDateTime startDatum, Subthema subthema, Gebruiker gebruiker)
     {
         this.naam = naam;
+        this.status = status;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
-        this.isGesloten = isGesloten;
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
@@ -96,14 +96,14 @@ public class Cirkelsessie implements Serializable
         this.maxAantalKaarten = maxAantalKaarten;
     }
 
-    public boolean isGesloten()
+    public Status getStatus()
     {
-        return isGesloten;
+        return status;
     }
 
-    public void setGesloten(boolean gesloten)
+    public void setStatus(Status status)
     {
-        isGesloten = gesloten;
+        this.status = status;
     }
 
     public LocalDateTime getStartDatum()

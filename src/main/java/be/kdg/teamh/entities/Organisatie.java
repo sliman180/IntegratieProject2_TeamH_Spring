@@ -83,4 +83,9 @@ public class Organisatie implements Serializable
     {
         this.hoofdthemas = hoofdthemas;
     }
+
+    public void addHoofdthema(Hoofdthema hoofdthema)
+    {
+        this.hoofdthemas.add(hoofdthema);
+    }
 }

@@ -52,6 +52,7 @@ public class GebruikerServiceImpl implements GebruikerService
             dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
             dto.setOrganisaties(gebruiker.getOrganisaties());
             dto.setHoofdthemas(gebruiker.getHoofdthemas());
+            dto.setSubthemas(gebruiker.getSubthemas());
             dto.setCirkelsessies(gebruiker.getCirkelsessies());
             dto.setKaarten(gebruiker.getKaarten());
             dto.setCommentaren(gebruiker.getCommentaren());
@@ -115,6 +116,7 @@ public class GebruikerServiceImpl implements GebruikerService
         dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
         dto.setOrganisaties(gebruiker.getOrganisaties());
         dto.setHoofdthemas(gebruiker.getHoofdthemas());
+        dto.setSubthemas(gebruiker.getSubthemas());
         dto.setCirkelsessies(gebruiker.getCirkelsessies());
         dto.setKaarten(gebruiker.getKaarten());
         dto.setCommentaren(gebruiker.getCommentaren());
@@ -145,6 +147,7 @@ public class GebruikerServiceImpl implements GebruikerService
         dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
         dto.setOrganisaties(gebruiker.getOrganisaties());
         dto.setHoofdthemas(gebruiker.getHoofdthemas());
+        dto.setSubthemas(gebruiker.getSubthemas());
         dto.setCirkelsessies(gebruiker.getCirkelsessies());
         dto.setKaarten(gebruiker.getKaarten());
         dto.setCommentaren(gebruiker.getCommentaren());
@@ -251,7 +254,7 @@ public class GebruikerServiceImpl implements GebruikerService
             dto.setNaam(cirkelsessie.getNaam());
             dto.setAantalCirkels(cirkelsessie.getAantalCirkels());
             dto.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
-            dto.setGesloten(cirkelsessie.isGesloten());
+            dto.setStatus(cirkelsessie.getStatus());
             dto.setStartDatum(cirkelsessie.getStartDatum());
             dto.setGebruiker(cirkelsessie.getGebruiker().getId());
             dto.setSubthema(cirkelsessie.getSubthema().getId());

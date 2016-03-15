@@ -3,6 +3,7 @@ package be.kdg.teamh.api;
 import be.kdg.teamh.dtos.request.*;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
+import be.kdg.teamh.entities.Status;
 import org.junit.Test;
 import org.springframework.web.util.NestedServletException;
 
@@ -27,25 +28,25 @@ public class DeelnameApiTest extends ApiTest
         http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", 10, 10, false, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        DeelnameRequest deelname = new DeelnameRequest(20, true, 1, 1);
+        DeelnameRequest deelname = new DeelnameRequest(20, true, LocalDateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(deelname);
 
         http.perform(post("/api/cirkelsessies/1/deelnames", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        deelname = new DeelnameRequest(10, true, 1, 1);
+        deelname = new DeelnameRequest(10, true, LocalDateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(deelname);
 
         http.perform(put("/api/deelnames/1", json).header("Authorization", getAdminToken()))
@@ -55,7 +56,7 @@ public class DeelnameApiTest extends ApiTest
     @Test(expected = NestedServletException.class)
     public void updateCirkelsessie_nonExistingDeelname() throws Exception
     {
-        DeelnameRequest deelname = new DeelnameRequest(20, true, 1, 1);
+        DeelnameRequest deelname = new DeelnameRequest(20, true, LocalDateTime.now(), 1, 1);
         String json = objectMapper.writeValueAsString(deelname);
 
         http.perform(put("/api/deelnames/1", json).header("Authorization", getAdminToken()));
@@ -76,19 +77,19 @@ public class DeelnameApiTest extends ApiTest
         http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1);
+        SubthemaRequest subthema = new SubthemaRequest("Houffalize", "Route 6", 1, 1);
         json = objectMapper.writeValueAsString(subthema);
 
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", 10, 10, false, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        DeelnameRequest deelname = new DeelnameRequest(15, false, 1, 1);
+        DeelnameRequest deelname = new DeelnameRequest(15, false, LocalDateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(deelname);
 
         http.perform(post("/api/cirkelsessies/1/deelnames", json).header("Authorization", getAdminToken()))

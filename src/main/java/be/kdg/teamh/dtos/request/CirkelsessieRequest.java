@@ -1,5 +1,6 @@
 package be.kdg.teamh.dtos.request;
 
+import be.kdg.teamh.entities.Status;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -15,17 +16,15 @@ public class CirkelsessieRequest implements Serializable
     private String naam;
 
     @NotNull
+    private Status status;
+
+    @NotNull
     private int aantalCirkels;
 
     @NotNull
     private int maxAantalKaarten;
 
     @NotNull
-    private boolean isGesloten;
-
-    @NotNull
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDatum;
 
     @NotNull
@@ -39,12 +38,12 @@ public class CirkelsessieRequest implements Serializable
         //
     }
 
-    public CirkelsessieRequest(String naam, int aantalCirkels, int maxAantalKaarten, boolean isGesloten, LocalDateTime startDatum, int subthema, int gebruiker)
+    public CirkelsessieRequest(String naam, Status status, int aantalCirkels, int maxAantalKaarten, LocalDateTime startDatum, int subthema, int gebruiker)
     {
         this.naam = naam;
+        this.status = status;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
-        this.isGesloten = isGesloten;
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
@@ -58,6 +57,16 @@ public class CirkelsessieRequest implements Serializable
     public void setNaam(String naam)
     {
         this.naam = naam;
+    }
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
     }
 
     public int getAantalCirkels()
@@ -80,21 +89,13 @@ public class CirkelsessieRequest implements Serializable
         this.maxAantalKaarten = maxAantalKaarten;
     }
 
-    public boolean isGesloten()
-    {
-        return isGesloten;
-    }
-
-    public void setGesloten(boolean gesloten)
-    {
-        isGesloten = gesloten;
-    }
-
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getStartDatum()
     {
         return startDatum;
     }
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setStartDatum(LocalDateTime startDatum)
     {
         this.startDatum = startDatum;

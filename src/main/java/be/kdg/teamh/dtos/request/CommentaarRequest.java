@@ -17,8 +17,6 @@ public class CommentaarRequest implements Serializable
     private String tekst;
 
     @NotNull
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime datum;
 
     @NotNull
@@ -50,11 +48,13 @@ public class CommentaarRequest implements Serializable
         this.tekst = tekst;
     }
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getDatum()
     {
         return datum;
     }
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setDatum(LocalDateTime datum)
     {
         this.datum = datum;

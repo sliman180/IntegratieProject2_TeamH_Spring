@@ -30,9 +30,11 @@ public class Bericht implements Serializable
         //
     }
 
-    public Bericht(String tekst, Gebruiker gebruiker)
+    public Bericht(String tekst, LocalDateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
     {
         this.tekst = tekst;
+        this.datum = datum;
+        this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
 

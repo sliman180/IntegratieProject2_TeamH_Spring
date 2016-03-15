@@ -29,6 +29,10 @@
 
         });
 
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
+        };
+
         vm.isDeelnemer = function (list) {
 
             if (list == null) {

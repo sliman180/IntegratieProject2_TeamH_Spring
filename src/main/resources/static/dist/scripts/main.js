@@ -33,6 +33,10 @@
                     $rootScope.naam = gebruiker.gebruikersnaam;
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
+                    $rootScope.aantalDeelnames = data.deelnames.length;
+                    $rootScope.aantalHoofdthemas = data.hoofdthemas.length;
+                    $rootScope.aantalOrganisaties = data.organisaties.length;
+                    $rootScope.aantalSubthemas = data.subthemas.length;
 
                 });
 
@@ -114,6 +118,30 @@
             .when ("/deelnames", {
                 templateUrl: "/dist/views/deelnames/index.html",
                 controller: "DeelnameIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/hoofdthemas", {
+                templateUrl: "/dist/views/hoofdthemas/index.html",
+                controller: "HoofdthemaIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas", {
+                templateUrl: "/dist/views/subthemas/index.html",
+                controller: "SubthemaIndexController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas/details/:id", {
+                templateUrl: "/dist/views/subthemas/details.html",
+                controller: "SubthemaDetailsController",
+                controllerAs: "vm"
+            })
+
+            .when ("/kaarten/details/:id", {
+                templateUrl: "/dist/views/kaarten/details.html",
+                controller: "KaartDetailsController",
                 controllerAs: "vm"
             })
 
@@ -223,6 +251,14 @@
         exports.create = function (cirkelsessie) {
 
             return $http.post("/api/cirkelsessies", cirkelsessie).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.createWithSubthema = function (cirkelsessie, subthemaId) {
+
+            return $http.post("/api/cirkelsessies/subthema=" + subthemaId, cirkelsessie).then(function (response) {
                 return response.data;
             });
 
@@ -415,6 +451,14 @@
 
         var exports = {};
 
+        exports.myHoofdthemas = function () {
+
+            return $http.get("/api/gebruikers/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.all = function () {
 
             return $http.get("/api/hoofdthemas").then(function (response) {
@@ -431,12 +475,19 @@
 
         };
 
+        exports.createWithOrganisation = function (hoofdthema, organisatieId) {
+
+            return $http.post("/api/hoofdthemas/organisatie=" + organisatieId, hoofdthema).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.create = function (hoofdthema) {
 
             return $http.post("/api/hoofdthemas", hoofdthema).then(function (response) {
                 return response.data;
             });
-
         };
 
         exports.update = function (hoofdthema) {
@@ -547,6 +598,14 @@
 
         var exports = {};
 
+        exports.find = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.createKaart = function (cirkelsessieId, kaart) {
 
             return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaarten", kaart).then(function (response) {
@@ -555,9 +614,41 @@
 
         };
 
+        exports.createKaartForSubthema = function (subthemaId, kaart) {
+
+            return $http.post("/api/subthemas/" + subthemaId + "/kaart", kaart).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.verschuifKaart = function (spelkaartId) {
 
             return $http.post("/api/spelkaarten/" + spelkaartId + "/verschuif").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getKaarten = function (subthemaId) {
+
+            return $http.get("/api/subthemas/" + subthemaId + "/kaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getComments = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId + "/comments").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.createComment = function (kaartId, comment) {
+
+            return $http.post("/api/kaarten/" + kaartId + "/comments", comment).then(function (response) {
                 return response.data;
             });
 
@@ -633,6 +724,78 @@
     }
 
     angular.module("kandoe").factory("OrganisatieService", OrganisatieService);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    SubthemaService.$inject = ["$http"];
+    function SubthemaService($http) {
+
+        var exports = {};
+
+        exports.mySubthemas = function () {
+
+            return $http.get("/api/gebruikers/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.all = function () {
+
+            return $http.get("/api/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.find = function (id) {
+
+            return $http.get("/api/subthemas/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.createWithHoofdthema = function (subthema, hoofdthemaId) {
+
+            return $http.post("/api/subthemas/hoofdthema=" + hoofdthemaId, subthema).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.create = function (subthema) {
+
+            return $http.post("/api/subthemas", subthema).then(function (response) {
+                return response.data;
+            });
+        };
+
+        exports.update = function (subthema) {
+
+            return $http.put("/api/subthemas/" + subthema.id, subthema).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.delete = function (id) {
+
+            return $http.delete("/api/hoofdthemas/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        return exports;
+
+    }
+
+    angular.module("kandoe").factory("SubthemaService", SubthemaService);
 
 })(window.angular);
 
@@ -741,6 +904,27 @@
 
     "use strict";
 
+    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
+    function DeelnameIndexController($rootScope, DeelnameService) {
+
+        var vm = this;
+
+        vm.deelnames = [];
+
+        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.deelnames = data;
+        });
+
+    }
+
+    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     CirkelsessieDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService"];
     function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, KaartService) {
 
@@ -768,6 +952,10 @@
             });
 
         });
+
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
+        };
 
         vm.isDeelnemer = function (list) {
 
@@ -854,47 +1042,52 @@
 
     "use strict";
 
-    CirkelsessieIndexController.$inject = ["$route", "CirkelsessieService"];
-    function CirkelsessieIndexController($route, CirkelsessieService) {
+    CirkelsessieIndexController.$inject = ["$route", "CirkelsessieService", "SubthemaService"];
+    function CirkelsessieIndexController($route, CirkelsessieService, SubthemaService) {
 
         var vm = this;
 
+        vm.nowDate = new Date();
         vm.cirkelsessies = [];
+        vm.subthemas = [];
+        vm.subthema = {};
 
         CirkelsessieService.all().then(function (data) {
             vm.cirkelsessies = data;
         });
 
-        vm.addCirkelsessie = function (cirkelsessie) {
-            CirkelsessieService.create(cirkelsessie).then(function () {
-                $route.reload();
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
+        };
+
+        SubthemaService.mySubthemas().then(function (data) {
+            vm.subthemas = data;
+        });
+
+        vm.getSubthema = function (subthemaId) {
+
+            SubthemaService.find(subthemaId).then(function (data) {
+                vm.subthema = data;
             });
+
+        };
+
+        vm.addCirkelsessie = function (cirkelsessie, subthemaId) {
+            if (subthemaId > 0) {
+                CirkelsessieService.createWithSubthema(cirkelsessie, subthemaId).then(function () {
+                    $route.reload();
+                });
+            } else {
+                CirkelsessieService.create(cirkelsessie).then(function () {
+                    $route.reload();
+                });
+            }
+
         };
 
     }
 
     angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
-    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
-    function DeelnameIndexController($rootScope, DeelnameService) {
-
-        var vm = this;
-
-        vm.deelnames = [];
-
-        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
-            vm.deelnames = data;
-        });
-
-    }
-
-    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
 
 })(window.angular);
 
@@ -936,5 +1129,168 @@
     }
 
     angular.module("kandoe").controller("HomeController", HomeController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    HoofdthemaIndexController.$inject = ["$route", "HoofdthemaService", "OrganisatieService"];
+    function HoofdthemaIndexController($route, HoofdthemaService, OrganisatieService) {
+
+        var vm = this;
+
+        vm.hoofdthemas = [];
+
+        vm.organisaties = [];
+
+
+        HoofdthemaService.myHoofdthemas().then(function (data) {
+            vm.hoofdthemas = data;
+        });
+
+        OrganisatieService.myOrganisaties().then(function (data) {
+            vm.organisaties = data;
+        });
+
+
+        vm.addHoofdthema = function (hoofdthema, organisatieId) {
+            if (organisatieId > 0) {
+                HoofdthemaService.createWithOrganisation(hoofdthema, organisatieId).then(function () {
+                    $route.reload();
+                });
+            } else {
+                HoofdthemaService.create(hoofdthema).then(function () {
+                    $route.reload();
+                });
+            }
+        }
+
+    }
+
+    angular.module("kandoe").controller("HoofdthemaIndexController", HoofdthemaIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+
+    KaartDetailsController.$inject = ["$route", "$routeParams", "KaartService"];
+    function KaartDetailsController($route, $routeParams, KaartService) {
+
+        var vm = this;
+
+        vm.kaart = {};
+        vm.comments = [];
+
+        KaartService.find($routeParams.id).then(function (data) {
+            vm.kaart = data;
+
+            KaartService.getComments($routeParams.id).then(function (commentsdata) {
+
+                vm.comments = commentsdata;
+            })
+        });
+
+
+        vm.createComment = function (kaartId, comment) {
+            KaartService.createComment(kaartId, comment).then(function () {
+                $route.reload;
+            });
+        };
+
+
+        //vm.createComment = function (kaartId, kaart) {
+        //    KaartService.createKaartComment(kaartId, kaart).then(function () {
+        //        $route.reload();
+        //    });
+        //};
+    }
+
+
+    angular.module("kandoe").controller("KaartDetailsController", KaartDetailsController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+
+    SubthemaDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "SubthemaService", "ChatService", "KaartService", "DeelnameService", "SpelkaartService"];
+    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, ChatService, KaartService, DeelnameService, SpelkaartService) {
+
+        var vm = this;
+
+        vm.subthema = {};
+        vm.subthemaId = {};
+        vm.kaarten = [];
+
+        SubthemaService.find($routeParams.id).then(function (data) {
+
+            KaartService.getKaarten(data.id).then(function (kaartendata) {
+                vm.kaarten = kaartendata;
+            });
+
+            vm.subthema = data;
+            vm.subthemaId = data.id;
+
+        });
+
+
+        vm.createKaart = function (subthemaId, kaart) {
+            KaartService.createKaartForSubthema(subthemaId, kaart).then(function () {
+                $route.reload();
+            });
+        };
+
+    }
+
+
+    angular.module("kandoe").controller("SubthemaDetailsController", SubthemaDetailsController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    SubthemaIndexController.$inject = ["$route", "HoofdthemaService", "SubthemaService"];
+    function SubthemaIndexController($route, HoofdthemaService, SubthemaService) {
+
+        var vm = this;
+
+        vm.subthemas = [];
+
+        vm.hoofdthemas = [];
+
+
+        SubthemaService.mySubthemas().then(function (data) {
+            vm.subthemas = data;
+        });
+
+        HoofdthemaService.myHoofdthemas().then(function (data) {
+            vm.hoofdthemas = data;
+        });
+
+
+        vm.addSubthema = function (subthema, hoofdthemaId) {
+            if (hoofdthemaId > 0) {
+                SubthemaService.createWithHoofdthema(subthema, hoofdthemaId).then(function () {
+                    $route.reload();
+                });
+            } else {
+                SubthemaService.create(subthema).then(function () {
+                    $route.reload();
+                });
+            }
+        }
+
+    }
+
+    angular.module("kandoe").controller("SubthemaIndexController", SubthemaIndexController);
 
 })(window.angular);

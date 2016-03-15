@@ -11,6 +11,8 @@ public interface AuthService
 
     GebruikerResponse findByToken(String token) throws GebruikerNotFound;
 
+    boolean isGuest(String token);
+
     boolean isRegistered(String token);
 
     boolean isAdmin(String token);

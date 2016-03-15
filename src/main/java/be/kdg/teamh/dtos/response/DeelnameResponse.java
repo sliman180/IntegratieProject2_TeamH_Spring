@@ -1,12 +1,19 @@
 package be.kdg.teamh.dtos.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class DeelnameResponse implements Serializable
 {
     private int id;
     private int aangemaakteKaarten;
     private boolean medeorganisator;
+    private LocalDateTime datum;
     private int cirkelsessie;
     private int gebruiker;
 
@@ -15,11 +22,12 @@ public class DeelnameResponse implements Serializable
         //
     }
 
-    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, int cirkelsessie, int gebruiker)
+    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, LocalDateTime datum, int cirkelsessie, int gebruiker)
     {
         this.id = id;
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
+        this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
@@ -52,6 +60,18 @@ public class DeelnameResponse implements Serializable
     public void setMedeorganisator(boolean medeorganisator)
     {
         this.medeorganisator = medeorganisator;
+    }
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    public LocalDateTime getDatum()
+    {
+        return datum;
+    }
+
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    public void setDatum(LocalDateTime datum)
+    {
+        this.datum = datum;
     }
 
     public int getCirkelsessie()

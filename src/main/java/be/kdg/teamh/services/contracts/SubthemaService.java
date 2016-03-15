@@ -2,7 +2,7 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.dtos.response.SubthemaResponse;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
@@ -12,7 +12,7 @@ public interface SubthemaService
 {
     List<SubthemaResponse> all();
 
-    void create(SubthemaRequest subthema) throws HoofdthemaNotFound;
+    void create(SubthemaRequest subthema) throws HoofdthemaNotFound, GebruikerNotFound;
 
     SubthemaResponse find(int id) throws SubthemaNotFound;
 

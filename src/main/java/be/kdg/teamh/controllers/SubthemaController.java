@@ -2,7 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.dtos.response.SubthemaResponse;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 import be.kdg.teamh.services.contracts.SubthemaService;
@@ -31,9 +31,9 @@ public class SubthemaController
         return service.all();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody SubthemaRequest subthema) throws HoofdthemaNotFound
+    public void create(@RequestBody SubthemaRequest subthema) throws HoofdthemaNotFound, GebruikerNotFound
     {
         service.create(subthema);
     }

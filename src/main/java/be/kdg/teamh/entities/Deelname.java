@@ -3,6 +3,7 @@ package be.kdg.teamh.entities;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "deelnames")
@@ -18,6 +19,9 @@ public class Deelname implements Serializable
     @NotNull
     private boolean medeorganisator;
 
+    @NotNull
+    private LocalDateTime datum;
+
     @ManyToOne
     private Cirkelsessie cirkelsessie;
 
@@ -29,16 +33,11 @@ public class Deelname implements Serializable
         //
     }
 
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator)
+    public Deelname(int aangemaakteKaarten, boolean medeorganisator, LocalDateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
     {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
-    }
-
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
-    {
-        this.aangemaakteKaarten = aangemaakteKaarten;
-        this.medeorganisator = medeorganisator;
+        this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
@@ -71,6 +70,16 @@ public class Deelname implements Serializable
     public void setMedeorganisator(boolean medeorganisator)
     {
         this.medeorganisator = medeorganisator;
+    }
+
+    public LocalDateTime getDatum()
+    {
+        return datum;
+    }
+
+    public void setDatum(LocalDateTime datum)
+    {
+        this.datum = datum;
     }
 
     public Cirkelsessie getCirkelsessie()

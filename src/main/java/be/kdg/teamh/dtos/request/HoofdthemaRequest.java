@@ -7,7 +7,6 @@ import java.io.Serializable;
 public class HoofdthemaRequest implements Serializable
 {
     @NotNull
-    @Column(unique = true)
     private String naam;
 
     @NotNull

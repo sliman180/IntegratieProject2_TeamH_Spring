@@ -6,8 +6,8 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
-import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
+import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -50,12 +49,6 @@ public class OrganisatieServiceImpl implements OrganisatieService
         }
 
         return dtos;
-    }
-
-    @Override
-    public List<OrganisatieResponse> allOfGebruiker(int id) throws GebruikerNotFound
-    {
-        return all().stream().filter(organisatie -> organisatie.getGebruiker() == id).collect(Collectors.toList());
     }
 
     @Override

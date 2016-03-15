@@ -4,7 +4,6 @@ import be.kdg.teamh.dtos.request.BerichtRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.response.*;
-import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -17,6 +16,10 @@ public interface CirkelsessieService
     List<CirkelsessieResponse> all();
 
     List<CirkelsessieResponse> actief();
+
+    List<CirkelsessieResponse> gesloten();
+
+    List<CirkelsessieResponse> beindigd();
 
     List<CirkelsessieResponse> gepland();
 

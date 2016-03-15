@@ -1,10 +1,14 @@
 package be.kdg.teamh.dtos.request;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class LoginRequest implements Serializable
 {
+    @NotNull
     private String gebruikersnaam;
+
+    @NotNull
     private String wachtwoord;
 
     public LoginRequest()

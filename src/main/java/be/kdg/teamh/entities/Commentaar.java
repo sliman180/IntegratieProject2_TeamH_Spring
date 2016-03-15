@@ -30,10 +30,12 @@ public class Commentaar implements Serializable
         //
     }
 
-    public Commentaar(String tekst, Gebruiker gebruiker)
+    public Commentaar(String tekst, LocalDateTime datum, Gebruiker gebruiker, Kaart kaart)
     {
         this.tekst = tekst;
+        this.datum = datum;
         this.gebruiker = gebruiker;
+        this.kaart = kaart;
     }
 
     public int getId()

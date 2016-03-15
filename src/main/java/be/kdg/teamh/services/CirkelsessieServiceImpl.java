@@ -80,7 +80,69 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
         for (Cirkelsessie cirkelsessie : cirkelsessies)
         {
-            if (!cirkelsessie.isGesloten() && now.isAfter(cirkelsessie.getStartDatum()))
+            if (cirkelsessie.getStatus() == Status.OPEN && now.isAfter(cirkelsessie.getStartDatum()))
+            {
+                CirkelsessieResponse dto = new CirkelsessieResponse();
+
+                dto.setId(cirkelsessie.getId());
+                dto.setNaam(cirkelsessie.getNaam());
+                dto.setAantalCirkels(cirkelsessie.getAantalCirkels());
+                dto.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
+                dto.setStartDatum(cirkelsessie.getStartDatum());
+                dto.setSubthema(cirkelsessie.getSubthema().getId());
+                dto.setGebruiker(cirkelsessie.getGebruiker().getId());
+                dto.setDeelnames(cirkelsessie.getDeelnames());
+                dto.setSpelkaarten(cirkelsessie.getSpelkaarten());
+                dto.setBerichten(cirkelsessie.getBerichten());
+
+                dtos.add(dto);
+            }
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<CirkelsessieResponse> beindigd()
+    {
+        List<Cirkelsessie> cirkelsessies = repository.findAll();
+        List<CirkelsessieResponse> dtos = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Cirkelsessie cirkelsessie : cirkelsessies)
+        {
+            if (cirkelsessie.getStatus() == Status.BEEINDIGD)
+            {
+                CirkelsessieResponse dto = new CirkelsessieResponse();
+
+                dto.setId(cirkelsessie.getId());
+                dto.setNaam(cirkelsessie.getNaam());
+                dto.setAantalCirkels(cirkelsessie.getAantalCirkels());
+                dto.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
+                dto.setStartDatum(cirkelsessie.getStartDatum());
+                dto.setSubthema(cirkelsessie.getSubthema().getId());
+                dto.setGebruiker(cirkelsessie.getGebruiker().getId());
+                dto.setDeelnames(cirkelsessie.getDeelnames());
+                dto.setSpelkaarten(cirkelsessie.getSpelkaarten());
+                dto.setBerichten(cirkelsessie.getBerichten());
+
+                dtos.add(dto);
+            }
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public List<CirkelsessieResponse> gesloten()
+    {
+        List<Cirkelsessie> cirkelsessies = repository.findAll();
+        List<CirkelsessieResponse> dtos = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Cirkelsessie cirkelsessie : cirkelsessies)
+        {
+            if (cirkelsessie.getStatus() == Status.GESLOTEN)
             {
                 CirkelsessieResponse dto = new CirkelsessieResponse();
 
@@ -155,7 +217,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         cirkelsessie.setNaam(dto.getNaam());
         cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
         cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
-        cirkelsessie.setGesloten(dto.isGesloten());
+        cirkelsessie.setStatus(dto.getStatus());
         cirkelsessie.setStartDatum(dto.getStartDatum());
         cirkelsessie.setGebruiker(gebruiker);
         cirkelsessie.setSubthema(subthema);
@@ -179,8 +241,6 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         {
             throw new CirkelsessieNotFound();
         }
-
-        System.out.println(cirkelsessie);
 
         CirkelsessieResponse dto = new CirkelsessieResponse();
 
@@ -211,7 +271,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         cirkelsessie.setNaam(dto.getNaam());
         cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
         cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
-        cirkelsessie.setGesloten(dto.isGesloten());
+        cirkelsessie.setStatus(dto.getStatus());
         cirkelsessie.setStartDatum(dto.getStartDatum());
 
         repository.saveAndFlush(cirkelsessie);
@@ -244,7 +304,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         clone.setNaam(cirkelsessie.getNaam());
         clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
         clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
-        clone.setGesloten(cirkelsessie.isGesloten());
+        clone.setStatus(cirkelsessie.getStatus());
         clone.setStartDatum(LocalDateTime.now());
         clone.setSubthema(cirkelsessie.getSubthema());
         clone.setGebruiker(cirkelsessie.getGebruiker());
@@ -325,7 +385,10 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             }
         }
 
-        Deelname deelname = new Deelname(0, false);
+        Deelname deelname = new Deelname();
+        deelname.setAangemaakteKaarten(0);
+        deelname.setMedeorganisator(false);
+        deelname.setDatum(LocalDateTime.now());
         deelname.setCirkelsessie(cirkelsessie);
         deelname.setGebruiker(gebruiker);
         deelname = deelnames.save(deelname);

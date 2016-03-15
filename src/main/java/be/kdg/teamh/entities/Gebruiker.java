@@ -31,6 +31,9 @@ public class Gebruiker implements Serializable
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Subthema> subthemas = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Kaart> kaarten = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
@@ -113,6 +116,11 @@ public class Gebruiker implements Serializable
         this.hoofdthemas = hoofdthemas;
     }
 
+    public void addHoofdthema(Hoofdthema hoofdthema)
+    {
+        this.hoofdthemas.add(hoofdthema);
+    }
+
     public List<Cirkelsessie> getCirkelsessies()
     {
         return cirkelsessies;
@@ -126,6 +134,21 @@ public class Gebruiker implements Serializable
     public void addCirkelsessie(Cirkelsessie cirkelsessie)
     {
         this.cirkelsessies.add(cirkelsessie);
+    }
+
+    public List<Subthema> getSubthemas()
+    {
+        return subthemas;
+    }
+
+    public void setSubthemas(List<Subthema> subthemas)
+    {
+        this.subthemas = subthemas;
+    }
+
+    public void addSubthema(Subthema subthema)
+    {
+        this.subthemas.add(subthema);
     }
 
     public List<Kaart> getKaarten()
