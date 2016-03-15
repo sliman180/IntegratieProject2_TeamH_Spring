@@ -15,6 +15,8 @@ public interface DeelnameService {
 
     Deelname find(int id) throws DeelnameNotFound;
 
+    Deelname findByCirkelsessie(int id) throws DeelnameNotFound, CirkelsessieNotFound;
+
     void update(int id, Deelname deelname) throws DeelnameNotFound;
 
     void delete(int id) throws DeelnameNotFound;

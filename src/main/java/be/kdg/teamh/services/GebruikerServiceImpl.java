@@ -2,11 +2,9 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gast;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
-import be.kdg.teamh.repositories.GastRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -31,9 +29,6 @@ public class GebruikerServiceImpl implements GebruikerService {
     @Autowired
     private RolRepository rolRepository;
 
-    @Autowired
-    private GastRepository gastRepository;
-
     @Override
     public List<Gebruiker> all() {
         return repository.findAll();
@@ -47,10 +42,10 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void create(Gast gast) {
-        gast.setWachtwoord(Hashing.sha256().hashString(gast.getWachtwoord(), StandardCharsets.UTF_8).toString());
-        gast.addRol(rolRepository.findByNaam(GAST_ROL));
-        gastRepository.save(gast);
+    public void createGast(Gebruiker gebruiker) {
+        gebruiker.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        gebruiker.addRol(rolRepository.findByNaam(GAST_ROL));
+        repository.save(gebruiker);
     }
 
     @Override
@@ -62,16 +57,6 @@ public class GebruikerServiceImpl implements GebruikerService {
         }
 
         return gebruiker;
-    }
-
-    @Override
-    public Gast findGast(int id) throws GebruikerNotFound {
-        Gast gast = gastRepository.findOne(id);
-
-        if (gast == null)
-            throw new GebruikerNotFound();
-
-        return gast;
     }
 
     @Override

@@ -10,6 +10,7 @@ import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
+import be.kdg.teamh.services.contracts.CirkelsessieService;
 import be.kdg.teamh.services.contracts.DeelnameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class DeelnameServiceImpl implements DeelnameService {
 
     @Autowired
     private CirkelsessieRepository cirkelsessieRepository;
+
+    @Autowired
+    private CirkelsessieService cirkelsessieService;
 
     @Override
     public List<Deelname> all() {
@@ -77,6 +81,17 @@ public class DeelnameServiceImpl implements DeelnameService {
     @Override
     public Deelname find(int id) throws DeelnameNotFound {
         Deelname deelname = repository.findOne(id);
+
+        if (deelname == null) {
+            throw new DeelnameNotFound();
+        }
+
+        return deelname;
+    }
+
+    @Override
+    public Deelname findByCirkelsessie(int id) throws DeelnameNotFound, CirkelsessieNotFound {
+        Deelname deelname = repository.findByCirkelsessie(cirkelsessieService.find(id));
 
         if (deelname == null) {
             throw new DeelnameNotFound();

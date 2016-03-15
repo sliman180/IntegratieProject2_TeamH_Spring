@@ -6,6 +6,7 @@ import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
+import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import io.jsonwebtoken.Jwts;
@@ -31,6 +32,9 @@ public class AuthController {
     CirkelsessieRepository cirkelsessieRepository;
 
     @Autowired
+    DeelnameRepository deelnameRepository;
+
+    @Autowired
     AuthService auth;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
@@ -53,10 +57,12 @@ public class AuthController {
                                     @RequestHeader(name = "Authorization") String token) throws IsForbidden {
         if (!auth.isRegistered(token)) throw new IsForbidden();
 
-        Gast gast = new Gast(generateString(STRING_LENGTH), generateString(STRING_LENGTH));
+        Gebruiker gast = new Gebruiker(generateString(STRING_LENGTH), generateString(STRING_LENGTH));
         Cirkelsessie cirkelsessie = cirkelsessieRepository.findOne(cirkelsessieId);
-        gast.addCirkelsessie(cirkelsessie);
-        service.create(gast);
+        Deelname deelname = new Deelname(0, false, cirkelsessie, gast);
+        deelnameRepository.save(deelname);
+        gast.addDeelname(deelname);
+        service.createGast(gast);
 
         return new Token(Jwts.builder().setSubject(String.valueOf(gast.getId()))
                 .claim(ROLLEN_CLAIM, gast.getRollen().stream().map(Rol::getNaam).collect(Collectors.toList()))

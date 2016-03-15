@@ -2,7 +2,6 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gast;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
 import be.kdg.teamh.exceptions.InvalidCredentials;
@@ -14,11 +13,9 @@ public interface GebruikerService {
 
     void create(Gebruiker gebruiker);
 
-    void create(Gast gast);
+    void createGast(Gebruiker gebruiker);
 
     Gebruiker find(int id) throws GebruikerNotFound;
-
-    Gast findGast(int id) throws GebruikerNotFound;
 
     Gebruiker findByLogin(Gebruiker login) throws GebruikerNotFound, InvalidCredentials;
 

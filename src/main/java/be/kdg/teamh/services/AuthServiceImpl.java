@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.Token;
-import be.kdg.teamh.entities.Gast;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.GebruikerNotFound;
@@ -44,12 +43,6 @@ public class AuthServiceImpl implements AuthService
     public Gebruiker findByToken(String token) throws GebruikerNotFound
     {
         return service.find(Integer.parseInt(parseToken(token).getSubject()));
-    }
-
-    @Override
-    public Gast findGastByToken(String token) throws GebruikerNotFound
-    {
-        return service.findGast(Integer.parseInt(parseToken(token).getSubject()));
     }
 
     @Override
