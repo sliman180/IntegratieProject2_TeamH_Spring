@@ -59,19 +59,34 @@ public class CirkelsessieController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/gast", method = RequestMethod.GET)
+    public String gastToken(@PathVariable int id, @RequestParam(name = "t") String token)
+            throws CirkelsessieNotFound, GebruikerNotFound, IsForbidden {
+        if (auth.isGuest(token) && service.find(id) != null) {
+            Gast gast = auth.findGastByToken(token);
+            List<Cirkelsessie> cirkelsessies = gast.getCirkelsessies();
+            if (cirkelsessies.contains(service.find(id)))
+                return token;
+            else throw new IsForbidden();
+        }
+        throw new IsForbidden();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestBody Cirkelsessie cirkelsessie,
-                       @RequestHeader(name = "Authorization") String token,
-                       @RequestParam(name = "t", required = false) String tokenParam)
+                       @RequestHeader(name = "Authorization") String token/*,
+                       @RequestParam(name = "t", required = false) String tokenParam*/)
             throws CirkelsessieNotFound, IsForbidden, GebruikerNotFound {
-        if (tokenParam != null && auth.isGuest(tokenParam)) {
+/*        if (tokenParam != null && auth.isGuest(tokenParam)) {
             Gast gast = auth.findGastByToken(tokenParam);
             List<Cirkelsessie> cirkelsessies = gast.getCirkelsessies();
-            if (cirkelsessies.contains(cirkelsessie))
+            if (cirkelsessies.contains(service.find(id)))
                 service.update(id, cirkelsessie);
             else throw new IsForbidden();
         }
-        else if (!auth.isRegistered(token) && !auth.isGuest(tokenParam))
+        else */
+        if (!auth.isRegistered(token)/* && !auth.isGuest(tokenParam)*/)
             throw new IsForbidden();
         service.update(id, cirkelsessie);
     }
