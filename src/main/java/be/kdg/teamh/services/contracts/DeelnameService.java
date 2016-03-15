@@ -1,21 +1,13 @@
 package be.kdg.teamh.services.contracts;
 
-import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.dtos.request.DeelnameRequest;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 
-import java.util.List;
-
-public interface DeelnameService {
-    List<Deelname> all();
-
-    void create(int id, int userId) throws DeelnameNotFound, GebruikerNotFound, CirkelsessieNotFound, AlreadyJoinedCirkelsessie;
-
-    Deelname find(int id) throws DeelnameNotFound;
-
-    void update(int id, Deelname deelname) throws DeelnameNotFound;
+public interface DeelnameService
+{
+    void update(int id, DeelnameRequest deelname) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound;
 
     void delete(int id) throws DeelnameNotFound;
 }

@@ -1,57 +1,155 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.dtos.request.HoofdthemaRequest;
+import be.kdg.teamh.dtos.response.HoofdthemaResponse;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.exceptions.HoofdthemaNotFound;
+import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
+import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
+import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.HoofdthemaRepository;
+import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.services.contracts.HoofdthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
-public class HoofdthemaServiceImpl implements HoofdthemaService {
-    @Autowired
+public class HoofdthemaServiceImpl implements HoofdthemaService
+{
     private HoofdthemaRepository repository;
+    private OrganisatieRepository organisaties;
+    private GebruikerRepository gebruikers;
 
-    @Override
-    public List<Hoofdthema> all() {
-        return repository.findAll();
+    @Autowired
+    public HoofdthemaServiceImpl(HoofdthemaRepository repository, OrganisatieRepository organisaties, GebruikerRepository gebruikers)
+    {
+        this.repository = repository;
+        this.organisaties = organisaties;
+        this.gebruikers = gebruikers;
     }
 
     @Override
-    public void create(Hoofdthema hoofdthema) {
+    public List<HoofdthemaResponse> all()
+    {
+        List<Hoofdthema> hoofdthemas = repository.findAll();
+        List<HoofdthemaResponse> dtos = new ArrayList<>();
+
+        for (Hoofdthema hoofdthema : hoofdthemas)
+        {
+            HoofdthemaResponse dto = new HoofdthemaResponse();
+
+            dto.setId(hoofdthema.getId());
+            dto.setNaam(hoofdthema.getNaam());
+            dto.setBeschrijving(hoofdthema.getBeschrijving());
+            dto.setGebruiker(hoofdthema.getGebruiker().getId());
+            dto.setOrganisatie(hoofdthema.getOrganisatie().getId());
+            dto.setSubthemas(hoofdthema.getSubthemas());
+            dto.setTags(hoofdthema.getTags());
+
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound
+    {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
+        if (gebruiker == null)
+        {
+            throw new GebruikerNotFound();
+        }
+
+        Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
+
+        if (organisatie == null)
+        {
+            throw new OrganisatieNotFound();
+        }
+
+        Hoofdthema hoofdthema = new Hoofdthema();
+
+        hoofdthema.setNaam(dto.getNaam());
+        hoofdthema.setBeschrijving(dto.getBeschrijving());
+        hoofdthema.setOrganisatie(organisatie);
+        hoofdthema.setGebruiker(gebruiker);
+
         repository.save(hoofdthema);
     }
 
     @Override
-    public Hoofdthema find(int id) throws HoofdthemaNotFound {
+    public HoofdthemaResponse find(int id) throws HoofdthemaNotFound
+    {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null) {
+        if (hoofdthema == null)
+        {
             throw new HoofdthemaNotFound();
         }
 
-        return hoofdthema;
+        HoofdthemaResponse dto = new HoofdthemaResponse();
+
+        dto.setId(hoofdthema.getId());
+        dto.setNaam(hoofdthema.getNaam());
+        dto.setBeschrijving(hoofdthema.getBeschrijving());
+        dto.setGebruiker(hoofdthema.getGebruiker().getId());
+        dto.setOrganisatie(hoofdthema.getOrganisatie().getId());
+        dto.setSubthemas(hoofdthema.getSubthemas());
+        dto.setTags(hoofdthema.getTags());
+
+        return dto;
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFound {
-        Hoofdthema old = find(id);
+    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound
+    {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        old.setNaam(hoofdthema.getNaam());
-        old.setBeschrijving(hoofdthema.getBeschrijving());
-        old.setOrganisatie(hoofdthema.getOrganisatie());
-        old.setGebruiker(hoofdthema.getGebruiker());
+        if (gebruiker == null)
+        {
+            throw new GebruikerNotFound();
+        }
 
-        repository.saveAndFlush(old);
+        Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
+
+        if (organisatie == null)
+        {
+            throw new OrganisatieNotFound();
+        }
+
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null)
+        {
+            throw new HoofdthemaNotFound();
+        }
+
+        hoofdthema.setNaam(dto.getNaam());
+        hoofdthema.setBeschrijving(dto.getBeschrijving());
+        hoofdthema.setOrganisatie(organisatie);
+        hoofdthema.setGebruiker(gebruiker);
+
+        repository.saveAndFlush(hoofdthema);
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFound {
-        Hoofdthema hoofdthema = find(id);
+    public void delete(int id) throws HoofdthemaNotFound
+    {
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null)
+        {
+            throw new HoofdthemaNotFound();
+        }
 
         repository.delete(hoofdthema);
     }

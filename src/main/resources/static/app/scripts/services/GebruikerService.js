@@ -46,9 +46,9 @@
 
         };
 
-        exports.getMijnDeelnames = function () {
+        exports.deelnames = function (id) {
 
-            return $http.get("/api/gebruikers/deelnames").then(function (response) {
+            return $http.get("/api/gebruikers/" + id + "deelnames").then(function (response) {
                 return response.data;
             });
 

@@ -1,11 +1,16 @@
 package be.kdg.teamh.controllers;
 
+import be.kdg.teamh.dtos.request.BerichtRequest;
+import be.kdg.teamh.dtos.request.CirkelsessieRequest;
+import be.kdg.teamh.dtos.request.KaartRequest;
+import be.kdg.teamh.dtos.response.*;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
+import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,94 +19,120 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cirkelsessies")
-public class CirkelsessieController {
-    @Autowired
+public class CirkelsessieController
+{
     private CirkelsessieService service;
+    private AuthService auth;
+
+    @Autowired
+    public CirkelsessieController(CirkelsessieService service, AuthService auth)
+    {
+        this.service = service;
+        this.auth = auth;
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Cirkelsessie> index() {
+    public List<CirkelsessieResponse> index()
+    {
         return service.all();
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Cirkelsessie cirkelsessie, @RequestHeader(name = "Authorization") String token) {
-        int userId = getUserId(token);
-        service.create(userId, cirkelsessie);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Cirkelsessie show(@PathVariable int id) throws CirkelsessieNotFound {
-        return service.find(id);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
-        service.update(id, cirkelsessie);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        service.delete(id);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
-    public Subthema getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        return service.find(id).getSubthema();
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
-    public void clone(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        service.clone(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "gepland", method = RequestMethod.GET)
-    public List<Cirkelsessie> gepland() {
+    public List<CirkelsessieResponse> gepland()
+    {
         return service.gepland();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "actief", method = RequestMethod.GET)
-    public List<Cirkelsessie> actief() {
+    public List<CirkelsessieResponse> actief()
+    {
         return service.actief();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/spelkaart", method = RequestMethod.POST)
-    public void createKaart(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @RequestBody Kaart kaart) throws CirkelsessieNotFound, GebruikerNotFound {
-
-        service.addSpelkaart(id, getUserId(token), kaart);
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public void create(@RequestBody CirkelsessieRequest cirkelsessie) throws GebruikerNotFound, SubthemaNotFound
+    {
+        service.create(cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
-    public List<Spelkaart> getSpelkaarten(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        return service.find(id).getSpelkaarten();
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public CirkelsessieResponse show(@PathVariable int id) throws CirkelsessieNotFound
+    {
+        return service.find(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable("id") int id, @RequestBody CirkelsessieRequest cirkelsessie) throws CirkelsessieNotFound
+    {
+        service.update(id, cirkelsessie);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        service.delete(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
+    public void clone(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        service.clone(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
+    public SubthemaResponse getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        return service.getSubthema(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/deelnames", method = RequestMethod.GET)
-    public List<Deelname> getDeelnames(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        return service.find(id).getDeelnames();
+    public List<DeelnameResponse> getDeelnames(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        return service.getDeelnames(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/deelnames", method = RequestMethod.POST)
+    public void addDeelname(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie
+    {
+        service.addDeelname(id, auth.findByToken(token).getId());
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}/chat", method = RequestMethod.GET)
-    public Chat getChat(@PathVariable("id") int id) throws CirkelsessieNotFound {
-        return service.find(id).getChat();
+    @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
+    public List<SpelkaartResponse> getSpelkaarten(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        return service.getSpelkaarten(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.POST)
+    public void addSpelkaart(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @RequestBody KaartRequest kaart) throws CirkelsessieNotFound, GebruikerNotFound
+    {
+        service.addSpelkaart(id, auth.findByToken(token).getId(), kaart);
+    }
 
-    private int getUserId(String token) {
-        Claims claims = Jwts.parser().setSigningKey("kandoe")
-                .parseClaimsJws(token.substring(7)).getBody();
-        return Integer.parseInt(claims.getSubject());
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/berichten", method = RequestMethod.GET)
+    public List<BerichtResponse> getBerichten(@PathVariable("id") int id) throws CirkelsessieNotFound
+    {
+        return service.getBerichten(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/berichten", method = RequestMethod.POST)
+    public void addBericht(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @RequestBody BerichtRequest bericht) throws CirkelsessieNotFound, GebruikerNotFound
+    {
+        service.addBericht(id, auth.findByToken(token).getId(), bericht);
     }
 }

@@ -1,4 +1,4 @@
-(function (angular) {
+﻿(function (angular) {
 
     "use strict";
 
@@ -6,18 +6,25 @@
 
         var exports = {};
 
+        exports.allOfGebruiker = function (id) {
 
-        exports.doeDeelname = function (cirkelsessieId) {
-
-            return $http.post("/api/deelnames/" + cirkelsessieId).then(function (response) {
+            return $http.get("/api/gebruikers/" + id + "/deelnames").then(function (response) {
                 return response.data;
             });
 
         };
 
-        exports.getDeelnames = function (cirkelsessieId) {
+        exports.update = function (deelname) {
 
-            return $http.get("/api/cirkelsessies/" + cirkelsessieId + "/deelnames").then(function (response) {
+            return $http.put("/api/deelnames/" + deelname.id, deelname).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.delete = function (id) {
+
+            return $http.delete("/api/deelnames/" + id).then(function (response) {
                 return response.data;
             });
 

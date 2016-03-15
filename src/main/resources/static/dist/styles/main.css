@@ -3553,18 +3553,18 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__box-outline, .mdl-checkbox.is-di
   left: 0;
   height: 100%;
   width: 100%;
-  -webkit-mask: url("/images/tick-mask.svg?embed");
-          mask: url("/images/tick-mask.svg?embed");
+  -webkit-mask: url("/dist/images/tick-mask.svg?embed");
+          mask: url("/dist/images/tick-mask.svg?embed");
   background: transparent;
   transition-duration: 0.28s;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-property: background;
 }
 .mdl-checkbox.is-checked .mdl-checkbox__tick-outline {
-  background: rgb(63,81,181) url("/images/tick.svg?embed");
+  background: rgb(63,81,181) url("/dist/images/tick.svg?embed");
 }
 fieldset[disabled] .mdl-checkbox.is-checked .mdl-checkbox__tick-outline, .mdl-checkbox.is-checked.is-disabled .mdl-checkbox__tick-outline {
-  background: rgba(0,0,0, 0.26) url("/images/tick.svg?embed");
+  background: rgba(0,0,0, 0.26) url("/dist/images/tick.svg?embed");
 }
 
 .mdl-checkbox__label {
@@ -4545,8 +4545,8 @@ fieldset[disabled] .mdl-checkbox .mdl-checkbox__ripple-container .mdl-ripple, .m
   .mdl-progress:not(.mdl-progress--indeterminate):not(.mdl-progress--indeterminate) > .auxbar,
   .mdl-progress:not(.mdl-progress__indeterminate):not(.mdl-progress__indeterminate) > .auxbar {
     background-image: linear-gradient(to right, rgba(255,255,255, 0.7), rgba(255,255,255, 0.7)), linear-gradient(to right, rgb(63,81,181), rgb(63,81,181));
-    -webkit-mask: url("/images/buffer.svg?embed");
-            mask: url("/images/buffer.svg?embed");
+    -webkit-mask: url("/dist/images/buffer.svg?embed");
+            mask: url("/dist/images/buffer.svg?embed");
   }
 }
 .mdl-progress:not(.mdl-progress--indeterminate) > .auxbar,

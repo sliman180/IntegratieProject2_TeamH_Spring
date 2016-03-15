@@ -11,13 +11,36 @@
 
         })
 
-        .run(function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
+        .run(function ($rootScope, $timeout) {
 
             $rootScope.$on('$viewContentLoaded', function () {
                 $timeout(function () {
                     componentHandler.upgradeAllRegistered();
                 }, 0);
             });
+
+        })
+
+        .run(function ($rootScope, GebruikerService, JwtService, localStorageService) {
+
+            var data = localStorageService.get("auth");
+
+            if (data) {
+
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (gebruiker) {
+
+                    $rootScope.id = gebruiker.id;
+                    $rootScope.naam = gebruiker.gebruikersnaam;
+                    $rootScope.rollen = gebruiker.rollen;
+                    $rootScope.loggedIn = true;
+
+                });
+
+            }
+
+        })
+
+        .run(function ($location, $rootScope, localStorageService) {
 
             $rootScope.logout = function () {
 
@@ -32,23 +55,7 @@
 
             };
 
-            var data = localStorageService.get("auth");
-
-            if (data) {
-
-                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (data) {
-
-                    $rootScope.id = data.id;
-                    $rootScope.naam = data.gebruikersnaam;
-                    $rootScope.rollen = data.rollen;
-                    $rootScope.loggedIn = true;
-
-                });
-
-            }
-
         });
-
 
 })(window.angular);
 
