@@ -1,12 +1,10 @@
 describe("On the home page", function(){
 
-    beforeEach(function(){
+    it("user should be able to login", function(){
+
         browser.driver.manage().window().maximize();
         browser.get("http://localhost:8080/#/");
         element(by.css(".nav-login-btn")).click();
-    });
-
-    it("user should be able to login", function(){
 
         element(by.id("gebruikersnaam")).sendKeys("user");
         element(by.id("wachtwoord")).sendKeys("user");
@@ -24,7 +22,6 @@ describe("On the home page", function(){
         expect(isPresent).toBe(false);
 
         element(by.css(".nav-logoff-btn")).click();
-
 
     });
 });
