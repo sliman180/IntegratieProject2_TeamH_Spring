@@ -51,4 +51,6 @@ public class SpelkaartController {
     public void verschuifKaart(@PathVariable("id") int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
         service.verschuif(id);
     }
+
+
 }

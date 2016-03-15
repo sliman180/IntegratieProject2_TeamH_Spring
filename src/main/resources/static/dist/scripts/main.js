@@ -629,6 +629,23 @@
 
         };
 
+        exports.getComments = function (kaartId) {
+
+            return $http.get("/api/kaarten/" + kaartId + "/comments").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+
+        exports.createComment = function (kaartId, comment) {
+
+            return $http.post("/api/kaarten/" + kaartId + "/comments", comment).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         return exports;
 
     }
@@ -1069,10 +1086,23 @@
         var vm = this;
 
         vm.kaart = {};
+        vm.comments = [];
 
         KaartService.find($routeParams.id).then(function (data) {
             vm.kaart = data;
+
+            KaartService.getComments($routeParams.id).then(function (commentsdata) {
+
+                vm.comments = commentsdata;
+            })
         });
+
+
+        vm.createComment = function (kaartId, comment) {
+            KaartService.createComment(kaartId, comment).then(function () {
+                $route.reload;
+            });
+        };
 
 
         //vm.createComment = function (kaartId, kaart) {

@@ -73,8 +73,8 @@ public class KaartenController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @RequestBody Commentaar comment) throws CommentsNotAllowed, KaartNotFound {
-        service.createComment(id, comment);
+    public void createComment(@PathVariable("id") int id,@RequestHeader(name = "Authorization") String token, @RequestBody Commentaar comment) throws CommentsNotAllowed, KaartNotFound, GebruikerNotFound {
+        service.createComment(id,getUserId(token),comment);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

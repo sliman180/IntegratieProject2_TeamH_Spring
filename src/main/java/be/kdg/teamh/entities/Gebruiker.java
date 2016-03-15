@@ -40,6 +40,7 @@ public class Gebruiker implements Serializable {
     private List<Deelname> deelnames = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Commentaar.class, property = "id")
     private List<Commentaar> commentaren = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -202,6 +203,10 @@ public class Gebruiker implements Serializable {
 
     public void addSubthema(Subthema subthema) {
         this.subthemas.add(subthema);
+    }
+
+    public void addCommentaar(Commentaar commentaar) {
+        this.commentaren.add(commentaar);
     }
 
 

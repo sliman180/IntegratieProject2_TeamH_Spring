@@ -67,6 +67,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         Gebruiker gebruiker = gebruikerRepository.findOne(userId);
         Subthema subthema = subthemaRepository.findOne(subthemaId);
 
+
         if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
@@ -82,6 +83,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         cirkelsessie.setGebruiker(gebruiker);
         cirkelsessie.setChat(savedChat);
         cirkelsessie.setSubthema(subthema);
+
+        for(Kaart kaart:subthema.getKaarten()){
+                Spelkaart spelkaart = new Spelkaart(kaart,cirkelsessie);
+                Spelkaart savedSpelkaart= spelkaartenRepository.save(spelkaart);
+                 cirkelsessie.addSpelkaart(savedSpelkaart);
+        }
+
         Cirkelsessie savedCirkelsessie = repository.save(cirkelsessie);
 
         subthema.addCirkelsessie(savedCirkelsessie);

@@ -491,15 +491,18 @@
                 </div>
                 <div class="mdl-card__menu dropdown-menu">
 
-                    <span>Positie: <b>{{spelkaart.positie}}</b>  <span ng-if="spelkaart.id>1"> | Aangemaakt door: <b>{{spelkaart.kaart.gebruiker}}</b></span></span>
+                    <p>
+                        Positie: <b>{{spelkaart.positie}}</b> | Aaantal comments: <b>{{spelkaart.kaart.commentaren.length}}</b>
+                        <!--Aangemaakt door: <b>{{spelkaart.kaart.gebruiker}}</b>-->
+                    </p>
+
+                    <p>
+                        Afbeelding url:
+                        <b><a ng-href="{{spelkaar.kaart.imageUrl}}" target="_blank">Kaart afbeelding</a></b>
+                    </p>
 
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
-                        <!--<ul class="dropdown-content">-->
-                        <!--<li ng-if="!vm.isDeelnemer(vm.deelnames)" disabled class="mdl-menu__item">Verplaats naar[{{spelkaart.positie + 1}}]</li>-->
-                        <!--<li ng-if="vm.isDeelnemer(vm.deelnames)" ng-click="vm.verschuifKaart(spelkaart.id)" class="mdl-menu__item">Verplaats naar[{{spelkaart.positie + 1}}]</li>-->
-                        <!--<li disabled class="mdl-menu__item">Meer informatie</li>-->
-                        <!--</ul>-->
                         <div class="dropdown-content">
                             <a ng-if="!vm.isDeelnemer(vm.deelnames)" disabled>Verplaats naar [{{spelkaart.positie +
                                 1}}]</a>

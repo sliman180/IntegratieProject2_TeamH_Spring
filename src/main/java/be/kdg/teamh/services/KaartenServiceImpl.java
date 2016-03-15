@@ -4,6 +4,7 @@ import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
+import be.kdg.teamh.repositories.CommentaarRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.KaartenRepository;
 import be.kdg.teamh.services.contracts.KaartenService;
@@ -21,6 +22,9 @@ public class KaartenServiceImpl implements KaartenService {
 
     @Autowired
     private GebruikerRepository gebruikerRepository;
+
+    @Autowired
+    private CommentaarRepository commentaarRepository;
 
     public List<Kaart> all() {
         return repository.findAll();
@@ -78,15 +82,33 @@ public class KaartenServiceImpl implements KaartenService {
     }
 
     @Override
-    public void createComment(int id, Commentaar commentaar) throws KaartNotFound, CommentsNotAllowed {
+    public void createComment(int id,int userId, Commentaar commentaar) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound {
         Kaart kaart = find(id);
 
-        if (!kaart.isCommentsToelaatbaar()) {
+        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+
+
+        if (kaart.isCommentsToelaatbaar()) {
             throw new CommentsNotAllowed();
         }
 
-        kaart.addComment(commentaar);
+        if(gebruiker == null){
+            throw new GebruikerNotFound();
+        }
 
+
+        //commentaar
+        commentaar.setGebruiker(gebruiker);
+        commentaar.setKaart(kaart);
+        Commentaar savedCommentaar = commentaarRepository.save(commentaar);
+
+
+        //gebruiker
+        gebruiker.addCommentaar(savedCommentaar);
+        gebruikerRepository.save(gebruiker);
+
+        //kaart
+        kaart.addComment(savedCommentaar);
         repository.save(kaart);
     }
 
