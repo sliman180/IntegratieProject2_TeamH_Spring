@@ -10,9 +10,8 @@
         vm.kaart = {};
 
         KaartService.find($routeParams.id).then(function (data) {
-                vm.kaart = data;
+            vm.kaart = data;
         });
-
 
 
         //vm.createComment = function (kaartId, kaart) {

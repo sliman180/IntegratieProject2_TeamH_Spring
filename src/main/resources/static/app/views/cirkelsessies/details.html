@@ -32,6 +32,26 @@
         float: right;
     }
 
+    .status-open {
+        color: green !important;
+    }
+
+    .status-gesloten {
+        color: black !important;
+    }
+
+    .status-beeindigd {
+        color: red !important;
+    }
+
+    .status-gestart {
+        color: green !important;
+    }
+
+    .color-blue {
+        color: blue !important;
+    }
+
 </style>
 
 
@@ -39,27 +59,35 @@
     <span id="cirkelsessie-begroeting">Welkom {{ $root.naam }} </span>
 
     <div id="header-buttons">
-        <div ng-if="vm.cirkelsessie.deelnames.length > 0">
-
+        <div>
             <button ng-if="vm.isDeelnemer(vm.deelnames)"
-                    class="mdl-button mdl-js-button mdl-button--raised" disabled>
+                    class="mdl-button mdl-js-button mdl-button--raised color-blue" disabled>
                 U hebt deelgenomen
             </button>
 
-            <button ng-if="!vm.isDeelnemer(vm.deelnames)"
+            <button ng-if="!vm.isDeelnemer(vm.deelnames) && vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.doeDeelname()"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                 <span>Deelnemen</span>
             </button>
-        </div>
 
-        <div ng-if="vm.cirkelsessie.deelnames.length == 0">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                    ng-click="vm.doeDeelname()">
-                <span>Deelnemen</span>
+            <button ng-if="vm.isActive(vm.cirkelsessie.startDatum)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-gestart" disabled>
+                De cirkelsessie is gestart!
+            </button>
+            <button ng-if="vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-open" disabled>
+                De cirkelsessie is open!
+            </button>
+            <button ng-if="vm.cirkelsessie.status=='GESLOTEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-gesloten" disabled>
+                De cirkelsessie is gesloten!
+            </button>
+            <button ng-if="vm.cirkelsessie.status=='BEEINDIGD' && !vm.isActive(vm.cirkelsessie.startDatum)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-beeindigd" disabled>
+                De cirkelsessie is beëndigd!
             </button>
         </div>
-
 
     </div>
 
@@ -71,9 +99,17 @@
         <h2 class="mdl-card__title-text">{{vm.cirkelsessie.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b> | Startdatum: <b>{{vm.cirkelsessie.startDatum
-        |
-        date:'dd/MM/yyyy HH:mm'}}</b> <span ng-if="vm.cirkelsessie.subthema!=null"> | Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
+        Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b>
+        | Startdatum: <b>{{vm.cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b> <span
+            ng-if="vm.cirkelsessie.subthema!=null">
+        | Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
+        | <p>Status:
+        <b class="status-open" ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='OPEN'">{{vm.cirkelsessie.status}}</b>
+        <b class="status-gesloten"
+           ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='GESLOTEN'">{{vm.cirkelsessie.status}}</b>
+        <b class="status-beeindigd"
+           ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='BEEINDIGD'">{{vm.cirkelsessie.status}}</b>
+        <b class="status-gestart" ng-if="vm.isActive(vm.cirkelsessie.startDatum)">GESTART</b>
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
@@ -295,9 +331,11 @@
             account_box
         </div>
 
-                <span><i ng-if="vm.circelsessie.isClosed" class="material-icons">lock_open</i>
-
-                <i ng-if="!vm.circelsessie.isClosed" class="material-icons">lock</i></span>
+                <span>
+                    <i ng-if="vm.cirkelsessie.status=='OPEN'" class="material-icons status-open">lock_open</i>
+                    <i ng-if="vm.cirkelsessie.status=='GESLOTEN'" class="material-icons status-gesloten">lock</i></span>
+        <i ng-if="vm.cirkelsessie.status=='BEEINDIGD'" class="material-icons status-beeindigd">lock</i>
+        </span>
 
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
             <i class="material-icons">share</i>
@@ -465,9 +503,13 @@
                         <div class="dropdown-content">
                             <a ng-if="!vm.isDeelnemer(vm.deelnames)" disabled>Verplaats naar [{{spelkaart.positie +
                                 1}}]</a>
-                            <a ng-if="vm.isDeelnemer(vm.deelnames)" ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
+                            <a ng-if="vm.isDeelnemer(vm.deelnames) && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
+                               ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
                                 naar[{{spelkaart.positie + 1}}]</a>
-                            <a>Meer informatie</a>
+
+                            <a ng-if="vm.cirkelsessie.aantalCirkels==spelkaart.positie" disabled>Verplaats
+                                naar[{{spelkaart.positie + 1}}]</a>
+                            <a href="/#/kaarten/details/{{spelkaart.kaart.id}}">Meer informatie</a>
                         </div>
                     </div>
 

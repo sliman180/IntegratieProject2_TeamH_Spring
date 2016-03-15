@@ -36,6 +36,9 @@
 
         });
 
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
+        };
 
         vm.getTimes = function (n) {
 

@@ -6,6 +6,9 @@
 
         var vm = this;
 
+        vm.nowDate = new Date();
+
+
         vm.cirkelsessies = [];
 
         vm.subthemas = [];
@@ -16,6 +19,10 @@
         CirkelsessieService.all().then(function (data) {
             vm.cirkelsessies = data;
         });
+
+        vm.isActive = function (date) {
+            return new Date() > new Date(date);
+        };
 
         SubthemaService.mySubthemas().then(function (data) {
             vm.subthemas = data;

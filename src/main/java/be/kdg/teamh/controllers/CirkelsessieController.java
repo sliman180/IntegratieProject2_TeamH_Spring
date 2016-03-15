@@ -69,15 +69,27 @@ public class CirkelsessieController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "gepland", method = RequestMethod.GET)
-    public List<Cirkelsessie> gepland() {
-        return service.gepland();
+    @RequestMapping(value = "gesloten", method = RequestMethod.GET)
+    public List<Cirkelsessie> gesloten() {
+        return service.gesloten();
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "actief", method = RequestMethod.GET)
-    public List<Cirkelsessie> actief() {
-        return service.actief();
+    @RequestMapping(value = "open", method = RequestMethod.GET)
+    public List<Cirkelsessie> open() {
+        return service.open();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "beeindigd", method = RequestMethod.GET)
+    public List<Cirkelsessie> beeindigd() {
+        return service.beeindigd();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "gestart", method = RequestMethod.GET)
+    public List<Cirkelsessie> gestart() {
+        return service.gestart();
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -124,7 +124,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
 
     public void clone(int id) throws CirkelsessieNotFound {
         Cirkelsessie old = find(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), true, new DateTime(), old.getSubthema(), old.getGebruiker(), old.getChat());
+        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), CirkelsessieSatus.OPEN, new DateTime(), old.getSubthema(), old.getGebruiker(), old.getChat());
 
         clone.cloneDeelnames(old.getDeelnames());
 
@@ -163,13 +163,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     }
 
     @Override
-    public List<Cirkelsessie> gepland() {
+    public List<Cirkelsessie> gesloten() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
         DateTime now = new DateTime();
 
         for (Cirkelsessie cirkelsessie : temp) {
-            if (cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) < 1)) {
+            if (cirkelsessie.getStatus()==CirkelsessieSatus.GESLOTEN) {
                 cirkelsessies.add(cirkelsessie);
             }
         }
@@ -178,13 +178,43 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     }
 
     @Override
-    public List<Cirkelsessie> actief() {
+    public List<Cirkelsessie> gestart() {
         List<Cirkelsessie> temp = all();
         List<Cirkelsessie> cirkelsessies = new ArrayList<>();
         DateTime now = new DateTime();
 
         for (Cirkelsessie cirkelsessie : temp) {
-            if (!cirkelsessie.isGesloten() && (now.compareTo(cirkelsessie.getStartDatum()) > 0)) {
+            if (cirkelsessie.getStatus()!=CirkelsessieSatus.BEEINDIGD && (now.compareTo(cirkelsessie.getStartDatum()) > 0)) {
+                cirkelsessies.add(cirkelsessie);
+            }
+        }
+
+        return cirkelsessies;
+    }
+
+    @Override
+    public List<Cirkelsessie> open() {
+        List<Cirkelsessie> temp = all();
+        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
+        DateTime now = new DateTime();
+
+        for (Cirkelsessie cirkelsessie : temp) {
+            if (cirkelsessie.getStatus()==CirkelsessieSatus.OPEN && (now.compareTo(cirkelsessie.getStartDatum()) < 0)) {
+                cirkelsessies.add(cirkelsessie);
+            }
+        }
+
+        return cirkelsessies;
+    }
+
+    @Override
+    public List<Cirkelsessie> beeindigd() {
+        List<Cirkelsessie> temp = all();
+        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
+        DateTime now = new DateTime();
+
+        for (Cirkelsessie cirkelsessie : temp) {
+            if (cirkelsessie.getStatus()==CirkelsessieSatus.BEEINDIGD) {
                 cirkelsessies.add(cirkelsessie);
             }
         }
