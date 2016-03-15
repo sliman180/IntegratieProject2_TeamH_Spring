@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CirkelsessieRepository extends JpaRepository<Cirkelsessie, Integer> {
+    Cirkelsessie findByNaam(String naam);
     //
 }

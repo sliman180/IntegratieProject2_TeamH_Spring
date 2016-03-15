@@ -12,13 +12,13 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public FilterRegistrationBean jwtFilter() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-
-        registrationBean.setFilter(new JwtFilter());
-        registrationBean.addUrlPatterns("/api/*");
-
-        return registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean jwtFilter() {
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+//
+//        registrationBean.setFilter(new JwtFilter());
+//        registrationBean.addUrlPatterns("/api/*");
+//
+//        return registrationBean;
+//    }
 }

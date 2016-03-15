@@ -119,12 +119,14 @@ public class CirkelsessieTest {
         Cirkelsessie cirkelsessie = new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null);
         String json = objectMapper.writeValueAsString(cirkelsessie);
 
-        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
+        this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json)
+                .header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
         json = objectMapper.writeValueAsString(new Cirkelsessie("Session two", 8, 15, false, new DateTime(), null, null, null));
 
-        this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json)
+                .header("Authorization", getUserToken()))
                 .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON))
@@ -145,7 +147,7 @@ public class CirkelsessieTest {
 
         json = objectMapper.writeValueAsString(new Cirkelsessie(null, 0, 0, false, new DateTime(), null, null, null));
 
-        this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json));
+        this.mvc.perform(put("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()));
     }
 
     @Test(expected = NestedServletException.class)
@@ -158,7 +160,7 @@ public class CirkelsessieTest {
 
         json = objectMapper.writeValueAsString(new Cirkelsessie("Session one", 5, 10, false, new DateTime(), null, null, null));
 
-        this.mvc.perform(put("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mvc.perform(put("/api/cirkelsessies/2").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isOk());
     }
 
@@ -170,7 +172,7 @@ public class CirkelsessieTest {
         this.mvc.perform(post("/api/cirkelsessies").contentType(MediaType.APPLICATION_JSON).content(json).header("Authorization", getUserToken()))
                 .andExpect(status().isCreated());
 
-        this.mvc.perform(delete("/api/cirkelsessies/1"))
+        this.mvc.perform(delete("/api/cirkelsessies/1").header("Authorization", getUserToken()))
                 .andExpect(status().isOk());
 
         this.mvc.perform(get("/api/cirkelsessies/1").contentType(MediaType.APPLICATION_JSON))
@@ -180,7 +182,7 @@ public class CirkelsessieTest {
 
     @Test(expected = NestedServletException.class)
     public void deleteCirkelsessie_nonExistingCirkelsessie() throws Exception {
-        this.mvc.perform(delete("/api/cirkelsessies/1"));
+        this.mvc.perform(delete("/api/cirkelsessies/1").header("Authorization", getUserToken()));
     }
 
     @Test
