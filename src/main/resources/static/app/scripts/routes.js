@@ -54,7 +54,6 @@
                 controllerAs: "vm"
             })
 
-
             .otherwise({
                 redirectTo: "/"
             });

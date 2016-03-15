@@ -1,12 +1,12 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.dtos.request.DeelnameRequest;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
-import be.kdg.teamh.exceptions.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.DeelnameNotFound;
-import be.kdg.teamh.exceptions.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
@@ -15,95 +15,64 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
-public class DeelnameServiceImpl implements DeelnameService {
-    @Autowired
+public class DeelnameServiceImpl implements DeelnameService
+{
     private DeelnameRepository repository;
+    private GebruikerRepository gebruikers;
+    private CirkelsessieRepository cirkelsessies;
 
     @Autowired
-    private GebruikerRepository gebruikerRepository;
-
-    @Autowired
-    private CirkelsessieRepository cirkelsessieRepository;
-
-    @Override
-    public List<Deelname> all() {
-        return repository.findAll();
+    public DeelnameServiceImpl(DeelnameRepository repository, GebruikerRepository gebruikers, CirkelsessieRepository cirkelsessies)
+    {
+        this.repository = repository;
+        this.gebruikers = gebruikers;
+        this.cirkelsessies = cirkelsessies;
     }
 
     @Override
-    public void create(int id, int userId) throws DeelnameNotFound, GebruikerNotFound, CirkelsessieNotFound, AlreadyJoinedCirkelsessie {
+    public void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound
+    {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        Cirkelsessie cirkelsessie = cirkelsessieRepository.findOne(id);
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-
-
-        for (Deelname deelname : repository.findAll()) {
-            if (deelname.getGebruiker().getId() == gebruiker.getId() && deelname.getCirkelsessie().getId() == cirkelsessie.getId()) {
-                throw new AlreadyJoinedCirkelsessie();
-
-            }
-        }
-
-        if (cirkelsessie == null) {
-            throw new CirkelsessieNotFound();
-        }
-
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
-        //deelname
-        Deelname deelname = new Deelname(0, false);
-        deelname.setCirkelsessie(cirkelsessie);
-        deelname.setGebruiker(gebruiker);
-        Deelname savedDeelname = repository.save(deelname);
+        Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
-        gebruiker.addDeelname(savedDeelname);
-        cirkelsessie.addDeelname(savedDeelname);
+        if (cirkelsessie == null)
+        {
+            throw new CirkelsessieNotFound();
+        }
 
-        //gebruiker
-        gebruikerRepository.saveAndFlush(gebruiker);
-
-        //cirkelsessie
-        cirkelsessieRepository.saveAndFlush(cirkelsessie);
-
-
-    }
-
-    @Override
-    public Deelname find(int id) throws DeelnameNotFound {
         Deelname deelname = repository.findOne(id);
 
-        if (deelname == null) {
+        if (deelname == null)
+        {
             throw new DeelnameNotFound();
         }
 
-        return deelname;
+        deelname.setAangemaakteKaarten(dto.getAangemaakteKaarten());
+        deelname.setMedeorganisator(dto.isMedeorganisator());
+        deelname.setCirkelsessie(cirkelsessie);
+        deelname.setGebruiker(gebruiker);
+
+        repository.saveAndFlush(deelname);
     }
 
     @Override
-    public void update(int id, Deelname deelname) throws DeelnameNotFound {
-        Deelname old = find(id);
+    public void delete(int id) throws DeelnameNotFound
+    {
+        Deelname deelname = repository.findOne(id);
 
-        old.setCirkelsessie(deelname.getCirkelsessie());
-        old.setGebruiker(deelname.getGebruiker());
-        old.setMedeorganisator(deelname.isMedeorganisator());
-        old.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
-
-        repository.saveAndFlush(old);
-    }
-
-    @Override
-    public void delete(int id) throws DeelnameNotFound {
-        Deelname deelname = find(id);
-
-        if (deelname == null) {
+        if (deelname == null)
+        {
             throw new DeelnameNotFound();
         }
-        repository.delete(id);
+
+        repository.delete(deelname);
     }
 }

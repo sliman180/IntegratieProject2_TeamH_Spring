@@ -1,8 +1,5 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -11,7 +8,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "gebruikers")
-public class Gebruiker implements Serializable {
+public class Gebruiker implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,185 +21,209 @@ public class Gebruiker implements Serializable {
     @NotNull
     private String wachtwoord;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<Hoofdthema> hoofdthemas = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Kaart> kaarten = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Deelname.class, property = "id")
-    private List<Deelname> deelnames = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Commentaar> commentaren = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Organisatie> organisaties = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<Bericht> berichten = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    @ManyToMany
-    private List<Rol> rollen = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    public Gebruiker() {
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Kaart> kaarten = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Deelname> deelnames = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Commentaar> commentaren = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bericht> berichten = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Rol> rollen = new ArrayList<>();
+
+    public Gebruiker()
+    {
         //
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord) {
+    public Gebruiker(String gebruikersnaam, String wachtwoord)
+    {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen) {
+    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen)
+    {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.rollen = rollen;
     }
 
-    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
-        this.cirkelsessies.add(cirkelsessie);
-    }
-
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getGebruikersnaam() {
+    public String getGebruikersnaam()
+    {
         return gebruikersnaam;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam) {
+    public void setGebruikersnaam(String gebruikersnaam)
+    {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public String getWachtwoord() {
+    public String getWachtwoord()
+    {
         return wachtwoord;
     }
 
-    public void setWachtwoord(String wachtwoord) {
+    public void setWachtwoord(String wachtwoord)
+    {
         this.wachtwoord = wachtwoord;
     }
 
-    public List<Hoofdthema> getHoofdthemas() {
-        return hoofdthemas;
-    }
-
-    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
-        this.hoofdthemas = hoofdthemas;
-    }
-
-    public List<Kaart> getKaarten() {
-        return kaarten;
-    }
-
-    public void setKaarten(List<Kaart> kaarten) {
-        this.kaarten = kaarten;
-    }
-
-    public List<Deelname> getDeelnames() {
-        return deelnames;
-    }
-
-    public void setDeelnames(List<Deelname> deelnames) {
-        this.deelnames = deelnames;
-    }
-
-    public List<Commentaar> getCommentaren() {
-        return commentaren;
-    }
-
-    public void setCommentaren(List<Commentaar> commentaren) {
-        this.commentaren = commentaren;
-    }
-
-    public List<Bericht> getBerichten() {
-        return berichten;
-    }
-
-    public void setBerichten(List<Bericht> berichten) {
-        this.berichten = berichten;
-    }
-
-    public List<Rol> getRollen() {
-        return rollen;
-    }
-
-    public void setRollen(List<Rol> rollen) {
-        this.rollen = rollen;
-    }
-
-    public List<Cirkelsessie> getCirkelsessies() {
-        return cirkelsessies;
-    }
-
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
-        this.cirkelsessies = cirkelsessies;
-    }
-
-    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
-        this.cirkelsessies = cirkelsessies;
-    }
-
-    public List<Organisatie> getOrganisaties() {
+    public List<Organisatie> getOrganisaties()
+    {
         return organisaties;
     }
 
-    public void setOrganisaties(List<Organisatie> organisaties) {
+    public void setOrganisaties(List<Organisatie> organisaties)
+    {
         this.organisaties = organisaties;
     }
 
-    public void addRol(Rol rol) {
-        rollen.add(rol);
-    }
-
-    public void addDeelname(Deelname deelname) {
-        this.deelnames.add(deelname);
-    }
-
-    public void addOrganisatie(Organisatie organisatie) {
+    public void addOrganisatie(Organisatie organisatie)
+    {
         this.organisaties.add(organisatie);
     }
 
-    public void addKaart(Kaart kaart) {
+    public List<Hoofdthema> getHoofdthemas()
+    {
+        return hoofdthemas;
+    }
+
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas)
+    {
+        this.hoofdthemas = hoofdthemas;
+    }
+
+    public List<Cirkelsessie> getCirkelsessies()
+    {
+        return cirkelsessies;
+    }
+
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies)
+    {
+        this.cirkelsessies = cirkelsessies;
+    }
+
+    public void addCirkelsessie(Cirkelsessie cirkelsessie)
+    {
+        this.cirkelsessies.add(cirkelsessie);
+    }
+
+    public List<Kaart> getKaarten()
+    {
+        return kaarten;
+    }
+
+    public void setKaarten(List<Kaart> kaarten)
+    {
+        this.kaarten = kaarten;
+    }
+
+    public void addKaart(Kaart kaart)
+    {
         this.kaarten.add(kaart);
     }
 
-    public void addBericht(Bericht bericht) {
+    public List<Deelname> getDeelnames()
+    {
+        return deelnames;
+    }
+
+    public void setDeelnames(List<Deelname> deelnames)
+    {
+        this.deelnames = deelnames;
+    }
+
+    public void addDeelname(Deelname deelname)
+    {
+        this.deelnames.add(deelname);
+    }
+
+    public List<Commentaar> getCommentaren()
+    {
+        return commentaren;
+    }
+
+    public void setCommentaren(List<Commentaar> commentaren)
+    {
+        this.commentaren = commentaren;
+    }
+
+    public void addCommentaar(Commentaar commentaar)
+    {
+        this.commentaren.add(commentaar);
+    }
+
+    public List<Bericht> getBerichten()
+    {
+        return berichten;
+    }
+
+    public void setBerichten(List<Bericht> berichten)
+    {
+        this.berichten = berichten;
+    }
+
+    public void addBericht(Bericht bericht)
+    {
         this.berichten.add(bericht);
     }
 
+    public List<Rol> getRollen()
+    {
+        return rollen;
+    }
+
+    public void setRollen(List<Rol> rollen)
+    {
+        this.rollen = rollen;
+    }
+
+    public void addRol(Rol rol)
+    {
+        this.rollen.add(rol);
+    }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
+        {
             return false;
         }
 
         Gebruiker gebruiker = (Gebruiker) o;
 
         return gebruikersnaam.equals(gebruiker.gebruikersnaam) && wachtwoord.equals(gebruiker.wachtwoord);
-
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = gebruikersnaam.hashCode();
 
         result = 31 * result + wachtwoord.hashCode();

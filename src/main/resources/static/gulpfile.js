@@ -96,12 +96,11 @@
                 paths.app.scripts + "/vendor/angular-storage.js"
             ],
             app: [
-                paths.app.scripts + "/plugins.js",
                 paths.app.scripts + "/module.js",
-                paths.app.scripts + "/constants.js",
                 paths.app.scripts + "/routes.js",
-                paths.app.scripts + "/filters/**/*",
                 paths.app.scripts + "/interceptors/**/*",
+                paths.app.scripts + "/directives/**/*",
+                paths.app.scripts + "/filters/**/*",
                 paths.app.scripts + "/services/**/*",
                 paths.app.scripts + "/controllers/**/*"
             ]

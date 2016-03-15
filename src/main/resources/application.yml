@@ -2,20 +2,16 @@ spring:
     main:
         banner-mode: "off"
 
+---
+
+spring:
+    profiles: travis
+
 logging:
     level:
         root: WARN
         org:
             hibernate: OFF
-
----
-
-spring:
-    profiles: development
-
-logging:
-    level:
-        root: INFO
 ---
 
 spring:
