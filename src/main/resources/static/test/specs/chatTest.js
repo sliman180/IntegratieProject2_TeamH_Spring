@@ -27,9 +27,6 @@ describe("During the session",function(){
         //duplicate id, alternative: 'class' for card divs
         expect(element.all(by.id("kaart")).count()).toBe(1);
 
-
-
-
     });
 
     it("user should be able to chat",function(){
