@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,24 +35,9 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public List<SpelkaartResponse> all()
+    public List<Spelkaart> all()
     {
-        List<Spelkaart> spelkaarten = repository.findAll();
-        List<SpelkaartResponse> dtos = new ArrayList<>();
-
-        for (Spelkaart spelkaart : spelkaarten)
-        {
-            SpelkaartResponse dto = new SpelkaartResponse();
-
-            dto.setId(spelkaart.getId());
-            dto.setPositie(spelkaart.getPositie());
-            dto.setCirkelsessie(spelkaart.getCirkelsessie().getId());
-            dto.setKaart(spelkaart.getKaart().getId());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return repository.findAll();
     }
 
     @Override
@@ -80,11 +63,11 @@ public class SpelkaartServiceImpl implements SpelkaartService
         spelkaart.setCirkelsessie(cirkelsessie);
         spelkaart.setKaart(kaart);
 
-        repository.save(spelkaart);
+        repository.saveAndFlush(spelkaart);
     }
 
     @Override
-    public SpelkaartResponse find(int id) throws SpelkaartNotFound
+    public Spelkaart find(int id) throws SpelkaartNotFound
     {
         Spelkaart spelkaart = repository.findOne(id);
 
@@ -93,14 +76,7 @@ public class SpelkaartServiceImpl implements SpelkaartService
             throw new SpelkaartNotFound();
         }
 
-        SpelkaartResponse dto = new SpelkaartResponse();
-
-        dto.setId(spelkaart.getId());
-        dto.setPositie(spelkaart.getPositie());
-        dto.setCirkelsessie(spelkaart.getCirkelsessie().getId());
-        dto.setKaart(spelkaart.getKaart().getId());
-
-        return dto;
+        return spelkaart;
     }
 
     @Override
@@ -164,6 +140,6 @@ public class SpelkaartServiceImpl implements SpelkaartService
 
         spelkaart.setPositie(spelkaart.getPositie() + 1);
 
-        repository.save(spelkaart);
+        repository.saveAndFlush(spelkaart);
     }
 }

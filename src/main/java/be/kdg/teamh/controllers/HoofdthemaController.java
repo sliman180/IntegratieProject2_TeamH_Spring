@@ -1,13 +1,11 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
-import be.kdg.teamh.dtos.response.HoofdthemaResponse;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.services.contracts.HoofdthemaService;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +26,7 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<HoofdthemaResponse> index()
+    public List<Hoofdthema> index()
     {
         return service.all();
     }
@@ -42,7 +40,7 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public HoofdthemaResponse show(@PathVariable("id") int id) throws HoofdthemaNotFound
+    public Hoofdthema show(@PathVariable("id") int id) throws HoofdthemaNotFound
     {
         return service.find(id);
     }

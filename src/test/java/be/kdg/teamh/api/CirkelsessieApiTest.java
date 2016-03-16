@@ -228,7 +228,7 @@ public class CirkelsessieApiTest extends ApiTest
         http.perform(delete("/api/cirkelsessies/1").header("Authorization", getAdminToken()));
     }
 
-    // TODO fix
+    @Test
     public void checkCirkelsessieLinkedToSubthema() throws Exception
     {
         OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);

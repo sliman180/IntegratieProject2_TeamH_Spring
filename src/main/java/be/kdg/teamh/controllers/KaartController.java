@@ -4,10 +4,10 @@ import be.kdg.teamh.dtos.request.CommentaarRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.dtos.response.CommentaarResponse;
-import be.kdg.teamh.dtos.response.KaartResponse;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
-import be.kdg.teamh.dtos.response.SubthemaResponse;
+import be.kdg.teamh.entities.Commentaar;
+import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -37,7 +37,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<KaartResponse> index()
+    public List<Kaart> index()
     {
         return service.all();
     }
@@ -51,7 +51,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public KaartResponse show(@PathVariable("id") int id) throws KaartNotFound
+    public Kaart show(@PathVariable("id") int id) throws KaartNotFound
     {
         return service.find(id);
     }
@@ -72,7 +72,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/subthemas", method = RequestMethod.GET)
-    public List<SubthemaResponse> subthemas(@PathVariable("id") int id) throws KaartNotFound
+    public List<Subthema> subthemas(@PathVariable("id") int id) throws KaartNotFound
     {
         return service.getSubthemas(id);
     }
@@ -86,7 +86,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
-    public List<CommentaarResponse> comments(@PathVariable("id") int id) throws KaartNotFound
+    public List<Commentaar> comments(@PathVariable("id") int id) throws KaartNotFound
     {
         return service.getCommentaren(id);
     }
@@ -100,7 +100,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
-    public List<SpelkaartResponse> getSpelkaarten(@PathVariable("id") int id) throws KaartNotFound
+    public List<Spelkaart> getSpelkaarten(@PathVariable("id") int id) throws KaartNotFound
     {
         return service.getSpelkaarten(id);
     }

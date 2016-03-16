@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -24,14 +27,18 @@ public class Kaart implements Serializable
     private boolean commentsToelaatbaar;
 
     @ManyToOne
+    @JsonBackReference
     private Gebruiker gebruiker;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "kaart")
     private List<Commentaar> commentaren = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "kaart")
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
+    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Subthema> subthemas = new ArrayList<>();
 

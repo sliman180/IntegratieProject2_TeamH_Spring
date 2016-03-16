@@ -1,5 +1,12 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -31,17 +38,22 @@ public class Cirkelsessie implements Serializable
     private LocalDateTime startDatum;
 
     @ManyToOne
+    @JsonBackReference
     private Subthema subthema;
 
     @ManyToOne
+    @JsonBackReference
     private Gebruiker gebruiker;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
     private List<Deelname> deelnames = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
     private List<Bericht> berichten = new ArrayList<>();
 
@@ -106,11 +118,13 @@ public class Cirkelsessie implements Serializable
         this.status = status;
     }
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getStartDatum()
     {
         return startDatum;
     }
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setStartDatum(LocalDateTime startDatum)
     {
         this.startDatum = startDatum;

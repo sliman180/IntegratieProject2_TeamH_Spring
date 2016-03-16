@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -22,14 +25,18 @@ public class Subthema implements Serializable
     private String beschrijving;
 
     @ManyToOne
+    @JsonBackReference
     private Hoofdthema hoofdthema;
 
     @ManyToOne
+    @JsonBackReference
     private Gebruiker gebruiker;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "subthema")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
+    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "subthemas")
     private List<Kaart> kaarten = new ArrayList<>();
 

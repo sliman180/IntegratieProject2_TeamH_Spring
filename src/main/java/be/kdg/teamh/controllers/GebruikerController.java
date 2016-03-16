@@ -1,9 +1,9 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.GebruikerRequest;
-import be.kdg.teamh.dtos.response.CirkelsessieResponse;
-import be.kdg.teamh.dtos.response.DeelnameResponse;
-import be.kdg.teamh.dtos.response.GebruikerResponse;
+import be.kdg.teamh.entities.Cirkelsessie;
+import be.kdg.teamh.entities.Deelname;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.RolNotFound;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -27,7 +27,7 @@ public class GebruikerController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<GebruikerResponse> index()
+    public List<Gebruiker> index()
     {
         return service.all();
     }
@@ -41,7 +41,7 @@ public class GebruikerController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public GebruikerResponse show(@PathVariable("id") int id) throws GebruikerNotFound
+    public Gebruiker show(@PathVariable("id") int id) throws GebruikerNotFound
     {
         return service.find(id);
     }
@@ -62,22 +62,22 @@ public class GebruikerController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/{id}/organisaties", method = RequestMethod.GET)
-    public List<DeelnameResponse> getOrganisaties(@PathVariable("id") int id) throws GebruikerNotFound
+    public List<Deelname> getOrganisaties(@PathVariable("id") int id) throws GebruikerNotFound
     {
-        return service.findDeelnames(id);
+        return service.getDeelnames(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> getCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
+    public List<Cirkelsessie> getCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound
     {
-        return service.findCirkelsessies(id);
+        return service.getCirkelsessies(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/{id}/deelnames", method = RequestMethod.GET)
-    public List<DeelnameResponse> getDeelnames(@PathVariable("id") int id) throws GebruikerNotFound
+    public List<Deelname> getDeelnames(@PathVariable("id") int id) throws GebruikerNotFound
     {
-        return service.findDeelnames(id);
+        return service.getDeelnames(id);
     }
 }

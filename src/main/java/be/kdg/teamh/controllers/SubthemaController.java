@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.dtos.response.SubthemaResponse;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -26,7 +26,7 @@ public class SubthemaController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SubthemaResponse> index()
+    public List<Subthema> index()
     {
         return service.all();
     }
@@ -40,14 +40,14 @@ public class SubthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public SubthemaResponse show(@PathVariable Integer id) throws SubthemaNotFound
+    public Subthema show(@PathVariable Integer id) throws SubthemaNotFound
     {
         return service.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody SubthemaRequest subthema) throws SubthemaNotFound, HoofdthemaNotFound
+    public void update(@PathVariable("id") int id, @RequestBody SubthemaRequest subthema) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
     {
         service.update(id, subthema);
     }

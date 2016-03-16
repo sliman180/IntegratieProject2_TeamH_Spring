@@ -1,5 +1,7 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ public class Rol implements Serializable
     @NotNull
     private String naam;
 
+    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "rollen")
     private List<Gebruiker> gebruikers = new ArrayList<>();
 

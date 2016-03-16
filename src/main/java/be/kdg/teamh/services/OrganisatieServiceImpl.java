@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
-import be.kdg.teamh.dtos.response.OrganisatieResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,25 +28,9 @@ public class OrganisatieServiceImpl implements OrganisatieService
         this.gebruikers = gebruikers;
     }
 
-    public List<OrganisatieResponse> all()
+    public List<Organisatie> all()
     {
-        List<Organisatie> organisaties = repository.findAll();
-        List<OrganisatieResponse> dtos = new ArrayList<>();
-
-        for (Organisatie organisatie : organisaties)
-        {
-            OrganisatieResponse dto = new OrganisatieResponse();
-
-            dto.setId(organisatie.getId());
-            dto.setNaam(organisatie.getNaam());
-            dto.setBeschrijving(organisatie.getBeschrijving());
-            dto.setGebruiker(organisatie.getGebruiker().getId());
-            dto.setHoofdthemas(organisatie.getHoofdthemas());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return repository.findAll();
     }
 
     @Override
@@ -65,14 +47,14 @@ public class OrganisatieServiceImpl implements OrganisatieService
         organisatie.setNaam(dto.getNaam());
         organisatie.setBeschrijving(dto.getBeschrijving());
         organisatie.setGebruiker(gebruiker);
-        organisatie = repository.save(organisatie);
+        organisatie = repository.saveAndFlush(organisatie);
 
         gebruiker.addOrganisatie(organisatie);
         gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
-    public OrganisatieResponse find(int id) throws OrganisatieNotFound
+    public Organisatie find(int id) throws OrganisatieNotFound
     {
         Organisatie organisatie = repository.findOne(id);
 
@@ -81,15 +63,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
             throw new OrganisatieNotFound();
         }
 
-        OrganisatieResponse dto = new OrganisatieResponse();
-
-        dto.setId(organisatie.getId());
-        dto.setNaam(organisatie.getNaam());
-        dto.setBeschrijving(organisatie.getBeschrijving());
-        dto.setGebruiker(organisatie.getGebruiker().getId());
-        dto.setHoofdthemas(organisatie.getHoofdthemas());
-
-        return dto;
+        return organisatie;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class Tag implements Serializable
     private String naam;
 
     @ManyToOne
+    @JsonBackReference
     private Hoofdthema hoofdthema;
 
     public Tag()

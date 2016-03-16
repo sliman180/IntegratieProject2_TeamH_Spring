@@ -4,10 +4,10 @@ import be.kdg.teamh.dtos.request.CommentaarRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.dtos.response.CommentaarResponse;
-import be.kdg.teamh.dtos.response.KaartResponse;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
-import be.kdg.teamh.dtos.response.SubthemaResponse;
+import be.kdg.teamh.entities.Commentaar;
+import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -18,25 +18,25 @@ import java.util.List;
 
 public interface KaartenService
 {
-    List<KaartResponse> all();
+    List<Kaart> all();
 
-    void create(KaartRequest kaart) throws GebruikerNotFound;
+    void create(KaartRequest dto) throws GebruikerNotFound;
 
-    KaartResponse find(int id) throws KaartNotFound;
+    Kaart find(int id) throws KaartNotFound;
 
-    void update(int id, KaartRequest kaart) throws KaartNotFound, GebruikerNotFound;
+    void update(int id, KaartRequest dto) throws KaartNotFound, GebruikerNotFound;
 
     void delete(int id) throws KaartNotFound;
 
-    List<SubthemaResponse> getSubthemas(int id) throws KaartNotFound;
+    List<Subthema> getSubthemas(int id) throws KaartNotFound;
 
-    void addSubthema(int id, SubthemaRequest subthema) throws KaartNotFound, HoofdthemaNotFound;
+    void addSubthema(int id, SubthemaRequest dto) throws KaartNotFound, HoofdthemaNotFound;
 
-    List<CommentaarResponse> getCommentaren(int id) throws KaartNotFound;
+    List<Commentaar> getCommentaren(int id) throws KaartNotFound;
 
-    void addCommentaar(int id, CommentaarRequest comment) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound;
+    void addCommentaar(int id, CommentaarRequest dto) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound;
 
-    List<SpelkaartResponse> getSpelkaarten(int id) throws KaartNotFound;
+    List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound;
 
-    void addSpelkaart(int id, SpelkaartRequest spelkaart) throws KaartNotFound, CirkelsessieNotFound;
+    void addSpelkaart(int id, SpelkaartRequest dto) throws KaartNotFound, CirkelsessieNotFound;
 }

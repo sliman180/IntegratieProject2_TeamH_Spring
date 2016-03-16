@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.dtos.response.SubthemaResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Subthema;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,26 +34,9 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public List<SubthemaResponse> all()
+    public List<Subthema> all()
     {
-        List<Subthema> subthemas = repository.findAll();
-        List<SubthemaResponse> dtos = new ArrayList<>();
-
-        for (Subthema subthema : subthemas)
-        {
-            SubthemaResponse dto = new SubthemaResponse();
-
-            dto.setId(subthema.getId());
-            dto.setNaam(subthema.getNaam());
-            dto.setBeschrijving(subthema.getBeschrijving());
-            dto.setHoofdthema(subthema.getHoofdthema().getId());
-            dto.setCirkelsessies(subthema.getCirkelsessies());
-            dto.setKaarten(subthema.getKaarten());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return repository.findAll();
     }
 
     @Override
@@ -80,17 +61,17 @@ public class SubthemaServiceImpl implements SubthemaService
         subthema.setBeschrijving(dto.getBeschrijving());
         subthema.setHoofdthema(hoofdthema);
         subthema.setGebruiker(gebruiker);
-        subthema = repository.save(subthema);
+        subthema = repository.saveAndFlush(subthema);
 
         hoofdthema.addSubthema(subthema);
         hoofdthemas.saveAndFlush(hoofdthema);
 
         gebruiker.addSubthema(subthema);
-        gebruikers.save(gebruiker);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
-    public SubthemaResponse find(int id) throws SubthemaNotFound
+    public Subthema find(int id) throws SubthemaNotFound
     {
         Subthema subthema = repository.findOne(id);
 
@@ -99,26 +80,24 @@ public class SubthemaServiceImpl implements SubthemaService
             throw new SubthemaNotFound();
         }
 
-        SubthemaResponse dto = new SubthemaResponse();
-
-        dto.setId(subthema.getId());
-        dto.setNaam(subthema.getNaam());
-        dto.setBeschrijving(subthema.getBeschrijving());
-        dto.setHoofdthema(subthema.getHoofdthema().getId());
-        dto.setCirkelsessies(subthema.getCirkelsessies());
-        dto.setKaarten(subthema.getKaarten());
-
-        return dto;
+        return subthema;
     }
 
     @Override
-    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound
+    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
     {
         Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
         if (hoofdthema == null)
         {
             throw new HoofdthemaNotFound();
+        }
+
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
+        if (gebruiker == null)
+        {
+            throw new GebruikerNotFound();
         }
 
         Subthema subthema = repository.findOne(id);
@@ -131,6 +110,7 @@ public class SubthemaServiceImpl implements SubthemaService
         subthema.setNaam(dto.getNaam());
         subthema.setBeschrijving(dto.getBeschrijving());
         subthema.setHoofdthema(hoofdthema);
+        subthema.setGebruiker(gebruiker);
 
         repository.saveAndFlush(subthema);
     }

@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
+import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
@@ -27,7 +27,7 @@ public class SpelkaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SpelkaartResponse> index()
+    public List<Spelkaart> index()
     {
         return service.all();
     }
@@ -41,7 +41,7 @@ public class SpelkaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public SpelkaartResponse show(@PathVariable("id") int id) throws SpelkaartNotFound
+    public Spelkaart show(@PathVariable("id") int id) throws SpelkaartNotFound
     {
         return service.find(id);
     }

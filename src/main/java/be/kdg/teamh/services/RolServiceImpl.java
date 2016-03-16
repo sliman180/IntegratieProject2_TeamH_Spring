@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.RolRequest;
-import be.kdg.teamh.dtos.response.RolResponse;
 import be.kdg.teamh.entities.Rol;
 import be.kdg.teamh.exceptions.notfound.RolNotFound;
 import be.kdg.teamh.repositories.RolRepository;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,23 +24,9 @@ public class RolServiceImpl implements RolService
     }
 
     @Override
-    public List<RolResponse> all()
+    public List<Rol> all()
     {
-        List<Rol> rollen = repository.findAll();
-        List<RolResponse> dtos = new ArrayList<>();
-
-        for (Rol rol : rollen)
-        {
-            RolResponse dto = new RolResponse();
-
-            dto.setId(rol.getId());
-            dto.setNaam(rol.getNaam());
-            dto.setGebruikers(rol.getGebruikers());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return repository.findAll();
     }
 
     @Override
@@ -52,11 +36,11 @@ public class RolServiceImpl implements RolService
 
         rol.setNaam(dto.getNaam());
 
-        repository.save(rol);
+        repository.saveAndFlush(rol);
     }
 
     @Override
-    public RolResponse find(int id) throws RolNotFound
+    public Rol find(int id) throws RolNotFound
     {
         Rol rol = repository.findOne(id);
 
@@ -65,13 +49,7 @@ public class RolServiceImpl implements RolService
             throw new RolNotFound();
         }
 
-        RolResponse dto = new RolResponse();
-
-        dto.setId(rol.getId());
-        dto.setNaam(rol.getNaam());
-        dto.setGebruikers(rol.getGebruikers());
-
-        return dto;
+        return rol;
     }
 
     @Override

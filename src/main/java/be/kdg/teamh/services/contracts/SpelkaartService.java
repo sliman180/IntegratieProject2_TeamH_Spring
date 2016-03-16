@@ -1,7 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
+import be.kdg.teamh.entities.Spelkaart;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface SpelkaartService
 {
-    List<SpelkaartResponse> all();
+    List<Spelkaart> all();
 
     void create(SpelkaartRequest dto) throws CirkelsessieNotFound, KaartNotFound;
 
-    SpelkaartResponse find(int id) throws SpelkaartNotFound;
+    Spelkaart find(int id) throws SpelkaartNotFound;
 
     void update(int id, SpelkaartRequest dto) throws SpelkaartNotFound, CirkelsessieNotFound, KaartNotFound;
 

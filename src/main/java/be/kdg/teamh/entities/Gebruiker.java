@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -21,30 +24,39 @@ public class Gebruiker implements Serializable
     @NotNull
     private String wachtwoord;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Organisatie> organisaties = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Subthema> subthemas = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Kaart> kaarten = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Deelname> deelnames = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Commentaar> commentaren = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Bericht> berichten = new ArrayList<>();
 
+    @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Rol> rollen = new ArrayList<>();
 

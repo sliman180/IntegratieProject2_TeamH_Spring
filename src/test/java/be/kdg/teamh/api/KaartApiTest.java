@@ -1,11 +1,7 @@
 package be.kdg.teamh.api;
 
 import be.kdg.teamh.dtos.request.*;
-import be.kdg.teamh.dtos.response.CommentaarResponse;
-import be.kdg.teamh.entities.Commentaar;
-import be.kdg.teamh.entities.Subthema;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import org.springframework.web.util.NestedServletException;
 
 import java.time.LocalDateTime;
@@ -191,7 +187,7 @@ public class KaartApiTest extends ApiTest
         http.perform(post("/api/kaarten/1/comments", json).header("Authorization", getAdminToken()));
     }
 
-    // TODO fix
+    @Test
     public void koppelKaartAanSubthema() throws Exception
     {
         OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);

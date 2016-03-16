@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
-import be.kdg.teamh.dtos.response.HoofdthemaResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,27 +34,9 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public List<HoofdthemaResponse> all()
+    public List<Hoofdthema> all()
     {
-        List<Hoofdthema> hoofdthemas = repository.findAll();
-        List<HoofdthemaResponse> dtos = new ArrayList<>();
-
-        for (Hoofdthema hoofdthema : hoofdthemas)
-        {
-            HoofdthemaResponse dto = new HoofdthemaResponse();
-
-            dto.setId(hoofdthema.getId());
-            dto.setNaam(hoofdthema.getNaam());
-            dto.setBeschrijving(hoofdthema.getBeschrijving());
-            dto.setGebruiker(hoofdthema.getGebruiker().getId());
-            dto.setOrganisatie(hoofdthema.getOrganisatie().getId());
-            dto.setSubthemas(hoofdthema.getSubthemas());
-            dto.setTags(hoofdthema.getTags());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return repository.findAll();
     }
 
     @Override
@@ -77,17 +57,21 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
         }
 
         Hoofdthema hoofdthema = new Hoofdthema();
-
         hoofdthema.setNaam(dto.getNaam());
         hoofdthema.setBeschrijving(dto.getBeschrijving());
         hoofdthema.setOrganisatie(organisatie);
         hoofdthema.setGebruiker(gebruiker);
-
         repository.save(hoofdthema);
+
+        organisatie.addHoofdthema(hoofdthema);
+        organisaties.saveAndFlush(organisatie);
+
+        gebruiker.addHoofdthema(hoofdthema);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
-    public HoofdthemaResponse find(int id) throws HoofdthemaNotFound
+    public Hoofdthema find(int id) throws HoofdthemaNotFound
     {
         Hoofdthema hoofdthema = repository.findOne(id);
 
@@ -96,17 +80,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
             throw new HoofdthemaNotFound();
         }
 
-        HoofdthemaResponse dto = new HoofdthemaResponse();
-
-        dto.setId(hoofdthema.getId());
-        dto.setNaam(hoofdthema.getNaam());
-        dto.setBeschrijving(hoofdthema.getBeschrijving());
-        dto.setGebruiker(hoofdthema.getGebruiker().getId());
-        dto.setOrganisatie(hoofdthema.getOrganisatie().getId());
-        dto.setSubthemas(hoofdthema.getSubthemas());
-        dto.setTags(hoofdthema.getTags());
-
-        return dto;
+        return hoofdthema;
     }
 
     @Override

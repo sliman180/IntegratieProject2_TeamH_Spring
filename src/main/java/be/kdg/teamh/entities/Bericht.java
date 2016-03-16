@@ -1,5 +1,11 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -20,9 +26,11 @@ public class Bericht implements Serializable
     private LocalDateTime datum;
 
     @ManyToOne
+    @JsonBackReference
     private Cirkelsessie cirkelsessie;
 
     @ManyToOne
+    @JsonBackReference
     private Gebruiker gebruiker;
 
     public Bericht()
@@ -53,11 +61,13 @@ public class Bericht implements Serializable
         this.tekst = tekst;
     }
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getDatum()
     {
         return datum;
     }
 
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     public void setDatum(LocalDateTime datum)
     {
         this.datum = datum;

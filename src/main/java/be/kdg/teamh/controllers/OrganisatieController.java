@@ -1,7 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
-import be.kdg.teamh.dtos.response.OrganisatieResponse;
+import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -29,7 +29,7 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<OrganisatieResponse> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden
+    public List<Organisatie> index(@RequestHeader(name = "Authorization") String token) throws IsForbidden
     {
         if (!auth.isRegistered(token))
         {
@@ -54,7 +54,7 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public OrganisatieResponse show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
+    public Organisatie show(@PathVariable int id, @RequestHeader(name = "Authorization") String token) throws OrganisatieNotFound, IsForbidden
     {
         if (!auth.isRegistered(token))
         {

@@ -3,7 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.dtos.request.BerichtRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
-import be.kdg.teamh.dtos.response.*;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -32,35 +32,35 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> index()
+    public List<Cirkelsessie> index()
     {
         return service.all();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "actief", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> actief()
+    public List<Cirkelsessie> actief()
     {
         return service.actief();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "gesloten", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> gesloten()
+    public List<Cirkelsessie> gesloten()
     {
         return service.gesloten();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "beindigd", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> beindigd()
+    public List<Cirkelsessie> beindigd()
     {
         return service.beindigd();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "gepland", method = RequestMethod.GET)
-    public List<CirkelsessieResponse> gepland()
+    public List<Cirkelsessie> gepland()
     {
         return service.gepland();
     }
@@ -74,7 +74,7 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public CirkelsessieResponse show(@PathVariable int id) throws CirkelsessieNotFound
+    public Cirkelsessie show(@PathVariable int id) throws CirkelsessieNotFound
     {
         return service.find(id);
     }
@@ -102,14 +102,14 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
-    public SubthemaResponse getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound
+    public Subthema getSubthema(@PathVariable("id") int id) throws CirkelsessieNotFound
     {
         return service.getSubthema(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/deelnames", method = RequestMethod.GET)
-    public List<DeelnameResponse> getDeelnames(@PathVariable("id") int id) throws CirkelsessieNotFound
+    public List<Deelname> getDeelnames(@PathVariable("id") int id) throws CirkelsessieNotFound
     {
         return service.getDeelnames(id);
     }
@@ -123,29 +123,29 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
-    public List<SpelkaartResponse> getSpelkaarten(@PathVariable("id") int id) throws CirkelsessieNotFound
+    public List<Spelkaart> getSpelkaarten(@PathVariable("id") int id) throws CirkelsessieNotFound
     {
         return service.getSpelkaarten(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.POST)
-    public void addSpelkaart(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @RequestBody KaartRequest kaart) throws CirkelsessieNotFound, GebruikerNotFound
+    public void addSpelkaart(@PathVariable("id") int id, @RequestBody KaartRequest kaart) throws CirkelsessieNotFound, GebruikerNotFound
     {
-        service.addSpelkaart(id, auth.findByToken(token).getId(), kaart);
+        service.addSpelkaart(id, kaart);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/berichten", method = RequestMethod.GET)
-    public List<BerichtResponse> getBerichten(@PathVariable("id") int id) throws CirkelsessieNotFound
+    public List<Bericht> getBerichten(@PathVariable("id") int id) throws CirkelsessieNotFound
     {
         return service.getBerichten(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/berichten", method = RequestMethod.POST)
-    public void addBericht(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @RequestBody BerichtRequest bericht) throws CirkelsessieNotFound, GebruikerNotFound
+    public void addBericht(@PathVariable("id") int id, @RequestBody BerichtRequest bericht) throws CirkelsessieNotFound, GebruikerNotFound
     {
-        service.addBericht(id, auth.findByToken(token).getId(), bericht);
+        service.addBericht(id, bericht);
     }
 }

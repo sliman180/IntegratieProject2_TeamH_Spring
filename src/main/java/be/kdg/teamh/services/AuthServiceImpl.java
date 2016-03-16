@@ -1,6 +1,5 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.dtos.response.GebruikerResponse;
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
@@ -30,7 +29,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public LoginResponse generateToken(GebruikerResponse gebruiker)
+    public LoginResponse generateToken(Gebruiker gebruiker)
     {
         Claims claims = Jwts.claims().setSubject(String.valueOf(gebruiker.getId()));
 
@@ -41,7 +40,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public GebruikerResponse findByToken(String token) throws GebruikerNotFound
+    public Gebruiker findByToken(String token) throws GebruikerNotFound
     {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
@@ -50,20 +49,7 @@ public class AuthServiceImpl implements AuthService
             throw new GebruikerNotFound();
         }
 
-        GebruikerResponse dto = new GebruikerResponse();
-
-        dto.setId(gebruiker.getId());
-        dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        dto.setOrganisaties(gebruiker.getOrganisaties());
-        dto.setHoofdthemas(gebruiker.getHoofdthemas());
-        dto.setCirkelsessies(gebruiker.getCirkelsessies());
-        dto.setKaarten(gebruiker.getKaarten());
-        dto.setDeelnames(gebruiker.getDeelnames());
-        dto.setBerichten(gebruiker.getBerichten());
-        dto.setCommentaren(gebruiker.getCommentaren());
-        dto.setRollen(gebruiker.getRollen());
-
-        return dto;
+        return gebruiker;
     }
 
     @Override
