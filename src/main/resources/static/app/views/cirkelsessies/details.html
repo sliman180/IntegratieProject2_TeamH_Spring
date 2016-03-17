@@ -52,6 +52,10 @@
         color: blue !important;
     }
 
+    .beurt {
+
+    }
+
 </style>
 
 
@@ -64,11 +68,29 @@
     <div id="header-buttons">
 
         <div>
+            <div ng-if="vm.isAanDeBeurt()" class="beurt">
+                <h4>U bent aan de beurt!</h4>
+                <!-- MDL Progress Bar with Buffering -->
+                <div ng-if="vm.isAanDeBeurt()" id="p3" class="mdl-progress mdl-js-progress"></div>
+                <script>
+                    document.querySelector('#p3').addEventListener('mdl-componentupgraded', function () {
+                        this.MaterialProgress.setProgress(33);
+                        this.MaterialProgress.setBuffer(87);
+                    });
+                </script>
+            </div>
+
+            <div ng-if="!vm.isAanDeBeurt()" class="beurt">
+                <h4>Wachten op uw beurt..</h4>
+                <!-- MDL Progress Bar with Indeterminate Progress -->
+                <div ng-if="!vm.isAanDeBeurt()" id="p2"
+                     class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            </div>
+
             <button ng-if="vm.isDeelnemer()"
                     class="mdl-button mdl-js-button mdl-button--raised color-blue" disabled>
                 U hebt deelgenomen
             </button>
-
             <button ng-if="!vm.isDeelnemer() && vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.addDeelname(vm.cirkelsessie.id)"
                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
@@ -412,7 +434,7 @@
         border: 1px solid black;
     }
 
-    #spelkaartContainer{
+    #spelkaartContainer {
         max-height: 500px;
         overflow-y: auto !important;
     }
@@ -516,10 +538,10 @@
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <a ng-if="!vm.isDeelnemer()" disabled>Verplaats naar
+                            <a ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()" disabled>Verplaats naar
                                 [{{spelkaart.positie +
                                 1}}]</a>
-                            <a ng-if="vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
+                            <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
                                ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
                                 naar[{{spelkaart.positie + 1}}]</a>
 

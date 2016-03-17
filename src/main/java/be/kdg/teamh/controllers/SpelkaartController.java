@@ -3,10 +3,13 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.exceptions.IsGeenDeelnemer;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
+import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.SpelkaartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +21,11 @@ import java.util.List;
 @RequestMapping("/api/spelkaarten")
 public class SpelkaartController {
     private SpelkaartService service;
+    private AuthService authService;
 
     @Autowired
-    public SpelkaartController(SpelkaartService service) {
+    public SpelkaartController(SpelkaartService service, AuthService authService) {
+        this.authService = authService;
         this.service = service;
     }
 
@@ -56,8 +61,8 @@ public class SpelkaartController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/{id}/verschuif", method = RequestMethod.POST)
-    public void verschuifKaart(@PathVariable("id") int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
-        service.verschuif(id);
+    public void verschuifKaart(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token) throws SpelkaartNotFound, SpelkaartMaxPositionReached, IsGeenDeelnemer, GebruikerNotFound {
+        service.verschuif(id, authService.findByToken(token));
     }
 
     @ResponseStatus(code = HttpStatus.OK)

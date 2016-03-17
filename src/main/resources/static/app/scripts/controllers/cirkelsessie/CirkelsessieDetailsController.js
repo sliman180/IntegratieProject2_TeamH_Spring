@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieDetailsController($route,$timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, SpelkaartService, BerichtService) {
+    function CirkelsessieDetailsController($route, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, SpelkaartService, BerichtService) {
 
         var vm = this;
 
@@ -13,29 +13,31 @@
         vm.spelkaarten = [];
         vm.commentaren = [];
 
-        var cirkelpolling = function() {
-        CirkelsessieService.find($routeParams.id).then(function (data) {
-            vm.cirkelsessie = data;
-            CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
-                vm.deelnames = deelnamedata;
-                angular.forEach(vm.deelnames, function (value, key) {
-                    DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
-                        vm.gebruikers.push(gebruikerdata);
+        var cirkelpolling = function () {
+            CirkelsessieService.find($routeParams.id).then(function (data) {
+                vm.cirkelsessie = data;
+                CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
+                    vm.deelnames = deelnamedata;
+                    angular.forEach(vm.deelnames, function (value, key) {
+                        DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
+                            vm.gebruikers.push(gebruikerdata);
+                        });
                     });
+
                 });
             });
-        });
+
             var promise = $timeout(cirkelpolling, 1500);
 
-            $rootScope.$on('$destroy', function(){
+            $rootScope.$on('$destroy', function () {
                 $timeout.cancel(promise);
             });
-            $rootScope.$on('$locationChangeStart', function(){
+            $rootScope.$on('$locationChangeStart', function () {
                 $timeout.cancel(promise);
             });
         };
 
-        var spelkaartpolling = function() {
+        var spelkaartpolling = function () {
             CirkelsessieService.getSpelkaarten($routeParams.id).then(function (spelkaartendata) {
                 vm.spelkaarten = spelkaartendata;
                 angular.forEach(vm.spelkaarten, function (value, key) {
@@ -46,26 +48,26 @@
             });
             var promise = $timeout(spelkaartpolling, 2000);
 
-            $rootScope.$on('$destroy', function(){
+            $rootScope.$on('$destroy', function () {
                 $timeout.cancel(promise);
             });
-            $rootScope.$on('$locationChangeStart', function(){
+            $rootScope.$on('$locationChangeStart', function () {
                 $timeout.cancel(promise);
             });
         };
-            var chatpolling = function() {
-                CirkelsessieService.getBerichten($routeParams.id).then(function (berichtendata) {
-                    vm.berichten = berichtendata;
-                });
-                var promise=$timeout(chatpolling, 500);
+        var chatpolling = function () {
+            CirkelsessieService.getBerichten($routeParams.id).then(function (berichtendata) {
+                vm.berichten = berichtendata;
+            });
+            var promise = $timeout(chatpolling, 500);
 
-                $rootScope.$on('$destroy', function(){
-                    $timeout.cancel(promise);
-                });
-                $rootScope.$on('$locationChangeStart', function(){
-                    $timeout.cancel(promise);
-                });
-            };
+            $rootScope.$on('$destroy', function () {
+                $timeout.cancel(promise);
+            });
+            $rootScope.$on('$locationChangeStart', function () {
+                $timeout.cancel(promise);
+            });
+        };
 
         cirkelpolling();
         spelkaartpolling();
@@ -85,6 +87,18 @@
             return false;
         };
 
+        vm.isAanDeBeurt = function () {
+
+            for (var i = 0; i < vm.deelnames.length; i++) {
+                if ($rootScope.id == vm.deelnames[i].gebruiker.id && vm.deelnames[i].aanDeBeurt == true) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;
             CirkelsessieService.addBericht(id, bericht);
@@ -92,7 +106,7 @@
 
         vm.addDeelname = function (id) {
             CirkelsessieService.addDeelname(id).then(function () {
-              alert('Beste ' +$rootScope.gebruikersnaam +', Dank u voor uw deelname !');
+                alert('Beste ' + $rootScope.gebruikersnaam + ', Dank u voor uw deelname !');
             });
         };
 

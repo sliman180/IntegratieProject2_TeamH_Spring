@@ -46,7 +46,7 @@
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
 
-                    var gebruikersdatapolling=function(){
+                    var gebruikersdatapolling = function () {
                         GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
                             $rootScope.aantalDeelnames = deelnames.length;
                         });

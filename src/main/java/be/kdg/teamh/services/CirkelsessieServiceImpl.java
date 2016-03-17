@@ -207,7 +207,11 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
             }
         }
 
+
         Deelname deelname = new Deelname();
+        if (cirkelsessie.getDeelnames().size() == 0) {
+            deelname.setAanDeBeurt(true);
+        }
         deelname.setAangemaakteKaarten(0);
         deelname.setMedeorganisator(false);
         deelname.setDatum(DateTime.now());

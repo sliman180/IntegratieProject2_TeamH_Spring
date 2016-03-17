@@ -8,21 +8,24 @@ public class DeelnameResponse implements Serializable {
     private int id;
     private int aangemaakteKaarten;
     private boolean medeorganisator;
+    private boolean isAanDeBeurt;
     private DateTime datum;
     private int cirkelsessie;
     private int gebruiker;
+
 
     public DeelnameResponse() {
         //
     }
 
-    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, DateTime datum, int cirkelsessie, int gebruiker) {
+    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, DateTime datum, int cirkelsessie, int gebruiker, boolean isAanDeBeurt) {
         this.id = id;
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
         this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
+        this.isAanDeBeurt = isAanDeBeurt;
     }
 
     public int getId() {
@@ -71,5 +74,13 @@ public class DeelnameResponse implements Serializable {
 
     public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
+    }
+
+    public boolean isAanDeBeurt() {
+        return isAanDeBeurt;
+    }
+
+    public void setAanDeBeurt(boolean aanDeBeurt) {
+        isAanDeBeurt = aanDeBeurt;
     }
 }

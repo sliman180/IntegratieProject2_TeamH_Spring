@@ -22,6 +22,9 @@ public class Deelname implements Serializable {
     private boolean medeorganisator;
 
     @NotNull
+    private boolean isAanDeBeurt;
+
+    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime datum;
 
@@ -43,6 +46,7 @@ public class Deelname implements Serializable {
         this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
+        this.isAanDeBeurt = false;
     }
 
     public int getId() {
@@ -91,5 +95,13 @@ public class Deelname implements Serializable {
 
     public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
+    }
+
+    public boolean isAanDeBeurt() {
+        return isAanDeBeurt;
+    }
+
+    public void setAanDeBeurt(boolean aanDeBeurt) {
+        isAanDeBeurt = aanDeBeurt;
     }
 }

@@ -1081,8 +1081,10 @@
                         vm.gebruikers.push(gebruikerdata);
                     });
                 });
+
             });
         });
+
             var promise = $timeout(cirkelpolling, 1500);
 
             $rootScope.$on('$destroy', function(){
@@ -1142,6 +1144,19 @@
 
             return false;
         };
+
+        vm.isAanDeBeurt = function () {
+
+            for (var i = 0; i < vm.deelnames.length; i++) {
+                if ($rootScope.id == vm.deelnames[i].gebruiker.id && vm.deelnames[i].aanDeBeurt==true) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+
 
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;

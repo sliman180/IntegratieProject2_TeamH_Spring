@@ -1,14 +1,13 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Spelkaart;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
+import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.repositories.KaartRepository;
 import be.kdg.teamh.repositories.SpelkaartRepository;
 import be.kdg.teamh.services.contracts.SpelkaartService;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,12 +24,14 @@ public class SpelkaartServiceImpl implements SpelkaartService {
     private SpelkaartRepository repository;
     private CirkelsessieRepository cirkelsessies;
     private KaartRepository kaarten;
+    private DeelnameRepository deelnames;
 
     @Autowired
-    public SpelkaartServiceImpl(SpelkaartRepository repository, CirkelsessieRepository cirkelsessies, KaartRepository kaarten) {
+    public SpelkaartServiceImpl(SpelkaartRepository repository, CirkelsessieRepository cirkelsessies, KaartRepository kaarten, DeelnameRepository deelnames) {
         this.repository = repository;
         this.cirkelsessies = cirkelsessies;
         this.kaarten = kaarten;
+        this.deelnames = deelnames;
     }
 
     @Override
@@ -110,7 +112,7 @@ public class SpelkaartServiceImpl implements SpelkaartService {
     }
 
     @Override
-    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
+    public void verschuif(int id, Gebruiker gebruiker) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null) {
@@ -121,9 +123,34 @@ public class SpelkaartServiceImpl implements SpelkaartService {
             throw new SpelkaartMaxPositionReached();
         }
 
+        List<Deelname> deelnameList = spelkaart.getCirkelsessie().getDeelnames();
+        Collections.sort(deelnameList, (Deelname o1, Deelname o2) ->
+                o1.getDatum().compareTo(o2.getDatum()));
+
         spelkaart.setPositie(spelkaart.getPositie() + 1);
 
         repository.saveAndFlush(spelkaart);
+
+        for (int x = 0; x < deelnameList.size(); x++) {
+            if (deelnameList.get(x).getGebruiker().getId() == gebruiker.getId()) {
+                if (x + 1 == deelnameList.size()) {
+                    deelnameList.get(x).setAanDeBeurt(false);
+                    Deelname deelname = deelnameList.get(0);
+                    deelname.setAanDeBeurt(true);
+                    deelnames.saveAndFlush(deelname);
+                    return;
+                } else {
+                    deelnameList.get(x).setAanDeBeurt(false);
+                    Deelname deelname = deelnameList.get(x + 1);
+                    deelname.setAanDeBeurt(true);
+                    deelnames.saveAndFlush(deelname);
+                    return;
+                }
+
+            }
+        }
+
+
     }
 
     @Override
