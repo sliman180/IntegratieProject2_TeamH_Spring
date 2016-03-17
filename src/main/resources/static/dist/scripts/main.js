@@ -1083,7 +1083,14 @@
                 });
             });
         });
-            $timeout(cirkelpolling, 1500);
+            var promise = $timeout(cirkelpolling, 1500);
+
+            $rootScope.$on('$destroy', function(){
+                $timeout.cancel(promise);
+            });
+            $rootScope.$on('$locationChangeStart', function(){
+                $timeout.cancel(promise);
+            });
         };
 
         var spelkaartpolling = function() {
@@ -1095,13 +1102,27 @@
                     });
                 });
             });
-            $timeout(spelkaartpolling, 2000);
+            var promise = $timeout(spelkaartpolling, 2000);
+
+            $rootScope.$on('$destroy', function(){
+                $timeout.cancel(promise);
+            });
+            $rootScope.$on('$locationChangeStart', function(){
+                $timeout.cancel(promise);
+            });
         };
             var chatpolling = function() {
                 CirkelsessieService.getBerichten($routeParams.id).then(function (berichtendata) {
                     vm.berichten = berichtendata;
                 });
-                $timeout(chatpolling, 500);
+                var promise=$timeout(chatpolling, 500);
+
+                $rootScope.$on('$destroy', function(){
+                    $timeout.cancel(promise);
+                });
+                $rootScope.$on('$locationChangeStart', function(){
+                    $timeout.cancel(promise);
+                });
             };
 
         cirkelpolling();
