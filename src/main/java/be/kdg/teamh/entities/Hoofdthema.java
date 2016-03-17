@@ -24,18 +24,18 @@ public class Hoofdthema implements Serializable {
     private String beschrijving;
 
     @ManyToOne
-    @JsonBackReference(value = "organisatie-hoofdthema")
+    @JsonManagedReference
     private Organisatie organisatie;
 
     @ManyToOne
-    @JsonBackReference(value = "hoofdthema-gebruiker")
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @JsonManagedReference(value = "subthema-hoofdthema")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hoofdthema")
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @JsonManagedReference(value = "hoofdthema-tag")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hoofdthema")
     private List<Tag> tags = new ArrayList<>();
 

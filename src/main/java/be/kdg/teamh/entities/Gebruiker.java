@@ -1,6 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "gebruikers")
-public class Gebruiker implements Serializable {
+public class Gebruiker implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,191 +23,229 @@ public class Gebruiker implements Serializable {
     @NotNull
     private String wachtwoord;
 
-    @JsonManagedReference(value = "gebruiker-organisatie")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Organisatie> organisaties = new ArrayList<>();
 
-    @JsonManagedReference(value = "hoofdthema-gebruiker")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
-    @JsonManagedReference(value = "cirkelsessie-gebruiker")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    @JsonManagedReference(value = "subthema-gebruiker")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @JsonManagedReference(value = "kaart-gebruiker")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Kaart> kaarten = new ArrayList<>();
 
-    @JsonManagedReference(value = "deelname-gebruiker")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Deelname> deelnames = new ArrayList<>();
 
-    @JsonManagedReference(value = "gebruiker-commentaar")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Commentaar> commentaren = new ArrayList<>();
 
-    @JsonManagedReference(value = "gebruiker-bericht")
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Bericht> berichten = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Rol> rollen = new ArrayList<>();
 
-    public Gebruiker() {
+    public Gebruiker()
+    {
         //
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord) {
+    public Gebruiker(String gebruikersnaam, String wachtwoord)
+    {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen) {
+    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen)
+    {
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.rollen = rollen;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public String getGebruikersnaam() {
+    public String getGebruikersnaam()
+    {
         return gebruikersnaam;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam) {
+    public void setGebruikersnaam(String gebruikersnaam)
+    {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public String getWachtwoord() {
+    public String getWachtwoord()
+    {
         return wachtwoord;
     }
 
-    public void setWachtwoord(String wachtwoord) {
+    public void setWachtwoord(String wachtwoord)
+    {
         this.wachtwoord = wachtwoord;
     }
 
-    public List<Organisatie> getOrganisaties() {
+    public List<Organisatie> getOrganisaties()
+    {
         return organisaties;
     }
 
-    public void setOrganisaties(List<Organisatie> organisaties) {
+    public void setOrganisaties(List<Organisatie> organisaties)
+    {
         this.organisaties = organisaties;
     }
 
-    public void addOrganisatie(Organisatie organisatie) {
+    public void addOrganisatie(Organisatie organisatie)
+    {
         this.organisaties.add(organisatie);
     }
 
-    public List<Hoofdthema> getHoofdthemas() {
+    public List<Hoofdthema> getHoofdthemas()
+    {
         return hoofdthemas;
     }
 
-    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas)
+    {
         this.hoofdthemas = hoofdthemas;
     }
 
-    public void addHoofdthema(Hoofdthema hoofdthema) {
+    public void addHoofdthema(Hoofdthema hoofdthema)
+    {
         this.hoofdthemas.add(hoofdthema);
     }
 
-    public List<Cirkelsessie> getCirkelsessies() {
+    public List<Cirkelsessie> getCirkelsessies()
+    {
         return cirkelsessies;
     }
 
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies)
+    {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+    public void addCirkelsessie(Cirkelsessie cirkelsessie)
+    {
         this.cirkelsessies.add(cirkelsessie);
     }
 
-    public List<Subthema> getSubthemas() {
+    public List<Subthema> getSubthemas()
+    {
         return subthemas;
     }
 
-    public void setSubthemas(List<Subthema> subthemas) {
+    public void setSubthemas(List<Subthema> subthemas)
+    {
         this.subthemas = subthemas;
     }
 
-    public void addSubthema(Subthema subthema) {
+    public void addSubthema(Subthema subthema)
+    {
         this.subthemas.add(subthema);
     }
 
-    public List<Kaart> getKaarten() {
+    public List<Kaart> getKaarten()
+    {
         return kaarten;
     }
 
-    public void setKaarten(List<Kaart> kaarten) {
+    public void setKaarten(List<Kaart> kaarten)
+    {
         this.kaarten = kaarten;
     }
 
-    public void addKaart(Kaart kaart) {
+    public void addKaart(Kaart kaart)
+    {
         this.kaarten.add(kaart);
     }
 
-    public List<Deelname> getDeelnames() {
+    public List<Deelname> getDeelnames()
+    {
         return deelnames;
     }
 
-    public void setDeelnames(List<Deelname> deelnames) {
+    public void setDeelnames(List<Deelname> deelnames)
+    {
         this.deelnames = deelnames;
     }
 
-    public void addDeelname(Deelname deelname) {
+    public void addDeelname(Deelname deelname)
+    {
         this.deelnames.add(deelname);
     }
 
-    public List<Commentaar> getCommentaren() {
+    public List<Commentaar> getCommentaren()
+    {
         return commentaren;
     }
 
-    public void setCommentaren(List<Commentaar> commentaren) {
+    public void setCommentaren(List<Commentaar> commentaren)
+    {
         this.commentaren = commentaren;
     }
 
-    public void addCommentaar(Commentaar commentaar) {
+    public void addCommentaar(Commentaar commentaar)
+    {
         this.commentaren.add(commentaar);
     }
 
-    public List<Bericht> getBerichten() {
+    public List<Bericht> getBerichten()
+    {
         return berichten;
     }
 
-    public void setBerichten(List<Bericht> berichten) {
+    public void setBerichten(List<Bericht> berichten)
+    {
         this.berichten = berichten;
     }
 
-    public void addBericht(Bericht bericht) {
+    public void addBericht(Bericht bericht)
+    {
         this.berichten.add(bericht);
     }
 
-    public List<Rol> getRollen() {
+    public List<Rol> getRollen()
+    {
         return rollen;
     }
 
-    public void setRollen(List<Rol> rollen) {
+    public void setRollen(List<Rol> rollen)
+    {
         this.rollen = rollen;
     }
 
-    public void addRol(Rol rol) {
+    public void addRol(Rol rol)
+    {
         this.rollen.add(rol);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
+        {
             return false;
         }
 
@@ -216,7 +255,8 @@ public class Gebruiker implements Serializable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = gebruikersnaam.hashCode();
 
         result = 31 * result + wachtwoord.hashCode();

@@ -1,6 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "berichten")
-public class Bericht implements Serializable {
+public class Bericht implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,57 +24,68 @@ public class Bericht implements Serializable {
     private DateTime datum;
 
     @ManyToOne
-    @JsonBackReference(value = "bericht-cirkelsessie")
+    @JsonManagedReference
     private Cirkelsessie cirkelsessie;
 
     @ManyToOne
-    @JsonBackReference(value = "gebruiker-bericht")
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    public Bericht() {
+    public Bericht()
+    {
         //
     }
 
-    public Bericht(String tekst, DateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
+    public Bericht(String tekst, DateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
+    {
         this.tekst = tekst;
         this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public String getTekst() {
+    public String getTekst()
+    {
         return tekst;
     }
 
-    public void setTekst(String tekst) {
+    public void setTekst(String tekst)
+    {
         this.tekst = tekst;
     }
 
-    public DateTime getDatum() {
+    public DateTime getDatum()
+    {
         return datum;
     }
 
-    public void setDatum(DateTime datum) {
+    public void setDatum(DateTime datum)
+    {
         this.datum = datum;
     }
 
-    public Cirkelsessie getCirkelsessie() {
+    public Cirkelsessie getCirkelsessie()
+    {
         return cirkelsessie;
     }
 
-    public void setCirkelsessie(Cirkelsessie cirkelsessie) {
+    public void setCirkelsessie(Cirkelsessie cirkelsessie)
+    {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public Gebruiker getGebruiker() {
+    public Gebruiker getGebruiker()
+    {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker) {
+    public void setGebruiker(Gebruiker gebruiker)
+    {
         this.gebruiker = gebruiker;
     }
 }
