@@ -412,6 +412,11 @@
         border: 1px solid black;
     }
 
+    #spelkaartContainer{
+        height: 500px;
+        overflow-y: auto !important;
+    }
+
     .kaart-titel {
         background-color: #9C9C9C;
     }
@@ -486,7 +491,7 @@
             </h2>
             <span class="mdl-badge" data-badge="{{vm.spelkaarten.length}}"></span>
         </div>
-        <div class="mdl-card__supporting-text">
+        <div id="spelkaartContainer" class="mdl-card__supporting-text">
             <div ng-repeat="spelkaart in  vm.spelkaarten | orderBy:'positie':true"
                  class="mdl-card mdl-shadow--2dp kaart">
 
@@ -570,7 +575,7 @@
             {{vm.cirkelsessie.naam}}
         </div>
         <div class="mdl-card__actions mdl-card--border" id="chat">
-            <div ng-repeat="bericht in  vm.berichten | orderBy:'datum'">
+            <div ng-repeat="bericht in  vm.berichten | orderBy:'datum':true">
                 <p>{{bericht.datum | date:'dd/MM/yyyy HH:mm:ss'}} | {{bericht.gebruiker.gebruikersnaam}}:
                     {{bericht.tekst}}</p>
 

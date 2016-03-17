@@ -46,18 +46,25 @@
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
 
-                    GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
-                        $rootScope.aantalDeelnames = deelnames.length;
-                    });
-                    GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
-                        $rootScope.aantalHoofdthemas = hoofdthemas.length;
-                    });
-                    GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
-                        $rootScope.aantalOrganisaties = organisaties.length;
-                    });
-                    GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
-                        $rootScope.aantalSubthemas = subthemas.length;
-                    });
+                    var gebruikersdatapolling=function(){
+                        GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
+                            $rootScope.aantalDeelnames = deelnames.length;
+                        });
+                        GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
+                            $rootScope.aantalHoofdthemas = hoofdthemas.length;
+                        });
+                        GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
+                            $rootScope.aantalOrganisaties = organisaties.length;
+                        });
+                        GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
+                            $rootScope.aantalSubthemas = subthemas.length;
+                        });
+
+                        $timeout(gebruikersdatapolling, 1000);
+                    };
+
+                    gebruikersdatapolling();
+
 
                 });
 
