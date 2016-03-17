@@ -2,9 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -62,10 +60,23 @@ public class SubthemaController {
     }
 
     @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
+    public List<Cirkelsessie> getCirkelsessies(@PathVariable Integer id) throws SubthemaNotFound {
+        return service.findCirkelsessies(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
     public Hoofdthema getHoofdthema(@PathVariable Integer id) throws SubthemaNotFound {
         return service.findHoofdthema(id);
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/kaarten", method = RequestMethod.GET)
+    public List<Kaart> getKaarten(@PathVariable Integer id) throws SubthemaNotFound {
+        return service.findKaarten(id);
+    }
+
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/kaart", method = RequestMethod.POST)

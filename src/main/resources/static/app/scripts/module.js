@@ -45,11 +45,19 @@
                     $rootScope.naam = gebruiker.gebruikersnaam;
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
-                    $rootScope.aantalDeelnames = gebruiker.deelnames.length;
-                    $rootScope.aantalHoofdthemas = gebruiker.hoofdthemas.length;
-                    $rootScope.aantalOrganisaties = gebruiker.organisaties.length;
-                    $rootScope.aantalSubthemas = gebruiker.subthemas.length;
 
+                    GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
+                        $rootScope.aantalDeelnames = deelnames.length;
+                    });
+                    GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
+                        $rootScope.aantalHoofdthemas = hoofdthemas.length;
+                    });
+                    GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
+                        $rootScope.aantalOrganisaties = organisaties.length;
+                    });
+                    GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
+                        $rootScope.aantalSubthemas = subthemas.length;
+                    });
 
                 });
 

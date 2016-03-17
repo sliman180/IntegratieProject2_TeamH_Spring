@@ -10,7 +10,7 @@
         vm.cirkelsessies = [];
         vm.subthemas = [];
         vm.subthema = {};
-        vm.gebruikers = [];
+        vm.deelnames = [];
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
@@ -18,10 +18,9 @@
 
         CirkelsessieService.all().then(function (data) {
             vm.cirkelsessies = data;
-
             angular.forEach(vm.cirkelsessies, function (value, key) {
-                CirkelsessieService.getGebruiker(value.id).then(function (gebruikerdata) {
-                    vm.gebruikers.push(gebruikerdata);
+                CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
+                    vm.deelnames.push(deelnamesdata);
                 });
             });
         });

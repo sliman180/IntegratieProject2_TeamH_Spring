@@ -8,21 +8,15 @@
 
         vm.subthemas = [];
 
+        vm.kaarten = [];
+
         vm.hoofdthemas = [];
-
-        vm.gekoppeldeHoofdthemas = [];
-
-        vm.gekoppeldeOrganisaties = [];
-
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
             angular.forEach(vm.subthemas, function (value, key) {
-                SubthemaService.getHoofdthema(value.id).then(function (hoofdthemadata) {
-                    vm.gekoppeldeHoofdthemas.push(hoofdthemadata);
-                });
-                SubthemaService.getOrganisatie(value.id).then(function (organisatiedata) {
-                    vm.gekoppeldeOrganisaties.push(organisatiedata);
+                SubthemaService.getKaarten(value.id).then(function (kaartendata) {
+                    vm.kaarten.push(kaartendata);
                 });
             });
         });

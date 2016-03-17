@@ -10,13 +10,13 @@
 
         vm.organisaties = [];
 
-        vm.gekoppeldeOrganisaties = [];
+        vm.subthemas = [];
 
         HoofdthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.hoofdthemas = data;
             angular.forEach(vm.hoofdthemas, function (value, key) {
-                HoofdthemaService.getOrganisatie(value.id).then(function (organisatiedata) {
-                    vm.gekoppeldeOrganisaties.push(organisatiedata);
+                HoofdthemaService.getSubthemas(value.id).then(function (subthemadata) {
+                    vm.subthemas.push(subthemadata);
                 });
             });
         });

@@ -7,9 +7,15 @@
         var vm = this;
 
         vm.organisaties = [];
+        vm.hoofdthemas = [];
 
         OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.organisaties = data;
+            angular.forEach(vm.organisaties, function (value, key) {
+                OrganisatieService.getHoofdthemas(value.id).then(function (hoofdthemadata) {
+                    vm.hoofdthemas.push(hoofdthemadata);
+                });
+            });
         });
 
         vm.addOrganisatie = function (organisatie) {

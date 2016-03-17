@@ -7,9 +7,25 @@
         var exports = {};
 
 
+        exports.getKaarten = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/kaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.getHoofdthema = function (id) {
 
             return $http.get("/api/subthemas/" + id + "/hoofdthema").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getCirkelsessies = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/cirkelsessies").then(function (response) {
                 return response.data;
             });
 

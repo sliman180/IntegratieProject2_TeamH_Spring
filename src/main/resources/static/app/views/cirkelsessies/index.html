@@ -147,7 +147,7 @@
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                <p>Organisator: <b>{{vm.gebruikers[$index].gebruikersnaam}}</b></p>
+                <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
 
                 <p>Startdatum: <b>{{cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b></p>
 
@@ -167,7 +167,7 @@
                 </a>
             </div>
             <div class="mdl-card__menu">
-                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{cirkelsessie.deelnames.length}}">
+                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.deelnames[$index].length}}">
                     account_box
                 </div>
 

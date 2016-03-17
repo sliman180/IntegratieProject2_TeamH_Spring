@@ -14,6 +14,14 @@
 
         };
 
+        exports.getSubthemas = function (id) {
+
+            return $http.get("/api/hoofdthemas/" + id + "/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.allOfGebruiker = function (id) {
 
             return $http.get("/api/gebruikers/" + id + "/hoofdthemas").then(function (response) {

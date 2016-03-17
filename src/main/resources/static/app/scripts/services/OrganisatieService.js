@@ -14,6 +14,7 @@
 
         };
 
+
         exports.allOfGebruiker = function (id) {
 
             return $http.get("/api/gebruikers/" + id + "/organisaties").then(function (response) {
@@ -29,6 +30,16 @@
             });
 
         };
+
+
+        exports.getHoofdthemas = function (id) {
+
+            return $http.get("/api/organisaties/" + id + "/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         exports.create = function (organisatie) {
 

@@ -21,8 +21,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class KaartServiceImpl implements KaartService
-{
+public class KaartServiceImpl implements KaartService {
     private CirkelsessieRepository cirkelsessies;
     private CommentaarRepository commentaren;
     private GebruikerRepository gebruikers;

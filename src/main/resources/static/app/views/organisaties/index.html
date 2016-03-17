@@ -77,7 +77,7 @@
               <i class="material-icons mdl-list__item-avatar">account_balance</i>
               <span>Organisatie: <a href="/#/">{{organisatie.naam}}</a></span>
               <span class="mdl-list__item-sub-title">{{organisatie.beschrijving}}</span>
-                <p class="mdl-list__item-sub-title">Aantal gekoppelde hoofthemas: {{organisatie.hoofdthemas.length}}</p>
+                <p class="mdl-list__item-sub-title">Aantal gekoppelde hoofthemas: {{vm.hoofdthemas[$index].length}}</p>
             </span>
             <span class="mdl-list__item-secondary-content">
               <span id="organisatie-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>

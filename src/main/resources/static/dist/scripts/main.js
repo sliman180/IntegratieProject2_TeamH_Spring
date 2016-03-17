@@ -45,11 +45,19 @@
                     $rootScope.naam = gebruiker.gebruikersnaam;
                     $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
-                    $rootScope.aantalDeelnames = gebruiker.deelnames.length;
-                    $rootScope.aantalHoofdthemas = gebruiker.hoofdthemas.length;
-                    $rootScope.aantalOrganisaties = gebruiker.organisaties.length;
-                    $rootScope.aantalSubthemas = gebruiker.subthemas.length;
 
+                    GebruikerService.deelnames(gebruiker.id).then(function(deelnames){
+                        $rootScope.aantalDeelnames = deelnames.length;
+                    });
+                    GebruikerService.hoofdthemas(gebruiker.id).then(function(hoofdthemas){
+                        $rootScope.aantalHoofdthemas = hoofdthemas.length;
+                    });
+                    GebruikerService.organisaties(gebruiker.id).then(function(organisaties){
+                        $rootScope.aantalOrganisaties = organisaties.length;
+                    });
+                    GebruikerService.subthemas(gebruiker.id).then(function(subthemas){
+                        $rootScope.aantalSubthemas = subthemas.length;
+                    });
 
                 });
 
@@ -465,11 +473,35 @@
 
         exports.deelnames = function (id) {
 
-            return $http.get("/api/gebruikers/" + id + "deelnames").then(function (response) {
+            return $http.get("/api/gebruikers/" + id + "/deelnames").then(function (response) {
                 return response.data;
             });
 
         };
+        exports.organisaties = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/organisaties").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.hoofdthemas = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.subthemas = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         return exports;
 
@@ -491,6 +523,14 @@
         exports.getOrganisatie = function (id) {
 
             return $http.get("/api/hoofdthemas/" + id + "/organisatie").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getSubthemas = function (id) {
+
+            return $http.get("/api/hoofdthemas/" + id + "/subthemas").then(function (response) {
                 return response.data;
             });
 
@@ -724,6 +764,8 @@
 
         };
 
+
+
         exports.allOfGebruiker = function (id) {
 
             return $http.get("/api/gebruikers/" + id + "/organisaties").then(function (response) {
@@ -739,6 +781,16 @@
             });
 
         };
+
+
+        exports.getHoofdthemas = function (id) {
+
+            return $http.get("/api/organisaties/" + id +"/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         exports.create = function (organisatie) {
 
@@ -807,9 +859,25 @@
         var exports = {};
 
 
+        exports.getKaarten = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/kaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.getHoofdthema = function (id) {
 
             return $http.get("/api/subthemas/" + id + "/hoofdthema").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getCirkelsessies = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/cirkelsessies").then(function (response) {
                 return response.data;
             });
 
@@ -984,33 +1052,6 @@
 
     "use strict";
 
-    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
-    function DeelnameIndexController($rootScope, DeelnameService) {
-
-        var vm = this;
-
-        vm.deelnames = [];
-        vm.cirkelsessies = [];
-
-        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
-            vm.deelnames = data;
-            angular.forEach(vm.deelnames, function (value, key) {
-                DeelnameService.getCirkelsessie(value.id).then(function (cirkelsessiedata) {
-                    vm.cirkelsessies.push(cirkelsessiedata);
-                });
-            });
-        });
-
-    }
-
-    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
     CirkelsessieDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService", "DeelnameService", "SpelkaartService", "BerichtService"];
     function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, SpelkaartService, BerichtService) {
 
@@ -1018,32 +1059,31 @@
 
         vm.cirkelsessie = {};
         vm.gebruikers = [];
-        vm.kaarten = [];
-        vm.chatgebruikers = [];
-        vm.gebruiker = {};
+        vm.deelnames=[];
+        vm.berichten=[];
+        vm.spelkaarten=[];
+        vm.commentaren=[];
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
-            CirkelsessieService.getGebruiker(vm.cirkelsessie.id).then(function (organisatordata) {
-                vm.gebruiker = organisatordata;
-            });
-
-            angular.forEach(vm.cirkelsessie.deelnames, function (value, key) {
-                DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
-                    vm.gebruikers.push(gebruikerdata);
+            CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
+                vm.deelnames=deelnamedata;
+                angular.forEach(vm.deelnames, function (value, key) {
+                    DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
+                        vm.gebruikers.push(gebruikerdata);
+                    });
                 });
             });
-
-            angular.forEach(vm.cirkelsessie.spelkaarten, function (value, key) {
-                SpelkaartService.getKaart(value.id).then(function (kaartdata) {
-                    vm.kaarten.push(kaartdata);
+            CirkelsessieService.getSpelkaarten(vm.cirkelsessie.id).then(function (spelkaartendata) {
+                vm.spelkaarten=spelkaartendata;
+                angular.forEach(vm.spelkaarten, function (value, key) {
+                    KaartService.getComments(value.kaart.id).then(function (commentaardata) {
+                        vm.commentaren.push(commentaardata);
+                    });
                 });
             });
-
-            angular.forEach(vm.cirkelsessie.berichten, function (value, key) {
-                BerichtService.getGebruiker(value.id).then(function (chatgebruikerdata) {
-                    vm.chatgebruikers.push(chatgebruikerdata);
-                });
+            CirkelsessieService.getBerichten(vm.cirkelsessie.id).then(function (berichtendata) {
+                vm.berichten=berichtendata;
             });
         });
 
@@ -1138,7 +1178,7 @@
         vm.cirkelsessies = [];
         vm.subthemas = [];
         vm.subthema = {};
-        vm.gebruikers = [];
+        vm.deelnames=[];
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
@@ -1146,10 +1186,9 @@
 
         CirkelsessieService.all().then(function (data) {
             vm.cirkelsessies = data;
-
             angular.forEach(vm.cirkelsessies, function (value, key) {
-                CirkelsessieService.getGebruiker(value.id).then(function (gebruikerdata) {
-                    vm.gebruikers.push(gebruikerdata);
+                CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
+                    vm.deelnames.push(deelnamesdata);
                 });
             });
         });
@@ -1183,15 +1222,42 @@
 
     "use strict";
 
+    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
+    function DeelnameIndexController($rootScope, DeelnameService) {
+
+        var vm = this;
+
+        vm.deelnames = [];
+
+        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.deelnames = data;
+        });
+
+    }
+
+    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     OrganisatieIndexController.$inject = ["$route", "$rootScope", "OrganisatieService"];
     function OrganisatieIndexController($route, $rootScope, OrganisatieService) {
 
         var vm = this;
 
         vm.organisaties = [];
+        vm.hoofdthemas=[];
 
         OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.organisaties = data;
+            angular.forEach(vm.organisaties, function (value, key) {
+                OrganisatieService.getHoofdthemas(value.id).then(function(hoofdthemadata){
+                    vm.hoofdthemas.push(hoofdthemadata);
+                });
+            });
         });
 
         vm.addOrganisatie = function (organisatie) {
@@ -1234,13 +1300,13 @@
 
         vm.organisaties = [];
 
-        vm.gekoppeldeOrganisaties = [];
+        vm.subthemas=[];
 
         HoofdthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.hoofdthemas = data;
             angular.forEach(vm.hoofdthemas, function (value, key) {
-                HoofdthemaService.getOrganisatie(value.id).then(function (organisatiedata) {
-                    vm.gekoppeldeOrganisaties.push(organisatiedata);
+                HoofdthemaService.getSubthemas(value.id).then(function(subthemadata){
+                    vm.subthemas.push(subthemadata);
                 });
             });
         });
@@ -1275,17 +1341,12 @@
 
         vm.kaart = {};
         vm.comments = [];
-        vm.gebruiker = {};
 
         KaartService.find($routeParams.id).then(function (data) {
             vm.kaart = data;
 
             KaartService.getComments($routeParams.id).then(function (commentsdata) {
                 vm.comments = commentsdata;
-            });
-
-            KaartService.getGebruiker(vm.kaart.id).then(function (gebruikerdata) {
-                vm.gebruiker = gebruikerdata;
             });
         });
 
@@ -1321,17 +1382,25 @@
         var vm = this;
 
         vm.subthema = {};
-        vm.hoofdthema = {};
-        vm.organisatie = {};
+        vm.kaarten=[];
+        vm.cirkelsessies=[];
+        vm.commentaren=[];
 
         SubthemaService.find($routeParams.id).then(function (data) {
             vm.subthema = data;
-            SubthemaService.getHoofdthema(vm.subthema.id).then(function (subthemadata) {
-                vm.hoofdthema = subthemadata;
+            SubthemaService.getKaarten(vm.subthema.id).then(function (kaartendata) {
+                vm.kaarten = kaartendata;
+                angular.forEach(vm.kaarten, function (value, key) {
+                    KaartService.getComments(value.id).then(function (commentaardata) {
+                        vm.commentaren.push(commentaardata);
+                    });
+                });
             });
-            SubthemaService.getOrganisatie(vm.subthema.id).then(function (organisatiedata) {
-                vm.organisatie = organisatiedata;
+
+            SubthemaService.getCirkelsessies(vm.subthema.id).then(function (cirkelsessiedata) {
+                vm.cirkelsessies = cirkelsessiedata;
             });
+
         });
 
         vm.createKaart = function (subthemaId, kaart) {
@@ -1359,21 +1428,15 @@
 
         vm.subthemas = [];
 
+        vm.kaarten=[];
+
         vm.hoofdthemas = [];
-
-        vm.gekoppeldeHoofdthemas = [];
-
-        vm.gekoppeldeOrganisaties = [];
-
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
             angular.forEach(vm.subthemas, function (value, key) {
-                SubthemaService.getHoofdthema(value.id).then(function (hoofdthemadata) {
-                    vm.gekoppeldeHoofdthemas.push(hoofdthemadata);
-                });
-                SubthemaService.getOrganisatie(value.id).then(function (organisatiedata) {
-                    vm.gekoppeldeOrganisaties.push(organisatiedata);
+                SubthemaService.getKaarten(value.id).then(function (kaartendata) {
+                    vm.kaarten.push(kaartendata);
                 });
             });
         });

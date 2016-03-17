@@ -8,17 +8,25 @@
         var vm = this;
 
         vm.subthema = {};
-        vm.hoofdthema = {};
-        vm.organisatie = {};
+        vm.kaarten = [];
+        vm.cirkelsessies = [];
+        vm.commentaren = [];
 
         SubthemaService.find($routeParams.id).then(function (data) {
             vm.subthema = data;
-            SubthemaService.getHoofdthema(vm.subthema.id).then(function (subthemadata) {
-                vm.hoofdthema = subthemadata;
+            SubthemaService.getKaarten(vm.subthema.id).then(function (kaartendata) {
+                vm.kaarten = kaartendata;
+                angular.forEach(vm.kaarten, function (value, key) {
+                    KaartService.getComments(value.id).then(function (commentaardata) {
+                        vm.commentaren.push(commentaardata);
+                    });
+                });
             });
-            SubthemaService.getOrganisatie(vm.subthema.id).then(function (organisatiedata) {
-                vm.organisatie = organisatiedata;
+
+            SubthemaService.getCirkelsessies(vm.subthema.id).then(function (cirkelsessiedata) {
+                vm.cirkelsessies = cirkelsessiedata;
             });
+
         });
 
         vm.createKaart = function (subthemaId, kaart) {

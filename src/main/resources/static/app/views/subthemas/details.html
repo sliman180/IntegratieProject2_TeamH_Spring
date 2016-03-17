@@ -45,13 +45,13 @@
         <h2 class="mdl-card__title-text">{{vm.subthema.naam}}</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        Organisatie: <b>{{vm.organisatie.naam}} </b> |
-        Hoofdthema: <b>{{vm.hoofdthema.naam}} </b>
+        Organisatie: <b>{{vm.subthema.hoofdthema.organisatie.naam}} </b> |
+        Hoofdthema: <b>{{vm.subthema.hoofdthema.naam}} </b>
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <p>Beschrijving:<b>{{vm.subthema.beschrijving}}</b></p>
 
-        <p>Aantal gekoppelde cirkelsessies: <b>{{vm.subthema.cirkelsessies.length}}</b></p>
+        <p>Aantal gekoppelde cirkelsessies: <b>{{vm.cirkelsessies.length}}</b></p>
     </div>
 
     <div class="mdl-card__menu">
@@ -196,10 +196,10 @@
             <h2 class="mdl-card__title-text">
                 <!-- Number badge -->Gekoppelde kaarten
             </h2>
-            <span class="mdl-badge" data-badge="{{vm.subthema.kaarten.length}}"></span>
+            <span class="mdl-badge" data-badge="{{vm.kaarten.length}}"></span>
         </div>
         <div class="mdl-card__supporting-text">
-            <div ng-repeat="kaart in  vm.subthema.kaarten"
+            <div ng-repeat="kaart in  vm.kaarten"
                  class="mdl-card mdl-shadow--2dp kaart">
 
                 <div class="mdl-card__title kaart-titel">
@@ -212,7 +212,7 @@
                         <b><a ng-href="{{kaart.imageUrl}}" target="_blank">Kaart afbeelding</a></b>
                     </p>
 
-                    <p>Aaantal comments: <b>{{kaart.commentaren.length}}</b>
+                    <p>Aaantal comments: <b>{{vm.commentaren[$index].length}}</b>
                     </p>
 
                     <div class="dropdown">

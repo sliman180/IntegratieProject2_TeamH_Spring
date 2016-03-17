@@ -8,32 +8,31 @@
 
         vm.cirkelsessie = {};
         vm.gebruikers = [];
-        vm.kaarten = [];
-        vm.chatgebruikers = [];
-        vm.gebruiker = {};
+        vm.deelnames = [];
+        vm.berichten = [];
+        vm.spelkaarten = [];
+        vm.commentaren = [];
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
             vm.cirkelsessie = data;
-            CirkelsessieService.getGebruiker(vm.cirkelsessie.id).then(function (organisatordata) {
-                vm.gebruiker = organisatordata;
-            });
-
-            angular.forEach(vm.cirkelsessie.deelnames, function (value, key) {
-                DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
-                    vm.gebruikers.push(gebruikerdata);
+            CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
+                vm.deelnames = deelnamedata;
+                angular.forEach(vm.deelnames, function (value, key) {
+                    DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
+                        vm.gebruikers.push(gebruikerdata);
+                    });
                 });
             });
-
-            angular.forEach(vm.cirkelsessie.spelkaarten, function (value, key) {
-                SpelkaartService.getKaart(value.id).then(function (kaartdata) {
-                    vm.kaarten.push(kaartdata);
+            CirkelsessieService.getSpelkaarten(vm.cirkelsessie.id).then(function (spelkaartendata) {
+                vm.spelkaarten = spelkaartendata;
+                angular.forEach(vm.spelkaarten, function (value, key) {
+                    KaartService.getComments(value.kaart.id).then(function (commentaardata) {
+                        vm.commentaren.push(commentaardata);
+                    });
                 });
             });
-
-            angular.forEach(vm.cirkelsessie.berichten, function (value, key) {
-                BerichtService.getGebruiker(value.id).then(function (chatgebruikerdata) {
-                    vm.chatgebruikers.push(chatgebruikerdata);
-                });
+            CirkelsessieService.getBerichten(vm.cirkelsessie.id).then(function (berichtendata) {
+                vm.berichten = berichtendata;
             });
         });
 

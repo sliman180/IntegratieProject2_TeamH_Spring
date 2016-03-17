@@ -20,7 +20,7 @@ public class GebruikerController {
     private AuthService authService;
 
     @Autowired
-    public GebruikerController(GebruikerService service,AuthService authService) {
+    public GebruikerController(GebruikerService service, AuthService authService) {
         this.service = service;
         this.authService = authService;
     }
@@ -88,8 +88,7 @@ public class GebruikerController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound
-    {
+    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
         return authService.findByToken(token);
     }
 }

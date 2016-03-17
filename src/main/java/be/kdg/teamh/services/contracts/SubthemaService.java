@@ -2,9 +2,7 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -27,4 +25,8 @@ public interface SubthemaService {
     Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound;
 
     void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
+
+    List<Kaart> findKaarten(Integer id) throws SubthemaNotFound;
+
+    List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound;
 }

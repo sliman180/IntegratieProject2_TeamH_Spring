@@ -9,17 +9,12 @@
 
         vm.kaart = {};
         vm.comments = [];
-        vm.gebruiker = {};
 
         KaartService.find($routeParams.id).then(function (data) {
             vm.kaart = data;
 
             KaartService.getComments($routeParams.id).then(function (commentsdata) {
                 vm.comments = commentsdata;
-            });
-
-            KaartService.getGebruiker(vm.kaart.id).then(function (gebruikerdata) {
-                vm.gebruiker = gebruikerdata;
             });
         });
 

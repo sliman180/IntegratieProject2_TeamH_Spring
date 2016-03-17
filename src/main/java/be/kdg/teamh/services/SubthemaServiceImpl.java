@@ -170,4 +170,26 @@ public class SubthemaServiceImpl implements SubthemaService {
         gebruiker.addKaart(savedKaart);
         gebruikers.saveAndFlush(gebruiker);
     }
+
+    @Override
+    public List<Kaart> findKaarten(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getKaarten();
+    }
+
+    @Override
+    public List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getCirkelsessies();
+    }
 }
