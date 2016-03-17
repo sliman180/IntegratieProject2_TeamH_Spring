@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -74,5 +75,11 @@ public class OrganisatieController {
         }
 
         service.delete(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
+    public List<Hoofdthema> showHoofdthemas(@PathVariable("id") int id) throws OrganisatieNotFound {
+        return service.showHoofdthemas(id);
     }
 }

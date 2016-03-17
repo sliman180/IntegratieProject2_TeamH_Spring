@@ -4,6 +4,7 @@ import be.kdg.teamh.dtos.request.HoofdthemaRequest;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -124,5 +125,12 @@ public class HoofdthemaServiceImpl implements HoofdthemaService {
         }
 
         return hoofdthema.getOrganisatie();
+    }
+
+    @Override
+    public List<Subthema> showSubthemas(int id) throws HoofdthemaNotFound {
+        Hoofdthema hoofdthema = find(id);
+
+        return hoofdthema.getSubthemas();
     }
 }

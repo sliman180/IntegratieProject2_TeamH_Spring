@@ -4,6 +4,7 @@ import be.kdg.teamh.dtos.request.GebruikerRequest;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.RolNotFound;
+import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,12 @@ import java.util.List;
 public class GebruikerController {
     private GebruikerService service;
 
+    private AuthService authService;
+
     @Autowired
-    public GebruikerController(GebruikerService service) {
+    public GebruikerController(GebruikerService service,AuthService authService) {
         this.service = service;
+        this.authService = authService;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -80,5 +84,12 @@ public class GebruikerController {
     @RequestMapping(value = "/{id}/deelnames", method = RequestMethod.GET)
     public List<Deelname> getDeelnames(@PathVariable("id") int id) throws GebruikerNotFound {
         return service.getDeelnames(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound
+    {
+        return authService.findByToken(token);
     }
 }

@@ -1,6 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -17,4 +18,7 @@ public interface OrganisatieService {
     void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound;
 
     void delete(int id) throws OrganisatieNotFound;
+
+    List<Hoofdthema> showHoofdthemas(int id) throws OrganisatieNotFound;
+
 }

@@ -2,6 +2,7 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -89,5 +90,12 @@ public class OrganisatieServiceImpl implements OrganisatieService {
         }
 
         repository.delete(organisatie);
+    }
+
+    @Override
+    public List<Hoofdthema> showHoofdthemas(int id) throws OrganisatieNotFound {
+        Organisatie organisatie = find(id);
+
+        return organisatie.getHoofdthemas();
     }
 }
