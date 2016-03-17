@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HoofdthemaResponse implements Serializable
-{
+public class HoofdthemaResponse implements Serializable {
     private int id;
     private String naam;
     private String beschrijving;
@@ -17,13 +16,11 @@ public class HoofdthemaResponse implements Serializable
     private List<Subthema> subthemas = new ArrayList<>();
     private List<Tag> tags = new ArrayList<>();
 
-    public HoofdthemaResponse()
-    {
+    public HoofdthemaResponse() {
         //
     }
 
-    public HoofdthemaResponse(int id, String naam, String beschrijving, int organisatie, int gebruiker)
-    {
+    public HoofdthemaResponse(int id, String naam, String beschrijving, int organisatie, int gebruiker) {
         this.id = id;
         this.naam = naam;
         this.beschrijving = beschrijving;
@@ -31,73 +28,59 @@ public class HoofdthemaResponse implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public String getBeschrijving()
-    {
+    public String getBeschrijving() {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving)
-    {
+    public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
     }
 
-    public int getOrganisatie()
-    {
+    public int getOrganisatie() {
         return organisatie;
     }
 
-    public void setOrganisatie(int organisatie)
-    {
+    public void setOrganisatie(int organisatie) {
         this.organisatie = organisatie;
     }
 
-    public int getGebruiker()
-    {
+    public int getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker)
-    {
+    public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
     }
 
-    public List<Subthema> getSubthemas()
-    {
+    public List<Subthema> getSubthemas() {
         return subthemas;
     }
 
-    public void setSubthemas(List<Subthema> subthemas)
-    {
+    public void setSubthemas(List<Subthema> subthemas) {
         this.subthemas = subthemas;
     }
 
-    public List<Tag> getTags()
-    {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags)
-    {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 }

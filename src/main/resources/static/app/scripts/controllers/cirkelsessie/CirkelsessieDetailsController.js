@@ -2,49 +2,48 @@
 
     "use strict";
 
-    function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, KaartService) {
+    function CirkelsessieDetailsController($route, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, SpelkaartService, BerichtService) {
 
         var vm = this;
 
         vm.cirkelsessie = {};
-        vm.spelkaarten = [];
-        vm.deelnames = [];
-        vm.berichten = [];
+        vm.gebruikers = [];
+        vm.kaarten = [];
+        vm.chatgebruikers = [];
+        vm.gebruiker = {};
 
         CirkelsessieService.find($routeParams.id).then(function (data) {
-
             vm.cirkelsessie = data;
-
-            CirkelsessieService.getSpelkaarten(data.id).then(function(spelkaarten) {
-                vm.spelkaarten = spelkaarten
+            CirkelsessieService.getGebruiker(vm.cirkelsessie.id).then(function (organisatordata) {
+                vm.gebruiker = organisatordata;
             });
 
-            CirkelsessieService.getDeelnames(data.id).then(function(deelnames) {
-                vm.deelnames = deelnames
+            angular.forEach(vm.cirkelsessie.deelnames, function (value, key) {
+                DeelnameService.getGebruiker(value.id).then(function (gebruikerdata) {
+                    vm.gebruikers.push(gebruikerdata);
+                });
             });
 
-            CirkelsessieService.getBerichten(data.id).then(function(berichten) {
-                vm.berichten = berichten
+            angular.forEach(vm.cirkelsessie.spelkaarten, function (value, key) {
+                SpelkaartService.getKaart(value.id).then(function (kaartdata) {
+                    vm.kaarten.push(kaartdata);
+                });
             });
 
+            angular.forEach(vm.cirkelsessie.berichten, function (value, key) {
+                BerichtService.getGebruiker(value.id).then(function (chatgebruikerdata) {
+                    vm.chatgebruikers.push(chatgebruikerdata);
+                });
+            });
         });
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);
         };
 
-        vm.isDeelnemer = function (list) {
-
-            if (list == null) {
-                return false;
-            }
-
-            if (list.length === 0) {
-                return false;
-            }
-
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].gebruiker.id == $rootScope.id) {
+        vm.isDeelnemer = function () {
+            for (var i = 0; i < vm.gebruikers.length; i++) {
+                if ($rootScope.id == vm.gebruikers[i].id) {
                     return true;
                 }
             }
@@ -53,6 +52,7 @@
         };
 
         vm.addBericht = function (id, bericht) {
+            bericht.gebruiker = $rootScope.id;
             CirkelsessieService.addBericht(id, bericht).then(function () {
                 $route.reload();
             });
@@ -65,6 +65,7 @@
         };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
+            kaart.gebruiker = $rootScope.id;
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 $route.reload();
             });

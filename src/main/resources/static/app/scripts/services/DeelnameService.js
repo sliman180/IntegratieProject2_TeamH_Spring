@@ -30,6 +30,21 @@
 
         };
 
+        exports.getGebruiker = function (id) {
+
+            return $http.get("/api/deelnames/" + id + "/gebruiker").then(function (response) {
+                return response.data;
+            });
+        };
+
+        exports.getCirkelsessie = function (id) {
+
+            return $http.get("/api/deelnames/" + id + "/cirkelsessie").then(function (response) {
+                return response.data;
+            });
+        };
+
+
         return exports;
 
     }

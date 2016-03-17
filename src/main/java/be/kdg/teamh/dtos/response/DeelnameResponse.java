@@ -1,29 +1,22 @@
 package be.kdg.teamh.dtos.response;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
-public class DeelnameResponse implements Serializable
-{
+public class DeelnameResponse implements Serializable {
     private int id;
     private int aangemaakteKaarten;
     private boolean medeorganisator;
-    private LocalDateTime datum;
+    private DateTime datum;
     private int cirkelsessie;
     private int gebruiker;
 
-    public DeelnameResponse()
-    {
+    public DeelnameResponse() {
         //
     }
 
-    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, LocalDateTime datum, int cirkelsessie, int gebruiker)
-    {
+    public DeelnameResponse(int id, int aangemaakteKaarten, boolean medeorganisator, DateTime datum, int cirkelsessie, int gebruiker) {
         this.id = id;
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
@@ -32,65 +25,51 @@ public class DeelnameResponse implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getAangemaakteKaarten()
-    {
+    public int getAangemaakteKaarten() {
         return aangemaakteKaarten;
     }
 
-    public void setAangemaakteKaarten(int aangemaakteKaarten)
-    {
+    public void setAangemaakteKaarten(int aangemaakteKaarten) {
         this.aangemaakteKaarten = aangemaakteKaarten;
     }
 
-    public boolean isMedeorganisator()
-    {
+    public boolean isMedeorganisator() {
         return medeorganisator;
     }
 
-    public void setMedeorganisator(boolean medeorganisator)
-    {
+    public void setMedeorganisator(boolean medeorganisator) {
         this.medeorganisator = medeorganisator;
     }
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    public LocalDateTime getDatum()
-    {
+    public DateTime getDatum() {
         return datum;
     }
 
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    public void setDatum(LocalDateTime datum)
-    {
+    public void setDatum(DateTime datum) {
         this.datum = datum;
     }
 
-    public int getCirkelsessie()
-    {
+    public int getCirkelsessie() {
         return cirkelsessie;
     }
 
-    public void setCirkelsessie(int cirkelsessie)
-    {
+    public void setCirkelsessie(int cirkelsessie) {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public int getGebruiker()
-    {
+    public int getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker)
-    {
+    public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

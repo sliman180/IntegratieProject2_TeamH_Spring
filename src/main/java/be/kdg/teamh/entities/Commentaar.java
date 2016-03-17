@@ -1,14 +1,16 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commentaren")
-public class Commentaar implements Serializable
-{
+public class Commentaar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,69 +19,61 @@ public class Commentaar implements Serializable
     private String tekst;
 
     @NotNull
-    private LocalDateTime datum;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime datum;
 
     @ManyToOne
+    @JsonBackReference(value = "gebruiker-commentaar")
     private Gebruiker gebruiker;
 
     @ManyToOne
+    @JsonBackReference(value = "commentaar-kaart")
     private Kaart kaart;
 
-    public Commentaar()
-    {
+    public Commentaar() {
         //
     }
 
-    public Commentaar(String tekst, LocalDateTime datum, Gebruiker gebruiker, Kaart kaart)
-    {
+    public Commentaar(String tekst, DateTime datum, Gebruiker gebruiker, Kaart kaart) {
         this.tekst = tekst;
         this.datum = datum;
         this.gebruiker = gebruiker;
         this.kaart = kaart;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public String getTekst()
-    {
+    public String getTekst() {
         return tekst;
     }
 
-    public void setTekst(String tekst)
-    {
+    public void setTekst(String tekst) {
         this.tekst = tekst;
     }
 
-    public LocalDateTime getDatum()
-    {
+    public DateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDateTime datum)
-    {
+    public void setDatum(DateTime datum) {
         this.datum = datum;
     }
 
-    public Gebruiker getGebruiker()
-    {
+    public Gebruiker getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker)
-    {
+    public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
 
-    public Kaart getKaart()
-    {
+    public Kaart getKaart() {
         return kaart;
     }
 
-    public void setKaart(Kaart kaart)
-    {
+    public void setKaart(Kaart kaart) {
         this.kaart = kaart;
     }
 }

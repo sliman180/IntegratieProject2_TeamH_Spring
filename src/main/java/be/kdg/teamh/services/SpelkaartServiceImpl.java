@@ -1,7 +1,6 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.dtos.response.SpelkaartResponse;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Kaart;
 import be.kdg.teamh.entities.Spelkaart;
@@ -17,60 +16,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
-public class SpelkaartServiceImpl implements SpelkaartService
-{
+public class SpelkaartServiceImpl implements SpelkaartService {
     private SpelkaartRepository repository;
     private CirkelsessieRepository cirkelsessies;
     private KaartRepository kaarten;
 
     @Autowired
-    public SpelkaartServiceImpl(SpelkaartRepository repository, CirkelsessieRepository cirkelsessies, KaartRepository kaarten)
-    {
+    public SpelkaartServiceImpl(SpelkaartRepository repository, CirkelsessieRepository cirkelsessies, KaartRepository kaarten) {
         this.repository = repository;
         this.cirkelsessies = cirkelsessies;
         this.kaarten = kaarten;
     }
 
     @Override
-    public List<SpelkaartResponse> all()
-    {
-        List<Spelkaart> spelkaarten = repository.findAll();
-        List<SpelkaartResponse> dtos = new ArrayList<>();
-
-        for (Spelkaart spelkaart : spelkaarten)
-        {
-            SpelkaartResponse dto = new SpelkaartResponse();
-
-            dto.setId(spelkaart.getId());
-            dto.setPositie(spelkaart.getPositie());
-            dto.setCirkelsessie(spelkaart.getCirkelsessie().getId());
-            dto.setKaart(spelkaart.getKaart().getId());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+    public List<Spelkaart> all() {
+        return repository.findAll();
     }
 
     @Override
-    public void create(SpelkaartRequest dto) throws CirkelsessieNotFound, KaartNotFound
-    {
+    public void create(SpelkaartRequest dto) throws CirkelsessieNotFound, KaartNotFound {
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
-        if (cirkelsessie == null)
-        {
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
         Kaart kaart = kaarten.findOne(dto.getKaart());
 
-        if (kaart == null)
-        {
+        if (kaart == null) {
             throw new KaartNotFound();
         }
 
@@ -80,50 +57,37 @@ public class SpelkaartServiceImpl implements SpelkaartService
         spelkaart.setCirkelsessie(cirkelsessie);
         spelkaart.setKaart(kaart);
 
-        repository.save(spelkaart);
+        repository.saveAndFlush(spelkaart);
     }
 
     @Override
-    public SpelkaartResponse find(int id) throws SpelkaartNotFound
-    {
+    public Spelkaart find(int id) throws SpelkaartNotFound {
         Spelkaart spelkaart = repository.findOne(id);
 
-        if (spelkaart == null)
-        {
+        if (spelkaart == null) {
             throw new SpelkaartNotFound();
         }
 
-        SpelkaartResponse dto = new SpelkaartResponse();
-
-        dto.setId(spelkaart.getId());
-        dto.setPositie(spelkaart.getPositie());
-        dto.setCirkelsessie(spelkaart.getCirkelsessie().getId());
-        dto.setKaart(spelkaart.getKaart().getId());
-
-        return dto;
+        return spelkaart;
     }
 
     @Override
-    public void update(int id, SpelkaartRequest dto) throws SpelkaartNotFound, CirkelsessieNotFound, KaartNotFound
-    {
+    public void update(int id, SpelkaartRequest dto) throws SpelkaartNotFound, CirkelsessieNotFound, KaartNotFound {
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
-        if (cirkelsessie == null)
-        {
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
         Kaart kaart = kaarten.findOne(dto.getKaart());
 
-        if (kaart == null)
-        {
+        if (kaart == null) {
             throw new KaartNotFound();
         }
 
         Spelkaart spelkaart = repository.findOne(id);
 
-        if (spelkaart == null)
-        {
+        if (spelkaart == null) {
             throw new SpelkaartNotFound();
         }
 
@@ -135,12 +99,10 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public void delete(int id) throws SpelkaartNotFound
-    {
+    public void delete(int id) throws SpelkaartNotFound {
         Spelkaart spelkaart = repository.findOne(id);
 
-        if (spelkaart == null)
-        {
+        if (spelkaart == null) {
             throw new SpelkaartNotFound();
         }
 
@@ -148,22 +110,30 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached
-    {
+    public void verschuif(int id) throws SpelkaartNotFound, SpelkaartMaxPositionReached {
         Spelkaart spelkaart = repository.findOne(id);
 
-        if (spelkaart == null)
-        {
+        if (spelkaart == null) {
             throw new SpelkaartNotFound();
         }
 
-        if (spelkaart.getPositie() >= spelkaart.getCirkelsessie().getAantalCirkels())
-        {
+        if (spelkaart.getPositie() >= spelkaart.getCirkelsessie().getAantalCirkels()) {
             throw new SpelkaartMaxPositionReached();
         }
 
         spelkaart.setPositie(spelkaart.getPositie() + 1);
 
-        repository.save(spelkaart);
+        repository.saveAndFlush(spelkaart);
+    }
+
+    @Override
+    public Kaart getKaart(int id) throws SpelkaartNotFound {
+        Spelkaart spelkaart = repository.findOne(id);
+
+        if (spelkaart == null) {
+            throw new SpelkaartNotFound();
+        }
+
+        return spelkaart.getKaart();
     }
 }

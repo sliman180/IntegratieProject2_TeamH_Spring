@@ -1,14 +1,16 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "berichten")
-public class Bericht implements Serializable
-{
+public class Bericht implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,69 +19,61 @@ public class Bericht implements Serializable
     private String tekst;
 
     @NotNull
-    private LocalDateTime datum;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime datum;
 
     @ManyToOne
+    @JsonBackReference(value = "bericht-cirkelsessie")
     private Cirkelsessie cirkelsessie;
 
     @ManyToOne
+    @JsonBackReference(value = "gebruiker-bericht")
     private Gebruiker gebruiker;
 
-    public Bericht()
-    {
+    public Bericht() {
         //
     }
 
-    public Bericht(String tekst, LocalDateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker)
-    {
+    public Bericht(String tekst, DateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public String getTekst()
-    {
+    public String getTekst() {
         return tekst;
     }
 
-    public void setTekst(String tekst)
-    {
+    public void setTekst(String tekst) {
         this.tekst = tekst;
     }
 
-    public LocalDateTime getDatum()
-    {
+    public DateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDateTime datum)
-    {
+    public void setDatum(DateTime datum) {
         this.datum = datum;
     }
 
-    public Cirkelsessie getCirkelsessie()
-    {
+    public Cirkelsessie getCirkelsessie() {
         return cirkelsessie;
     }
 
-    public void setCirkelsessie(Cirkelsessie cirkelsessie)
-    {
+    public void setCirkelsessie(Cirkelsessie cirkelsessie) {
         this.cirkelsessie = cirkelsessie;
     }
 
-    public Gebruiker getGebruiker()
-    {
+    public Gebruiker getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker)
-    {
+    public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

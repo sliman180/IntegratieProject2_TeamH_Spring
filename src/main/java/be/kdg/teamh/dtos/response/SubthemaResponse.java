@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubthemaResponse implements Serializable
-{
+public class SubthemaResponse implements Serializable {
     private int id;
     private String naam;
     private String beschrijving;
@@ -17,13 +16,11 @@ public class SubthemaResponse implements Serializable
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
     private List<Kaart> kaarten = new ArrayList<>();
 
-    public SubthemaResponse()
-    {
+    public SubthemaResponse() {
         //
     }
 
-    public SubthemaResponse(int id, String naam, String beschrijving, int hoofdthema, int gebruiker)
-    {
+    public SubthemaResponse(int id, String naam, String beschrijving, int hoofdthema, int gebruiker) {
         this.id = id;
         this.naam = naam;
         this.beschrijving = beschrijving;
@@ -31,73 +28,59 @@ public class SubthemaResponse implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public String getBeschrijving()
-    {
+    public String getBeschrijving() {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving)
-    {
+    public void setBeschrijving(String beschrijving) {
         this.beschrijving = beschrijving;
     }
 
-    public int getHoofdthema()
-    {
+    public int getHoofdthema() {
         return hoofdthema;
     }
 
-    public void setHoofdthema(int hoofdthema)
-    {
+    public void setHoofdthema(int hoofdthema) {
         this.hoofdthema = hoofdthema;
     }
 
-    public int getGebruiker()
-    {
+    public int getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker)
-    {
+    public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
     }
 
-    public List<Cirkelsessie> getCirkelsessies()
-    {
+    public List<Cirkelsessie> getCirkelsessies() {
         return cirkelsessies;
     }
 
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies)
-    {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public List<Kaart> getKaarten()
-    {
+    public List<Kaart> getKaarten() {
         return kaarten;
     }
 
-    public void setKaarten(List<Kaart> kaarten)
-    {
+    public void setKaarten(List<Kaart> kaarten) {
         this.kaarten = kaarten;
     }
 }

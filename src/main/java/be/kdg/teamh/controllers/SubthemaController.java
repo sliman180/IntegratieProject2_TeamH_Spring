@@ -1,7 +1,10 @@
 package be.kdg.teamh.controllers;
 
+import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.dtos.response.SubthemaResponse;
+import be.kdg.teamh.entities.Hoofdthema;
+import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -14,48 +17,61 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/subthemas")
-public class SubthemaController
-{
+public class SubthemaController {
     private SubthemaService service;
 
     @Autowired
-    public SubthemaController(SubthemaService service)
-    {
+    public SubthemaController(SubthemaService service) {
         this.service = service;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<SubthemaResponse> index()
-    {
+    public List<Subthema> index() {
         return service.all();
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody SubthemaRequest subthema) throws HoofdthemaNotFound, GebruikerNotFound
-    {
+    public void create(@RequestBody SubthemaRequest subthema) throws HoofdthemaNotFound, GebruikerNotFound {
         service.create(subthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public SubthemaResponse show(@PathVariable Integer id) throws SubthemaNotFound
-    {
+    public Subthema show(@PathVariable Integer id) throws SubthemaNotFound {
         return service.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody SubthemaRequest subthema) throws SubthemaNotFound, HoofdthemaNotFound
-    {
+    public void update(@PathVariable("id") int id, @RequestBody SubthemaRequest subthema) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound {
         service.update(id, subthema);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) throws SubthemaNotFound
-    {
+    public void delete(@PathVariable("id") int id) throws SubthemaNotFound {
         service.delete(id);
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/organisatie", method = RequestMethod.GET)
+    public Organisatie getOrganisatie(@PathVariable Integer id) throws SubthemaNotFound {
+        return service.findOrganisatie(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
+    public Hoofdthema getHoofdthema(@PathVariable Integer id) throws SubthemaNotFound {
+        return service.findHoofdthema(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/kaart", method = RequestMethod.POST)
+    public void createKaart(@PathVariable("id") int subthemaId, @RequestHeader(name = "Authorization") String token, @RequestBody KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound {
+
+        service.addKaart(subthemaId, kaart);
+    }
+
 }

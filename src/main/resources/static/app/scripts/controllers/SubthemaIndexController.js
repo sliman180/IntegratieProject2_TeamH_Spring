@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function SubthemaIndexController($route, HoofdthemaService, SubthemaService) {
+    function SubthemaIndexController($route, $rootScope, HoofdthemaService, SubthemaService, OrganisatieService) {
 
         var vm = this;
 
@@ -10,28 +10,34 @@
 
         vm.hoofdthemas = [];
 
+        vm.gekoppeldeHoofdthemas = [];
 
-        SubthemaService.mySubthemas().then(function (data) {
+        vm.gekoppeldeOrganisaties = [];
+
+
+        SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
+            angular.forEach(vm.subthemas, function (value, key) {
+                SubthemaService.getHoofdthema(value.id).then(function (hoofdthemadata) {
+                    vm.gekoppeldeHoofdthemas.push(hoofdthemadata);
+                });
+                SubthemaService.getOrganisatie(value.id).then(function (organisatiedata) {
+                    vm.gekoppeldeOrganisaties.push(organisatiedata);
+                });
+            });
         });
 
-        HoofdthemaService.myHoofdthemas().then(function (data) {
+        HoofdthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.hoofdthemas = data;
         });
 
 
-        vm.addSubthema = function (subthema, hoofdthemaId) {
-            if (hoofdthemaId > 0) {
-                SubthemaService.createWithHoofdthema(subthema, hoofdthemaId).then(function () {
-                    $route.reload();
-                });
-            } else {
-                SubthemaService.create(subthema).then(function () {
-                    $route.reload();
-                });
-            }
+        vm.addSubthema = function (subthema) {
+            subthema.gebruiker = $rootScope.id;
+            SubthemaService.create(subthema).then(function () {
+                $route.reload();
+            });
         }
-
     }
 
     angular.module("kandoe").controller("SubthemaIndexController", SubthemaIndexController);

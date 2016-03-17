@@ -3,27 +3,26 @@
     "use strict";
 
 
-    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, ChatService, KaartService, DeelnameService, SpelkaartService) {
+    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, HoofdthemaService, OrganisatieService, KaartService) {
 
         var vm = this;
 
         vm.subthema = {};
-        vm.subthemaId = {};
-        vm.kaarten = [];
+        vm.hoofdthema = {};
+        vm.organisatie = {};
 
         SubthemaService.find($routeParams.id).then(function (data) {
-
-            KaartService.getKaarten(data.id).then(function (kaartendata) {
-                vm.kaarten = kaartendata;
-            });
-
             vm.subthema = data;
-            vm.subthemaId = data.id;
-
+            SubthemaService.getHoofdthema(vm.subthema.id).then(function (subthemadata) {
+                vm.hoofdthema = subthemadata;
+            });
+            SubthemaService.getOrganisatie(vm.subthema.id).then(function (organisatiedata) {
+                vm.organisatie = organisatiedata;
+            });
         });
 
-
         vm.createKaart = function (subthemaId, kaart) {
+            kaart.gebruiker = $rootScope.id;
             KaartService.createKaartForSubthema(subthemaId, kaart).then(function () {
                 $route.reload();
             });

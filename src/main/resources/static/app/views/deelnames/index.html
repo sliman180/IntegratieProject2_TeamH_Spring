@@ -44,13 +44,13 @@
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
 
-    <h2 class="mdl-card__title-text">Mijn deelnames ({{ vm.deelnames.length }})</h2>
+    <h2 id="deelname-title" class="mdl-card__title-text">Mijn deelnames ({{ vm.deelnames.length }})</h2>
 
     <ul class="demo-list-two mdl-list lijst">
         <li ng-repeat="deelname in vm.deelnames" class="mdl-list__item mdl-list__item--two-line lijst-item">
             <span class="mdl-list__item-primary-content">
               <i class="material-icons mdl-list__item-avatar">playlist_add_check</i>
-              <span>Cirkelsessie: <a href="/#/cirkelsessies/details/{{deelname.cirkelsessie.id}}">{{deelname.cirkelsessie.naam}}</a></span>
+              <span>Cirkelsessie: <a href="/#/cirkelsessies/details/{{vm.cirkelsessies[$index].id}}">{{vm.cirkelsessies[$index].naam}}</a></span>
               <span class="mdl-list__item-sub-title">Deelgenomen op: {{deelname.datum | date:'dd/MM/yyyy HH:mm'}}</span>
             </span>
             <span class="mdl-list__item-secondary-content instelling-content">
@@ -58,7 +58,7 @@
                 <p>
                     <div>
                         <a id="details" class="mdl-list__item-secondary-action blueIcon"
-                           href="/#/cirkelsessies/details/{{deelname.cirkelsessie.id}}"><i class="material-icons">info_outline</i></a>
+                           href="/#/cirkelsessies/details/{{vm.cirkelsessies[$index].id}}"><i class="material-icons">info_outline</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="details">Bekijk deelname</div>
                     </div>

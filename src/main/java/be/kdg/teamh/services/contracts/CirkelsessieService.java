@@ -3,7 +3,7 @@ package be.kdg.teamh.services.contracts;
 import be.kdg.teamh.dtos.request.BerichtRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
-import be.kdg.teamh.dtos.response.*;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
@@ -11,39 +11,40 @@ import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
 import java.util.List;
 
-public interface CirkelsessieService
-{
-    List<CirkelsessieResponse> all();
+public interface CirkelsessieService {
+    List<Cirkelsessie> all();
 
-    List<CirkelsessieResponse> actief();
+    List<Cirkelsessie> actief();
 
-    List<CirkelsessieResponse> gesloten();
+    List<Cirkelsessie> gesloten();
 
-    List<CirkelsessieResponse> beindigd();
+    List<Cirkelsessie> beindigd();
 
-    List<CirkelsessieResponse> gepland();
+    List<Cirkelsessie> gepland();
 
-    void create(CirkelsessieRequest cirkelsessie) throws GebruikerNotFound, SubthemaNotFound;
+    void create(CirkelsessieRequest dto) throws GebruikerNotFound, SubthemaNotFound;
 
-    CirkelsessieResponse find(int id) throws CirkelsessieNotFound;
+    Cirkelsessie find(int id) throws CirkelsessieNotFound;
 
-    void update(int id, CirkelsessieRequest cirkelsessie) throws CirkelsessieNotFound;
+    void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound;
 
     void delete(int id) throws CirkelsessieNotFound;
 
     void clone(int id) throws CirkelsessieNotFound;
 
-    SubthemaResponse getSubthema(int id) throws CirkelsessieNotFound;
+    Subthema getSubthema(int id) throws CirkelsessieNotFound;
 
-    List<DeelnameResponse> getDeelnames(int id) throws CirkelsessieNotFound;
+    List<Deelname> getDeelnames(int id) throws CirkelsessieNotFound;
 
     void addDeelname(int id, int gebruikerId) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie;
 
-    List<SpelkaartResponse> getSpelkaarten(int id) throws CirkelsessieNotFound;
+    List<Spelkaart> getSpelkaarten(int id) throws CirkelsessieNotFound;
 
-    void addSpelkaart(int id, int gebruikerId, KaartRequest kaart) throws CirkelsessieNotFound, GebruikerNotFound;
+    void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
 
-    List<BerichtResponse> getBerichten(int id) throws CirkelsessieNotFound;
+    List<Bericht> getBerichten(int id) throws CirkelsessieNotFound;
 
-    void addBericht(int id, int gebruikerId, BerichtRequest bericht) throws CirkelsessieNotFound, GebruikerNotFound;
+    void addBericht(int id, BerichtRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
+
+    Gebruiker getGebruiker(int id) throws CirkelsessieNotFound;
 }

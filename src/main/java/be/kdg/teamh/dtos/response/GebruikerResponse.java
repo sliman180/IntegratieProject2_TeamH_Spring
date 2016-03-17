@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GebruikerResponse implements Serializable
-{
+public class GebruikerResponse implements Serializable {
     private int id;
     private String gebruikersnaam;
     private List<Organisatie> organisaties = new ArrayList<>();
@@ -21,125 +20,101 @@ public class GebruikerResponse implements Serializable
     private List<Bericht> berichten = new ArrayList<>();
     private List<Rol> rollen = new ArrayList<>();
 
-    public GebruikerResponse()
-    {
+    public GebruikerResponse() {
         //
     }
 
-    public GebruikerResponse(int id, String gebruikersnaam)
-    {
+    public GebruikerResponse(int id, String gebruikersnaam) {
         this.id = id;
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getGebruikersnaam()
-    {
+    public String getGebruikersnaam() {
         return gebruikersnaam;
     }
 
-    public void setGebruikersnaam(String gebruikersnaam)
-    {
+    public void setGebruikersnaam(String gebruikersnaam) {
         this.gebruikersnaam = gebruikersnaam;
     }
 
-    public List<Organisatie> getOrganisaties()
-    {
+    public List<Organisatie> getOrganisaties() {
         return organisaties;
     }
 
-    public void setOrganisaties(List<Organisatie> organisaties)
-    {
+    public void setOrganisaties(List<Organisatie> organisaties) {
         this.organisaties = organisaties;
     }
 
-    public List<Hoofdthema> getHoofdthemas()
-    {
+    public List<Hoofdthema> getHoofdthemas() {
         return hoofdthemas;
     }
 
-    public void setHoofdthemas(List<Hoofdthema> hoofdthemas)
-    {
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
         this.hoofdthemas = hoofdthemas;
     }
 
-    public List<Subthema> getSubthemas()
-    {
+    public List<Subthema> getSubthemas() {
         return subthemas;
     }
 
-    public void setSubthemas(List<Subthema> subthemas)
-    {
+    public void setSubthemas(List<Subthema> subthemas) {
         this.subthemas = subthemas;
     }
 
-    public List<Cirkelsessie> getCirkelsessies()
-    {
+    public List<Cirkelsessie> getCirkelsessies() {
         return cirkelsessies;
     }
 
-    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies)
-    {
+    public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public List<Kaart> getKaarten()
-    {
+    public List<Kaart> getKaarten() {
         return kaarten;
     }
 
-    public void setKaarten(List<Kaart> kaarten)
-    {
+    public void setKaarten(List<Kaart> kaarten) {
         this.kaarten = kaarten;
     }
 
-    public List<Deelname> getDeelnames()
-    {
+    public List<Deelname> getDeelnames() {
         return deelnames;
     }
 
-    public void setDeelnames(List<Deelname> deelnames)
-    {
+    public void setDeelnames(List<Deelname> deelnames) {
         this.deelnames = deelnames;
     }
 
-    public List<Commentaar> getCommentaren()
-    {
+    public List<Commentaar> getCommentaren() {
         return commentaren;
     }
 
-    public void setCommentaren(List<Commentaar> commentaren)
-    {
+    public void setCommentaren(List<Commentaar> commentaren) {
         this.commentaren = commentaren;
     }
 
-    public List<Bericht> getBerichten()
-    {
+    public List<Bericht> getBerichten() {
         return berichten;
     }
 
-    public void setBerichten(List<Bericht> berichten)
-    {
+    public void setBerichten(List<Bericht> berichten) {
         this.berichten = berichten;
     }
 
     @JsonBackReference
-    public List<Rol> getRollen()
-    {
+    public List<Rol> getRollen() {
         return rollen;
     }
 
-    public void setRollen(List<Rol> rollen)
-    {
+    public void setRollen(List<Rol> rollen) {
         this.rollen = rollen;
     }
 }

@@ -13,6 +13,7 @@
         });
 
         vm.addOrganisatie = function (organisatie) {
+            organisatie.gebruiker = $rootScope.id;
             OrganisatieService.create(organisatie).then(function () {
                 $route.reload();
             });

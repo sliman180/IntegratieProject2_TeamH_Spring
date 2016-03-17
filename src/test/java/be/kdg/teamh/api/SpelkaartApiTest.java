@@ -2,10 +2,9 @@ package be.kdg.teamh.api;
 
 import be.kdg.teamh.dtos.request.*;
 import be.kdg.teamh.entities.Status;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.web.util.NestedServletException;
-
-import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -43,7 +42,7 @@ public class SpelkaartApiTest extends ApiTest
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
@@ -87,7 +86,7 @@ public class SpelkaartApiTest extends ApiTest
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
@@ -137,7 +136,7 @@ public class SpelkaartApiTest extends ApiTest
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
@@ -187,7 +186,7 @@ public class SpelkaartApiTest extends ApiTest
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))
@@ -245,7 +244,7 @@ public class SpelkaartApiTest extends ApiTest
         http.perform(post("/api/subthemas", json).header("Authorization", getAdminToken()))
             .andExpect(status().isCreated());
 
-        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, LocalDateTime.now(), 1, 1);
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Een cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         json = objectMapper.writeValueAsString(cirkelsessie);
 
         http.perform(post("/api/cirkelsessies", json).header("Authorization", getAdminToken()))

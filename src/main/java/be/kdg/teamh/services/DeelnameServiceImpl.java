@@ -17,41 +17,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class DeelnameServiceImpl implements DeelnameService
-{
+public class DeelnameServiceImpl implements DeelnameService {
     private DeelnameRepository repository;
     private GebruikerRepository gebruikers;
     private CirkelsessieRepository cirkelsessies;
 
     @Autowired
-    public DeelnameServiceImpl(DeelnameRepository repository, GebruikerRepository gebruikers, CirkelsessieRepository cirkelsessies)
-    {
+    public DeelnameServiceImpl(DeelnameRepository repository, GebruikerRepository gebruikers, CirkelsessieRepository cirkelsessies) {
         this.repository = repository;
         this.gebruikers = gebruikers;
         this.cirkelsessies = cirkelsessies;
     }
 
     @Override
-    public void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound
-    {
+    public void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
-        if (cirkelsessie == null)
-        {
+        if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
         Deelname deelname = repository.findOne(id);
 
-        if (deelname == null)
-        {
+        if (deelname == null) {
             throw new DeelnameNotFound();
         }
 
@@ -64,15 +58,35 @@ public class DeelnameServiceImpl implements DeelnameService
     }
 
     @Override
-    public void delete(int id) throws DeelnameNotFound
-    {
+    public void delete(int id) throws DeelnameNotFound {
         Deelname deelname = repository.findOne(id);
 
-        if (deelname == null)
-        {
+        if (deelname == null) {
             throw new DeelnameNotFound();
         }
 
         repository.delete(deelname);
+    }
+
+    @Override
+    public Gebruiker getGebruiker(int id) throws DeelnameNotFound {
+        Deelname deelname = repository.findOne(id);
+
+        if (deelname == null) {
+            throw new DeelnameNotFound();
+        }
+
+        return deelname.getGebruiker();
+    }
+
+    @Override
+    public Cirkelsessie getCirkelsessie(int id) throws DeelnameNotFound {
+        Deelname deelname = repository.findOne(id);
+
+        if (deelname == null) {
+            throw new DeelnameNotFound();
+        }
+
+        return deelname.getCirkelsessie();
     }
 }

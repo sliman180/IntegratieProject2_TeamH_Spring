@@ -1,6 +1,5 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.dtos.response.GebruikerResponse;
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
@@ -18,20 +17,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthServiceImpl implements AuthService
-{
+public class AuthServiceImpl implements AuthService {
     private String key = "kandoe";
     private GebruikerRepository repository;
 
     @Autowired
-    public AuthServiceImpl(GebruikerRepository repository)
-    {
+    public AuthServiceImpl(GebruikerRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public LoginResponse generateToken(GebruikerResponse gebruiker)
-    {
+    public LoginResponse generateToken(Gebruiker gebruiker) {
         Claims claims = Jwts.claims().setSubject(String.valueOf(gebruiker.getId()));
 
         claims.put("gebruikersnaam", gebruiker.getGebruikersnaam());
@@ -41,56 +37,36 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public GebruikerResponse findByToken(String token) throws GebruikerNotFound
-    {
+    public Gebruiker findByToken(String token) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        GebruikerResponse dto = new GebruikerResponse();
-
-        dto.setId(gebruiker.getId());
-        dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        dto.setOrganisaties(gebruiker.getOrganisaties());
-        dto.setHoofdthemas(gebruiker.getHoofdthemas());
-        dto.setCirkelsessies(gebruiker.getCirkelsessies());
-        dto.setKaarten(gebruiker.getKaarten());
-        dto.setDeelnames(gebruiker.getDeelnames());
-        dto.setBerichten(gebruiker.getBerichten());
-        dto.setCommentaren(gebruiker.getCommentaren());
-        dto.setRollen(gebruiker.getRollen());
-
-        return dto;
+        return gebruiker;
     }
 
     @Override
-    public boolean isGuest(String token)
-    {
+    public boolean isGuest(String token) {
         return hasRole(token, "guest");
     }
 
     @Override
-    public boolean isRegistered(String token)
-    {
+    public boolean isRegistered(String token) {
         return hasRole(token, "user");
     }
 
     @Override
-    public boolean isAdmin(String token)
-    {
+    public boolean isAdmin(String token) {
         return hasRole(token, "admin");
     }
 
-    private Claims parseToken(String token)
-    {
+    private Claims parseToken(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token.substring(7)).getBody();
     }
 
-    private boolean hasRole(String token, String user)
-    {
+    private boolean hasRole(String token, String user) {
         return ((List) parseToken(token).get("rollen")).contains(user);
     }
 }

@@ -44,6 +44,10 @@
         margin: 2%;
     }
 
+    #form-title:hover {
+        cursor: pointer;
+    }
+
 </style>
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
@@ -55,7 +59,7 @@
               <i class="material-icons mdl-list__item-avatar">turned_in</i>
                 <span>Hoofthema: <a href="/#/">{{hoofdthema.naam}}</a></span>
                 <span class="mdl-list__item-sub-title">Beschrijving: {{hoofdthema.beschrijving}}</span>
-                <span class="mdl-list__item-sub-title">Organisatie: {{hoofdthema.organisatie.naam}}</span>
+                <span class="mdl-list__item-sub-title">Organisatie: {{vm.gekoppeldeOrganisaties[$index].naam}}</span>
                 <span class="mdl-list__item-sub-title">Aantal subthemas: {{hoofdthema.subthemas.length}}</span>
             </span>
             <span class="mdl-list__item-secondary-content">
@@ -90,7 +94,7 @@
 
         <div class="mdl-card__supporting-text">
 
-            <form ng-submit="vm.addHoofdthema(hoofdthema,organisatieId)">
+            <form ng-submit="vm.addHoofdthema(hoofdthema)">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" ng-model="hoofdthema.naam">
@@ -105,7 +109,7 @@
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Organisatie</label>
-                    <select ng-model="organisatieId">
+                    <select ng-model="hoofdthema.organisatie">
                         <option ng-repeat="organisatie in vm.organisaties" value="{{organisatie.id}}">
                             {{organisatie.naam}}
                         </option>

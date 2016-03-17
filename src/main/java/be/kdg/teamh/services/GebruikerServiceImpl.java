@@ -3,10 +3,6 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.dtos.request.GebruikerRequest;
 import be.kdg.teamh.dtos.request.LoginRequest;
 import be.kdg.teamh.dtos.request.RegistratieRequest;
-import be.kdg.teamh.dtos.response.CirkelsessieResponse;
-import be.kdg.teamh.dtos.response.DeelnameResponse;
-import be.kdg.teamh.dtos.response.GebruikerResponse;
-import be.kdg.teamh.dtos.response.OrganisatieResponse;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.InvalidCredentials;
 import be.kdg.teamh.exceptions.PasswordsDoNotMatch;
@@ -21,57 +17,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
-public class GebruikerServiceImpl implements GebruikerService
-{
+public class GebruikerServiceImpl implements GebruikerService {
     private GebruikerRepository repository;
     private RolRepository rollen;
 
     @Autowired
-    public GebruikerServiceImpl(GebruikerRepository repository, RolRepository rollen)
-    {
+    public GebruikerServiceImpl(GebruikerRepository repository, RolRepository rollen) {
         this.repository = repository;
         this.rollen = rollen;
     }
 
     @Override
-    public List<GebruikerResponse> all()
-    {
-        List<Gebruiker> gebruikers = repository.findAll();
-        List<GebruikerResponse> dtos = new ArrayList<>();
-
-        for (Gebruiker gebruiker : gebruikers)
-        {
-            GebruikerResponse dto = new GebruikerResponse();
-
-            dto.setId(gebruiker.getId());
-            dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-            dto.setOrganisaties(gebruiker.getOrganisaties());
-            dto.setHoofdthemas(gebruiker.getHoofdthemas());
-            dto.setSubthemas(gebruiker.getSubthemas());
-            dto.setCirkelsessies(gebruiker.getCirkelsessies());
-            dto.setKaarten(gebruiker.getKaarten());
-            dto.setCommentaren(gebruiker.getCommentaren());
-            dto.setBerichten(gebruiker.getBerichten());
-            dto.setRollen(gebruiker.getRollen());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+    public List<Gebruiker> all() {
+        return repository.findAll();
     }
 
     @Override
-    public void create(GebruikerRequest dto) throws RolNotFound
-    {
-        Rol rol = rollen.findOne(1);
+    public void create(GebruikerRequest dto) throws RolNotFound {
+        Rol rol = rollen.findByNaam("user");
 
-        if (rol == null)
-        {
+        if (rol == null) {
             throw new RolNotFound();
         }
 
@@ -85,10 +54,8 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch
-    {
-        if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie()))
-        {
+    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch {
+        if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie())) {
             throw new PasswordsDoNotMatch();
         }
 
@@ -101,78 +68,43 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public GebruikerResponse find(int id) throws GebruikerNotFound
-    {
+    public Gebruiker find(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        GebruikerResponse dto = new GebruikerResponse();
-
-        dto.setId(gebruiker.getId());
-        dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        dto.setOrganisaties(gebruiker.getOrganisaties());
-        dto.setHoofdthemas(gebruiker.getHoofdthemas());
-        dto.setSubthemas(gebruiker.getSubthemas());
-        dto.setCirkelsessies(gebruiker.getCirkelsessies());
-        dto.setKaarten(gebruiker.getKaarten());
-        dto.setCommentaren(gebruiker.getCommentaren());
-        dto.setBerichten(gebruiker.getBerichten());
-        dto.setRollen(gebruiker.getRollen());
-
-        return dto;
+        return gebruiker;
     }
 
     @Override
-    public GebruikerResponse findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials
-    {
+    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials {
         Gebruiker gebruiker = repository.findByGebruikersnaam(login.getGebruikersnaam());
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord()))
-        {
+        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord())) {
             throw new InvalidCredentials();
         }
 
-        GebruikerResponse dto = new GebruikerResponse();
-
-        dto.setId(gebruiker.getId());
-        dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        dto.setOrganisaties(gebruiker.getOrganisaties());
-        dto.setHoofdthemas(gebruiker.getHoofdthemas());
-        dto.setSubthemas(gebruiker.getSubthemas());
-        dto.setCirkelsessies(gebruiker.getCirkelsessies());
-        dto.setKaarten(gebruiker.getKaarten());
-        dto.setCommentaren(gebruiker.getCommentaren());
-        dto.setBerichten(gebruiker.getBerichten());
-        dto.setRollen(gebruiker.getRollen());
-
-        return dto;
+        return gebruiker;
     }
 
     @Override
-    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound
-    {
+    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
 
-        if (!dto.getWachtwoord().isEmpty())
-        {
-            if (!dto.getWachtwoord().equals(gebruiker.getWachtwoord()))
-            {
+        if (!dto.getWachtwoord().isEmpty()) {
+            if (!dto.getWachtwoord().equals(gebruiker.getWachtwoord())) {
                 gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
             }
         }
@@ -181,23 +113,10 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void update(int id, Gebruiker gebruiker) throws GebruikerNotFound
-    {
-        GebruikerRequest dto = new GebruikerRequest();
-
-        dto.setGebruikersnaam(gebruiker.getGebruikersnaam());
-        dto.setWachtwoord(gebruiker.getWachtwoord());
-
-        update(id, dto);
-    }
-
-    @Override
-    public void delete(int id) throws GebruikerNotFound
-    {
+    public void delete(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
@@ -205,95 +124,57 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public List<OrganisatieResponse> findOrganisaties(int id) throws GebruikerNotFound
-    {
+    public List<Organisatie> getOrganisaties(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        List<Organisatie> organisaties = gebruiker.getOrganisaties();
-        List<OrganisatieResponse> dtos = new ArrayList<>();
-
-        for (Organisatie organisatie : organisaties)
-        {
-            OrganisatieResponse dto = new OrganisatieResponse();
-
-            dto.setId(organisatie.getId());
-            dto.setNaam(organisatie.getNaam());
-            dto.setBeschrijving(organisatie.getBeschrijving());
-            dto.setGebruiker(organisatie.getGebruiker().getId());
-            dto.setHoofdthemas(organisatie.getHoofdthemas());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return gebruiker.getOrganisaties();
     }
 
     @Override
-    public List<CirkelsessieResponse> findCirkelsessies(int id) throws GebruikerNotFound
-    {
+    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        List<Cirkelsessie> cirkelsessies = gebruiker.getCirkelsessies();
-        List<CirkelsessieResponse> dtos = new ArrayList<>();
-
-        for (Cirkelsessie cirkelsessie : cirkelsessies)
-        {
-            CirkelsessieResponse dto = new CirkelsessieResponse();
-
-            dto.setId(cirkelsessie.getId());
-            dto.setNaam(cirkelsessie.getNaam());
-            dto.setAantalCirkels(cirkelsessie.getAantalCirkels());
-            dto.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
-            dto.setStatus(cirkelsessie.getStatus());
-            dto.setStartDatum(cirkelsessie.getStartDatum());
-            dto.setGebruiker(cirkelsessie.getGebruiker().getId());
-            dto.setSubthema(cirkelsessie.getSubthema().getId());
-            dto.setDeelnames(cirkelsessie.getDeelnames());
-            dto.setSpelkaarten(cirkelsessie.getSpelkaarten());
-            dto.setBerichten(cirkelsessie.getBerichten());
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+        return gebruiker.getCirkelsessies();
     }
 
     @Override
-    public List<DeelnameResponse> findDeelnames(int id) throws GebruikerNotFound
-    {
+    public List<Deelname> getDeelnames(int id) throws GebruikerNotFound {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        List<Deelname> deelnames = gebruiker.getDeelnames();
-        List<DeelnameResponse> dtos = new ArrayList<>();
+        return gebruiker.getDeelnames();
+    }
 
-        for (Deelname deelname : deelnames)
-        {
-            DeelnameResponse dto = new DeelnameResponse();
+    @Override
+    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
 
-            dto.setId(deelname.getId());
-            dto.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
-            dto.setMedeorganisator(deelname.isMedeorganisator());
-            dto.setCirkelsessie(deelname.getCirkelsessie().getId());
-            dto.setGebruiker(deelname.getGebruiker().getId());
-
-            dtos.add(dto);
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
         }
 
-        return dtos;
+        return gebruiker.getHoofdthemas();
+    }
+
+    @Override
+    public List<Subthema> getSubthemas(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        return gebruiker.getSubthemas();
     }
 }

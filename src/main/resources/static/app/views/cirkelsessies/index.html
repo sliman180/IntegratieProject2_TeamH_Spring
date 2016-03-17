@@ -147,7 +147,7 @@
                 <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
             </div>
             <div class="mdl-card__supporting-text">
-                <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
+                <p>Organisator: <b>{{vm.gebruikers[$index].gebruikersnaam}}</b></p>
 
                 <p>Startdatum: <b>{{cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b></p>
 
@@ -173,125 +173,98 @@
 
                 <span>
                     <i ng-if="cirkelsessie.status=='OPEN'" class="material-icons status-open">lock_open</i>
-                    <i ng-if="cirkelsessie.status=='GESLOTEN'" class="material-icons status-gesloten">lock</i>
-                    <i ng-if="cirkelsessie.status=='BEEINDIGD'" class="material-icons status-beeindigd">lock</i>
-                </span>
 
-                <div class="mdl-card__supporting-text">
-                    Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b> | Startdatum:
-                    {{cirkelsessie.startDatum | date:'yyyy-MM-dd'}}
-                </div>
+                <i ng-if="cirkelsessie.status=='GESLOTEN'" class="material-icons status-gesloten">lock</i></span>
+                <i ng-if="cirkelsessie.status=='BEEINDIGD'" class="material-icons status-beeindigd">lock</i></span>
 
-                <div class="mdl-card__actions mdl-card--border">
-                    <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
-                       class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                        Bekijk!
-                    </a>
-                </div>
+                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <i class="material-icons">share</i>
+                </button>
 
-                <div class="mdl-card__menu">
+                <!-- Right aligned menu below button -->
+                <button id="demo-menu-lower-right {{cirkelsessie.id}}"
+                        class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
 
-                    <div class="material-icons mdl-badge mdl-badge--overlap"
-                         data-badge="{{cirkelsessie.deelnames.length}}">
-                        account_box
-                    </div>
-
-            <span>
-                <i ng-if="circelsessie.isClosed" class="material-icons">lock_open</i>
-                <i ng-if="!circelsessie.isClosed" class="material-icons">lock</i>
-            </span>
-
-                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                        <i class="material-icons">share</i>
-                    </button>
-
-                    <button id="demo-menu-lower-right {{cirkelsessie.id}}"
-                            class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons">more_vert</i>
-                    </button>
-
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="demo-menu-lower-right {{cirkelsessie.id}}">
-                        <li class="mdl-menu__item"><a href="/#/cirkelsessies/details/{{ cirkelsessie.id }}">Bekijk</a>
-                        </li>
-                        <li class="mdl-menu__item"><a href="">Wijzig</a></li>
-                        <li class="mdl-menu__item"><a href="">Verwijder</a></li>
-                    </ul>
-
-                </div>
-
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="demo-menu-lower-right {{cirkelsessie.id}}">
+                    <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
+                    <li disabled class="mdl-menu__item">Wijzig</li>
+                    <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+                </ul>
             </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div>
+    <div id="form-title" class="mdl-card__title mdl-color--primary mdl-color-text--white"
+         ng-click="showForm = ! showForm">
+        <h2 class="mdl-card__title-text">Maak een cirkelsessie aan</h2>
+    </div>
+    <div class="mdl-card mdl-shadow--6dp" id="form" ng-show="showForm">
+
+        <div class="mdl-card__supporting-text">
+
+            <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="">
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
+                    <label class="mdl-textfield__label" for="naam">Naam</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$"
+                           id="aantalCirkels" ng-model="cirkelsessie.aantalCirkels">
+                    <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
+                    <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="number" id="maxAantalKaarten"
+                           ng-model="cirkelsessie.maxAantalKaarten">
+                    <label class="mdl-textfield__label" for="maxAantalKaarten">Maximum toegelaten
+                        kaarten</label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <label>Status </label>
+                    <select ng-model="cirkelsessie.status">
+                        <option value="OPEN">
+                            OPEN
+                        </option>
+                        <option value="GESLOTEN">
+                            GESLOTEN
+                        </option>
+                    </select>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="datetime-local" id="datum"
+                           ng-model="cirkelsessie.startDatum">
+                    <label class="mdl-textfield__label" for="datum"></label>
+                </div>
+
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <label>Subthema </label>
+                    <select ng-model="subthema">
+                        <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}">
+                            {{subthema.naam}}
+                        </option>
+                    </select>
+
+                </div>
+
+                <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Toevoegen
+                </button>
+
+            </form>
 
         </div>
 
-        <div>
-            <div id="form-title" class="mdl-card__title mdl-color--primary mdl-color-text--white"
-                 ng-click="showForm = ! showForm">
-                <h2 class="mdl-card__title-text">Maak een cirkelsessie aan</h2>
-            </div>
-            <div class="mdl-card mdl-shadow--6dp" id="form" ng-show="showForm">
-
-                <div class="mdl-card__supporting-text">
-
-                    <form ng-submit="vm.addCirkelsessie(cirkelsessie,subthemaId)" action="">
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
-                            <label class="mdl-textfield__label" for="naam">Naam</label>
-                        </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$"
-                                   id="aantalCirkels" ng-model="cirkelsessie.aantalCirkels">
-                            <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
-                            <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
-                        </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="number" id="maxAantalKaarten"
-                                   ng-model="cirkelsessie.maxAantalKaarten">
-                            <label class="mdl-textfield__label" for="maxAantalKaarten">Maximum toegelaten
-                                kaarten</label>
-                        </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <label>Status </label>
-                            <select ng-model="cirkelsessie.status">
-                                <option value="OPEN">
-                                    OPEN
-                                </option>
-                                <option value="GESLOTEN">
-                                    GESLOTEN
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" min="2016-03-04" type="datetime-local" id="datum"
-                                   ng-model="cirkelsessie.startDatum">
-                            <label class="mdl-textfield__label" for="datum"></label>
-                        </div>
-
-                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <label>Subthema </label>
-                            <select ng-model="subthemaId">
-                                <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}">
-                                    {{subthema.naam}}
-                                </option>
-                            </select>
-
-                        </div>
-
-                        <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
-                            Toevoegen
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
     </div>
 </div>

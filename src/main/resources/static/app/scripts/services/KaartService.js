@@ -54,6 +54,14 @@
 
         };
 
+        exports.getGebruiker = function (id) {
+
+            return $http.get("/api/kaarten/" + id + "/gebruiker").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.createComment = function (kaartId, comment) {
 
             return $http.post("/api/kaarten/" + kaartId + "/comments", comment).then(function (response) {

@@ -30,14 +30,6 @@
 
         };
 
-        exports.createWithSubthema = function (cirkelsessie, subthemaId) {
-
-            return $http.post("/api/cirkelsessies/subthema=" + subthemaId, cirkelsessie).then(function (response) {
-                return response.data;
-            });
-
-        };
-
         exports.update = function (cirkelsessie) {
 
             return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
@@ -89,6 +81,14 @@
         exports.getBerichten = function (id) {
 
             return $http.get("/api/cirkelsessies/" + id + "/berichten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getGebruiker = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id + "/gebruiker").then(function (response) {
                 return response.data;
             });
 

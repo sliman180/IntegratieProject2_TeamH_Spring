@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieIndexController($route, CirkelsessieService, SubthemaService) {
+    function CirkelsessieIndexController($rootScope, $route, CirkelsessieService, SubthemaService) {
 
         var vm = this;
 
@@ -10,18 +10,25 @@
         vm.cirkelsessies = [];
         vm.subthemas = [];
         vm.subthema = {};
+        vm.gebruikers = [];
+
+        SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.subthemas = data;
+        });
 
         CirkelsessieService.all().then(function (data) {
             vm.cirkelsessies = data;
+
+            angular.forEach(vm.cirkelsessies, function (value, key) {
+                CirkelsessieService.getGebruiker(value.id).then(function (gebruikerdata) {
+                    vm.gebruikers.push(gebruikerdata);
+                });
+            });
         });
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);
         };
-
-        SubthemaService.mySubthemas().then(function (data) {
-            vm.subthemas = data;
-        });
 
         vm.getSubthema = function (subthemaId) {
 
@@ -31,17 +38,11 @@
 
         };
 
-        vm.addCirkelsessie = function (cirkelsessie, subthemaId) {
-            if (subthemaId > 0) {
-                CirkelsessieService.createWithSubthema(cirkelsessie, subthemaId).then(function () {
-                    $route.reload();
-                });
-            } else {
-                CirkelsessieService.create(cirkelsessie).then(function () {
-                    $route.reload();
-                });
-            }
-
+        vm.addCirkelsessie = function (cirkelsessie) {
+            cirkelsessie.gebruiker = $rootScope.id;
+            CirkelsessieService.create(cirkelsessie).then(function () {
+                $route.reload();
+            });
         };
 
     }
