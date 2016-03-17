@@ -296,8 +296,7 @@ public class CirkelsessieApiTest extends ApiTest
             .andExpect(jsonPath("$.id", is(2)))
             .andExpect(jsonPath("$.naam", is("Een cirkelsessie")))
             .andExpect(jsonPath("$.aantalCirkels", is(10)))
-            .andExpect(jsonPath("$.maxAantalKaarten", is(10)))
-            .andExpect(jsonPath("$.deelnames", hasSize(0)));
+            .andExpect(jsonPath("$.maxAantalKaarten", is(10)));
     }
 
     @Test
