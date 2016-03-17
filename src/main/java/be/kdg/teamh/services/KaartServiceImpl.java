@@ -11,7 +11,7 @@ import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.repositories.*;
-import be.kdg.teamh.services.contracts.KaartenService;
+import be.kdg.teamh.services.contracts.KaartService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,8 @@ import java.util.List;
 
 @Service
 @Transactional
-public class KaartServiceImpl implements KaartenService {
+public class KaartServiceImpl implements KaartService
+{
     private CirkelsessieRepository cirkelsessies;
     private CommentaarRepository commentaren;
     private GebruikerRepository gebruikers;

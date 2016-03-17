@@ -11,7 +11,7 @@ import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 import be.kdg.teamh.services.contracts.AuthService;
-import be.kdg.teamh.services.contracts.KaartenService;
+import be.kdg.teamh.services.contracts.KaartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +21,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/kaarten")
 public class KaartController {
-    private KaartenService service;
+    private KaartService service;
     private AuthService auth;
 
     @Autowired
-    public KaartController(KaartenService service, AuthService auth) {
+    public KaartController(KaartService service, AuthService auth) {
         this.service = service;
         this.auth = auth;
     }
