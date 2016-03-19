@@ -8,7 +8,8 @@ import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 
 import java.util.List;
 
-public interface OrganisatieService {
+public interface OrganisatieService
+{
     List<Organisatie> all();
 
     void create(OrganisatieRequest dto) throws GebruikerNotFound;
@@ -19,6 +20,6 @@ public interface OrganisatieService {
 
     void delete(int id) throws OrganisatieNotFound;
 
-    List<Hoofdthema> showHoofdthemas(int id) throws OrganisatieNotFound;
+    List<Hoofdthema> getHoofdthemas(int id) throws OrganisatieNotFound;
 
 }

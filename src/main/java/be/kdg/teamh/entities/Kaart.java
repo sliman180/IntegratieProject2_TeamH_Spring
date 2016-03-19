@@ -11,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "kaarten")
-public class Kaart implements Serializable {
+public class Kaart implements Serializable
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -41,11 +42,13 @@ public class Kaart implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "kaart")
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
-    public Kaart() {
+    public Kaart()
+    {
         //
     }
 
-    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Subthema subthema, Gebruiker gebruiker) {
+    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Subthema subthema, Gebruiker gebruiker)
+    {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
         this.commentsToelaatbaar = commentsToelaatbaar;
@@ -53,75 +56,93 @@ public class Kaart implements Serializable {
         this.gebruiker = gebruiker;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getTekst() {
+    public String getTekst()
+    {
         return tekst;
     }
 
-    public void setTekst(String tekst) {
+    public void setTekst(String tekst)
+    {
         this.tekst = tekst;
     }
 
-    public String getImageUrl() {
+    public String getImageUrl()
+    {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl)
+    {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isCommentsToelaatbaar() {
+    public boolean isCommentsToelaatbaar()
+    {
         return commentsToelaatbaar;
     }
 
-    public void setCommentsToelaatbaar(boolean commentsToelaatbaar) {
+    public void setCommentsToelaatbaar(boolean commentsToelaatbaar)
+    {
         this.commentsToelaatbaar = commentsToelaatbaar;
     }
 
-    public Subthema getSubthema() {
+    public Subthema getSubthema()
+    {
         return subthema;
     }
 
-    public void setSubthema(Subthema subthema) {
+    public void setSubthema(Subthema subthema)
+    {
         this.subthema = subthema;
     }
 
-    public Gebruiker getGebruiker() {
+    public Gebruiker getGebruiker()
+    {
         return gebruiker;
     }
 
-    public void setGebruiker(Gebruiker gebruiker) {
+    public void setGebruiker(Gebruiker gebruiker)
+    {
         this.gebruiker = gebruiker;
     }
 
-    public List<Commentaar> getCommentaren() {
+    public List<Commentaar> getCommentaren()
+    {
         return commentaren;
     }
 
-    public void setCommentaren(List<Commentaar> commentaren) {
+    public void setCommentaren(List<Commentaar> commentaren)
+    {
         this.commentaren = commentaren;
     }
 
-    public void addCommentaar(Commentaar commentaar) {
+    public void addCommentaar(Commentaar commentaar)
+    {
         this.commentaren.add(commentaar);
     }
 
-    public List<Spelkaart> getSpelkaarten() {
+    public List<Spelkaart> getSpelkaarten()
+    {
         return spelkaarten;
     }
 
-    public void setSpelkaarten(List<Spelkaart> spelkaarten) {
+    public void setSpelkaarten(List<Spelkaart> spelkaarten)
+    {
         this.spelkaarten = spelkaarten;
     }
 
-    public void addSpelkaart(Spelkaart spelkaart) {
+    public void addSpelkaart(Spelkaart spelkaart)
+    {
         this.spelkaarten.add(spelkaart);
     }
 }

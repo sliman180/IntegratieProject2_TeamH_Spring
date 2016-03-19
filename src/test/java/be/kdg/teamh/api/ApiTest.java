@@ -39,22 +39,22 @@ public abstract class ApiTest
         this.http = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
-    protected MockHttpServletRequestBuilder get(String url) throws Exception
+    protected MockHttpServletRequestBuilder get(String url)
     {
         return MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON);
     }
 
-    protected MockHttpServletRequestBuilder post(String url, String json) throws Exception
+    protected MockHttpServletRequestBuilder post(String url, String json)
     {
         return MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON).content(json);
     }
 
-    protected MockHttpServletRequestBuilder put(String url, String json) throws Exception
+    protected MockHttpServletRequestBuilder put(String url, String json)
     {
         return MockMvcRequestBuilders.put(url).contentType(MediaType.APPLICATION_JSON).content(json);
     }
 
-    protected MockHttpServletRequestBuilder delete(String url) throws Exception
+    protected MockHttpServletRequestBuilder delete(String url)
     {
         return MockMvcRequestBuilders.delete(url).contentType(MediaType.APPLICATION_JSON);
     }

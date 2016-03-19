@@ -21,26 +21,31 @@ import java.util.List;
 
 @Service
 @Transactional
-public class GebruikerServiceImpl implements GebruikerService {
+public class GebruikerServiceImpl implements GebruikerService
+{
     private GebruikerRepository repository;
     private RolRepository rollen;
 
     @Autowired
-    public GebruikerServiceImpl(GebruikerRepository repository, RolRepository rollen) {
+    public GebruikerServiceImpl(GebruikerRepository repository, RolRepository rollen)
+    {
         this.repository = repository;
         this.rollen = rollen;
     }
 
     @Override
-    public List<Gebruiker> all() {
+    public List<Gebruiker> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(GebruikerRequest dto) throws RolNotFound {
+    public void create(GebruikerRequest dto) throws RolNotFound
+    {
         Rol rol = rollen.findByNaam("user");
 
-        if (rol == null) {
+        if (rol == null)
+        {
             throw new RolNotFound();
         }
 
@@ -54,8 +59,10 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch {
-        if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie())) {
+    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch
+    {
+        if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie()))
+        {
             throw new PasswordsDoNotMatch();
         }
 
@@ -68,10 +75,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public Gebruiker find(int id) throws GebruikerNotFound {
+    public Gebruiker find(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -79,14 +88,17 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials {
+    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials
+    {
         Gebruiker gebruiker = repository.findByGebruikersnaam(login.getGebruikersnaam());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
-        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord())) {
+        if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord()))
+        {
             throw new InvalidCredentials();
         }
 
@@ -94,17 +106,21 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound {
+    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
 
-        if (!dto.getWachtwoord().isEmpty()) {
-            if (!dto.getWachtwoord().equals(gebruiker.getWachtwoord())) {
+        if (!dto.getWachtwoord().isEmpty())
+        {
+            if (!dto.getWachtwoord().equals(gebruiker.getWachtwoord()))
+            {
                 gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
             }
         }
@@ -113,10 +129,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void delete(int id) throws GebruikerNotFound {
+    public void delete(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -124,10 +142,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public List<Organisatie> getOrganisaties(int id) throws GebruikerNotFound {
+    public List<Organisatie> getOrganisaties(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -135,10 +155,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNotFound {
+    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -146,10 +168,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public List<Deelname> getDeelnames(int id) throws GebruikerNotFound {
+    public List<Deelname> getDeelnames(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -157,10 +181,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNotFound {
+    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -168,10 +194,12 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public List<Subthema> getSubthemas(int id) throws GebruikerNotFound {
+    public List<Subthema> getSubthemas(int id) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(id);
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 

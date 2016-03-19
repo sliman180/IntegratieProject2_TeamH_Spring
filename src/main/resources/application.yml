@@ -1,9 +1,6 @@
 spring:
     main:
         banner-mode: "off"
-    jpa:
-        show-sql: false
-
 
 ---
 
@@ -21,7 +18,6 @@ spring:
     profiles: production
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL82Dialect
-        show-sql: false
         hibernate:
             ddl-auto: create
     datasource:

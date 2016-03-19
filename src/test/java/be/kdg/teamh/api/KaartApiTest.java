@@ -25,44 +25,39 @@ public class KaartApiTest extends ApiTest
     @Test
     public void createKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         http.perform(get("/api/kaarten").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].tekst", is("Een kaartje")))
-            .andExpect(jsonPath("$[0].imageUrl", is("http://www.afbeeldingurl.be")));
+            .andExpect(jsonPath("$", hasSize(1)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void createKaart_nullInput() throws Exception
     {
         KaartRequest kaart = new KaartRequest(null, null, true, 0);
-        String json = objectMapper.writeValueAsString(kaart);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()));
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
     public void showKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
         http.perform(get("/api/kaarten/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.imageUrl", is("http://www.afbeeldingurl.be")))
-            .andExpect(jsonPath("$.tekst", is("Een kaartje")));
+            .andExpect(jsonPath("$.tekst", is("Naam Kaart")))
+            .andExpect(jsonPath("$.imageUrl", is("http://www.afbeelding.url")));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void showKaart_nonExistingKaart() throws Exception
     {
         http.perform(get("/api/kaarten/1").header("Authorization", getUserToken()))
@@ -72,68 +67,51 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
-        kaart = new KaartRequest("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, 1);
-        json = objectMapper.writeValueAsString(kaart);
+        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", true, 1);
 
-        http.perform(put("/api/kaarten/1", json).header("Authorization", getAdminToken()))
+        http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
 
         http.perform(get("/api/kaarten/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.tekst", is("Een gewijzigde kaartje")))
-            .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeeldingurl.be")));
+            .andExpect(jsonPath("$.tekst", is("Nieuwe Naam Kaart")))
+            .andExpect(jsonPath("$.imageUrl", is("http://www.gewijzigdeafbeelding.url")));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void updateKaart_nullInput() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest(null, null, true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
         kaart = new KaartRequest(null, null, true, 0);
-        json = objectMapper.writeValueAsString(kaart);
 
-        http.perform(put("/api/kaarten/1", json).header("Authorization", getAdminToken()));
+        http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void updateKaart_nonExistingKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        kaart = new KaartRequest("Een gewijzigde kaartje", "http://www.gewijzigdeafbeeldingurl.be", true, 1);
-        json = objectMapper.writeValueAsString(kaart);
-
-        http.perform(put("/api/kaarten/2", json).header("Authorization", getAdminToken()));
+        http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
-        http.perform(get("/api/kaarten").header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)));
-
-        http.perform(delete("/api/kaarten/1").header("Authorization", getAdminToken()))
+        http.perform(delete("/api/kaarten/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk());
 
         http.perform(get("/api/kaarten").header("Authorization", getUserToken()))
@@ -141,31 +119,23 @@ public class KaartApiTest extends ApiTest
             .andExpect(jsonPath("$", hasSize(0)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void deleteKaart_nonExistingKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
-
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        http.perform(delete("/api/kaarten/2").header("Authorization", getAdminToken()));
+        http.perform(delete("/api/kaarten/1").header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void commentToevoegenAanKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", true, 1);
-        String json = objectMapper.writeValueAsString(kaart);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
-        CommentaarRequest commentaar = new CommentaarRequest("Een comment", DateTime.now(), 1, 1);
-        json = objectMapper.writeValueAsString(commentaar);
+        CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
 
-        http.perform(post("/api/kaarten/1/comments", json).header("Authorization", getAdminToken()))
+        http.perform(post("/api/kaarten/1/comments", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
         http.perform(get("/api/kaarten/1/comments").header("Authorization", getUserToken()))
@@ -173,51 +143,16 @@ public class KaartApiTest extends ApiTest
             .andExpect(jsonPath("$", hasSize(1)));
     }
 
-    //TODO commentsniettoelaatbaar
-//    @Test(expected = NestedServletException.class)
-//    public void commentToevoegenAanKaart_nietToegelaten() throws Exception
-//    {
-//        KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", false, 1);
-//        String json = objectMapper.writeValueAsString(kaart);
-//
-//        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-//            .andExpect(status().isCreated());
-//
-//        CommentaarRequest commentaar = new CommentaarRequest("Een comment", DateTime.now(), 1, 1);
-//        json = objectMapper.writeValueAsString(commentaar);
-//
-//        http.perform(post("/api/kaarten/1/comments", json).header("Authorization", getAdminToken()));
-//    }
-
     @Test
-    public void koppelKaartAanSubthema() throws Exception
+    public void commentToevoegenAanKaart_nietToegelaten() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
-
-        http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
         KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", false, 1);
-        json = objectMapper.writeValueAsString(kaart);
 
-        http.perform(post("/api/kaarten", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
 
-        SubthemaRequest subthema = new SubthemaRequest("Een subthema", "beschrijving", 1, 1);
-        json = objectMapper.writeValueAsString(subthema);
+        CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
 
-        http.perform(post("/api/kaarten/1/subthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        http.perform(get("/api/kaarten/1/subthema").header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(1)));
+        http.perform(post("/api/kaarten/1/comments", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserToken()))
+            .andExpect(status().isConflict());
     }
 }
