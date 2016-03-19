@@ -112,6 +112,7 @@ public class KaartServiceImpl implements KaartService
     {
         Kaart kaart = repository.findOne(id);
 
+
         if (kaart == null)
         {
             throw new KaartNotFound();

@@ -1,6 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Subthema;
@@ -23,6 +24,4 @@ public interface HoofdthemaService
     void delete(int id) throws HoofdthemaNotFound;
 
     Organisatie findOrganisatie(int id) throws HoofdthemaNotFound;
-
-    List<Subthema> showSubthemas(int id) throws HoofdthemaNotFound;
 }

@@ -14,6 +14,14 @@
 
         };
 
+        exports.update = function (kaart) {
+
+            return $http.put("/api/kaarten/" + kaart.id, kaart).then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.createKaart = function (cirkelsessieId, kaart) {
 
             return $http.post("/api/cirkelsessies/" + cirkelsessieId + "/spelkaarten", kaart).then(function (response) {

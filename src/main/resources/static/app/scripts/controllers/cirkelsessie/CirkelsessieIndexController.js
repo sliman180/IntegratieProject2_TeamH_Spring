@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieIndexController($rootScope, $route, CirkelsessieService, SubthemaService) {
+    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService) {
 
         var vm = this;
 
@@ -51,11 +51,15 @@
 
         vm.showCirkelsessieLink = function (id) {
 
-            window.location.href = '/#/cirkelsessies/details/' + id;
+            $location.path('/cirkelsessies/details/' + id);
         };
 
         vm.deleteCirkelsessieLink = function (id) {
-            window.location.href = '/#/cirkelsessies/delete/' + id;
+            $location.path('/cirkelsessies/delete/' + id);
+        };
+
+        vm.editCirkelsessieLink = function (id) {
+            $location.path('/cirkelsessies/edit/' + id);
         };
 
         vm.cloneCirkelsessie = function (id, cirkelsessie) {

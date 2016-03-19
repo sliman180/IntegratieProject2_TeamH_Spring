@@ -88,18 +88,18 @@ public class SubthemaServiceImpl implements SubthemaService
     @Override
     public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
     {
-        Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
-
-        if (hoofdthema == null)
-        {
-            throw new HoofdthemaNotFound();
-        }
-
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
             throw new GebruikerNotFound();
+        }
+
+        Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
+
+        if (hoofdthema == null)
+        {
+            throw new HoofdthemaNotFound();
         }
 
         Subthema subthema = repository.findOne(id);
@@ -131,7 +131,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public Organisatie findOrganisatie(Integer id) throws SubthemaNotFound
+    public Organisatie findOrganisatie(int id) throws SubthemaNotFound
     {
         Subthema subthema = repository.findOne(id);
 
@@ -144,7 +144,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound
+    public Hoofdthema findHoofdthema(int id) throws SubthemaNotFound
     {
         Subthema subthema = repository.findOne(id);
 
@@ -154,6 +154,32 @@ public class SubthemaServiceImpl implements SubthemaService
         }
 
         return subthema.getHoofdthema();
+    }
+
+    @Override
+    public List<Cirkelsessie> getCirkelsessies(int id) throws SubthemaNotFound
+    {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null)
+        {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getCirkelsessies();
+    }
+
+    @Override
+    public List<Kaart> getKaarten(int id) throws SubthemaNotFound
+    {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null)
+        {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getKaarten();
     }
 
     @Override
@@ -172,7 +198,6 @@ public class SubthemaServiceImpl implements SubthemaService
             throw new GebruikerNotFound();
         }
 
-        //kaart
         Kaart kaartje = new Kaart();
         kaartje.setImageUrl(kaart.getImageUrl());
         kaartje.setTekst(kaart.getTekst());
@@ -182,38 +207,10 @@ public class SubthemaServiceImpl implements SubthemaService
 
         Kaart savedKaart = kaarten.save(kaartje);
 
-        //cirkelsessie
         subthema.addKaart(savedKaart);
         repository.saveAndFlush(subthema);
 
-        //gebruiker
         gebruiker.addKaart(savedKaart);
         gebruikers.saveAndFlush(gebruiker);
-    }
-
-    @Override
-    public List<Kaart> getKaarten(Integer id) throws SubthemaNotFound
-    {
-        Subthema subthema = repository.findOne(id);
-
-        if (subthema == null)
-        {
-            throw new SubthemaNotFound();
-        }
-
-        return subthema.getKaarten();
-    }
-
-    @Override
-    public List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound
-    {
-        Subthema subthema = repository.findOne(id);
-
-        if (subthema == null)
-        {
-            throw new SubthemaNotFound();
-        }
-
-        return subthema.getCirkelsessies();
     }
 }

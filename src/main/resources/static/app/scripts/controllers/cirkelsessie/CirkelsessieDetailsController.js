@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieDetailsController($route, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, SpelkaartService, BerichtService) {
+    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService) {
 
         var vm = this;
 
@@ -171,6 +171,15 @@
             }
             return true;
         };
+
+        vm.deleteCirkelsessieLink = function (id) {
+            $location.path('/cirkelsessies/delete/' + id);
+        };
+
+        vm.editCirkelsessieLink = function (id) {
+            $location.path('/cirkelsessies/edit/' + id);
+        };
+
 
     }
 

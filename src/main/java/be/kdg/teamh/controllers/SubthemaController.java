@@ -59,6 +59,7 @@ public class SubthemaController
         service.update(id, subthema);
     }
 
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
@@ -80,7 +81,7 @@ public class SubthemaController
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
     public List<Cirkelsessie> getCirkelsessies(@PathVariable int id)
     {
-        return service.findCirkelsessies(id);
+        return service.getCirkelsessies(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

@@ -1,6 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;

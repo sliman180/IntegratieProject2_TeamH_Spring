@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
+import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.Forbidden;

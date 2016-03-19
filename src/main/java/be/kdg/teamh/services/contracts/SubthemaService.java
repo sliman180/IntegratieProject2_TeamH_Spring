@@ -21,13 +21,13 @@ public interface SubthemaService
 
     void delete(int id) throws SubthemaNotFound;
 
-    Organisatie findOrganisatie(Integer id) throws SubthemaNotFound;
+    Organisatie findOrganisatie(int id) throws SubthemaNotFound;
 
-    Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound;
+    Hoofdthema findHoofdthema(int id) throws SubthemaNotFound;
 
-    void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
+    List<Cirkelsessie> getCirkelsessies(int id) throws SubthemaNotFound;
 
-    List<Kaart> getKaarten(Integer id) throws SubthemaNotFound;
+    List<Kaart> getKaarten(int id) throws SubthemaNotFound;
 
-    List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound;
+    void addKaart(int id, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
 }
