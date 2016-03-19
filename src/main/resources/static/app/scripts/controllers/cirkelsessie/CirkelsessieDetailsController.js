@@ -155,7 +155,7 @@
             document.getElementById('tooltip').setAttribute("visibility", "hidden");
         };
 
-        vm.beeindigSpel = function(cirkelsessie){
+        vm.beeindigSpel = function (cirkelsessie) {
             CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
                 alert('U hebt de spel beeindigd!');
             });
