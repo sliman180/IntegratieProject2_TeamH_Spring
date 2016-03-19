@@ -14,57 +14,49 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/organisaties")
-public class OrganisatieController
-{
+public class OrganisatieController {
     private OrganisatieService service;
     private AuthService auth;
 
     @Autowired
-    public OrganisatieController(OrganisatieService service, AuthService auth)
-    {
+    public OrganisatieController(OrganisatieService service, AuthService auth) {
         this.service = service;
         this.auth = auth;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Organisatie> index()
-    {
+    public List<Organisatie> index() {
         return service.all();
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody OrganisatieRequest organisatie)
-    {
+    public void create(@Valid @RequestBody OrganisatieRequest organisatie) {
         service.create(organisatie);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Organisatie show(@PathVariable int id)
-    {
+    public Organisatie show(@PathVariable int id) {
         return service.find(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie)
-    {
+    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie) {
         service.update(id, organisatie);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
-    {
+    public void delete(@PathVariable("id") int id) {
         service.delete(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
-    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id)
-    {
+    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id) {
         return service.getHoofdthemas(id);
     }
 }

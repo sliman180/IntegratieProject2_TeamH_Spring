@@ -592,22 +592,24 @@
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <a class="linkDisabled" ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()">Verplaats naar
-                                [{{spelkaart.positie +
-                                1}}]
-                            </a>
-                            <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie
-                            && vm.cirkelsessie.status!='BEEINDIGD'"
-                               ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
-                                naar[{{spelkaart.positie + 1}}]
-                            </a>
-                            <a ng-if="vm.cirkelsessie.status=='GESLOTEN'">
-                                Verplaats naar[{{spelkaart.positie + 1}}]
-                            </a>
+                            <div ng-if="vm.cirkelsessie.status!='BEEINDIGD'">
+                                <a class="linkDisabled" ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()">Verplaats naar
+                                    [{{spelkaart.positie +
+                                    1}}]
+                                </a>
+                                <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
+                                   ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
+                                    naar[{{spelkaart.positie + 1}}]
+                                </a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.status=='GESLOTEN'">
+                                    Verplaats naar[{{spelkaart.positie + 1}}]
+                                </a>
 
-                            <a class="linkDisabled" ng-if="vm.cirkelsessie.aantalCirkels==spelkaart.positie">Max positie
-                                bereikt!</a>
-                            <a href="/#/kaarten/details/{{spelkaart.kaart.id}}">Meer informatie</a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.aantalCirkels==spelkaart.positie">Max
+                                    positie
+                                    bereikt!</a>
+                                <a href="/#/kaarten/details/{{spelkaart.kaart.id}}">Meer informatie</a>
+                            </div>
                         </div>
                     </div>
 
@@ -635,12 +637,12 @@
             </div>
 
             <button
-                    ng-if="!vm.isDeelnemer() || vm.cirkelsessie.status=='BEEINDIGD' || vm.cirkelsessie.status=='GESLOTEN'"
+                    ng-if="!vm.isDeelnemer() || vm.cirkelsessie.status=='BEEINDIGD' || vm.cirkelsessie.status=='GESLOTEN' || !vm.kanKaartenToevoegen()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
                 Kaart toevoegen
             </button>
             <button
-                    ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
+                    ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD' && vm.kanKaartenToevoegen()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect">
                 Kaart toevoegen
             </button>

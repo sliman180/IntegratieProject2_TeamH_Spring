@@ -9,8 +9,7 @@ import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
 import java.util.List;
 
-public interface SubthemaService
-{
+public interface SubthemaService {
     List<Subthema> all();
 
     void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound;

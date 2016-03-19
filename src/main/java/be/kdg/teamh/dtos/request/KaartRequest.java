@@ -3,8 +3,7 @@ package be.kdg.teamh.dtos.request;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class KaartRequest implements Serializable
-{
+public class KaartRequest implements Serializable {
     @NotNull
     private String tekst;
 
@@ -17,56 +16,46 @@ public class KaartRequest implements Serializable
     @NotNull
     private int gebruiker;
 
-    public KaartRequest()
-    {
+    public KaartRequest() {
         //
     }
 
-    public KaartRequest(String tekst, String imageUrl, boolean commentsToelaatbaar, int gebruiker)
-    {
+    public KaartRequest(String tekst, String imageUrl, boolean commentsToelaatbaar, int gebruiker) {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
         this.commentsToelaatbaar = commentsToelaatbaar;
         this.gebruiker = gebruiker;
     }
 
-    public String getTekst()
-    {
+    public String getTekst() {
         return tekst;
     }
 
-    public void setTekst(String tekst)
-    {
+    public void setTekst(String tekst) {
         this.tekst = tekst;
     }
 
-    public String getImageUrl()
-    {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl)
-    {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isCommentsToelaatbaar()
-    {
+    public boolean isCommentsToelaatbaar() {
         return commentsToelaatbaar;
     }
 
-    public void setCommentsToelaatbaar(boolean commentsToelaatbaar)
-    {
+    public void setCommentsToelaatbaar(boolean commentsToelaatbaar) {
         this.commentsToelaatbaar = commentsToelaatbaar;
     }
 
-    public int getGebruiker()
-    {
+    public int getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker)
-    {
+    public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

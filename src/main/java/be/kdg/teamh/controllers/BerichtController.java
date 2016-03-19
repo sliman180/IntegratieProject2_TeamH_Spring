@@ -8,20 +8,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/berichten")
-public class BerichtController
-{
+public class BerichtController {
     private BerichtService service;
 
     @Autowired
-    public BerichtController(BerichtService service)
-    {
+    public BerichtController(BerichtService service) {
         this.service = service;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/gebruiker", method = RequestMethod.GET)
-    public Gebruiker getGebruiker(@PathVariable("id") int id)
-    {
+    public Gebruiker getGebruiker(@PathVariable("id") int id) {
         return service.getGebruiker(id);
     }
 }

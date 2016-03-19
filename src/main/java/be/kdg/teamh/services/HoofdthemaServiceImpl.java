@@ -20,40 +20,34 @@ import java.util.List;
 
 @Service
 @Transactional
-public class HoofdthemaServiceImpl implements HoofdthemaService
-{
+public class HoofdthemaServiceImpl implements HoofdthemaService {
     private HoofdthemaRepository repository;
     private OrganisatieRepository organisaties;
     private GebruikerRepository gebruikers;
 
     @Autowired
-    public HoofdthemaServiceImpl(HoofdthemaRepository repository, OrganisatieRepository organisaties, GebruikerRepository gebruikers)
-    {
+    public HoofdthemaServiceImpl(HoofdthemaRepository repository, OrganisatieRepository organisaties, GebruikerRepository gebruikers) {
         this.repository = repository;
         this.organisaties = organisaties;
         this.gebruikers = gebruikers;
     }
 
     @Override
-    public List<Hoofdthema> all()
-    {
+    public List<Hoofdthema> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound
-    {
+    public void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
         Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
 
-        if (organisatie == null)
-        {
+        if (organisatie == null) {
             throw new OrganisatieNotFound();
         }
 
@@ -72,12 +66,10 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public Hoofdthema find(int id) throws HoofdthemaNotFound
-    {
+    public Hoofdthema find(int id) throws HoofdthemaNotFound {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFound();
         }
 
@@ -85,26 +77,22 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound
-    {
+    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null)
-        {
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
         Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
 
-        if (organisatie == null)
-        {
+        if (organisatie == null) {
             throw new OrganisatieNotFound();
         }
 
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFound();
         }
 
@@ -117,12 +105,10 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFound
-    {
+    public void delete(int id) throws HoofdthemaNotFound {
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFound();
         }
 
@@ -130,13 +116,11 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public Organisatie findOrganisatie(int id) throws HoofdthemaNotFound
-    {
+    public Organisatie findOrganisatie(int id) throws HoofdthemaNotFound {
 
         Hoofdthema hoofdthema = repository.findOne(id);
 
-        if (hoofdthema == null)
-        {
+        if (hoofdthema == null) {
             throw new HoofdthemaNotFound();
         }
 
@@ -144,8 +128,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public List<Subthema> showSubthemas(int id) throws HoofdthemaNotFound
-    {
+    public List<Subthema> showSubthemas(int id) throws HoofdthemaNotFound {
         Hoofdthema hoofdthema = find(id);
 
         return hoofdthema.getSubthemas();

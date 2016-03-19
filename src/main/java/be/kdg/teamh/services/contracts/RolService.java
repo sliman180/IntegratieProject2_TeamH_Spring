@@ -6,8 +6,7 @@ import be.kdg.teamh.exceptions.notfound.RolNotFound;
 
 import java.util.List;
 
-public interface RolService
-{
+public interface RolService {
     List<Rol> all();
 
     void create(RolRequest dto);

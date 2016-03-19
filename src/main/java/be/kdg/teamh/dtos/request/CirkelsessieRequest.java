@@ -6,8 +6,7 @@ import org.joda.time.DateTime;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class CirkelsessieRequest implements Serializable
-{
+public class CirkelsessieRequest implements Serializable {
     @NotNull
     private String naam;
 
@@ -29,13 +28,11 @@ public class CirkelsessieRequest implements Serializable
     @NotNull
     private int gebruiker;
 
-    public CirkelsessieRequest()
-    {
+    public CirkelsessieRequest() {
         //
     }
 
-    public CirkelsessieRequest(String naam, Status status, int aantalCirkels, int maxAantalKaarten, DateTime startDatum, int subthema, int gebruiker)
-    {
+    public CirkelsessieRequest(String naam, Status status, int aantalCirkels, int maxAantalKaarten, DateTime startDatum, int subthema, int gebruiker) {
         this.naam = naam;
         this.status = status;
         this.aantalCirkels = aantalCirkels;
@@ -45,73 +42,59 @@ public class CirkelsessieRequest implements Serializable
         this.gebruiker = gebruiker;
     }
 
-    public String getNaam()
-    {
+    public String getNaam() {
         return naam;
     }
 
-    public void setNaam(String naam)
-    {
+    public void setNaam(String naam) {
         this.naam = naam;
     }
 
-    public Status getStatus()
-    {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status)
-    {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public int getAantalCirkels()
-    {
+    public int getAantalCirkels() {
         return aantalCirkels;
     }
 
-    public void setAantalCirkels(int aantalCirkels)
-    {
+    public void setAantalCirkels(int aantalCirkels) {
         this.aantalCirkels = aantalCirkels;
     }
 
-    public int getMaxAantalKaarten()
-    {
+    public int getMaxAantalKaarten() {
         return maxAantalKaarten;
     }
 
-    public void setMaxAantalKaarten(int maxAantalKaarten)
-    {
+    public void setMaxAantalKaarten(int maxAantalKaarten) {
         this.maxAantalKaarten = maxAantalKaarten;
     }
 
-    public DateTime getStartDatum()
-    {
+    public DateTime getStartDatum() {
         return startDatum;
     }
 
-    public void setStartDatum(DateTime startDatum)
-    {
+    public void setStartDatum(DateTime startDatum) {
         this.startDatum = startDatum;
     }
 
-    public int getSubthema()
-    {
+    public int getSubthema() {
         return subthema;
     }
 
-    public void setSubthema(int subthema)
-    {
+    public void setSubthema(int subthema) {
         this.subthema = subthema;
     }
 
-    public int getGebruiker()
-    {
+    public int getGebruiker() {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker)
-    {
+    public void setGebruiker(int gebruiker) {
         this.gebruiker = gebruiker;
     }
 }

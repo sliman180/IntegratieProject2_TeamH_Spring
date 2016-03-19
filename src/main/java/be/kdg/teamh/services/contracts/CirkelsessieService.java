@@ -11,8 +11,7 @@ import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
 import java.util.List;
 
-public interface CirkelsessieService
-{
+public interface CirkelsessieService {
     List<Cirkelsessie> all();
 
     List<Cirkelsessie> actief();

@@ -16,29 +16,25 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController
-{
+public class AuthController {
     private GebruikerService service;
     private AuthService auth;
 
     @Autowired
-    public AuthController(AuthService auth, GebruikerService service)
-    {
+    public AuthController(AuthService auth, GebruikerService service) {
         this.auth = auth;
         this.service = service;
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@Valid @RequestBody LoginRequest login)
-    {
+    public LoginResponse login(@Valid @RequestBody LoginRequest login) {
         Gebruiker gebruiker = service.findByLogin(login);
 
         return auth.generateToken(gebruiker);
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody RegistratieRequest registratie)
-    {
+    public void register(@Valid @RequestBody RegistratieRequest registratie) {
         service.register(registratie);
     }
 }
