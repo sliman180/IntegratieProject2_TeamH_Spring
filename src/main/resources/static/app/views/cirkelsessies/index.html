@@ -208,8 +208,12 @@
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right {{cirkelsessie.id}}">
                     <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
-                    <li disabled class="mdl-menu__item">Wijzig</li>
-                    <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(cirkelsessie.id)"
+                        class="mdl-menu__item">Wijzig
+                    </li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id"
+                        ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder
+                    </li>
                 </ul>
             </div>
         </div>

@@ -21,9 +21,9 @@ public interface KaartService
 
     Kaart find(int id) throws KaartNotFound;
 
-    void update(int id, KaartRequest dto) throws KaartNotFound, GebruikerNotFound;
+    void update(int id,Gebruiker gebruiker, KaartRequest dto) throws KaartNotFound, GebruikerNotFound;
 
-    void delete(int id) throws KaartNotFound;
+    void delete(int id, Gebruiker gebruiker) throws KaartNotFound;
 
     Subthema getSubthema(int id) throws KaartNotFound;
 

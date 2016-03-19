@@ -28,9 +28,9 @@ public interface CirkelsessieService
 
     Cirkelsessie find(int id) throws CirkelsessieNotFound;
 
-    void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound;
+    void update(int id,Gebruiker gebruiker, CirkelsessieRequest dto) throws CirkelsessieNotFound;
 
-    void delete(int id) throws CirkelsessieNotFound;
+    void delete(int id, Gebruiker gebruiker) throws CirkelsessieNotFound;
 
     void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound;
 

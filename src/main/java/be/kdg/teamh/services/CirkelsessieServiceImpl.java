@@ -6,6 +6,7 @@ import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
+import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -137,13 +138,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound
+    public void update(int id, Gebruiker gebruiker, CirkelsessieRequest dto) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
             throw new CirkelsessieNotFound();
+        }
+
+        if(gebruiker.getId()!=cirkelsessie.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         cirkelsessie.setNaam(dto.getNaam());
@@ -156,13 +161,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void delete(int id) throws CirkelsessieNotFound
+    public void delete(int id, Gebruiker gebruiker) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
             throw new CirkelsessieNotFound();
+        }
+
+        if(gebruiker.getId()!=cirkelsessie.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         repository.delete(cirkelsessie);

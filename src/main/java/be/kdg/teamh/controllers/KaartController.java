@@ -51,16 +51,16 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart)
+    public void update(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart,@RequestHeader("Authorization") String token)
     {
-        service.update(id, kaart);
+        service.update(id,auth.findByToken(token), kaart);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        service.delete(id);
+        service.delete(id,auth.findByToken(token));
     }
 
     @ResponseStatus(code = HttpStatus.OK)

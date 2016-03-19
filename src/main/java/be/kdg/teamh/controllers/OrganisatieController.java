@@ -49,16 +49,16 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie)
+    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie,@RequestHeader("Authorization") String token)
     {
-        service.update(id, organisatie);
+        service.update(id,auth.findByToken(token), organisatie);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        service.delete(id);
+        service.delete(id,auth.findByToken(token));
     }
 
     @ResponseStatus(code = HttpStatus.OK)

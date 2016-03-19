@@ -4,6 +4,7 @@ import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
@@ -68,7 +69,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound
+    public void update(int id,Gebruiker ingelogdeGebruiker, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
@@ -84,6 +85,10 @@ public class OrganisatieServiceImpl implements OrganisatieService
             throw new OrganisatieNotFound();
         }
 
+        if(ingelogdeGebruiker.getId()!=organisatie.getGebruiker().getId()){
+            throw new IsForbidden();
+        }
+
         organisatie.setNaam(dto.getNaam());
         organisatie.setBeschrijving(dto.getBeschrijving());
         organisatie.setGebruiker(gebruiker);
@@ -92,13 +97,18 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void delete(int id) throws OrganisatieNotFound
+    public void delete(int id, Gebruiker gebruiker) throws OrganisatieNotFound
     {
         Organisatie organisatie = repository.findOne(id);
+
 
         if (organisatie == null)
         {
             throw new OrganisatieNotFound();
+        }
+
+        if(gebruiker.getId()!=organisatie.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         repository.delete(organisatie);

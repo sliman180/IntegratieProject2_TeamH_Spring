@@ -17,9 +17,9 @@ public interface SubthemaService
 
     Subthema find(int id) throws SubthemaNotFound;
 
-    void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound;
+    void update(int id, Gebruiker gebruiker, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound;
 
-    void delete(int id) throws SubthemaNotFound;
+    void delete(int id, Gebruiker gebruiker) throws SubthemaNotFound;
 
     Organisatie findOrganisatie(Integer id) throws SubthemaNotFound;
 

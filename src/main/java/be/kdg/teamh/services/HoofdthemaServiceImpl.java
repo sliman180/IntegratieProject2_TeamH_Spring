@@ -5,6 +5,7 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -85,7 +86,7 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound
+    public void update(int id,Gebruiker ingelogdeGebruiker, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
@@ -108,6 +109,11 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
             throw new HoofdthemaNotFound();
         }
 
+        if(ingelogdeGebruiker.getId()!=hoofdthema.getGebruiker().getId()){
+            throw new IsForbidden();
+        }
+
+
         hoofdthema.setNaam(dto.getNaam());
         hoofdthema.setBeschrijving(dto.getBeschrijving());
         hoofdthema.setOrganisatie(organisatie);
@@ -117,13 +123,17 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFound
+    public void delete(int id, Gebruiker gebruiker) throws HoofdthemaNotFound
     {
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
             throw new HoofdthemaNotFound();
+        }
+
+        if(gebruiker.getId()!=hoofdthema.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         repository.delete(hoofdthema);

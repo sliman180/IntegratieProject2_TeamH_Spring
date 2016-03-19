@@ -3,6 +3,7 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -86,7 +87,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
+    public void update(int id,Gebruiker ingelogdeGebruiker, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
     {
         Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
@@ -108,6 +109,9 @@ public class SubthemaServiceImpl implements SubthemaService
         {
             throw new SubthemaNotFound();
         }
+        if(ingelogdeGebruiker.getId()!=subthema.getGebruiker().getId()){
+            throw new IsForbidden();
+        }
 
         subthema.setNaam(dto.getNaam());
         subthema.setBeschrijving(dto.getBeschrijving());
@@ -118,13 +122,17 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public void delete(int id) throws SubthemaNotFound
+    public void delete(int id, Gebruiker gebruiker) throws SubthemaNotFound
     {
         Subthema subthema = repository.findOne(id);
 
         if (subthema == null)
         {
             throw new SubthemaNotFound();
+        }
+
+        if(gebruiker.getId()!=subthema.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         repository.delete(subthema);

@@ -79,16 +79,16 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
+    public void update(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieRequest cirkelsessie,@RequestHeader("Authorization") String token)
     {
-        service.update(id, cirkelsessie);
+        service.update(id,auth.findByToken(token), cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        service.delete(id);
+        service.delete(id, auth.findByToken(token));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

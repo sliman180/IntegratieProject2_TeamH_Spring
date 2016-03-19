@@ -6,6 +6,7 @@ import be.kdg.teamh.dtos.request.SpelkaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.CommentsNotAllowed;
+import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
@@ -83,7 +84,7 @@ public class KaartServiceImpl implements KaartService
     }
 
     @Override
-    public void update(int id, KaartRequest dto) throws KaartNotFound, GebruikerNotFound
+    public void update(int id,Gebruiker ingelogdeGebruiker, KaartRequest dto) throws KaartNotFound, GebruikerNotFound
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
@@ -99,6 +100,10 @@ public class KaartServiceImpl implements KaartService
             throw new KaartNotFound();
         }
 
+        if(gebruiker.getId()!=kaart.getGebruiker().getId()){
+            throw new IsForbidden();
+        }
+
         kaart.setTekst(dto.getTekst());
         kaart.setImageUrl(dto.getImageUrl());
         kaart.setCommentsToelaatbaar(dto.isCommentsToelaatbaar());
@@ -108,13 +113,18 @@ public class KaartServiceImpl implements KaartService
     }
 
     @Override
-    public void delete(int id) throws KaartNotFound
+    public void delete(int id, Gebruiker gebruiker) throws KaartNotFound
     {
         Kaart kaart = repository.findOne(id);
+
 
         if (kaart == null)
         {
             throw new KaartNotFound();
+        }
+
+        if(gebruiker.getId()!=kaart.getGebruiker().getId()){
+            throw new IsForbidden();
         }
 
         repository.delete(kaart);

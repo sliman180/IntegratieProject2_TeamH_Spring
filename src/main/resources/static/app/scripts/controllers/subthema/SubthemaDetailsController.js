@@ -3,7 +3,7 @@
     "use strict";
 
 
-    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, HoofdthemaService, OrganisatieService, KaartService) {
+    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, KaartService) {
 
         var vm = this;
 
@@ -35,7 +35,6 @@
                 $route.reload();
             });
         };
-
     }
 
 
