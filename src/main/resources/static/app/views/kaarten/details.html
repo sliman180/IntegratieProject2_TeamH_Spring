@@ -225,8 +225,8 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <div class="comment-item" ng-repeat="comment in  vm.comments | orderBy:'datum':true">
-                <p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}} | Gebruiker: {{comment.gebruiker.gebruikersnaam}}</p>
-
+                <p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}} | Gebruiker:
+                    {{comment.gebruiker.gebruikersnaam}}</p>
 
 
                 <p> Commentaar: {{comment.tekst}}</p>
