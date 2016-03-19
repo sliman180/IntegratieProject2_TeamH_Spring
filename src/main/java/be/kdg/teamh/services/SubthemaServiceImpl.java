@@ -192,7 +192,7 @@ public class SubthemaServiceImpl implements SubthemaService
     }
 
     @Override
-    public List<Kaart> findKaarten(Integer id) throws SubthemaNotFound
+    public List<Kaart> getKaarten(Integer id) throws SubthemaNotFound
     {
         Subthema subthema = repository.findOne(id);
 

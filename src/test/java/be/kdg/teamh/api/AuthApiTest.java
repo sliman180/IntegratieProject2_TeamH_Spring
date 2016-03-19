@@ -12,7 +12,7 @@ public class AuthApiTest extends ApiTest
     @Test
     public void login() throws Exception
     {
-        LoginRequest login = new LoginRequest("user", "user");
+        LoginRequest login = new LoginRequest("userone", "userone");
 
         http.perform(post("/auth/login", objectMapper.writeValueAsString(login)))
             .andExpect(status().isOk())
@@ -40,7 +40,7 @@ public class AuthApiTest extends ApiTest
     @Test
     public void register_reedsGeregistreerd() throws Exception
     {
-        RegistratieRequest registratie = new RegistratieRequest("user", "password", "password");
+        RegistratieRequest registratie = new RegistratieRequest("userone", "password", "password");
 
         http.perform(post("/auth/register", objectMapper.writeValueAsString(registratie)))
             .andExpect(status().isConflict());
@@ -49,7 +49,7 @@ public class AuthApiTest extends ApiTest
     @Test
     public void register_wachtwoordTeKort() throws Exception
     {
-        RegistratieRequest registratie = new RegistratieRequest("test", "pass", "pass");
+        RegistratieRequest registratie = new RegistratieRequest("test", "password", "password");
 
         http.perform(post("/auth/register", objectMapper.writeValueAsString(registratie)))
             .andExpect(status().isBadRequest());

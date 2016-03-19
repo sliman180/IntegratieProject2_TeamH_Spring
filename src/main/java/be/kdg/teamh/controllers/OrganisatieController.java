@@ -1,8 +1,8 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
-import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.exceptions.Unauthorized;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +35,10 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody OrganisatieRequest organisatie)
+    public void create(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
+        auth.checkUserIsRegistered(token);
+
         service.create(organisatie);
     }
 
@@ -49,22 +51,21 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie)
+    public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.update(id, organisatie);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
-        service.delete(id);
-    }
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
 
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
-    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id)
-    {
-        return service.getHoofdthemas(id);
+        service.delete(id);
     }
 }

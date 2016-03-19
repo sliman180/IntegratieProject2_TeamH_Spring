@@ -3,6 +3,8 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
+import be.kdg.teamh.exceptions.Forbidden;
+import be.kdg.teamh.exceptions.Unauthorized;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.AuthService;
@@ -53,26 +55,31 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public boolean isGuest(String token)
+    public void checkUserIsRegistered(String token)
     {
-        return hasRole(token, "guest");
+        if (!isValidToken(token) || !hasRole(token, "user"))
+        {
+            throw new Unauthorized();
+        }
     }
 
     @Override
-    public boolean isRegistered(String token)
+    public void checkUserIsAllowed(String token, Gebruiker gebruiker)
     {
-        return hasRole(token, "user");
-    }
-
-    @Override
-    public boolean isAdmin(String token)
-    {
-        return hasRole(token, "admin");
+        if (findByToken(token).getId() != gebruiker.getId())
+        {
+            throw new Forbidden();
+        }
     }
 
     private Claims parseToken(String token)
     {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token.substring(7)).getBody();
+    }
+
+    private boolean isValidToken(String token)
+    {
+        return token != null && token.startsWith("Bearer ");
     }
 
     private boolean hasRole(String token, String user)

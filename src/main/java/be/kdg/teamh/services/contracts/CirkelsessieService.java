@@ -34,8 +34,6 @@ public interface CirkelsessieService
 
     void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound;
 
-    void clone(int id) throws CirkelsessieNotFound;
-
     Subthema getSubthema(int id) throws CirkelsessieNotFound;
 
     List<Deelname> getDeelnames(int id) throws CirkelsessieNotFound;

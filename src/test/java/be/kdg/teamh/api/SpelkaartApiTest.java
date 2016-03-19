@@ -5,7 +5,6 @@ import be.kdg.teamh.entities.Status;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -23,17 +22,17 @@ public class SpelkaartApiTest extends ApiTest
         CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
         KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
-        http.perform(post("/api/organisaties", objectMapper.writeValueAsString(organisatie)).header("Authorization", getUserToken()));
-        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()));
-        http.perform(post("/api/subthemas", objectMapper.writeValueAsString(subthema)).header("Authorization", getUserToken()));
-        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserToken()));
-        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/organisaties", objectMapper.writeValueAsString(organisatie)).header("Authorization", getUserOneToken()));
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserOneToken()));
+        http.perform(post("/api/subthemas", objectMapper.writeValueAsString(subthema)).header("Authorization", getUserOneToken()));
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
     }
 
     @Test
     public void indexSpelkaart() throws Exception
     {
-        http.perform(get("/api/spelkaarten").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -43,10 +42,10 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()))
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isCreated());
 
-        http.perform(get("/api/spelkaarten").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -56,9 +55,9 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
-        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.positie", is(0)));
     }
@@ -66,7 +65,7 @@ public class SpelkaartApiTest extends ApiTest
     @Test
     public void showSpelkaart_onbestaandeSpelkaart() throws Exception
     {
-        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
     }
 
@@ -75,14 +74,14 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
         spelkaart.setPositie(5);
 
-        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()))
+        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isOk());
 
-        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.positie", is(5)));
     }
@@ -92,7 +91,7 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()))
+        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
     }
 
@@ -101,12 +100,12 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
-        http.perform(delete("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(delete("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk());
 
-        http.perform(get("/api/spelkaarten").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -114,7 +113,7 @@ public class SpelkaartApiTest extends ApiTest
     @Test
     public void deleteSpelkaart_onbestaandeSpelkaart() throws Exception
     {
-        http.perform(delete("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(delete("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
     }
 
@@ -123,12 +122,12 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
-        http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getUserToken()))
+        http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk());
 
-        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/spelkaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.positie", is(1)));
     }
@@ -138,13 +137,13 @@ public class SpelkaartApiTest extends ApiTest
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
-        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
         spelkaart.setPositie(10);
 
-        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserToken()));
+        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
 
-        http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getUserToken()))
+        http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getUserOneToken()))
             .andExpect(status().isConflict());
     }
 }

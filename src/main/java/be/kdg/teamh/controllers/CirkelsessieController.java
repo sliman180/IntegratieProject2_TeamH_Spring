@@ -93,18 +93,10 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
-    public void clone(@PathVariable("id") int id)
-    {
-        service.clone(id);
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/cloneSession", method = RequestMethod.POST)
-    public void cloneWithChanges(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
+    public void clone(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
     {
         service.clone(id, cirkelsessie);
     }
-
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)

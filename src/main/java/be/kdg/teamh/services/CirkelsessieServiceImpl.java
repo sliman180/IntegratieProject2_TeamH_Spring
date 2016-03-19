@@ -68,7 +68,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Cirkelsessie> gepland() {
+    public List<Cirkelsessie> gepland()
+    {
         return all().stream().filter(cirkelsessie -> cirkelsessie.getStatus() == Status.OPEN && DateTime.now().isBefore(cirkelsessie.getStartDatum())).collect(Collectors.toList());
     }
 
@@ -194,11 +195,17 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound, SubthemaNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
-        Gebruiker gebruiker=gebruikers.findOne(dto.getGebruiker());
 
         if (cirkelsessie == null)
         {
             throw new CirkelsessieNotFound();
+        }
+
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
+        if (gebruiker == null)
+        {
+            throw new GebruikerNotFound();
         }
 
         Cirkelsessie clone = new Cirkelsessie();
@@ -209,18 +216,20 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         clone.setStartDatum(dto.getStartDatum());
         clone.setGebruiker(gebruiker);
 
-        if(cirkelsessie.getSubthema()!=null){
-            Subthema oldSubthema = subthemas.findOne(cirkelsessie.getSubthema().getId());
+        if (cirkelsessie.getSubthema() != null)
+        {
+            Subthema subthema = subthemas.findOne(cirkelsessie.getSubthema().getId());
 
-            if(oldSubthema==null){
+            if (subthema == null)
+            {
                 throw new SubthemaNotFound();
             }
 
-            oldSubthema.addCirkelsessie(cirkelsessie);
-            oldSubthema = subthemas.saveAndFlush(oldSubthema);
-            clone.setSubthema(oldSubthema);
+            subthema.addCirkelsessie(cirkelsessie);
+            subthema = subthemas.saveAndFlush(subthema);
+            clone.setSubthema(subthema);
 
-            for (Kaart kaart : oldSubthema.getKaarten())
+            for (Kaart kaart : subthema.getKaarten())
             {
                 Spelkaart spelkaart = new Spelkaart(kaart, clone);
                 spelkaart = spelkaarten.save(spelkaart);
@@ -228,7 +237,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             }
         }
 
-        for(Deelname deelname : cirkelsessie.getDeelnames()){
+        for (Deelname deelname : cirkelsessie.getDeelnames())
+        {
             Deelname cloneDeelname = new Deelname();
             cloneDeelname.setCirkelsessie(clone);
             cloneDeelname.setAanDeBeurt(deelname.isAanDeBeurt());
@@ -243,6 +253,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         }
 
         clone = repository.save(clone);
+
         gebruiker.addCirkelsessie(clone);
         gebruikers.saveAndFlush(gebruiker);
     }

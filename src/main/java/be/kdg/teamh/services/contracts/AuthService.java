@@ -10,9 +10,7 @@ public interface AuthService
 
     Gebruiker findByToken(String token) throws GebruikerNotFound;
 
-    boolean isGuest(String token);
+    void checkUserIsRegistered(String token);
 
-    boolean isRegistered(String token);
-
-    boolean isAdmin(String token);
+    void checkUserIsAllowed(String token, Gebruiker gebruiker);
 }

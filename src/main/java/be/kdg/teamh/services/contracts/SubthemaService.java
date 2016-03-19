@@ -27,7 +27,7 @@ public interface SubthemaService
 
     void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
 
-    List<Kaart> findKaarten(Integer id) throws SubthemaNotFound;
+    List<Kaart> getKaarten(Integer id) throws SubthemaNotFound;
 
     List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound;
 }
