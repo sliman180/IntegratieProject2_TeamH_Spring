@@ -11,9 +11,14 @@
         vm.subthemas = [];
         vm.subthema = {};
         vm.deelnames = [];
+        vm.mijnCirkelsessies = [];
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
+        });
+
+        CirkelsessieService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.mijnCirkelsessies = data;
         });
 
         CirkelsessieService.all().then(function (data) {
@@ -52,6 +57,12 @@
         vm.deleteCirkelsessieLink = function (id) {
 
             window.location.href = '/#/cirkelsessies/delete/' + id;
+        };
+
+        vm.cloneCirkelsessie = function (id, cirkelsessie) {
+            CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
+                $route.reload();
+            });
         };
 
     }

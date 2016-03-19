@@ -14,6 +14,14 @@
 
         };
 
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.find = function (id) {
 
             return $http.get("/api/cirkelsessies/" + id).then(function (response) {
@@ -97,6 +105,14 @@
         exports.addBericht = function (id, bericht) {
 
             return $http.post("/api/cirkelsessies/" + id + "/berichten", bericht).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.cloneCirkelsessie = function (id, cirkelsessie) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
                 return response.data;
             });
 

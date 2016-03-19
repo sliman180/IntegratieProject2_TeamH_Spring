@@ -1,6 +1,7 @@
 package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.BerichtRequest;
+import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
@@ -30,6 +31,8 @@ public interface CirkelsessieService
     void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound;
 
     void delete(int id) throws CirkelsessieNotFound;
+
+    void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound;
 
     void clone(int id) throws CirkelsessieNotFound;
 

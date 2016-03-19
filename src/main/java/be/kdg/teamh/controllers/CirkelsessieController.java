@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.BerichtRequest;
+import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
@@ -96,6 +97,14 @@ public class CirkelsessieController
     {
         service.clone(id);
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/cloneSession", method = RequestMethod.POST)
+    public void cloneWithChanges(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
+    {
+        service.clone(id, cirkelsessie);
+    }
+
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)

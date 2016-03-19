@@ -1,6 +1,7 @@
 package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.BerichtRequest;
+import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
@@ -184,6 +185,29 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
         clone.setStatus(cirkelsessie.getStatus());
         clone.setStartDatum(DateTime.now());
+        clone.setSubthema(cirkelsessie.getSubthema());
+        clone.setGebruiker(cirkelsessie.getGebruiker());
+        clone.setDeelnames(cirkelsessie.getDeelnames().stream().collect(Collectors.toList()));
+
+        repository.save(clone);
+    }
+
+    public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound
+    {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null)
+        {
+            throw new CirkelsessieNotFound();
+        }
+
+        Cirkelsessie clone = new Cirkelsessie();
+
+        clone.setNaam(dto.getNaam());
+        clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
+        clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
+        clone.setStatus(dto.getStatus());
+        clone.setStartDatum(dto.getStartDatum());
         clone.setSubthema(cirkelsessie.getSubthema());
         clone.setGebruiker(cirkelsessie.getGebruiker());
         clone.setDeelnames(cirkelsessie.getDeelnames().stream().collect(Collectors.toList()));

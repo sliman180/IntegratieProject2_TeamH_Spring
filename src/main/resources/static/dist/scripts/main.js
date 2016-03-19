@@ -278,6 +278,14 @@
 
         };
 
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.find = function (id) {
 
             return $http.get("/api/cirkelsessies/" + id).then(function (response) {
@@ -361,6 +369,14 @@
         exports.addBericht = function (id, bericht) {
 
             return $http.post("/api/cirkelsessies/" + id + "/berichten", bericht).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.cloneCirkelsessie = function (id, cirkelsessie) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
                 return response.data;
             });
 
@@ -517,7 +533,6 @@
             });
 
         };
-
 
         return exports;
 
@@ -1228,9 +1243,9 @@
         };
 
         vm.kanKaartenToevoegen = function () {
-            for(var x=0;x<vm.deelnames.length;x++){
-                if(vm.deelnames[x].gebruiker.id==$rootScope.id){
-                    if(vm.cirkelsessie.maxAantalKaarten==vm.deelnames[x].aangemaakteKaarten){
+            for (var x = 0; x < vm.deelnames.length; x++) {
+                if (vm.deelnames[x].gebruiker.id == $rootScope.id) {
+                    if (vm.cirkelsessie.maxAantalKaarten == vm.deelnames[x].aangemaakteKaarten) {
                         return false;
                     }
                 }
@@ -1258,9 +1273,14 @@
         vm.subthemas = [];
         vm.subthema = {};
         vm.deelnames = [];
+        vm.mijnCirkelsessies = [];
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
+        });
+
+        CirkelsessieService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.mijnCirkelsessies = data;
         });
 
         CirkelsessieService.all().then(function (data) {
@@ -1299,6 +1319,12 @@
         vm.deleteCirkelsessieLink = function (id) {
 
             window.location.href = '/#/cirkelsessies/delete/' + id;
+        };
+
+        vm.cloneCirkelsessie = function (id, cirkelsessie) {
+            CirkelsessieService.cloneCirkelsessie(id,cirkelsessie).then(function () {
+                $route.reload();
+            });
         };
 
     }
