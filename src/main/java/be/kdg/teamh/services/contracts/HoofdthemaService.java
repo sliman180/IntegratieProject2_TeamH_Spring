@@ -10,7 +10,8 @@ import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 
 import java.util.List;
 
-public interface HoofdthemaService {
+public interface HoofdthemaService
+{
     List<Hoofdthema> all();
 
     void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound;

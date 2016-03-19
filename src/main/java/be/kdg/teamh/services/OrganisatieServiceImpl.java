@@ -17,25 +17,30 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrganisatieServiceImpl implements OrganisatieService {
+public class OrganisatieServiceImpl implements OrganisatieService
+{
     private OrganisatieRepository repository;
     private GebruikerRepository gebruikers;
 
     @Autowired
-    public OrganisatieServiceImpl(OrganisatieRepository repository, GebruikerRepository gebruikers) {
+    public OrganisatieServiceImpl(OrganisatieRepository repository, GebruikerRepository gebruikers)
+    {
         this.repository = repository;
         this.gebruikers = gebruikers;
     }
 
-    public List<Organisatie> all() {
+    public List<Organisatie> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(OrganisatieRequest dto) throws GebruikerNotFound {
+    public void create(OrganisatieRequest dto) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -50,10 +55,12 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public Organisatie find(int id) throws OrganisatieNotFound {
+    public Organisatie find(int id) throws OrganisatieNotFound
+    {
         Organisatie organisatie = repository.findOne(id);
 
-        if (organisatie == null) {
+        if (organisatie == null)
+        {
             throw new OrganisatieNotFound();
         }
 
@@ -61,16 +68,19 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound {
+    public void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound
+    {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
         Organisatie organisatie = repository.findOne(id);
 
-        if (organisatie == null) {
+        if (organisatie == null)
+        {
             throw new OrganisatieNotFound();
         }
 
@@ -82,10 +92,12 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public void delete(int id) throws OrganisatieNotFound {
+    public void delete(int id) throws OrganisatieNotFound
+    {
         Organisatie organisatie = repository.findOne(id);
 
-        if (organisatie == null) {
+        if (organisatie == null)
+        {
             throw new OrganisatieNotFound();
         }
 
@@ -93,7 +105,8 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public List<Hoofdthema> getHoofdthemas(int id) throws OrganisatieNotFound {
+    public List<Hoofdthema> getHoofdthemas(int id) throws OrganisatieNotFound
+    {
         Organisatie organisatie = find(id);
 
         return organisatie.getHoofdthemas();

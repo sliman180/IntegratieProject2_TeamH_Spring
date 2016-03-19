@@ -13,21 +13,25 @@ import java.util.List;
 
 @Service
 @Transactional
-public class RolServiceImpl implements RolService {
+public class RolServiceImpl implements RolService
+{
     private RolRepository repository;
 
     @Autowired
-    public RolServiceImpl(RolRepository repository) {
+    public RolServiceImpl(RolRepository repository)
+    {
         this.repository = repository;
     }
 
     @Override
-    public List<Rol> all() {
+    public List<Rol> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(RolRequest dto) {
+    public void create(RolRequest dto)
+    {
         Rol rol = new Rol();
 
         rol.setNaam(dto.getNaam());
@@ -36,10 +40,12 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public Rol find(int id) throws RolNotFound {
+    public Rol find(int id) throws RolNotFound
+    {
         Rol rol = repository.findOne(id);
 
-        if (rol == null) {
+        if (rol == null)
+        {
             throw new RolNotFound();
         }
 
@@ -47,10 +53,12 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public void update(int id, RolRequest dto) throws RolNotFound {
+    public void update(int id, RolRequest dto) throws RolNotFound
+    {
         Rol rol = repository.findOne(id);
 
-        if (rol == null) {
+        if (rol == null)
+        {
             throw new RolNotFound();
         }
 
@@ -60,10 +68,12 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public void delete(int id) throws RolNotFound {
+    public void delete(int id) throws RolNotFound
+    {
         Rol rol = repository.findOne(id);
 
-        if (rol == null) {
+        if (rol == null)
+        {
             throw new RolNotFound();
         }
 

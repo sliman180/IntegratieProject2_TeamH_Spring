@@ -19,14 +19,16 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SubthemaServiceImpl implements SubthemaService {
+public class SubthemaServiceImpl implements SubthemaService
+{
     private SubthemaRepository repository;
     private HoofdthemaRepository hoofdthemas;
     private GebruikerRepository gebruikers;
     private KaartRepository kaarten;
 
     @Autowired
-    public SubthemaServiceImpl(SubthemaRepository repository, HoofdthemaRepository hoofdthemas, GebruikerRepository gebruikers, KaartRepository kaarten) {
+    public SubthemaServiceImpl(SubthemaRepository repository, HoofdthemaRepository hoofdthemas, GebruikerRepository gebruikers, KaartRepository kaarten)
+    {
         this.repository = repository;
         this.hoofdthemas = hoofdthemas;
         this.gebruikers = gebruikers;
@@ -34,21 +36,25 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public List<Subthema> all() {
+    public List<Subthema> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound {
+    public void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound
+    {
         Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
-        if (hoofdthema == null) {
+        if (hoofdthema == null)
+        {
             throw new HoofdthemaNotFound();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -67,10 +73,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public Subthema find(int id) throws SubthemaNotFound {
+    public Subthema find(int id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -78,22 +86,26 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound {
+    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound
+    {
         Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
-        if (hoofdthema == null) {
+        if (hoofdthema == null)
+        {
             throw new HoofdthemaNotFound();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -106,10 +118,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public void delete(int id) throws SubthemaNotFound {
+    public void delete(int id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -117,10 +131,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public Organisatie findOrganisatie(Integer id) throws SubthemaNotFound {
+    public Organisatie findOrganisatie(Integer id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -128,10 +144,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound {
+    public Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -139,15 +157,18 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound {
+    public void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound
+    {
         Subthema subthema = repository.findOne(subthemaId);
         Gebruiker gebruiker = gebruikers.findOne(kaart.getGebruiker());
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -171,10 +192,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public List<Kaart> findKaarten(Integer id) throws SubthemaNotFound {
+    public List<Kaart> findKaarten(Integer id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 
@@ -182,10 +205,12 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound {
+    public List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound
+    {
         Subthema subthema = repository.findOne(id);
 
-        if (subthema == null) {
+        if (subthema == null)
+        {
             throw new SubthemaNotFound();
         }
 

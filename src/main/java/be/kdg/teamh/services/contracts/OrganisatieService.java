@@ -8,7 +8,8 @@ import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
 
 import java.util.List;
 
-public interface OrganisatieService {
+public interface OrganisatieService
+{
     List<Organisatie> all();
 
     void create(OrganisatieRequest dto) throws GebruikerNotFound;

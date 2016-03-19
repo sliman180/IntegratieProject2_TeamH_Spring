@@ -13,37 +13,43 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/deelnames")
-public class DeelnameController {
+public class DeelnameController
+{
     private DeelnameService service;
     private AuthService auth;
 
     @Autowired
-    public DeelnameController(DeelnameService service, AuthService auth) {
+    public DeelnameController(DeelnameService service, AuthService auth)
+    {
         this.service = service;
         this.auth = auth;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody DeelnameRequest deelname) {
+    public void update(@PathVariable("id") int id, @Valid @RequestBody DeelnameRequest deelname)
+    {
         service.update(id, deelname);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id)
+    {
         service.delete(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/gebruiker", method = RequestMethod.GET)
-    public Gebruiker getGebruiker(@PathVariable("id") int id) {
+    public Gebruiker getGebruiker(@PathVariable("id") int id)
+    {
         return service.getGebruiker(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessie", method = RequestMethod.GET)
-    public Cirkelsessie getCirkelsessie(@PathVariable("id") int id) {
+    public Cirkelsessie getCirkelsessie(@PathVariable("id") int id)
+    {
         return service.getCirkelsessie(id);
     }
 }

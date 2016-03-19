@@ -21,7 +21,8 @@ import java.util.List;
 
 @Service
 @Transactional
-public class KaartServiceImpl implements KaartService {
+public class KaartServiceImpl implements KaartService
+{
     private CirkelsessieRepository cirkelsessies;
     private CommentaarRepository commentaren;
     private GebruikerRepository gebruikers;
@@ -31,7 +32,8 @@ public class KaartServiceImpl implements KaartService {
     private SubthemaRepository subthemas;
 
     @Autowired
-    public KaartServiceImpl(CirkelsessieRepository cirkelsessies, CommentaarRepository commentaren, GebruikerRepository gebruikers, HoofdthemaRepository hoofdthemas, KaartRepository repository, SpelkaartRepository spelkaarten, SubthemaRepository subthemas) {
+    public KaartServiceImpl(CirkelsessieRepository cirkelsessies, CommentaarRepository commentaren, GebruikerRepository gebruikers, HoofdthemaRepository hoofdthemas, KaartRepository repository, SpelkaartRepository spelkaarten, SubthemaRepository subthemas)
+    {
         this.cirkelsessies = cirkelsessies;
         this.commentaren = commentaren;
         this.gebruikers = gebruikers;
@@ -41,15 +43,18 @@ public class KaartServiceImpl implements KaartService {
         this.subthemas = subthemas;
     }
 
-    public List<Kaart> all() {
+    public List<Kaart> all()
+    {
         return repository.findAll();
     }
 
     @Override
-    public void create(KaartRequest dto) throws GebruikerNotFound {
+    public void create(KaartRequest dto) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -65,10 +70,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public Kaart find(int id) throws KaartNotFound {
+    public Kaart find(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -76,16 +83,19 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public void update(int id, KaartRequest dto) throws KaartNotFound, GebruikerNotFound {
+    public void update(int id, KaartRequest dto) throws KaartNotFound, GebruikerNotFound
+    {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -98,10 +108,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public void delete(int id) throws KaartNotFound {
+    public void delete(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -109,10 +121,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public Subthema getSubthema(int id) throws KaartNotFound {
+    public Subthema getSubthema(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -120,16 +134,19 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public void addSubthema(int id, SubthemaRequest dto) throws KaartNotFound, HoofdthemaNotFound {
+    public void addSubthema(int id, SubthemaRequest dto) throws KaartNotFound, HoofdthemaNotFound
+    {
         Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
-        if (hoofdthema == null) {
+        if (hoofdthema == null)
+        {
             throw new HoofdthemaNotFound();
         }
 
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -147,10 +164,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public List<Commentaar> getCommentaren(int id) throws KaartNotFound {
+    public List<Commentaar> getCommentaren(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -158,20 +177,24 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public void addCommentaar(int id, CommentaarRequest dto) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound {
+    public void addCommentaar(int id, CommentaarRequest dto) throws KaartNotFound, CommentsNotAllowed, GebruikerNotFound
+    {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
-        if (!kaart.isCommentsToelaatbaar()) {
+        if (!kaart.isCommentsToelaatbaar())
+        {
             throw new CommentsNotAllowed();
         }
 
@@ -190,10 +213,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound {
+    public List<Spelkaart> getSpelkaarten(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -201,16 +226,19 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public void addSpelkaart(int id, SpelkaartRequest dto) throws KaartNotFound, CirkelsessieNotFound {
+    public void addSpelkaart(int id, SpelkaartRequest dto) throws KaartNotFound, CirkelsessieNotFound
+    {
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
-        if (cirkelsessie == null) {
+        if (cirkelsessie == null)
+        {
             throw new CirkelsessieNotFound();
         }
 
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
 
@@ -228,10 +256,12 @@ public class KaartServiceImpl implements KaartService {
     }
 
     @Override
-    public Gebruiker getGebruiker(int id) throws KaartNotFound {
+    public Gebruiker getGebruiker(int id) throws KaartNotFound
+    {
         Kaart kaart = repository.findOne(id);
 
-        if (kaart == null) {
+        if (kaart == null)
+        {
             throw new KaartNotFound();
         }
         return kaart.getGebruiker();

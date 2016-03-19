@@ -36,11 +36,11 @@ public class DeelnameApiTest extends ApiTest
     {
         DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
 
-        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getAdminToken()));
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserToken()));
 
         deelname = new DeelnameRequest(10, true, DateTime.now(), 1, 1);
 
-        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getAdminToken()))
+        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
     }
 
@@ -49,7 +49,7 @@ public class DeelnameApiTest extends ApiTest
     {
         DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
 
-        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getAdminToken()))
+        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserToken()))
             .andExpect(status().isNotFound());
     }
 
@@ -58,17 +58,17 @@ public class DeelnameApiTest extends ApiTest
     {
         DeelnameRequest deelname = new DeelnameRequest(15, false, DateTime.now(), 1, 1);
 
-        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getAdminToken()))
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
-        http.perform(delete("/api/deelnames/1").header("Authorization", getAdminToken()))
+        http.perform(delete("/api/deelnames/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk());
     }
 
     @Test
     public void deleteDeelname_nonExistingDeelname() throws Exception
     {
-        http.perform(delete("/api/deelnames/1").header("Authorization", getAdminToken()))
+        http.perform(delete("/api/deelnames/1").header("Authorization", getUserToken()))
             .andExpect(status().isNotFound());
     }
 }

@@ -13,7 +13,8 @@ import be.kdg.teamh.exceptions.notfound.KaartNotFound;
 
 import java.util.List;
 
-public interface KaartService {
+public interface KaartService
+{
     List<Kaart> all();
 
     void create(KaartRequest dto) throws GebruikerNotFound;

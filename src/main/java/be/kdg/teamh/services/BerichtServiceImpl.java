@@ -11,20 +11,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class BerichtServiceImpl implements BerichtService {
+public class BerichtServiceImpl implements BerichtService
+{
     private BerichtRepository repository;
 
     @Autowired
-    public BerichtServiceImpl(BerichtRepository repository) {
+    public BerichtServiceImpl(BerichtRepository repository)
+    {
         this.repository = repository;
     }
 
 
     @Override
-    public Gebruiker getGebruiker(int id) throws BerichtNotFound {
+    public Gebruiker getGebruiker(int id) throws BerichtNotFound
+    {
         Bericht bericht = repository.findOne(id);
 
-        if (bericht == null) {
+        if (bericht == null)
+        {
             throw new BerichtNotFound();
         }
 

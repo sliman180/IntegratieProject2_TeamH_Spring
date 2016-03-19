@@ -14,73 +14,85 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/subthemas")
-public class SubthemaController {
+public class SubthemaController
+{
     private SubthemaService service;
     private AuthService auth;
 
     @Autowired
-    public SubthemaController(SubthemaService service, AuthService auth) {
+    public SubthemaController(SubthemaService service, AuthService auth)
+    {
         this.service = service;
         this.auth = auth;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Subthema> index() {
+    public List<Subthema> index()
+    {
         return service.all();
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody SubthemaRequest subthema) {
+    public void create(@Valid @RequestBody SubthemaRequest subthema)
+    {
         service.create(subthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Subthema show(@PathVariable int id) {
+    public Subthema show(@PathVariable int id)
+    {
         return service.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody SubthemaRequest subthema) {
+    public void update(@PathVariable("id") int id, @Valid @RequestBody SubthemaRequest subthema)
+    {
         service.update(id, subthema);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id)
+    {
         service.delete(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/organisatie", method = RequestMethod.GET)
-    public Organisatie getOrganisatie(@PathVariable int id) {
+    public Organisatie getOrganisatie(@PathVariable int id)
+    {
         return service.findOrganisatie(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
-    public List<Cirkelsessie> getCirkelsessies(@PathVariable int id) {
+    public List<Cirkelsessie> getCirkelsessies(@PathVariable int id)
+    {
         return service.findCirkelsessies(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
-    public Hoofdthema getHoofdthema(@PathVariable int id) {
+    public Hoofdthema getHoofdthema(@PathVariable int id)
+    {
         return service.findHoofdthema(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/kaarten", method = RequestMethod.GET)
-    public List<Kaart> getKaarten(@PathVariable int id) {
+    public List<Kaart> getKaarten(@PathVariable int id)
+    {
         return service.findKaarten(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/kaart", method = RequestMethod.POST)
-    public void createKaart(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart) {
+    public void createKaart(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart)
+    {
         service.addKaart(id, kaart);
     }
 }

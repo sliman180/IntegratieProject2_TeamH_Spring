@@ -7,34 +7,39 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.GebruikerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController
+{
     private GebruikerService service;
     private AuthService auth;
 
     @Autowired
-    public AuthController(AuthService auth, GebruikerService service) {
+    public AuthController(AuthService auth, GebruikerService service)
+    {
         this.auth = auth;
         this.service = service;
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@Valid @RequestBody LoginRequest login) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest login)
+    {
         Gebruiker gebruiker = service.findByLogin(login);
 
         return auth.generateToken(gebruiker);
     }
 
+
+    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public void register(@Valid @RequestBody RegistratieRequest registratie) {
+    public void register(@Valid @RequestBody RegistratieRequest registratie)
+    {
         service.register(registratie);
     }
 }

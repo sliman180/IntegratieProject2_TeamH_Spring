@@ -15,55 +15,64 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hoofdthemas")
-public class HoofdthemaController {
+public class HoofdthemaController
+{
     private HoofdthemaService service;
     private AuthService auth;
 
     @Autowired
-    public HoofdthemaController(HoofdthemaService service, AuthService auth) {
+    public HoofdthemaController(HoofdthemaService service, AuthService auth)
+    {
         this.service = service;
         this.auth = auth;
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Hoofdthema> index() {
+    public List<Hoofdthema> index()
+    {
         return service.all();
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody HoofdthemaRequest hoofdthema) {
+    public void create(@Valid @RequestBody HoofdthemaRequest hoofdthema)
+    {
         service.create(hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Hoofdthema show(@PathVariable("id") int id) {
+    public Hoofdthema show(@PathVariable("id") int id)
+    {
         return service.find(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody HoofdthemaRequest hoofdthema) {
+    public void update(@PathVariable("id") int id, @Valid @RequestBody HoofdthemaRequest hoofdthema)
+    {
         service.update(id, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) {
+    public void delete(@PathVariable("id") int id)
+    {
         service.delete(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/organisatie", method = RequestMethod.GET)
-    public Organisatie getOrganisatie(@PathVariable("id") int id) {
+    public Organisatie getOrganisatie(@PathVariable("id") int id)
+    {
         return service.findOrganisatie(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/subthemas", method = RequestMethod.GET)
-    public List<Subthema> showSubthemas(@PathVariable("id") int id) {
+    public List<Subthema> showSubthemas(@PathVariable("id") int id)
+    {
         return service.showSubthemas(id);
     }
 }
