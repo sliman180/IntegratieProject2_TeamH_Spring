@@ -3,6 +3,7 @@ package be.kdg.teamh.api;
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Hoofdthema;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.util.NestedServletException;
 
@@ -13,10 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class HoofdthemaApiTest extends ApiTest
 {
+    @Before
+    public void setUpParents() throws Exception
+    {
+        OrganisatieRequest organisatie = new OrganisatieRequest("Naam Organisatie", "Beschrijving Organisatie", 1);
+
+        http.perform(post("/api/organisaties", objectMapper.writeValueAsString(organisatie)).header("Authorization", getUserToken()));
+    }
+
     @Test
     public void indexHoofdthema() throws Exception
     {
-        this.http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
+        http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
@@ -24,144 +33,104 @@ public class HoofdthemaApiTest extends ApiTest
     @Test
     public void createHoofdthema() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        this.http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
+        http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$[0].naam", is("Voetbal")))
-            .andExpect(jsonPath("$[0].beschrijving", is("Nieuw voetbalveld")));
+            .andExpect(jsonPath("$", hasSize(1)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void createHoofdthema_nullInput() throws Exception
     {
-        Hoofdthema hoofdthema = new Hoofdthema(null, null, null, null);
-        String json = objectMapper.writeValueAsString(hoofdthema);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest(null, null, 1, 1);
 
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()));
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
     public void showHoofdthema() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()));
 
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        this.http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Nieuw voetbalveld")));
+            .andExpect(jsonPath("$.naam", is("Naam Hoofdthema")))
+            .andExpect(jsonPath("$.beschrijving", is("Beschrijving Hoofdthema")));
     }
 
-    @Test(expected = NestedServletException.class)
-    public void showHoofdthema_nonExistingHoofdthema() throws Exception
+    @Test
+    public void showHoofdthema_onbestaandHoofdthema() throws Exception
     {
-        this.http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()));
+        http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void updateHoofdthema() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()));
 
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
+        hoofdthema = new HoofdthemaRequest("Nieuwe Naam Hoofdthema", "Nieuwe Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        hoofdthema = new HoofdthemaRequest("Voetbal", "Vernieuwd voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        this.http.perform(put("/api/hoofdthemas/1", json).header("Authorization", getAdminToken()))
+        http.perform(put("/api/hoofdthemas/1", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
 
-        this.http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()))
+        http.perform(get("/api/hoofdthemas/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.naam", is("Voetbal")))
-            .andExpect(jsonPath("$.beschrijving", is("Vernieuwd voetbalveld")));
+            .andExpect(jsonPath("$.naam", is("Nieuwe Naam Hoofdthema")))
+            .andExpect(jsonPath("$.beschrijving", is("Nieuwe Beschrijving Hoofdthema")));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void updateHoofdthema_nullInput() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()));
 
         hoofdthema = new HoofdthemaRequest(null, null, 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
 
-        this.http.perform(put("/api/hoofdthemas/1", json).header("Authorization", getAdminToken()));
+        http.perform(put("/api/hoofdthemas/1", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
-    @Test(expected = NestedServletException.class)
-    public void updateHoofdthema_nonExistingHoofdthema() throws Exception
+    @Test
+    public void updateHoofdthema_onbestaandHoofdthema() throws Exception
     {
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Vernieuwd voetbalveld", 1, 1);
-        String json = objectMapper.writeValueAsString(hoofdthema);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(put("/api/hoofdthemas/1", json).header("Authorization", getAdminToken()));
+        http.perform(put("/api/hoofdthemas/1", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteHoofdthema() throws Exception
     {
-        OrganisatieRequest organisatie = new OrganisatieRequest("Voetbal", "Nieuw voetbalveld", 1);
-        String json = objectMapper.writeValueAsString(organisatie);
+        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Naam Hoofdthema", "Beschrijving Hoofdthema", 1, 1);
 
-        this.http.perform(post("/api/organisaties", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/hoofdthemas", objectMapper.writeValueAsString(hoofdthema)).header("Authorization", getUserToken()));
 
-        HoofdthemaRequest hoofdthema = new HoofdthemaRequest("Voetbal", "Nieuw voetbalveld", 1, 1);
-        json = objectMapper.writeValueAsString(hoofdthema);
-
-        this.http.perform(post("/api/hoofdthemas", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        this.http.perform(delete("/api/hoofdthemas/1").header("Authorization", getAdminToken()))
+        http.perform(delete("/api/hoofdthemas/1").header("Authorization", getUserToken()))
             .andExpect(status().isOk());
 
-        this.http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
+        http.perform(get("/api/hoofdthemas").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(0)));
     }
 
-    @Test(expected = NestedServletException.class)
-    public void deleteHoofdthema_nonExistingHoofdthema() throws Exception
+    @Test
+    public void deleteHoofdthema_onbestaandHoofdthema() throws Exception
     {
-        this.http.perform(delete("/api/hoofdthemas/1").header("Authorization", getAdminToken()));
+        http.perform(delete("/api/hoofdthemas/1").header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 }

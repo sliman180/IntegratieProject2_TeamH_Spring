@@ -13,7 +13,8 @@ import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
 
 import java.util.List;
 
-public interface SpelkaartService {
+public interface SpelkaartService
+{
     List<Spelkaart> all();
 
     void create(SpelkaartRequest dto) throws CirkelsessieNotFound, KaartNotFound;

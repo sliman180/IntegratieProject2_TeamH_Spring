@@ -155,6 +155,23 @@
             document.getElementById('tooltip').setAttribute("visibility", "hidden");
         };
 
+        vm.beeindigSpel = function (cirkelsessie) {
+            CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel beeindigd!');
+            });
+        };
+
+        vm.kanKaartenToevoegen = function () {
+            for (var x = 0; x < vm.deelnames.length; x++) {
+                if (vm.deelnames[x].gebruiker.id == $rootScope.id) {
+                    if (vm.cirkelsessie.maxAantalKaarten == vm.deelnames[x].aangemaakteKaarten) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
     }
 
     angular.module("kandoe").controller("CirkelsessieDetailsController", CirkelsessieDetailsController);

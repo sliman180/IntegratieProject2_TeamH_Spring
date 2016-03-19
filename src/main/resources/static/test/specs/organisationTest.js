@@ -8,9 +8,8 @@ describe("From a home page",function(){
         element(by.id("beschrijving")).sendKeys("Karel de Grote");
         element(by.id("form")).element(by.tagName("button")).click();
 
-        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/organisaties");
         expect(element.all(by.css(".lijst-item")).count()).toBe(1);
-
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/organisaties")
 
     });
 

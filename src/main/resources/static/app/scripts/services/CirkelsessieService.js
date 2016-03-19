@@ -14,6 +14,14 @@
 
         };
 
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.find = function (id) {
 
             return $http.get("/api/cirkelsessies/" + id).then(function (response) {
@@ -100,6 +108,22 @@
                 return response.data;
             });
 
+        };
+
+        exports.cloneCirkelsessie = function (id, cirkelsessie) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.beeindigSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'BEEINDIGD';
+            cirkelsessie.gebruiker = cirkelsessie.gebruiker.id;
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
         };
 
         return exports;

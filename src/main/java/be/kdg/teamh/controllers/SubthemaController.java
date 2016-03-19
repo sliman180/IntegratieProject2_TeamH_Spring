@@ -3,86 +3,96 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
+import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.SubthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/subthemas")
-public class SubthemaController {
+public class SubthemaController
+{
     private SubthemaService service;
+    private AuthService auth;
 
     @Autowired
-    public SubthemaController(SubthemaService service) {
+    public SubthemaController(SubthemaService service, AuthService auth)
+    {
         this.service = service;
+        this.auth = auth;
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Subthema> index() {
+    public List<Subthema> index()
+    {
         return service.all();
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody SubthemaRequest subthema) throws HoofdthemaNotFound, GebruikerNotFound {
+    public void create(@Valid @RequestBody SubthemaRequest subthema)
+    {
         service.create(subthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Subthema show(@PathVariable Integer id) throws SubthemaNotFound {
+    public Subthema show(@PathVariable int id)
+    {
         return service.find(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody SubthemaRequest subthema) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound {
+    public void update(@PathVariable("id") int id, @Valid @RequestBody SubthemaRequest subthema)
+    {
         service.update(id, subthema);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id) throws SubthemaNotFound {
+    public void delete(@PathVariable("id") int id)
+    {
         service.delete(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/organisatie", method = RequestMethod.GET)
-    public Organisatie getOrganisatie(@PathVariable Integer id) throws SubthemaNotFound {
+    public Organisatie getOrganisatie(@PathVariable int id)
+    {
         return service.findOrganisatie(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
-    public List<Cirkelsessie> getCirkelsessies(@PathVariable Integer id) throws SubthemaNotFound {
+    public List<Cirkelsessie> getCirkelsessies(@PathVariable int id)
+    {
         return service.findCirkelsessies(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
-    public Hoofdthema getHoofdthema(@PathVariable Integer id) throws SubthemaNotFound {
+    public Hoofdthema getHoofdthema(@PathVariable int id)
+    {
         return service.findHoofdthema(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/kaarten", method = RequestMethod.GET)
-    public List<Kaart> getKaarten(@PathVariable Integer id) throws SubthemaNotFound {
+    public List<Kaart> getKaarten(@PathVariable int id)
+    {
         return service.findKaarten(id);
     }
 
-
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/kaart", method = RequestMethod.POST)
-    public void createKaart(@PathVariable("id") int subthemaId, @RequestHeader(name = "Authorization") String token, @RequestBody KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound {
-
-        service.addKaart(subthemaId, kaart);
+    public void createKaart(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart)
+    {
+        service.addKaart(id, kaart);
     }
-
 }

@@ -26,75 +26,53 @@ public class GebruikerApiTest extends ApiTest
     public void createGebruiker() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()))
             .andExpect(status().isCreated());
 
-        http.perform(get("/api/gebruikers").contentType(MediaType.APPLICATION_JSON).header("Authorization", getAdminToken()))
+        http.perform(get("/api/gebruikers").contentType(MediaType.APPLICATION_JSON).header("Authorization", getUserToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(4)))
-            .andExpect(jsonPath("$[3].gebruikersnaam", is("testuser")));
+            .andExpect(jsonPath("$", hasSize(4)));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void createGebruiker_nullInput() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest(null, null);
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()));
-    }
-
-    @Test(expected = ServletException.class)
-    public void createGebruiker_wrongCredentials() throws Exception
-    {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(post("/api/gebruikers", json).header("Authorization", getNonExistingUserToken()))
-            .andExpect(status().isUnauthorized());
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
     public void showGebruiker() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()));
 
         http.perform(get("/api/gebruikers/4").header("Authorization", getUserToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.gebruikersnaam", is("testuser")));
     }
 
-    @Test(expected = ServletException.class)
-    public void showGebruiker_wrongCredentials() throws Exception
+    @Test
+    public void showGebruiker_onbestaandeGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        http.perform(get("/api/gebruikers/4").header("Authorization", getNonExistingUserToken()));
+        http.perform(get("/api/gebruikers/4").header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void updateGebruiker() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()));
 
         gebruiker = new GebruikerRequest("newuser", "newuser");
-        json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(put("/api/gebruikers/4", json).header("Authorization", getAdminToken()))
+        http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()))
             .andExpect(status().isOk());
 
         http.perform(get("/api/gebruikers/4").header("Authorization", getUserToken()))
@@ -102,58 +80,30 @@ public class GebruikerApiTest extends ApiTest
             .andExpect(jsonPath("$.gebruikersnaam", is("newuser")));
     }
 
-    @Test(expected = NestedServletException.class)
+    @Test
     public void updateGebruiker_nullInput() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
+        GebruikerRequest gebruiker = new GebruikerRequest(null, null);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        gebruiker = new GebruikerRequest(null, null);
-        json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(put("/api/gebruikers/4", json).header("Authorization", getAdminToken()));
+        http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()))
+            .andExpect(status().isBadRequest());
     }
 
-    @Test(expected = NestedServletException.class)
-    public void updateGebruiker_nonExistingGebruiker() throws Exception
-    {
-        GebruikerRequest gebruiker = new GebruikerRequest("newuser", "newuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(put("/api/gebruikers/4", json).header("Authorization", getAdminToken()));
-    }
-
-    @Test(expected = ServletException.class)
-    public void updateGebruiker_wrongCredentials() throws Exception
+    @Test
+    public void updateGebruiker_onbestaandeGebruiker() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        gebruiker = new GebruikerRequest("newuser", "newuser");
-        json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(put("/api/gebruikers/4", json).header("Authorization", getNonExistingUserToken()))
-            .andExpect(status().isUnauthorized());
+        http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteGebruiker() throws Exception
     {
         GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
 
-        http.perform(post("/api/gebruikers", json).header("Authorization", getUserToken()))
-            .andExpect(status().isCreated());
-
-        http.perform(get("/api/gebruikers").header("Authorization", getUserToken()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(4)));
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserToken()));
 
         http.perform(delete("/api/gebruikers/4").header("Authorization", getUserToken()))
             .andExpect(status().isOk());
@@ -163,23 +113,10 @@ public class GebruikerApiTest extends ApiTest
             .andExpect(jsonPath("$", hasSize(3)));
     }
 
-    @Test(expected = NestedServletException.class)
-    public void deleteGebruiker_nonExistingGebruiker() throws Exception
+    @Test
+    public void deleteGebruiker_onbestaandeGebruiker() throws Exception
     {
-        http.perform(delete("/api/gebruikers/4").header("Authorization", getAdminToken()));
-    }
-
-
-    @Test(expected = ServletException.class)
-    public void deleteGebruiker_wrongCredentials() throws Exception
-    {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
-        String json = objectMapper.writeValueAsString(gebruiker);
-
-        http.perform(post("/api/gebruikers", json).header("Authorization", getAdminToken()))
-            .andExpect(status().isCreated());
-
-        http.perform(delete("/api/gebruikers/4").header("Authorization", getNonExistingUserToken()))
-            .andExpect(status().isUnauthorized());
+        http.perform(delete("/api/gebruikers/4").header("Authorization", getUserToken()))
+            .andExpect(status().isNotFound());
     }
 }

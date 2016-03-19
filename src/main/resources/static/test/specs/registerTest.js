@@ -15,6 +15,5 @@ describe("On the start page", function(){
 
         expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/auth/login");
 
-
     });
 });

@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class CirkelsessieRequest implements Serializable
+public class CirkelsessieCloneRequest implements Serializable
 {
     @NotNull
     private String naam;
@@ -14,27 +14,23 @@ public class CirkelsessieRequest implements Serializable
     @NotNull
     private Status status;
 
-    @NotNull
     private int aantalCirkels;
 
-    @NotNull
     private int maxAantalKaarten;
 
     @NotNull
     private DateTime startDatum;
 
-    @NotNull
     private int subthema;
 
-    @NotNull
     private int gebruiker;
 
-    public CirkelsessieRequest()
+    public CirkelsessieCloneRequest()
     {
         //
     }
 
-    public CirkelsessieRequest(String naam, Status status, int aantalCirkels, int maxAantalKaarten, DateTime startDatum, int subthema, int gebruiker)
+    public CirkelsessieCloneRequest(String naam, Status status, int aantalCirkels, int maxAantalKaarten, DateTime startDatum, int subthema, int gebruiker)
     {
         this.naam = naam;
         this.status = status;

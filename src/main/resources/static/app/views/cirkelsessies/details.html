@@ -52,8 +52,29 @@
         color: blue !important;
     }
 
-    .beurt {
+    #deelnemerContainer {
+        max-height: 200px;
+        overflow-x: auto;
+    }
 
+    .deelname {
+        width: 120px;
+        padding: 1%;
+        margin-left: 1%;
+        border: 1px solid black;
+        color: black;
+        background-color: lightgoldenrodyellow;
+        float: left;
+    }
+
+    .deelnameAandeBeurt {
+        width: 120px;
+        padding: 1%;
+        margin-left: 1%;
+        border: 3px solid #1C8C81;
+        color: black;
+        background-color: #F7CD56;
+        float: left;
     }
 
 </style>
@@ -68,23 +89,15 @@
     <div id="header-buttons">
 
         <div>
-            <div ng-if="vm.isAanDeBeurt()" class="beurt">
+            <div ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'" class="beurt">
                 <h4>U bent aan de beurt!</h4>
-                <!-- MDL Progress Bar with Buffering -->
-                <div ng-if="vm.isAanDeBeurt()" id="p3" class="mdl-progress mdl-js-progress"></div>
-                <script>
-                    document.querySelector('#p3').addEventListener('mdl-componentupgraded', function () {
-                        this.MaterialProgress.setProgress(33);
-                        this.MaterialProgress.setBuffer(87);
-                    });
-                </script>
             </div>
 
-            <div ng-if="!vm.isAanDeBeurt()" class="beurt">
-                <h4>Wachten op uw beurt..</h4>
-                <!-- MDL Progress Bar with Indeterminate Progress -->
-                <div ng-if="!vm.isAanDeBeurt()" id="p2"
-                     class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            <div ng-if="!vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'" class="beurt">
+                <h4>Wachten op uw beurt...</h4>
+                <!-- MDL Spinner Component -->
+                <div ng-if="!vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
+                     class="mdl-spinner mdl-js-spinner is-active"></div>
             </div>
 
             <button ng-if="vm.isDeelnemer()"
@@ -93,7 +106,7 @@
             </button>
             <button ng-if="!vm.isDeelnemer() && vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.addDeelname(vm.cirkelsessie.id)"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect participate-btn">
                 <span>Deelnemen</span>
             </button>
 
@@ -114,10 +127,44 @@
                     class="mdl-button mdl-js-button mdl-button--raised status-beeindigd" disabled>
                 De cirkelsessie is beëndigd!
             </button>
+            <button ng-if="vm.cirkelsessie.status!='BEEINDIGD' && $root.id==vm.cirkelsessie.gebruiker.id"
+                    ng-click="vm.beeindigSpel(vm.cirkelsessie)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-beeindigd">
+                Beëndigd de cirkelsessie!
+            </button>
         </div>
 
     </div>
 
+</div>
+<div class="mdl-cell mdl-cell--12-col demo-card-wide mdl-card mdl-shadow--2dp">
+
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Deelnemers({{vm.deelnames.length}})</h2>
+    </div>
+
+    <div id="deelnemerContainer" class="mdl-card__supporting-text">
+        <div ng-if="vm.deelnames.length==0">
+            <h2>Geen deelnemers</h2>
+        </div>
+
+        <div ng-if="vm.deelnames.length>0">
+            <div ng-repeat="deelname in vm.deelnames | orderBy:'aanDeBeurt':true">
+                <div class="deelnameAandeBeurt" ng-if="deelname.aanDeBeurt">
+                    <p>Naam: <b>{{deelname.gebruiker.gebruikersnaam}}</b></p>
+
+                    <p>Deelgenomen op: <b>{{deelname.datum | date:'dd/MM/yyyy HH:mm'}}</b></p>
+
+                    <p><b>Is aan de beurt!</b></p>
+                </div>
+                <div class="deelname" ng-if=!deelname.aanDeBeurt">
+                    <p>Naam: <b>{{deelname.gebruiker.gebruikersnaam}}</b></p>
+
+                    <p>Deelgenomen op: <b>{{deelname.datum | date:'dd/MM/yyyy HH:mm'}}</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="mdl-cell mdl-cell--8-col demo-card-wide mdl-card mdl-shadow--2dp">
@@ -130,7 +177,7 @@
         Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b>
         | Startdatum: <b>{{vm.cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b>
         <span ng-if="vm.cirkelsessie.subthema!=null">| Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
-        | <p>Status:
+        | Status:
         <b class="status-open" ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='OPEN'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gesloten"
            ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='GESLOTEN'">{{vm.cirkelsessie.status}}</b>
@@ -435,6 +482,7 @@
     }
 
     #spelkaartContainer {
+        min-height: 300px;
         max-height: 500px;
         overflow-y: auto !important;
     }
@@ -503,6 +551,10 @@
         cursor: pointer;
     }
 
+    .linkDisabled {
+        color: #7B7777;
+    }
+
 </style>
 
 <div class="mdl-cell mdl-cell--4-col demo-card-wide mdl-card mdl-shadow--2dp">
@@ -531,23 +583,33 @@
                     </p>
 
                     <p>
-                        Afbeelding url:
+                        Aangemaakt door:
+                        <b> {{spelkaart.kaart.gebruiker.gebruikersnaam}} </b>
+                        | Afbeelding url:
                         <b><a ng-href="{{spelkaart.kaart.imageUrl}}" target="_blank">Kaart afbeelding</a></b>
                     </p>
 
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <a ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()" disabled>Verplaats naar
-                                [{{spelkaart.positie +
-                                1}}]</a>
-                            <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
-                               ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
-                                naar[{{spelkaart.positie + 1}}]</a>
+                            <div ng-if="vm.cirkelsessie.status!='BEEINDIGD'">
+                                <a class="linkDisabled" ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()">Verplaats naar
+                                    [{{spelkaart.positie +
+                                    1}}]
+                                </a>
+                                <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
+                                   ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
+                                    naar[{{spelkaart.positie + 1}}]
+                                </a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.status=='GESLOTEN'">
+                                    Verplaats naar[{{spelkaart.positie + 1}}]
+                                </a>
 
-                            <a ng-if="vm.cirkelsessie.aantalCirkels==spelkaart.positie" disabled>Verplaats
-                                naar[{{spelkaart.positie + 1}}]</a>
-                            <a href="/#/kaarten/details/{{spelkaart.kaart.id}}">Meer informatie</a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.aantalCirkels==spelkaart.positie">Max
+                                    positie
+                                    bereikt!</a>
+                                <a href="/#/kaarten/details/{{spelkaart.kaart.id}}">Meer informatie</a>
+                            </div>
                         </div>
                     </div>
 
@@ -575,12 +637,12 @@
             </div>
 
             <button
-                    ng-if="!vm.isDeelnemer()"
+                    ng-if="!vm.isDeelnemer() || vm.cirkelsessie.status=='BEEINDIGD' || vm.cirkelsessie.status=='GESLOTEN' || !vm.kanKaartenToevoegen()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
                 Kaart toevoegen
             </button>
             <button
-                    ng-if="vm.isDeelnemer()"
+                    ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD' && vm.kanKaartenToevoegen()"
                     class="mdl-button mdl-js-button mdl-js-ripple-effect">
                 Kaart toevoegen
             </button>
@@ -604,21 +666,21 @@
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="">
+            <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="" class="message-form">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
                     <label class="mdl-textfield__label" for="tekst">Bericht</label>
                 </div>
 
-                <button ng-if="vm.isDeelnemer()"
+                <button ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect">
                     Post
                 </button>
 
-                <button ng-if="!vm.isDeelnemer()"
+                <button ng-if="!vm.isDeelnemer() || vm.cirkelsessie.status=='BEEINDIGD'"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
-                    Post
+                    Verzend
                 </button>
 
             </form>

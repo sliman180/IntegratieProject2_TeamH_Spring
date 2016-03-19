@@ -17,17 +17,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService
+{
     private String key = "kandoe";
     private GebruikerRepository repository;
 
     @Autowired
-    public AuthServiceImpl(GebruikerRepository repository) {
+    public AuthServiceImpl(GebruikerRepository repository)
+    {
         this.repository = repository;
     }
 
     @Override
-    public LoginResponse generateToken(Gebruiker gebruiker) {
+    public LoginResponse generateToken(Gebruiker gebruiker)
+    {
         Claims claims = Jwts.claims().setSubject(String.valueOf(gebruiker.getId()));
 
         claims.put("gebruikersnaam", gebruiker.getGebruikersnaam());
@@ -37,10 +40,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Gebruiker findByToken(String token) throws GebruikerNotFound {
+    public Gebruiker findByToken(String token) throws GebruikerNotFound
+    {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
-        if (gebruiker == null) {
+        if (gebruiker == null)
+        {
             throw new GebruikerNotFound();
         }
 
@@ -48,25 +53,30 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean isGuest(String token) {
+    public boolean isGuest(String token)
+    {
         return hasRole(token, "guest");
     }
 
     @Override
-    public boolean isRegistered(String token) {
+    public boolean isRegistered(String token)
+    {
         return hasRole(token, "user");
     }
 
     @Override
-    public boolean isAdmin(String token) {
+    public boolean isAdmin(String token)
+    {
         return hasRole(token, "admin");
     }
 
-    private Claims parseToken(String token) {
+    private Claims parseToken(String token)
+    {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token.substring(7)).getBody();
     }
 
-    private boolean hasRole(String token, String user) {
+    private boolean hasRole(String token, String user)
+    {
         return ((List) parseToken(token).get("rollen")).contains(user);
     }
 }

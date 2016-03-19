@@ -3,7 +3,8 @@ package be.kdg.teamh.dtos.request;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class SubthemaRequest implements Serializable {
+public class SubthemaRequest implements Serializable
+{
     @NotNull
     private String naam;
 
@@ -16,46 +17,56 @@ public class SubthemaRequest implements Serializable {
     @NotNull
     private int gebruiker;
 
-    public SubthemaRequest() {
+    public SubthemaRequest()
+    {
         //
     }
 
-    public SubthemaRequest(String naam, String beschrijving, int hoofdthema, int gebruiker) {
+    public SubthemaRequest(String naam, String beschrijving, int hoofdthema, int gebruiker)
+    {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
         this.gebruiker = gebruiker;
     }
 
-    public String getNaam() {
+    public String getNaam()
+    {
         return naam;
     }
 
-    public void setNaam(String naam) {
+    public void setNaam(String naam)
+    {
         this.naam = naam;
     }
 
-    public String getBeschrijving() {
+    public String getBeschrijving()
+    {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
+    public void setBeschrijving(String beschrijving)
+    {
         this.beschrijving = beschrijving;
     }
 
-    public int getHoofdthema() {
+    public int getHoofdthema()
+    {
         return hoofdthema;
     }
 
-    public void setHoofdthema(int hoofdthema) {
+    public void setHoofdthema(int hoofdthema)
+    {
         this.hoofdthema = hoofdthema;
     }
 
-    public int getGebruiker() {
+    public int getGebruiker()
+    {
         return gebruiker;
     }
 
-    public void setGebruiker(int gebruiker) {
+    public void setGebruiker(int gebruiker)
+    {
         this.gebruiker = gebruiker;
     }
 }

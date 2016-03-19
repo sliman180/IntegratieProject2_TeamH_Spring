@@ -278,6 +278,14 @@
 
         };
 
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.find = function (id) {
 
             return $http.get("/api/cirkelsessies/" + id).then(function (response) {
@@ -364,6 +372,22 @@
                 return response.data;
             });
 
+        };
+
+        exports.cloneCirkelsessie = function (id, cirkelsessie) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.beeindigSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'BEEINDIGD';
+            cirkelsessie.gebruiker = cirkelsessie.gebruiker.id;
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
         };
 
         return exports;
@@ -509,7 +533,6 @@
             });
 
         };
-
 
         return exports;
 
@@ -1213,6 +1236,23 @@
             document.getElementById('tooltip').setAttribute("visibility", "hidden");
         };
 
+        vm.beeindigSpel = function (cirkelsessie) {
+            CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel beeindigd!');
+            });
+        };
+
+        vm.kanKaartenToevoegen = function () {
+            for (var x = 0; x < vm.deelnames.length; x++) {
+                if (vm.deelnames[x].gebruiker.id == $rootScope.id) {
+                    if (vm.cirkelsessie.maxAantalKaarten == vm.deelnames[x].aangemaakteKaarten) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
     }
 
     angular.module("kandoe").controller("CirkelsessieDetailsController", CirkelsessieDetailsController);
@@ -1233,9 +1273,14 @@
         vm.subthemas = [];
         vm.subthema = {};
         vm.deelnames = [];
+        vm.mijnCirkelsessies = [];
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
+        });
+
+        CirkelsessieService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.mijnCirkelsessies = data;
         });
 
         CirkelsessieService.all().then(function (data) {
@@ -1262,6 +1307,22 @@
         vm.addCirkelsessie = function (cirkelsessie) {
             cirkelsessie.gebruiker = $rootScope.id;
             CirkelsessieService.create(cirkelsessie).then(function () {
+                $route.reload();
+            });
+        };
+
+        vm.showCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/details/' + id;
+        };
+
+        vm.deleteCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/delete/' + id;
+        };
+
+        vm.cloneCirkelsessie = function (id, cirkelsessie) {
+            CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });
         };

@@ -11,7 +11,8 @@ import be.kdg.teamh.exceptions.notfound.RolNotFound;
 
 import java.util.List;
 
-public interface GebruikerService {
+public interface GebruikerService
+{
     List<Gebruiker> all();
 
     void create(GebruikerRequest dto) throws RolNotFound;
