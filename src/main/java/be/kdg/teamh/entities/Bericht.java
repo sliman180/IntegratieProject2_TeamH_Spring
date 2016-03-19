@@ -1,7 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -23,47 +22,27 @@ public class Bericht implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime datum;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private Chat chat;
+    @ManyToOne
+    @JsonManagedReference
+    private Cirkelsessie cirkelsessie;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
     public Bericht() {
         //
-
-        this.datum = new DateTime();
     }
 
-    public Bericht(String tekst, Gebruiker gebruiker) {
+    public Bericht(String tekst, DateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
         this.tekst = tekst;
-        this.gebruiker = gebruiker;
-        this.datum = new DateTime();
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
+        this.datum = datum;
+        this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTekst() {
@@ -80,5 +59,21 @@ public class Bericht implements Serializable {
 
     public void setDatum(DateTime datum) {
         this.datum = datum;
+    }
+
+    public Cirkelsessie getCirkelsessie() {
+        return cirkelsessie;
+    }
+
+    public void setCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessie = cirkelsessie;
+    }
+
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
     }
 }

@@ -1,10 +1,13 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.dtos.request.GebruikerRequest;
+import be.kdg.teamh.dtos.request.LoginRequest;
+import be.kdg.teamh.dtos.request.RegistratieRequest;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.InvalidCredentials;
+import be.kdg.teamh.exceptions.PasswordsDoNotMatch;
+import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.RolNotFound;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -15,16 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class GebruikerServiceImpl implements GebruikerService {
-    @Autowired
     private GebruikerRepository repository;
+    private RolRepository rollen;
 
     @Autowired
-    private RolRepository rolRepository;
+    public GebruikerServiceImpl(GebruikerRepository repository, RolRepository rollen) {
+        this.repository = repository;
+        this.rollen = rollen;
+    }
 
     @Override
     public List<Gebruiker> all() {
@@ -32,10 +37,34 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void create(Gebruiker gebruiker) {
-        gebruiker.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
-        gebruiker.addRol(rolRepository.findOne(1));
+    public void create(GebruikerRequest dto) throws RolNotFound {
+        Rol rol = rollen.findByNaam("user");
+
+        if (rol == null) {
+            throw new RolNotFound();
+        }
+
+        Gebruiker gebruiker = new Gebruiker();
+
+        gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
+        gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        gebruiker.addRol(rol);
+
         repository.save(gebruiker);
+    }
+
+    @Override
+    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch {
+        if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie())) {
+            throw new PasswordsDoNotMatch();
+        }
+
+        GebruikerRequest gebruiker = new GebruikerRequest();
+
+        gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
+        gebruiker.setWachtwoord(dto.getWachtwoord());
+
+        create(gebruiker);
     }
 
     @Override
@@ -50,7 +79,7 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public Gebruiker findByLogin(Gebruiker login) throws GebruikerNotFound, InvalidCredentials {
+    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials {
         Gebruiker gebruiker = repository.findByGebruikersnaam(login.getGebruikersnaam());
 
         if (gebruiker == null) {
@@ -65,44 +94,87 @@ public class GebruikerServiceImpl implements GebruikerService {
     }
 
     @Override
-    public void update(int id, Gebruiker gebruiker) throws GebruikerNotFound {
-        Gebruiker old = find(id);
+    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
 
-        old.setGebruikersnaam(gebruiker.getGebruikersnaam());
-
-        if (!gebruiker.getWachtwoord().isEmpty()) {
-            old.setWachtwoord(Hashing.sha256().hashString(gebruiker.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
         }
 
-        repository.saveAndFlush(old);
+        gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
+
+        if (!dto.getWachtwoord().isEmpty()) {
+            if (!dto.getWachtwoord().equals(gebruiker.getWachtwoord())) {
+                gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
+            }
+        }
+
+        repository.saveAndFlush(gebruiker);
     }
 
     @Override
     public void delete(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
 
-        Gebruiker gebruiker = find(id);
-
-        if (gebruiker != null) {
-
+        if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
-
 
         repository.delete(gebruiker);
     }
 
     @Override
-    public List<Deelname> findDeelnames(int userId) throws GebruikerNotFound {
+    public List<Organisatie> getOrganisaties(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
 
-        Gebruiker gebruiker = find(userId);
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        return gebruiker.getOrganisaties();
+    }
+
+    @Override
+    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        return gebruiker.getCirkelsessies();
+    }
+
+    @Override
+    public List<Deelname> getDeelnames(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
 
         return gebruiker.getDeelnames();
     }
 
     @Override
-    public List<Cirkelsessie> showCirkelsessies(int id) throws GebruikerNotFound {
-        return find(id).getDeelnames().stream().map(Deelname::getCirkelsessie).collect(Collectors.toList());
+    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        return gebruiker.getHoofdthemas();
     }
 
+    @Override
+    public List<Subthema> getSubthemas(int id) throws GebruikerNotFound {
+        Gebruiker gebruiker = repository.findOne(id);
 
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        return gebruiker.getSubthemas();
+    }
 }

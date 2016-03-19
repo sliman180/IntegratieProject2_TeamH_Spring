@@ -1,6 +1,10 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.dtos.request.BerichtRequest;
+import be.kdg.teamh.dtos.request.CirkelsessieRequest;
+import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
 import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
@@ -11,29 +15,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class CirkelsessieServiceImpl implements CirkelsessieService {
-    @Autowired
     private CirkelsessieRepository repository;
+    private GebruikerRepository gebruikers;
+    private SubthemaRepository subthemas;
+    private SpelkaartRepository spelkaarten;
+    private KaartRepository kaarten;
+    private DeelnameRepository deelnames;
+    private BerichtRepository berichten;
 
     @Autowired
-    private SpelkaartenRepository spelkaartenRepository;
-
-    @Autowired
-    private KaartenRepository kaartenRepository;
-
-    @Autowired
-    private GebruikerRepository gebruikerRepository;
-
-    @Autowired
-    private ChatRepository chatRepository;
-
-    @Autowired
-    private SubthemaRepository subthemaRepository;
+    public CirkelsessieServiceImpl(CirkelsessieRepository repository, GebruikerRepository gebruikers, SubthemaRepository subthemas, SpelkaartRepository spelkaarten, KaartRepository kaarten, DeelnameRepository deelnames, BerichtRepository berichten) {
+        this.repository = repository;
+        this.gebruikers = gebruikers;
+        this.subthemas = subthemas;
+        this.spelkaarten = spelkaarten;
+        this.kaarten = kaarten;
+        this.deelnames = deelnames;
+        this.berichten = berichten;
+    }
 
     @Override
     public List<Cirkelsessie> all() {
@@ -41,63 +46,68 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     }
 
     @Override
-    public void create(int userId, Cirkelsessie cirkelsessie) {
-
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-
-
-        Chat chat = new Chat((cirkelsessie.getNaam()), cirkelsessie);
-        Chat savedChat = chatRepository.save(chat);
-
-
-        //cirkelsessie
-        cirkelsessie.setGebruiker(gebruiker);
-        cirkelsessie.setChat(savedChat);
-        Cirkelsessie savedCirkelsessie = repository.save(cirkelsessie);
-
-        //gebruiker
-        gebruiker.addCirkelsessie(savedCirkelsessie);
-        gebruikerRepository.save(gebruiker);
-
-
+    public List<Cirkelsessie> actief() {
+        return all().stream().filter(cirkelsessie -> cirkelsessie.getStatus() == Status.OPEN && DateTime.now().isAfter(cirkelsessie.getStartDatum())).collect(Collectors.toList());
     }
 
     @Override
-    public void create(int userId, int subthemaId, Cirkelsessie cirkelsessie) throws SubthemaNotFound, GebruikerNotFound {
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-        Subthema subthema = subthemaRepository.findOne(subthemaId);
+    public List<Cirkelsessie> beindigd() {
+        return all().stream().filter(cirkelsessie -> cirkelsessie.getStatus() == Status.BEEINDIGD).collect(Collectors.toList());
+    }
 
+    @Override
+    public List<Cirkelsessie> gesloten() {
+        return all().stream().filter(cirkelsessie -> cirkelsessie.getStatus() == Status.GESLOTEN).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Cirkelsessie> gepland() {
+        return all().stream().filter(cirkelsessie -> DateTime.now().isBefore(cirkelsessie.getStartDatum())).collect(Collectors.toList());
+    }
+
+    @Override
+    public void create(CirkelsessieRequest dto) throws GebruikerNotFound, SubthemaNotFound {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+        Subthema subthema = null;
+        Cirkelsessie cirkelsessie = new Cirkelsessie();
 
         if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        if (subthema == null) {
-            throw new SubthemaNotFound();
+        if (dto.getSubthema() > 0) {
+            subthema = subthemas.findOne(dto.getSubthema());
+
+            if (subthema == null) {
+                throw new SubthemaNotFound();
+            }
+
+            for (Kaart kaart : subthema.getKaarten()) {
+                Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+                spelkaart = spelkaarten.save(spelkaart);
+                cirkelsessie.addSpelkaart(spelkaart);
+            }
         }
 
-        Chat chat = new Chat((cirkelsessie.getNaam()), cirkelsessie);
-        Chat savedChat = chatRepository.save(chat);
 
-
+        cirkelsessie.setNaam(dto.getNaam());
+        cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
+        cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
+        cirkelsessie.setStatus(dto.getStatus());
+        cirkelsessie.setStartDatum(dto.getStartDatum());
         cirkelsessie.setGebruiker(gebruiker);
-        cirkelsessie.setChat(savedChat);
         cirkelsessie.setSubthema(subthema);
+        cirkelsessie = repository.save(cirkelsessie);
 
-        for(Kaart kaart:subthema.getKaarten()){
-                Spelkaart spelkaart = new Spelkaart(kaart,cirkelsessie);
-                Spelkaart savedSpelkaart= spelkaartenRepository.save(spelkaart);
-                 cirkelsessie.addSpelkaart(savedSpelkaart);
+        if (subthema != null) {
+            subthema.addCirkelsessie(cirkelsessie);
+            subthemas.saveAndFlush(subthema);
         }
 
-        Cirkelsessie savedCirkelsessie = repository.save(cirkelsessie);
-
-        subthema.addCirkelsessie(savedCirkelsessie);
-        subthemaRepository.save(subthema);
-
-        gebruiker.addCirkelsessie(savedCirkelsessie);
-        gebruikerRepository.save(gebruiker);
+        gebruiker.addCirkelsessie(cirkelsessie);
+        gebruikers.saveAndFlush(gebruiker);
     }
+
 
     @Override
     public Cirkelsessie find(int id) throws CirkelsessieNotFound {
@@ -111,122 +121,200 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
     }
 
     @Override
-    public void update(int id, Cirkelsessie cirkelsessie) throws CirkelsessieNotFound {
-        Cirkelsessie old = find(id);
-
-        old.setNaam(cirkelsessie.getNaam());
-        old.setGebruiker(cirkelsessie.getGebruiker());
-        old.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
-        old.setAantalCirkels(cirkelsessie.getAantalCirkels());
-
-        repository.saveAndFlush(old);
-    }
-
-
-    @Override
-    public void delete(int id) throws CirkelsessieNotFound {
-        Cirkelsessie cirkelsessie = find(id);
-
-        repository.delete(cirkelsessie);
-    }
-
-    public void clone(int id) throws CirkelsessieNotFound {
-        Cirkelsessie old = find(id);
-        Cirkelsessie clone = new Cirkelsessie(old.getNaam(), old.getMaxAantalKaarten(), old.getAantalCirkels(), CirkelsessieSatus.OPEN, new DateTime(), old.getSubthema(), old.getGebruiker(), old.getChat());
-
-        clone.cloneDeelnames(old.getDeelnames());
-
-        repository.save(clone);
-    }
-
-    @Override
-    public void addSpelkaart(int id, int userId, Kaart kaart) throws CirkelsessieNotFound, GebruikerNotFound {
+    public void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound {
         Cirkelsessie cirkelsessie = repository.findOne(id);
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
 
         if (cirkelsessie == null) {
             throw new CirkelsessieNotFound();
         }
 
+        cirkelsessie.setNaam(dto.getNaam());
+        cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
+        cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
+        cirkelsessie.setStatus(dto.getStatus());
+        cirkelsessie.setStartDatum(dto.getStartDatum());
+
+        repository.saveAndFlush(cirkelsessie);
+    }
+
+    @Override
+    public void delete(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        repository.delete(cirkelsessie);
+    }
+
+    public void clone(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        Cirkelsessie clone = new Cirkelsessie();
+
+        clone.setNaam(cirkelsessie.getNaam());
+        clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
+        clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
+        clone.setStatus(cirkelsessie.getStatus());
+        clone.setStartDatum(DateTime.now());
+        clone.setSubthema(cirkelsessie.getSubthema());
+        clone.setGebruiker(cirkelsessie.getGebruiker());
+        clone.setDeelnames(cirkelsessie.getDeelnames().stream().collect(Collectors.toList()));
+
+        repository.save(clone);
+    }
+
+    @Override
+    public Subthema getSubthema(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        return cirkelsessie.getSubthema();
+    }
+
+    @Override
+    public List<Deelname> getDeelnames(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        return cirkelsessie.getDeelnames();
+    }
+
+    @Override
+    public void addDeelname(int id, int gebruikerId) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        Gebruiker gebruiker = gebruikers.findOne(gebruikerId);
+
+        for (Deelname deelname : cirkelsessie.getDeelnames()) {
+            if (deelname.getGebruiker().equals(gebruiker)) {
+                throw new AlreadyJoinedCirkelsessie();
+            }
+        }
+
+
+        Deelname deelname = new Deelname();
+        if (cirkelsessie.getDeelnames().size() == 0) {
+            deelname.setAanDeBeurt(true);
+        }
+        deelname.setAangemaakteKaarten(0);
+        deelname.setMedeorganisator(false);
+        deelname.setDatum(DateTime.now());
+        deelname.setCirkelsessie(cirkelsessie);
+        deelname.setGebruiker(gebruiker);
+        deelname = deelnames.save(deelname);
+
+        gebruiker.addDeelname(deelname);
+        gebruikers.saveAndFlush(gebruiker);
+
+        cirkelsessie.addDeelname(deelname);
+        repository.saveAndFlush(cirkelsessie);
+    }
+
+    @Override
+    public List<Spelkaart> getSpelkaarten(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        return cirkelsessie.getSpelkaarten();
+    }
+
+    @Override
+    public void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNotFound, GebruikerNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
+        }
+
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
         if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
 
-        //kaart
-        kaart.setGebruiker(gebruiker);
-        Kaart savedKaart = kaartenRepository.save(kaart);
+        Kaart kaart = new Kaart();
+        kaart.setTekst(dto.getTekst());
+        kaart.setImageUrl(dto.getImageUrl());
+        kaart.setCommentsToelaatbaar(dto.isCommentsToelaatbaar());
+        kaart.setGebruiker(gebruikers.findOne(dto.getGebruiker()));
+        kaart = kaarten.save(kaart);
 
-        //spelkaart
-        Spelkaart spelkaart = new Spelkaart(savedKaart, cirkelsessie);
-        Spelkaart savedSpelkaart = spelkaartenRepository.save(spelkaart);
+        gebruiker.addKaart(kaart);
+        gebruikers.saveAndFlush(gebruiker);
 
-        //cirkelsessie
-        cirkelsessie.addSpelkaart(savedSpelkaart);
-        Cirkelsessie savedCirkelsessie = repository.saveAndFlush(cirkelsessie);
+        Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+        spelkaart = spelkaarten.save(spelkaart);
 
-        //gebruiker
-        gebruiker.addKaart(savedKaart);
-        gebruikerRepository.save(gebruiker);
-
+        cirkelsessie.addSpelkaart(spelkaart);
+        repository.saveAndFlush(cirkelsessie);
     }
 
     @Override
-    public List<Cirkelsessie> gesloten() {
-        List<Cirkelsessie> temp = all();
-        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        DateTime now = new DateTime();
+    public List<Bericht> getBerichten(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        for (Cirkelsessie cirkelsessie : temp) {
-            if (cirkelsessie.getStatus()==CirkelsessieSatus.GESLOTEN) {
-                cirkelsessies.add(cirkelsessie);
-            }
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
         }
 
-        return cirkelsessies;
+        return cirkelsessie.getBerichten();
     }
 
     @Override
-    public List<Cirkelsessie> gestart() {
-        List<Cirkelsessie> temp = all();
-        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        DateTime now = new DateTime();
+    public void addBericht(int id, BerichtRequest dto) throws CirkelsessieNotFound, GebruikerNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        for (Cirkelsessie cirkelsessie : temp) {
-            if (cirkelsessie.getStatus()!=CirkelsessieSatus.BEEINDIGD && (now.compareTo(cirkelsessie.getStartDatum()) > 0)) {
-                cirkelsessies.add(cirkelsessie);
-            }
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
         }
 
-        return cirkelsessies;
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        Bericht bericht = new Bericht();
+        bericht.setTekst(dto.getTekst());
+        bericht.setDatum(DateTime.now().now());
+        bericht.setCirkelsessie(cirkelsessie);
+        bericht.setGebruiker(gebruiker);
+        bericht = berichten.save(bericht);
+
+        gebruiker.addBericht(bericht);
+        gebruikers.saveAndFlush(gebruiker);
+
+        cirkelsessie.addBericht(bericht);
+        repository.saveAndFlush(cirkelsessie);
     }
 
     @Override
-    public List<Cirkelsessie> open() {
-        List<Cirkelsessie> temp = all();
-        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        DateTime now = new DateTime();
+    public Gebruiker getGebruiker(int id) throws CirkelsessieNotFound {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
 
-        for (Cirkelsessie cirkelsessie : temp) {
-            if (cirkelsessie.getStatus()==CirkelsessieSatus.OPEN && (now.compareTo(cirkelsessie.getStartDatum()) < 0)) {
-                cirkelsessies.add(cirkelsessie);
-            }
+        if (cirkelsessie == null) {
+            throw new CirkelsessieNotFound();
         }
 
-        return cirkelsessies;
-    }
-
-    @Override
-    public List<Cirkelsessie> beeindigd() {
-        List<Cirkelsessie> temp = all();
-        List<Cirkelsessie> cirkelsessies = new ArrayList<>();
-        DateTime now = new DateTime();
-
-        for (Cirkelsessie cirkelsessie : temp) {
-            if (cirkelsessie.getStatus()==CirkelsessieSatus.BEEINDIGD) {
-                cirkelsessies.add(cirkelsessie);
-            }
-        }
-
-        return cirkelsessies;
+        return cirkelsessie.getGebruiker();
     }
 }

@@ -1,14 +1,15 @@
 package be.kdg.teamh.services;
 
-import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.entities.Hoofdthema;
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.dtos.request.KaartRequest;
+import be.kdg.teamh.dtos.request.SubthemaRequest;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
-import be.kdg.teamh.repositories.*;
+import be.kdg.teamh.repositories.GebruikerRepository;
+import be.kdg.teamh.repositories.HoofdthemaRepository;
+import be.kdg.teamh.repositories.KaartRepository;
+import be.kdg.teamh.repositories.SubthemaRepository;
 import be.kdg.teamh.services.contracts.SubthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,21 +20,19 @@ import java.util.List;
 @Service
 @Transactional
 public class SubthemaServiceImpl implements SubthemaService {
-    @Autowired
     private SubthemaRepository repository;
+    private HoofdthemaRepository hoofdthemas;
+    private GebruikerRepository gebruikers;
+    private KaartRepository kaarten;
+
 
     @Autowired
-    private HoofdthemaRepository hoofdthemaRepository;
-
-    @Autowired
-    private GebruikerRepository gebruikerRepository;
-
-    @Autowired
-    private KaartenRepository kaartenRepository;
-
-    @Autowired
-    private SpelkaartenRepository spelkaartenRepository;
-
+    public SubthemaServiceImpl(SubthemaRepository repository, HoofdthemaRepository hoofdthemas, GebruikerRepository gebruikers, KaartRepository kaarten) {
+        this.repository = repository;
+        this.hoofdthemas = hoofdthemas;
+        this.gebruikers = gebruikers;
+        this.kaarten = kaarten;
+    }
 
     @Override
     public List<Subthema> all() {
@@ -41,46 +40,31 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public void create(int userId, Subthema subthema) throws GebruikerNotFound {
-
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-
-        if (gebruiker == null) {
-            throw new GebruikerNotFound();
-        }
-
-        subthema.setGebruiker(gebruiker);
-        Subthema savedSubthema = repository.save(subthema);
-
-        gebruiker.addSubthema(savedSubthema);
-        gebruikerRepository.save(gebruiker);
-    }
-
-    @Override
-    public void create(int userId, int hoofdthemaId, Subthema subthema) throws GebruikerNotFound, HoofdthemaNotFound {
-
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-        Hoofdthema hoofdthema = hoofdthemaRepository.findOne(hoofdthemaId);
-
-        if (gebruiker == null) {
-            throw new GebruikerNotFound();
-        }
+    public void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound {
+        Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
         if (hoofdthema == null) {
             throw new HoofdthemaNotFound();
         }
 
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        subthema.setGebruiker(gebruiker);
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        Subthema subthema = new Subthema();
+        subthema.setNaam(dto.getNaam());
+        subthema.setBeschrijving(dto.getBeschrijving());
         subthema.setHoofdthema(hoofdthema);
-        Subthema savedSubthema = repository.save(subthema);
+        subthema.setGebruiker(gebruiker);
+        subthema = repository.saveAndFlush(subthema);
 
-        hoofdthema.addSubthema(savedSubthema);
-        hoofdthemaRepository.save(hoofdthema);
+        hoofdthema.addSubthema(subthema);
+        hoofdthemas.saveAndFlush(hoofdthema);
 
-
-        gebruiker.addSubthema(savedSubthema);
-        gebruikerRepository.save(gebruiker);
+        gebruiker.addSubthema(subthema);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
@@ -95,26 +79,70 @@ public class SubthemaServiceImpl implements SubthemaService {
     }
 
     @Override
-    public void update(int id, Subthema subthema) throws SubthemaNotFound {
-        Subthema old = find(id);
+    public void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound {
+        Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
 
-        old.setNaam(subthema.getNaam());
-        old.setBeschrijving(subthema.getBeschrijving());
+        if (hoofdthema == null) {
+            throw new HoofdthemaNotFound();
+        }
 
-        repository.saveAndFlush(old);
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
+
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
+
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        subthema.setNaam(dto.getNaam());
+        subthema.setBeschrijving(dto.getBeschrijving());
+        subthema.setHoofdthema(hoofdthema);
+        subthema.setGebruiker(gebruiker);
+
+        repository.saveAndFlush(subthema);
     }
 
     @Override
     public void delete(int id) throws SubthemaNotFound {
-        Subthema subthema = find(id);
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
 
         repository.delete(subthema);
     }
 
     @Override
-    public void addKaart(int subthemaId, int userId, Kaart kaart) throws GebruikerNotFound, SubthemaNotFound {
+    public Organisatie findOrganisatie(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getHoofdthema().getOrganisatie();
+    }
+
+    @Override
+    public Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getHoofdthema();
+    }
+
+    @Override
+    public void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound {
         Subthema subthema = repository.findOne(subthemaId);
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+        Gebruiker gebruiker = gebruikers.findOne(kaart.getGebruiker());
 
         if (subthema == null) {
             throw new SubthemaNotFound();
@@ -125,9 +153,14 @@ public class SubthemaServiceImpl implements SubthemaService {
         }
 
         //kaart
-        kaart.setGebruiker(gebruiker);
-        kaart.setSubthema(subthema);
-        Kaart savedKaart = kaartenRepository.save(kaart);
+        Kaart kaartje = new Kaart();
+        kaartje.setImageUrl(kaart.getImageUrl());
+        kaartje.setTekst(kaart.getTekst());
+        kaartje.setGebruiker(gebruiker);
+        kaartje.setSubthema(subthema);
+        kaartje.setCommentsToelaatbaar(false);
+
+        Kaart savedKaart = kaarten.save(kaartje);
 
         //cirkelsessie
         subthema.addKaart(savedKaart);
@@ -135,20 +168,28 @@ public class SubthemaServiceImpl implements SubthemaService {
 
         //gebruiker
         gebruiker.addKaart(savedKaart);
-        gebruikerRepository.save(gebruiker);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
-    public List<Kaart> getKaarten(int userId, int subthemaId) throws SubthemaNotFound, IsForbidden {
+    public List<Kaart> findKaarten(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
 
-        Subthema subthema = find(subthemaId);
-
-        if (subthema.getGebruiker().getId() != userId) {
-
-            throw new IsForbidden();
+        if (subthema == null) {
+            throw new SubthemaNotFound();
         }
 
         return subthema.getKaarten();
+    }
 
+    @Override
+    public List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound {
+        Subthema subthema = repository.findOne(id);
+
+        if (subthema == null) {
+            throw new SubthemaNotFound();
+        }
+
+        return subthema.getCirkelsessies();
     }
 }

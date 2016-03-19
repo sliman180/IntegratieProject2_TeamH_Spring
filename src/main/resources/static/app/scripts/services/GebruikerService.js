@@ -46,13 +46,37 @@
 
         };
 
-        exports.getMijnDeelnames = function () {
+        exports.deelnames = function (id) {
 
-            return $http.get("/api/gebruikers/deelnames").then(function (response) {
+            return $http.get("/api/gebruikers/" + id + "/deelnames").then(function (response) {
                 return response.data;
             });
 
         };
+        exports.organisaties = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/organisaties").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.hoofdthemas = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.subthemas = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         return exports;
 

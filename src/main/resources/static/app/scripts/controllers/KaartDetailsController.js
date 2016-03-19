@@ -3,7 +3,7 @@
     "use strict";
 
 
-    function KaartDetailsController($route, $routeParams, KaartService) {
+    function KaartDetailsController($route, $routeParams, KaartService, $rootScope) {
 
         var vm = this;
 
@@ -14,13 +14,13 @@
             vm.kaart = data;
 
             KaartService.getComments($routeParams.id).then(function (commentsdata) {
-
                 vm.comments = commentsdata;
-            })
+            });
         });
 
 
         vm.createComment = function (kaartId, comment) {
+            comment.gebruiker = $rootScope.id;
             KaartService.createComment(kaartId, comment).then(function () {
                 $route.reload;
             });

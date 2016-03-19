@@ -30,14 +30,6 @@
 
         };
 
-        exports.createWithSubthema = function (cirkelsessie, subthemaId) {
-
-            return $http.post("/api/cirkelsessies/subthema=" + subthemaId, cirkelsessie).then(function (response) {
-                return response.data;
-            });
-
-        };
-
         exports.update = function (cirkelsessie) {
 
             return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
@@ -49,6 +41,62 @@
         exports.delete = function (id) {
 
             return $http.delete("/api/cirkelsessies/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getSpelkaarten = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id + "/spelkaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.addSpelkaart = function (id) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/spelkaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getDeelnames = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id + "/deelnames").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.addDeelname = function (id) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/deelnames").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getBerichten = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id + "/berichten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getGebruiker = function (id) {
+
+            return $http.get("/api/cirkelsessies/" + id + "/gebruiker").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.addBericht = function (id, bericht) {
+
+            return $http.post("/api/cirkelsessies/" + id + "/berichten", bericht).then(function (response) {
                 return response.data;
             });
 

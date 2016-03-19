@@ -1,7 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,13 +16,13 @@ public class Spelkaart implements Serializable {
     @NotNull
     private int positie;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Kaart kaart;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Cirkelsessie.class, property = "id")
+    @ManyToOne
+    @JsonManagedReference
     private Cirkelsessie cirkelsessie;
-
 
     public Spelkaart() {
         //
@@ -72,5 +71,4 @@ public class Spelkaart implements Serializable {
     public void setPositie(int positie) {
         this.positie = positie;
     }
-
 }

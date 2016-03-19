@@ -1,7 +1,7 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,30 +25,31 @@ public class Kaart implements Serializable {
     @NotNull
     private boolean commentsToelaatbaar;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "gebruikersnaam")
-    private Gebruiker gebruiker;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
+    @ManyToOne
+    @JsonManagedReference(value = "kaart-subthema")
     private Subthema subthema;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @ManyToOne
+    @JsonManagedReference(value = "kaart-gebruiker")
+    private Gebruiker gebruiker;
+
+    @JsonBackReference(value = "commentaar-kaart")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "kaart")
     private List<Commentaar> commentaren = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference(value = "kaart-spelkaart")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "kaart")
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
     public Kaart() {
         //
     }
 
-    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Gebruiker gebruiker) {
+    public Kaart(String tekst, String imageUrl, boolean commentsToelaatbaar, Subthema subthema, Gebruiker gebruiker) {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
         this.commentsToelaatbaar = commentsToelaatbaar;
+        this.subthema = subthema;
         this.gebruiker = gebruiker;
     }
 
@@ -84,6 +85,14 @@ public class Kaart implements Serializable {
         this.commentsToelaatbaar = commentsToelaatbaar;
     }
 
+    public Subthema getSubthema() {
+        return subthema;
+    }
+
+    public void setSubthema(Subthema subthema) {
+        this.subthema = subthema;
+    }
+
     public Gebruiker getGebruiker() {
         return gebruiker;
     }
@@ -100,7 +109,7 @@ public class Kaart implements Serializable {
         this.commentaren = commentaren;
     }
 
-    public void addComment(Commentaar commentaar) {
+    public void addCommentaar(Commentaar commentaar) {
         this.commentaren.add(commentaar);
     }
 
@@ -114,13 +123,5 @@ public class Kaart implements Serializable {
 
     public void addSpelkaart(Spelkaart spelkaart) {
         this.spelkaarten.add(spelkaart);
-    }
-
-    public Subthema getSubthema() {
-        return subthema;
-    }
-
-    public void setSubthema(Subthema subthema) {
-        this.subthema = subthema;
     }
 }

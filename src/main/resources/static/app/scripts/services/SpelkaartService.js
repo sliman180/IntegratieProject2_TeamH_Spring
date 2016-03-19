@@ -6,10 +6,9 @@
 
         var exports = {};
 
+        exports.getKaart = function (id) {
 
-        exports.getSpelkaarten = function (cirkelsessieId) {
-
-            return $http.get("/api/cirkelsessies/" + cirkelsessieId + "/spelkaarten").then(function (response) {
+            return $http.get("/api/spelkaarten/" + id + "/kaart").then(function (response) {
                 return response.data;
             });
 

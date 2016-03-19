@@ -6,9 +6,25 @@
 
         var exports = {};
 
-        exports.myHoofdthemas = function () {
+        exports.getOrganisatie = function (id) {
 
-            return $http.get("/api/gebruikers/hoofdthemas").then(function (response) {
+            return $http.get("/api/hoofdthemas/" + id + "/organisatie").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getSubthemas = function (id) {
+
+            return $http.get("/api/hoofdthemas/" + id + "/subthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/hoofdthemas").then(function (response) {
                 return response.data;
             });
 
@@ -25,14 +41,6 @@
         exports.find = function (id) {
 
             return $http.get("/api/hoofdthemas/" + id).then(function (response) {
-                return response.data;
-            });
-
-        };
-
-        exports.createWithOrganisation = function (hoofdthema, organisatieId) {
-
-            return $http.post("/api/hoofdthemas/organisatie=" + organisatieId, hoofdthema).then(function (response) {
                 return response.data;
             });
 

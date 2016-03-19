@@ -1,7 +1,7 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "hoofdthemas")
 public class Hoofdthema implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,21 +23,23 @@ public class Hoofdthema implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Organisatie organisatie;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hoofdthema")
     private List<Subthema> subthemas = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hoofdthema")
     private List<Tag> tags = new ArrayList<>();
 
-    private Hoofdthema() {
+    public Hoofdthema() {
         //
     }
 
@@ -49,20 +50,8 @@ public class Hoofdthema implements Serializable {
         this.gebruiker = gebruiker;
     }
 
-    public List<Subthema> getSubthemas() {
-        return subthemas;
-    }
-
-    public void setSubthemas(List<Subthema> subthemas) {
-        this.subthemas = subthemas;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNaam() {
@@ -97,15 +86,23 @@ public class Hoofdthema implements Serializable {
         this.gebruiker = gebruiker;
     }
 
+    public List<Subthema> getSubthemas() {
+        return subthemas;
+    }
+
+    public void setSubthemas(List<Subthema> subthemas) {
+        this.subthemas = subthemas;
+    }
+
+    public void addSubthema(Subthema subthema) {
+        this.subthemas.add(subthema);
+    }
+
     public List<Tag> getTags() {
         return tags;
     }
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
-    }
-
-    public void addSubthema(Subthema subthema) {
-        this.subthemas.add(subthema);
     }
 }

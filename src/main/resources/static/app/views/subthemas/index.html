@@ -44,6 +44,10 @@
         margin: 2%;
     }
 
+    #form-title:hover {
+        cursor: pointer;
+    }
+
 </style>
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
@@ -57,7 +61,7 @@
                 <span class="mdl-list__item-sub-title">Beschrijving: {{subthema.beschrijving}}</span>
                 <span class="mdl-list__item-sub-title">Organisatie: {{subthema.hoofdthema.organisatie.naam}}</span>
                 <span class="mdl-list__item-sub-title">Hoofdthema: {{subthema.hoofdthema.naam}}</span>
-                <span class="mdl-list__item-sub-title">Aantal kaarten: {{subthema.kaarten.length}}</span>
+                <span class="mdl-list__item-sub-title">Aantal kaarten: {{vm.kaarten[$index].length}}</span>
             </span>
             <span class="mdl-list__item-secondary-content">
               <span id="subthema-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
@@ -91,7 +95,7 @@
 
         <div class="mdl-card__supporting-text">
 
-            <form ng-submit="vm.addSubthema(subthema,hoofdthemaId)">
+            <form ng-submit="vm.addSubthema(subthema)">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" ng-model="subthema.naam">
@@ -106,7 +110,7 @@
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Hoofdthema</label>
-                    <select ng-model="hoofdthemaId">
+                    <select ng-model="subthema.hoofdthema">
                         <option ng-repeat="hoofdthema in vm.hoofdthemas" value="{{hoofdthema.id}}" class="mt-opt">
                             {{hoofdthema.naam}}
                         </option>

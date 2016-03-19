@@ -51,7 +51,7 @@
     <div class="mdl-card__actions mdl-card--border">
         <p>Beschrijving:<b>{{vm.subthema.beschrijving}}</b></p>
 
-        <p>Aantal gekoppelde cirkelsessies: <b>{{vm.subthema.cirkelsessies.length}}</b></p>
+        <p>Aantal gekoppelde cirkelsessies: <b>{{vm.cirkelsessies.length}}</b></p>
     </div>
 
     <div class="mdl-card__menu">
@@ -212,7 +212,7 @@
                         <b><a ng-href="{{kaart.imageUrl}}" target="_blank">Kaart afbeelding</a></b>
                     </p>
 
-                    <p>Aaantal comments: <b>{{kaart.commentaren.length}}</b>
+                    <p>Aaantal comments: <b>{{vm.commentaren[$index].length}}</b>
                     </p>
 
                     <div class="dropdown">
@@ -234,7 +234,7 @@
         <p></p>
     </div>
     <div class="mdl-card__supporting-text">
-        <form ng-submit="vm.createKaart(vm.subthema.id, kaart)" action="" id="form">
+        <form ng-submit="vm.createKaart(vm.subthema.id,kaart)" action="">
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst">

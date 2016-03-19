@@ -1,8 +1,7 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -23,78 +22,54 @@ public class Cirkelsessie implements Serializable {
     private String naam;
 
     @NotNull
+    private Status status;
+
+    @NotNull
     private int aantalCirkels;
 
     @NotNull
     private int maxAantalKaarten;
 
     @NotNull
-    private CirkelsessieSatus status;
-
-    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime startDatum;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
+    @ManyToOne
+    @JsonManagedReference
     private Subthema subthema;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Deelname.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
     private List<Deelname> deelnames = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Spelkaart.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
     private List<Spelkaart> spelkaarten = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Chat.class, property = "id")
-    private Chat chat;
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cirkelsessie")
+    private List<Bericht> berichten = new ArrayList<>();
 
     public Cirkelsessie() {
         //
     }
 
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, CirkelsessieSatus status, DateTime startDatum, Chat chat) {
+    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Status status, DateTime startDatum, Subthema subthema, Gebruiker gebruiker) {
         this.naam = naam;
-        this.maxAantalKaarten = maxAantalKaarten;
-        this.aantalCirkels = aantalCirkels;
         this.status = status;
-        this.startDatum = startDatum;
-        this.chat = chat;
-    }
-
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, Subthema subthema, Gebruiker gebruiker, Chat chat) {
-        this.naam = naam;
         this.aantalCirkels = aantalCirkels;
         this.maxAantalKaarten = maxAantalKaarten;
-        this.subthema = subthema;
-        this.gebruiker = gebruiker;
-        this.chat = chat;
-    }
-
-    public Cirkelsessie(String naam, int aantalCirkels, int maxAantalKaarten, CirkelsessieSatus status, DateTime startDatum, Subthema subthema, Gebruiker gebruiker, Chat chat) {
-        this.naam = naam;
-        this.aantalCirkels = aantalCirkels;
-        this.maxAantalKaarten = maxAantalKaarten;
-        this.status = status;
         this.startDatum = startDatum;
         this.subthema = subthema;
         this.gebruiker = gebruiker;
-        this.chat = chat;
     }
-
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNaam() {
@@ -105,14 +80,6 @@ public class Cirkelsessie implements Serializable {
         this.naam = naam;
     }
 
-    public CirkelsessieSatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(CirkelsessieSatus status) {
-        this.status = status;
-    }
-
     public int getAantalCirkels() {
         return aantalCirkels;
     }
@@ -121,20 +88,28 @@ public class Cirkelsessie implements Serializable {
         this.aantalCirkels = aantalCirkels;
     }
 
-    public DateTime getStartDatum() {
-        return startDatum;
-    }
-
-    public void setStartDatum(DateTime startDatum) {
-        this.startDatum = startDatum;
-    }
-
     public int getMaxAantalKaarten() {
         return maxAantalKaarten;
     }
 
     public void setMaxAantalKaarten(int maxAantalKaarten) {
         this.maxAantalKaarten = maxAantalKaarten;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public DateTime getStartDatum() {
+        return startDatum;
+    }
+
+    public void setStartDatum(DateTime startDatum) {
+        this.startDatum = startDatum;
     }
 
     public Subthema getSubthema() {
@@ -174,24 +149,18 @@ public class Cirkelsessie implements Serializable {
     }
 
     public void addSpelkaart(Spelkaart spelkaart) {
-        spelkaarten.add(spelkaart);
+        this.spelkaarten.add(spelkaart);
     }
 
-
-    public void cloneDeelnames(List<Deelname> deelnames) {
-        for (Deelname deelname : deelnames) {
-            deelname.setCirkelsessie(this);
-            this.deelnames.add(deelname);
-        }
+    public List<Bericht> getBerichten() {
+        return berichten;
     }
 
-    public Chat getChat() {
-        return chat;
+    public void setBerichten(List<Bericht> berichten) {
+        this.berichten = berichten;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void addBericht(Bericht bericht) {
+        this.berichten.add(bericht);
     }
-
-
 }

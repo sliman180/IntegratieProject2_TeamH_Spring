@@ -39,17 +39,32 @@
             var data = localStorageService.get("auth");
 
             if (data) {
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (gebruiker) {
 
-                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (data) {
-
-                    $rootScope.id = data.id;
-                    $rootScope.naam = data.gebruikersnaam;
-                    $rootScope.rollen = data.rollen;
+                    $rootScope.id = gebruiker.id;
+                    $rootScope.naam = gebruiker.gebruikersnaam;
+                    $rootScope.rollen = gebruiker.rollen;
                     $rootScope.loggedIn = true;
-                    $rootScope.aantalDeelnames = data.deelnames.length;
-                    $rootScope.aantalHoofdthemas = data.hoofdthemas.length;
-                    $rootScope.aantalOrganisaties = data.organisaties.length;
-                    $rootScope.aantalSubthemas = data.subthemas.length;
+
+                    var gebruikersdatapolling = function () {
+                        GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
+                            $rootScope.aantalDeelnames = deelnames.length;
+                        });
+                        GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
+                            $rootScope.aantalHoofdthemas = hoofdthemas.length;
+                        });
+                        GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
+                            $rootScope.aantalOrganisaties = organisaties.length;
+                        });
+                        GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
+                            $rootScope.aantalSubthemas = subthemas.length;
+                        });
+
+                        $timeout(gebruikersdatapolling, 1000);
+                    };
+
+                    gebruikersdatapolling();
+
 
                 });
 

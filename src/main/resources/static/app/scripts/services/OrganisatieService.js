@@ -6,9 +6,18 @@
 
         var exports = {};
 
-        exports.myOrganisaties = function () {
+        exports.all = function () {
 
-            return $http.get("/api/organisaties/my").then(function (response) {
+            return $http.get("/api/organisaties").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/organisaties").then(function (response) {
                 return response.data;
             });
 
@@ -21,6 +30,16 @@
             });
 
         };
+
+
+        exports.getHoofdthemas = function (id) {
+
+            return $http.get("/api/organisaties/" + id + "/hoofdthemas").then(function (response) {
+                return response.data;
+            });
+
+        };
+
 
         exports.create = function (organisatie) {
 

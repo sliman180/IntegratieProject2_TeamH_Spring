@@ -1,10 +1,11 @@
 package be.kdg.teamh.controllers;
 
+import be.kdg.teamh.dtos.request.GebruikerRequest;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.notfound.RolNotFound;
+import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.GebruikerService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/gebruikers")
 public class GebruikerController {
-    @Autowired
     private GebruikerService service;
+
+    private AuthService authService;
+
+    @Autowired
+    public GebruikerController(GebruikerService service, AuthService authService) {
+        this.service = service;
+        this.authService = authService;
+    }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -23,9 +31,9 @@ public class GebruikerController {
         return service.all();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@RequestBody Gebruiker gebruiker) {
+    public void create(@RequestBody GebruikerRequest gebruiker) throws RolNotFound {
         service.create(gebruiker);
     }
 
@@ -37,7 +45,7 @@ public class GebruikerController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @RequestBody Gebruiker gebruiker) throws GebruikerNotFound {
+    public void update(@PathVariable("id") int id, @RequestBody GebruikerRequest gebruiker) throws GebruikerNotFound {
         service.update(id, gebruiker);
     }
 
@@ -48,53 +56,39 @@ public class GebruikerController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/{id}/organisaties", method = RequestMethod.GET)
+    public List<Organisatie> getOrganisaties(@PathVariable("id") int id) throws GebruikerNotFound {
+        return service.getOrganisaties(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/{id}/subthemas", method = RequestMethod.GET)
+    public List<Subthema> getSubthemas(@PathVariable("id") int id) throws GebruikerNotFound {
+        return service.getSubthemas(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/{id}/hoofdthemas", method = RequestMethod.GET)
+    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id) throws GebruikerNotFound {
+        return service.getHoofdthemas(id);
+    }
+
+
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/cirkelsessies", method = RequestMethod.GET)
-    public List<Cirkelsessie> showCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound {
-        return service.showCirkelsessies(id);
+    public List<Cirkelsessie> getCirkelsessies(@PathVariable("id") int id) throws GebruikerNotFound {
+        return service.getCirkelsessies(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/deelnames", method = RequestMethod.GET)
-    public List<Deelname> getDeelnames(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
-
-        return service.findDeelnames(getUserId(token));
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/hoofdthemas", method = RequestMethod.GET)
-    public List<Hoofdthema> getHoofdthemas(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
-
-        return service.find(getUserId(token)).getHoofdthemas();
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/subthemas", method = RequestMethod.GET)
-    public List<Subthema> getSubthemas(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
-
-        return service.find(getUserId(token)).getSubthemas();
+    @RequestMapping(value = "/{id}/deelnames", method = RequestMethod.GET)
+    public List<Deelname> getDeelnames(@PathVariable("id") int id) throws GebruikerNotFound {
+        return service.getDeelnames(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound
-    {
-        return service.find(getUserId(token));
-    }
-
-
-    private boolean isAdmin(String token) {
-        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
-
-        return ((List) claims.get("rollen")).contains("admin");
-    }
-
-    private boolean isRegistered(String token) {
-        Claims claims = Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody();
-
-        return ((List) claims.get("rollen")).contains("user");
-    }
-
-    private int getUserId(String token) {
-        return Integer.parseInt(Jwts.parser().setSigningKey("kandoe").parseClaimsJws(token.substring(7)).getBody().getSubject());
+    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token) throws GebruikerNotFound {
+        return authService.findByToken(token);
     }
 }

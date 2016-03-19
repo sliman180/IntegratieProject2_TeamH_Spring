@@ -1,7 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -23,40 +22,27 @@ public class Commentaar implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime datum;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = Gebruiker.class, property = "gebruikersnaam")
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @ManyToOne
+    @JsonManagedReference
     private Kaart kaart;
 
     public Commentaar() {
         //
-
-        this.datum = new DateTime();
     }
 
-    public Commentaar(String tekst, Gebruiker gebruiker) {
+    public Commentaar(String tekst, DateTime datum, Gebruiker gebruiker, Kaart kaart) {
         this.tekst = tekst;
+        this.datum = datum;
         this.gebruiker = gebruiker;
-        this.datum = new DateTime();
-    }
-
-    public Kaart getKaart() {
-        return kaart;
-    }
-
-    public void setKaart(Kaart kaart) {
         this.kaart = kaart;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTekst() {
@@ -67,14 +53,6 @@ public class Commentaar implements Serializable {
         this.tekst = tekst;
     }
 
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
-    }
-
     public DateTime getDatum() {
         return datum;
     }
@@ -83,5 +61,19 @@ public class Commentaar implements Serializable {
         this.datum = datum;
     }
 
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
 
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
+    }
+
+    public Kaart getKaart() {
+        return kaart;
+    }
+
+    public void setKaart(Kaart kaart) {
+        this.kaart = kaart;
+    }
 }

@@ -6,9 +6,43 @@
 
         var exports = {};
 
-        exports.mySubthemas = function () {
 
-            return $http.get("/api/gebruikers/subthemas").then(function (response) {
+        exports.getKaarten = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/kaarten").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getHoofdthema = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/hoofdthema").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.getCirkelsessies = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/cirkelsessies").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+
+        exports.getOrganisatie = function (id) {
+
+            return $http.get("/api/subthemas/" + id + "/organisatie").then(function (response) {
+                return response.data;
+            });
+
+        };
+
+        exports.allOfGebruiker = function (id) {
+
+            return $http.get("/api/gebruikers/" + id + "/subthemas").then(function (response) {
                 return response.data;
             });
 
@@ -25,14 +59,6 @@
         exports.find = function (id) {
 
             return $http.get("/api/subthemas/" + id).then(function (response) {
-                return response.data;
-            });
-
-        };
-
-        exports.createWithHoofdthema = function (subthema, hoofdthemaId) {
-
-            return $http.post("/api/subthemas/hoofdthema=" + hoofdthemaId, subthema).then(function (response) {
                 return response.data;
             });
 

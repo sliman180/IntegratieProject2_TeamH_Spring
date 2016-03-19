@@ -1,7 +1,6 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,40 +22,40 @@ public class Gebruiker implements Serializable {
     @NotNull
     private String wachtwoord;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<Hoofdthema> hoofdthemas = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Subthema.class, property = "id")
-    private List<Subthema> subthemas = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Kaart.class, property = "id")
-    private List<Kaart> kaarten = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Deelname.class, property = "id")
-    private List<Deelname> deelnames = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Commentaar.class, property = "id")
-    private List<Commentaar> commentaren = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Organisatie> organisaties = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Hoofdthema> hoofdthemas = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Subthema> subthemas = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Kaart> kaarten = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Deelname> deelnames = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
+    private List<Commentaar> commentaren = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
     private List<Bericht> berichten = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Rol> rollen = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
     public Gebruiker() {
         //
@@ -73,16 +72,8 @@ public class Gebruiker implements Serializable {
         this.rollen = rollen;
     }
 
-    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
-        this.cirkelsessies.add(cirkelsessie);
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getGebruikersnaam() {
@@ -101,6 +92,18 @@ public class Gebruiker implements Serializable {
         this.wachtwoord = wachtwoord;
     }
 
+    public List<Organisatie> getOrganisaties() {
+        return organisaties;
+    }
+
+    public void setOrganisaties(List<Organisatie> organisaties) {
+        this.organisaties = organisaties;
+    }
+
+    public void addOrganisatie(Organisatie organisatie) {
+        this.organisaties.add(organisatie);
+    }
+
     public List<Hoofdthema> getHoofdthemas() {
         return hoofdthemas;
     }
@@ -109,44 +112,8 @@ public class Gebruiker implements Serializable {
         this.hoofdthemas = hoofdthemas;
     }
 
-    public List<Kaart> getKaarten() {
-        return kaarten;
-    }
-
-    public void setKaarten(List<Kaart> kaarten) {
-        this.kaarten = kaarten;
-    }
-
-    public List<Deelname> getDeelnames() {
-        return deelnames;
-    }
-
-    public void setDeelnames(List<Deelname> deelnames) {
-        this.deelnames = deelnames;
-    }
-
-    public List<Commentaar> getCommentaren() {
-        return commentaren;
-    }
-
-    public void setCommentaren(List<Commentaar> commentaren) {
-        this.commentaren = commentaren;
-    }
-
-    public List<Bericht> getBerichten() {
-        return berichten;
-    }
-
-    public void setBerichten(List<Bericht> berichten) {
-        this.berichten = berichten;
-    }
-
-    public List<Rol> getRollen() {
-        return rollen;
-    }
-
-    public void setRollen(List<Rol> rollen) {
-        this.rollen = rollen;
+    public void addHoofdthema(Hoofdthema hoofdthema) {
+        this.hoofdthemas.add(hoofdthema);
     }
 
     public List<Cirkelsessie> getCirkelsessies() {
@@ -157,16 +124,8 @@ public class Gebruiker implements Serializable {
         this.cirkelsessies = cirkelsessies;
     }
 
-    public void setCirkelsessise(List<Cirkelsessie> cirkelsessies) {
-        this.cirkelsessies = cirkelsessies;
-    }
-
-    public List<Organisatie> getOrganisaties() {
-        return organisaties;
-    }
-
-    public void setOrganisaties(List<Organisatie> organisaties) {
-        this.organisaties = organisaties;
+    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessies.add(cirkelsessie);
     }
 
     public List<Subthema> getSubthemas() {
@@ -177,38 +136,69 @@ public class Gebruiker implements Serializable {
         this.subthemas = subthemas;
     }
 
-    public void addRol(Rol rol) {
-        rollen.add(rol);
+    public void addSubthema(Subthema subthema) {
+        this.subthemas.add(subthema);
     }
 
-    public void addDeelname(Deelname deelname) {
-        this.deelnames.add(deelname);
+    public List<Kaart> getKaarten() {
+        return kaarten;
     }
 
-    public void addOrganisatie(Organisatie organisatie) {
-        this.organisaties.add(organisatie);
+    public void setKaarten(List<Kaart> kaarten) {
+        this.kaarten = kaarten;
     }
 
     public void addKaart(Kaart kaart) {
         this.kaarten.add(kaart);
     }
 
-    public void addBericht(Bericht bericht) {
-        this.berichten.add(bericht);
+    public List<Deelname> getDeelnames() {
+        return deelnames;
     }
 
-    public void addHoofdthema(Hoofdthema hoofdthema) {
-        this.hoofdthemas.add(hoofdthema);
+    public void setDeelnames(List<Deelname> deelnames) {
+        this.deelnames = deelnames;
     }
 
-    public void addSubthema(Subthema subthema) {
-        this.subthemas.add(subthema);
+    public void addDeelname(Deelname deelname) {
+        this.deelnames.add(deelname);
+    }
+
+    public List<Commentaar> getCommentaren() {
+        return commentaren;
+    }
+
+    public void setCommentaren(List<Commentaar> commentaren) {
+        this.commentaren = commentaren;
     }
 
     public void addCommentaar(Commentaar commentaar) {
         this.commentaren.add(commentaar);
     }
 
+    public List<Bericht> getBerichten() {
+        return berichten;
+    }
+
+    public void setBerichten(List<Bericht> berichten) {
+        this.berichten = berichten;
+    }
+
+    public void addBericht(Bericht bericht) {
+        this.berichten.add(bericht);
+    }
+
+    public List<Rol> getRollen() {
+        return rollen;
+    }
+
+    public void setRollen(List<Rol> rollen) {
+        this.rollen = rollen;
+    }
+
+    public void addRol(Rol rol) {
+        this.rollen.add(rol);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -223,7 +213,6 @@ public class Gebruiker implements Serializable {
         Gebruiker gebruiker = (Gebruiker) o;
 
         return gebruikersnaam.equals(gebruiker.gebruikersnaam) && wachtwoord.equals(gebruiker.wachtwoord);
-
     }
 
     @Override

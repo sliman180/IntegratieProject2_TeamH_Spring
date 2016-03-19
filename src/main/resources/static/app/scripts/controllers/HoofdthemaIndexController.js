@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function HoofdthemaIndexController($route, HoofdthemaService, OrganisatieService) {
+    function HoofdthemaIndexController($rootScope, $route, HoofdthemaService, OrganisatieService) {
 
         var vm = this;
 
@@ -10,26 +10,27 @@
 
         vm.organisaties = [];
 
+        vm.subthemas = [];
 
-        HoofdthemaService.myHoofdthemas().then(function (data) {
+        HoofdthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.hoofdthemas = data;
+            angular.forEach(vm.hoofdthemas, function (value, key) {
+                HoofdthemaService.getSubthemas(value.id).then(function (subthemadata) {
+                    vm.subthemas.push(subthemadata);
+                });
+            });
         });
 
-        OrganisatieService.myOrganisaties().then(function (data) {
+
+        OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.organisaties = data;
         });
 
-
-        vm.addHoofdthema = function (hoofdthema, organisatieId) {
-            if (organisatieId > 0) {
-                HoofdthemaService.createWithOrganisation(hoofdthema, organisatieId).then(function () {
-                    $route.reload();
-                });
-            } else {
-                HoofdthemaService.create(hoofdthema).then(function () {
-                    $route.reload();
-                });
-            }
+        vm.addHoofdthema = function (hoofdthema) {
+            hoofdthema.gebruiker = $rootScope.id;
+            HoofdthemaService.create(hoofdthema).then(function () {
+                $route.reload();
+            });
         }
 
     }

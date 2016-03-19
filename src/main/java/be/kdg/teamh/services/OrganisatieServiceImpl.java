@@ -1,6 +1,8 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -11,31 +13,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
 public class OrganisatieServiceImpl implements OrganisatieService {
-    @Autowired
     private OrganisatieRepository repository;
+    private GebruikerRepository gebruikers;
 
     @Autowired
-    private GebruikerRepository gebruikerRepository;
+    public OrganisatieServiceImpl(OrganisatieRepository repository, GebruikerRepository gebruikers) {
+        this.repository = repository;
+        this.gebruikers = gebruikers;
+    }
 
     public List<Organisatie> all() {
         return repository.findAll();
     }
 
     @Override
-    public void create(int userId, Organisatie organisatie) {
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
+    public void create(OrganisatieRequest dto) throws GebruikerNotFound {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        organisatie.setOrganisator(gebruiker);
-        Organisatie savedOrganisatie = repository.save(organisatie);
-        gebruiker.addOrganisatie(savedOrganisatie);
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
 
-        gebruikerRepository.save(gebruiker);
+        Organisatie organisatie = new Organisatie();
+        organisatie.setNaam(dto.getNaam());
+        organisatie.setBeschrijving(dto.getBeschrijving());
+        organisatie.setGebruiker(gebruiker);
+        organisatie = repository.saveAndFlush(organisatie);
+
+        gebruiker.addOrganisatie(organisatie);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
@@ -50,40 +61,41 @@ public class OrganisatieServiceImpl implements OrganisatieService {
     }
 
     @Override
-    public void update(int id, Organisatie organisatie) throws OrganisatieNotFound {
-        Organisatie old = repository.findOne(id);
+    public void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        old.setNaam(organisatie.getNaam());
-        old.setBeschrijving(organisatie.getBeschrijving());
-        old.setOrganisator(organisatie.getOrganisator());
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
 
-        repository.saveAndFlush(old);
+        Organisatie organisatie = repository.findOne(id);
+
+        if (organisatie == null) {
+            throw new OrganisatieNotFound();
+        }
+
+        organisatie.setNaam(dto.getNaam());
+        organisatie.setBeschrijving(dto.getBeschrijving());
+        organisatie.setGebruiker(gebruiker);
+
+        repository.saveAndFlush(organisatie);
     }
 
     @Override
     public void delete(int id) throws OrganisatieNotFound {
-        Organisatie organisatie = find(id);
+        Organisatie organisatie = repository.findOne(id);
 
+        if (organisatie == null) {
+            throw new OrganisatieNotFound();
+        }
 
         repository.delete(organisatie);
     }
 
-
     @Override
-    public List<Organisatie> getMyOrganisaties(int userId) throws GebruikerNotFound {
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-        List<Organisatie> myOrganisaties = new ArrayList<>();
-        if (gebruiker == null) {
+    public List<Hoofdthema> showHoofdthemas(int id) throws OrganisatieNotFound {
+        Organisatie organisatie = find(id);
 
-            throw new GebruikerNotFound();
-        }
-
-        for (Organisatie organisatie : repository.findAll()) {
-            if (organisatie.getOrganisator().getId() == userId) {
-                myOrganisaties.add(organisatie);
-            }
-
-        }
-        return myOrganisaties;
+        return organisatie.getHoofdthemas();
     }
 }

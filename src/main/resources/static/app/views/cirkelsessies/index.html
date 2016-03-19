@@ -167,7 +167,7 @@
                 </a>
             </div>
             <div class="mdl-card__menu">
-                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{cirkelsessie.deelnames.length}}">
+                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="{{vm.deelnames[$index].length}}">
                     account_box
                 </div>
 
@@ -196,7 +196,10 @@
             </div>
         </div>
     </div>
+
+
 </div>
+
 <div>
     <div id="form-title" class="mdl-card__title mdl-color--primary mdl-color-text--white"
          ng-click="showForm = ! showForm">
@@ -206,7 +209,7 @@
 
         <div class="mdl-card__supporting-text">
 
-            <form ng-submit="vm.addCirkelsessie(cirkelsessie,subthemaId)" action="">
+            <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="" id="session-form">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
@@ -214,8 +217,8 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$" id="aantalCirkels"
-                           ng-model="cirkelsessie.aantalCirkels">
+                    <input class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$"
+                           id="aantalCirkels" ng-model="cirkelsessie.aantalCirkels">
                     <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
                     <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
                 </div>
@@ -240,14 +243,14 @@
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" min="2016-03-04" type="datetime-local" id="datum"
+                    <input class="mdl-textfield__input" type="datetime-local" id="datum"
                            ng-model="cirkelsessie.startDatum">
                     <label class="mdl-textfield__label" for="datum"></label>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Subthema </label>
-                    <select ng-model="subthemaId">
+                    <select ng-model="subthema">
                         <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}" class="sbt-opt">
                             {{subthema.naam}}
                         </option>
@@ -262,6 +265,6 @@
             </form>
 
         </div>
-    </div>
 
+    </div>
 </div>

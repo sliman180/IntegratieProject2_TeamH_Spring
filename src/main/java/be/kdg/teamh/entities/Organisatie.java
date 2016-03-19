@@ -1,7 +1,7 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,11 +23,12 @@ public class Organisatie implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisatie")
     private List<Hoofdthema> hoofdthemas = new ArrayList<>();
 
     public Organisatie() {
@@ -40,21 +41,8 @@ public class Organisatie implements Serializable {
         this.gebruiker = gebruiker;
     }
 
-
-    public List<Hoofdthema> getHoofdthemas() {
-        return hoofdthemas;
-    }
-
-    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
-        this.hoofdthemas = hoofdthemas;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNaam() {
@@ -73,12 +61,20 @@ public class Organisatie implements Serializable {
         this.beschrijving = beschrijving;
     }
 
-    public Gebruiker getOrganisator() {
+    public Gebruiker getGebruiker() {
         return gebruiker;
     }
 
-    public void setOrganisator(Gebruiker gebruiker) {
+    public void setGebruiker(Gebruiker gebruiker) {
         this.gebruiker = gebruiker;
+    }
+
+    public List<Hoofdthema> getHoofdthemas() {
+        return hoofdthemas;
+    }
+
+    public void setHoofdthemas(List<Hoofdthema> hoofdthemas) {
+        this.hoofdthemas = hoofdthemas;
     }
 
     public void addHoofdthema(Hoofdthema hoofdthema) {

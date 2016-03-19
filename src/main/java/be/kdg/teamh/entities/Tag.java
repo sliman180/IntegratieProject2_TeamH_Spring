@@ -1,6 +1,9 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -10,9 +13,12 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Hoofdthema hoofdthema;
+    @NotNull
+    private String naam;
 
+    @ManyToOne
+    @JsonManagedReference
+    private Hoofdthema hoofdthema;
 
     public Tag() {
         //
@@ -22,8 +28,12 @@ public class Tag implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getNaam() {
+        return naam;
+    }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
     }
 
     public Hoofdthema getHoofdthema() {

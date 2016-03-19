@@ -1,7 +1,7 @@
 package be.kdg.teamh.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,31 +23,32 @@ public class Subthema implements Serializable {
     @NotNull
     private String beschrijving;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Hoofdthema hoofdthema;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonManagedReference
     private Gebruiker gebruiker;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Cirkelsessie.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "subthema")
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Kaart.class, property = "id")
+    @JsonBackReference
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "subthema")
     private List<Kaart> kaarten = new ArrayList<>();
 
     public Subthema() {
         //
     }
 
-    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema) {
+    public Subthema(String naam, String beschrijving, Hoofdthema hoofdthema, Gebruiker gebruiker) {
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.hoofdthema = hoofdthema;
-
+        this.gebruiker = gebruiker;
     }
-
 
     public int getId() {
         return id;
@@ -81,12 +82,24 @@ public class Subthema implements Serializable {
         this.hoofdthema = hoofdthema;
     }
 
+    public Gebruiker getGebruiker() {
+        return gebruiker;
+    }
+
+    public void setGebruiker(Gebruiker gebruiker) {
+        this.gebruiker = gebruiker;
+    }
+
     public List<Cirkelsessie> getCirkelsessies() {
         return cirkelsessies;
     }
 
     public void setCirkelsessies(List<Cirkelsessie> cirkelsessies) {
         this.cirkelsessies = cirkelsessies;
+    }
+
+    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
+        this.cirkelsessies.add(cirkelsessie);
     }
 
     public List<Kaart> getKaarten() {
@@ -98,18 +111,6 @@ public class Subthema implements Serializable {
     }
 
     public void addKaart(Kaart kaart) {
-        kaarten.add(kaart);
-    }
-
-    public void addCirkelsessie(Cirkelsessie cirkelsessie) {
-        cirkelsessies.add(cirkelsessie);
-    }
-
-    public Gebruiker getGebruiker() {
-        return gebruiker;
-    }
-
-    public void setGebruiker(Gebruiker gebruiker) {
-        this.gebruiker = gebruiker;
+        this.kaarten.add(kaart);
     }
 }

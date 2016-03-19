@@ -9,8 +9,9 @@ describe("From a home page", function(){
         element(by.cssContainingText(".org-opt","KdG")).click();
         element(by.id("form")).element(by.tagName("button")).click();
 
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/hoofdthemas");
         expect(element.all(by.css(".lijst-item")).count()).toBe(1);
-        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/hoofdthemas")
+
 
     });
 

@@ -1,8 +1,10 @@
 package be.kdg.teamh.services;
 
+import be.kdg.teamh.dtos.request.HoofdthemaRequest;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
 import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
@@ -19,14 +21,16 @@ import java.util.List;
 @Service
 @Transactional
 public class HoofdthemaServiceImpl implements HoofdthemaService {
-    @Autowired
     private HoofdthemaRepository repository;
+    private OrganisatieRepository organisaties;
+    private GebruikerRepository gebruikers;
 
     @Autowired
-    private GebruikerRepository gebruikerRepository;
-
-    @Autowired
-    private OrganisatieRepository organisatieRepository;
+    public HoofdthemaServiceImpl(HoofdthemaRepository repository, OrganisatieRepository organisaties, GebruikerRepository gebruikers) {
+        this.repository = repository;
+        this.organisaties = organisaties;
+        this.gebruikers = gebruikers;
+    }
 
     @Override
     public List<Hoofdthema> all() {
@@ -34,46 +38,31 @@ public class HoofdthemaServiceImpl implements HoofdthemaService {
     }
 
     @Override
-    public void create(int userId, Hoofdthema hoofdthema) throws GebruikerNotFound {
-
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-
-        if (gebruiker == null) {
-            throw new GebruikerNotFound();
-        }
-
-        hoofdthema.setGebruiker(gebruiker);
-        Hoofdthema savedHoofdthema = repository.save(hoofdthema);
-
-        gebruiker.addHoofdthema(savedHoofdthema);
-        gebruikerRepository.save(gebruiker);
-    }
-
-    @Override
-    public void create(int userId, int organisatieId, Hoofdthema hoofdthema) throws GebruikerNotFound, OrganisatieNotFound {
-
-        Gebruiker gebruiker = gebruikerRepository.findOne(userId);
-        Organisatie organisatie = organisatieRepository.findOne(organisatieId);
+    public void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
+
+        Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
 
         if (organisatie == null) {
             throw new OrganisatieNotFound();
         }
 
-
-        hoofdthema.setGebruiker(gebruiker);
+        Hoofdthema hoofdthema = new Hoofdthema();
+        hoofdthema.setNaam(dto.getNaam());
+        hoofdthema.setBeschrijving(dto.getBeschrijving());
         hoofdthema.setOrganisatie(organisatie);
-        Hoofdthema savedHoofdthema = repository.save(hoofdthema);
+        hoofdthema.setGebruiker(gebruiker);
+        repository.save(hoofdthema);
 
-        organisatie.addHoofdthema(savedHoofdthema);
-        organisatieRepository.save(organisatie);
+        organisatie.addHoofdthema(hoofdthema);
+        organisaties.saveAndFlush(organisatie);
 
-
-        gebruiker.addHoofdthema(savedHoofdthema);
-        gebruikerRepository.save(gebruiker);
+        gebruiker.addHoofdthema(hoofdthema);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
@@ -88,21 +77,60 @@ public class HoofdthemaServiceImpl implements HoofdthemaService {
     }
 
     @Override
-    public void update(int id, Hoofdthema hoofdthema) throws HoofdthemaNotFound {
-        Hoofdthema old = find(id);
+    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound {
+        Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
-        old.setNaam(hoofdthema.getNaam());
-        old.setBeschrijving(hoofdthema.getBeschrijving());
-        old.setOrganisatie(hoofdthema.getOrganisatie());
-        old.setGebruiker(hoofdthema.getGebruiker());
+        if (gebruiker == null) {
+            throw new GebruikerNotFound();
+        }
 
-        repository.saveAndFlush(old);
+        Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
+
+        if (organisatie == null) {
+            throw new OrganisatieNotFound();
+        }
+
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null) {
+            throw new HoofdthemaNotFound();
+        }
+
+        hoofdthema.setNaam(dto.getNaam());
+        hoofdthema.setBeschrijving(dto.getBeschrijving());
+        hoofdthema.setOrganisatie(organisatie);
+        hoofdthema.setGebruiker(gebruiker);
+
+        repository.saveAndFlush(hoofdthema);
     }
 
     @Override
     public void delete(int id) throws HoofdthemaNotFound {
-        Hoofdthema hoofdthema = find(id);
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null) {
+            throw new HoofdthemaNotFound();
+        }
 
         repository.delete(hoofdthema);
+    }
+
+    @Override
+    public Organisatie findOrganisatie(int id) throws HoofdthemaNotFound {
+
+        Hoofdthema hoofdthema = repository.findOne(id);
+
+        if (hoofdthema == null) {
+            throw new HoofdthemaNotFound();
+        }
+
+        return hoofdthema.getOrganisatie();
+    }
+
+    @Override
+    public List<Subthema> showSubthemas(int id) throws HoofdthemaNotFound {
+        Hoofdthema hoofdthema = find(id);
+
+        return hoofdthema.getSubthemas();
     }
 }

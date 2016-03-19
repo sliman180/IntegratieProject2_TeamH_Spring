@@ -1,10 +1,10 @@
 package be.kdg.teamh.services.contracts;
 
-import be.kdg.teamh.entities.Kaart;
-import be.kdg.teamh.entities.Subthema;
+import be.kdg.teamh.dtos.request.KaartRequest;
+import be.kdg.teamh.dtos.request.SubthemaRequest;
+import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
 import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.IsForbidden;
 import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
 
 import java.util.List;
@@ -12,17 +12,21 @@ import java.util.List;
 public interface SubthemaService {
     List<Subthema> all();
 
-    void create(int userId, int hoofdthemaId, Subthema subthema) throws GebruikerNotFound, HoofdthemaNotFound;
-
-    void create(int userId, Subthema subthema) throws GebruikerNotFound;
+    void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound;
 
     Subthema find(int id) throws SubthemaNotFound;
 
-    void update(int id, Subthema subthema) throws SubthemaNotFound;
+    void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound;
 
     void delete(int id) throws SubthemaNotFound;
 
-    void addKaart(int subthemaId, int userId, Kaart kaart) throws GebruikerNotFound, SubthemaNotFound;
+    Organisatie findOrganisatie(Integer id) throws SubthemaNotFound;
 
-    List<Kaart> getKaarten(int userId, int subthemaId) throws SubthemaNotFound, IsForbidden;
+    Hoofdthema findHoofdthema(Integer id) throws SubthemaNotFound;
+
+    void addKaart(int subthemaId, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
+
+    List<Kaart> findKaarten(Integer id) throws SubthemaNotFound;
+
+    List<Cirkelsessie> findCirkelsessies(Integer id) throws SubthemaNotFound;
 }

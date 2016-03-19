@@ -6,11 +6,12 @@ describe("From home page",function(){
         element(by.id("form-title")).element(by.tagName("h2")).click();
         element(by.id("naam")).sendKeys("AO");
         element(by.id("beschrijving")).sendKeys("Applicatieontwikkeling");
-        element(by.cssContainingText(".mt-opt","AO"));
+        element(by.cssContainingText('.mt-opt','HW')).click();
         element(by.id("form")).element(by.tagName("button")).click();
 
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/subthemas");
         expect(element.all(by.css(".lijst-item")).count()).toBe(1);
-        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/subthemas")
+
 
     });
 
@@ -24,7 +25,7 @@ describe("From home page",function(){
         element(by.id("imageUrl")).sendKeys("imageUrl");
         element(by.css("form")).element(by.tagName("button")).click();
 
-        expect(element.all(by.css(".kaart")).count()).toBe(1);
+        expect(element.all(by.repeater("kaart in  vm.kaarten")).count()).toBe(1);
 
     });
 });

@@ -1,5 +1,8 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -16,18 +19,16 @@ public class Rol implements Serializable {
     @NotNull
     private String naam;
 
-    private String beschrijving;
-
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "rollen")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private List<Gebruiker> gebruikers = new ArrayList<>();
 
     public Rol() {
         //
     }
 
-    public Rol(String naam, String beschrijving) {
+    public Rol(String naam) {
         this.naam = naam;
-        this.beschrijving = beschrijving;
     }
 
     public int getId() {
@@ -40,14 +41,6 @@ public class Rol implements Serializable {
 
     public void setNaam(String naam) {
         this.naam = naam;
-    }
-
-    public String getBeschrijving() {
-        return beschrijving;
-    }
-
-    public void setBeschrijving(String beschrijving) {
-        this.beschrijving = beschrijving;
     }
 
     public List<Gebruiker> getGebruikers() {

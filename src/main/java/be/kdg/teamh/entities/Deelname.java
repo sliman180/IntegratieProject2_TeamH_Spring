@@ -1,5 +1,6 @@
 package be.kdg.teamh.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -20,34 +21,33 @@ public class Deelname implements Serializable {
     @NotNull
     private boolean medeorganisator;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Cirkelsessie cirkelsessie;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Gebruiker gebruiker;
+    @NotNull
+    private boolean isAanDeBeurt;
 
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime datum;
 
+    @ManyToOne
+    @JsonManagedReference
+    private Cirkelsessie cirkelsessie;
+
+    @ManyToOne
+    @JsonManagedReference
+    private Gebruiker gebruiker;
+
     public Deelname() {
         //
     }
 
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
+    public Deelname(int aangemaakteKaarten, boolean medeorganisator, DateTime datum, Cirkelsessie cirkelsessie, Gebruiker gebruiker) {
         this.aangemaakteKaarten = aangemaakteKaarten;
         this.medeorganisator = medeorganisator;
+        this.datum = datum;
         this.cirkelsessie = cirkelsessie;
         this.gebruiker = gebruiker;
-        this.datum = new DateTime();
+        this.isAanDeBeurt = false;
     }
-
-    public Deelname(int aangemaakteKaarten, boolean medeorganisator) {
-        this.aangemaakteKaarten = aangemaakteKaarten;
-        this.medeorganisator = medeorganisator;
-        this.datum = new DateTime();
-    }
-
 
     public int getId() {
         return id;
@@ -73,6 +73,14 @@ public class Deelname implements Serializable {
         this.medeorganisator = medeorganisator;
     }
 
+    public DateTime getDatum() {
+        return datum;
+    }
+
+    public void setDatum(DateTime datum) {
+        this.datum = datum;
+    }
+
     public Cirkelsessie getCirkelsessie() {
         return cirkelsessie;
     }
@@ -89,11 +97,11 @@ public class Deelname implements Serializable {
         this.gebruiker = gebruiker;
     }
 
-    public DateTime getDatum() {
-        return datum;
+    public boolean isAanDeBeurt() {
+        return isAanDeBeurt;
     }
 
-    public void setDatum(DateTime datum) {
-        this.datum = datum;
+    public void setAanDeBeurt(boolean aanDeBeurt) {
+        isAanDeBeurt = aanDeBeurt;
     }
 }
