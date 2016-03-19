@@ -55,11 +55,11 @@
         };
 
         vm.deleteCirkelsessieLink = function (id) {
-
             window.location.href = '/#/cirkelsessies/delete/' + id;
         };
 
         vm.cloneCirkelsessie = function (id, cirkelsessie) {
+            cirkelsessie.gebruiker=$rootScope.id;
             CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });

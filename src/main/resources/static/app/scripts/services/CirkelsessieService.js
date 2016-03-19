@@ -111,7 +111,6 @@
         };
 
         exports.cloneCirkelsessie = function (id, cirkelsessie) {
-
             return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
                 return response.data;
             });

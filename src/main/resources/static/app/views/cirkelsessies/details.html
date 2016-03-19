@@ -176,7 +176,6 @@
     <div class="mdl-card__supporting-text">
         Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b>
         | Startdatum: <b>{{vm.cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b>
-        <span ng-if="vm.cirkelsessie.subthema!=null">| Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
         | Status:
         <b class="status-open" ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='OPEN'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gesloten"
@@ -184,6 +183,11 @@
         <b class="status-beeindigd"
            ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='BEEINDIGD'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gestart" ng-if="vm.isActive(vm.cirkelsessie.startDatum)">GESTART</b>
+        <p ng-if="vm.cirkelsessie.subthema!=null">
+            Organisatie: <b>{{vm.cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
+            | Hoofdthema: <b>{{vm.cirkelsessie.subthema.hoofdthema.naam}}</b>
+            | Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b>
+        </p>
     </div>
 
     <div class="mdl-card__actions mdl-card--border">

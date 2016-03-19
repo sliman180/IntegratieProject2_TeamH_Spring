@@ -375,7 +375,6 @@
         };
 
         exports.cloneCirkelsessie = function (id, cirkelsessie) {
-
             return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
                 return response.data;
             });
@@ -1317,12 +1316,12 @@
         };
 
         vm.deleteCirkelsessieLink = function (id) {
-
             window.location.href = '/#/cirkelsessies/delete/' + id;
         };
 
         vm.cloneCirkelsessie = function (id, cirkelsessie) {
-            CirkelsessieService.cloneCirkelsessie(id,cirkelsessie).then(function () {
+            cirkelsessie.gebruiker=$rootScope.id;
+            CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });
         };

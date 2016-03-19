@@ -68,9 +68,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Cirkelsessie> gepland()
-    {
-        return all().stream().filter(cirkelsessie -> DateTime.now().isBefore(cirkelsessie.getStartDatum())).collect(Collectors.toList());
+    public List<Cirkelsessie> gepland() {
+        return all().stream().filter(cirkelsessie -> cirkelsessie.getStatus() == Status.OPEN && DateTime.now().isBefore(cirkelsessie.getStartDatum())).collect(Collectors.toList());
     }
 
     @Override
@@ -192,9 +191,10 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         repository.save(clone);
     }
 
-    public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound
+    public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound, SubthemaNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
+        Gebruiker gebruiker=gebruikers.findOne(dto.getGebruiker());
 
         if (cirkelsessie == null)
         {
@@ -203,16 +203,50 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
         Cirkelsessie clone = new Cirkelsessie();
 
+        if(cirkelsessie.getSubthema()!=null){
+            Subthema oldSubthema = subthemas.findOne(cirkelsessie.getSubthema().getId());
+
+            if(oldSubthema==null){
+                throw new SubthemaNotFound();
+            }
+
+            oldSubthema.addCirkelsessie(cirkelsessie);
+            oldSubthema = subthemas.saveAndFlush(oldSubthema);
+            clone.setSubthema(oldSubthema);
+
+
+            for (Kaart kaart : oldSubthema.getKaarten())
+            {
+                Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+                spelkaart = spelkaarten.save(spelkaart);
+                clone.addSpelkaart(spelkaart);
+            }
+        }
+
         clone.setNaam(dto.getNaam());
         clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
         clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
         clone.setStatus(dto.getStatus());
         clone.setStartDatum(dto.getStartDatum());
-        clone.setSubthema(cirkelsessie.getSubthema());
-        clone.setGebruiker(cirkelsessie.getGebruiker());
-        clone.setDeelnames(cirkelsessie.getDeelnames().stream().collect(Collectors.toList()));
+        clone.setGebruiker(gebruiker);
 
-        repository.save(clone);
+        for(Deelname deelname : cirkelsessie.getDeelnames()){
+            Deelname cloneDeelname = new Deelname();
+            cloneDeelname.setCirkelsessie(clone);
+            cloneDeelname.setAanDeBeurt(deelname.isAanDeBeurt());
+            cloneDeelname.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
+            cloneDeelname.setDatum(deelname.getDatum());
+            cloneDeelname.setMedeorganisator(deelname.isMedeorganisator());
+            cloneDeelname.setGebruiker(gebruiker);
+
+            cloneDeelname = deelnames.save(cloneDeelname);
+            clone.addDeelname(cloneDeelname);
+            gebruiker.addDeelname(cloneDeelname);
+        }
+
+        clone = repository.save(clone);
+        gebruiker.addCirkelsessie(clone);
+        gebruikers.saveAndFlush(gebruiker);
     }
 
     @Override
