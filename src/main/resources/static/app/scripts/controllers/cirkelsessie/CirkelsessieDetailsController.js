@@ -155,6 +155,12 @@
             document.getElementById('tooltip').setAttribute("visibility", "hidden");
         };
 
+        vm.beeindigSpel = function(cirkelsessie){
+            CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel beeindigd!');
+            });
+        };
+
     }
 
     angular.module("kandoe").controller("CirkelsessieDetailsController", CirkelsessieDetailsController);

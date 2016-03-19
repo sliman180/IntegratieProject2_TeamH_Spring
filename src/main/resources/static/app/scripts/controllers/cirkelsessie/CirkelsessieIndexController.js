@@ -44,6 +44,16 @@
             });
         };
 
+        vm.showCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/details/' + id;
+        };
+
+        vm.deleteCirkelsessieLink = function (id) {
+
+            window.location.href = '/#/cirkelsessies/delete/' + id;
+        };
+
     }
 
     angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);

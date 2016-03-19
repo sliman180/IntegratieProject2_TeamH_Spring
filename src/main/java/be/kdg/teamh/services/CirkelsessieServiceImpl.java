@@ -71,6 +71,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         Subthema subthema = null;
         Cirkelsessie cirkelsessie = new Cirkelsessie();
 
+        cirkelsessie.setNaam(dto.getNaam());
+        cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
+        cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
+        cirkelsessie.setStatus(dto.getStatus());
+        cirkelsessie.setStartDatum(dto.getStartDatum());
+        cirkelsessie.setGebruiker(gebruiker);
+
         if (gebruiker == null) {
             throw new GebruikerNotFound();
         }
@@ -81,6 +88,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
             if (subthema == null) {
                 throw new SubthemaNotFound();
             }
+            cirkelsessie.setSubthema(subthema);
 
             for (Kaart kaart : subthema.getKaarten()) {
                 Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
@@ -90,13 +98,6 @@ public class CirkelsessieServiceImpl implements CirkelsessieService {
         }
 
 
-        cirkelsessie.setNaam(dto.getNaam());
-        cirkelsessie.setAantalCirkels(dto.getAantalCirkels());
-        cirkelsessie.setMaxAantalKaarten(dto.getMaxAantalKaarten());
-        cirkelsessie.setStatus(dto.getStatus());
-        cirkelsessie.setStartDatum(dto.getStartDatum());
-        cirkelsessie.setGebruiker(gebruiker);
-        cirkelsessie.setSubthema(subthema);
         cirkelsessie = repository.save(cirkelsessie);
 
         if (subthema != null) {

@@ -144,9 +144,17 @@
          ng-repeat="cirkelsessie in vm.cirkelsessies | filter:filter | orderBy:sortorder">
         <div class="">
             <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">{{cirkelsessie.naam}}</h2>
+                <h2 class="mdl-card__title-text">{{cirkelsessie.naam | limitTo: 11}}
+                    <span ng-if="cirkelsessie.naam.length > 11">...</span>
+                </h2>
             </div>
             <div class="mdl-card__supporting-text">
+                <p ng-if="cirkelsessie.subthema!=null">
+                    Organisatie: <b>{{cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
+                    | Hoofdthema: <b>{{cirkelsessie.subthema.hoofdthema.naam}}</b>
+                    | Subthema: <b>{{cirkelsessie.subthema.naam}}</b>
+                </p>
+
                 <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
 
                 <p>Startdatum: <b>{{cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b></p>
