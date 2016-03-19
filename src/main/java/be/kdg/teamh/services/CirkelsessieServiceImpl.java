@@ -202,6 +202,12 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         }
 
         Cirkelsessie clone = new Cirkelsessie();
+        clone.setNaam(dto.getNaam());
+        clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
+        clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
+        clone.setStatus(dto.getStatus());
+        clone.setStartDatum(dto.getStartDatum());
+        clone.setGebruiker(gebruiker);
 
         if(cirkelsessie.getSubthema()!=null){
             Subthema oldSubthema = subthemas.findOne(cirkelsessie.getSubthema().getId());
@@ -214,21 +220,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             oldSubthema = subthemas.saveAndFlush(oldSubthema);
             clone.setSubthema(oldSubthema);
 
-
             for (Kaart kaart : oldSubthema.getKaarten())
             {
-                Spelkaart spelkaart = new Spelkaart(kaart, cirkelsessie);
+                Spelkaart spelkaart = new Spelkaart(kaart, clone);
                 spelkaart = spelkaarten.save(spelkaart);
                 clone.addSpelkaart(spelkaart);
             }
         }
-
-        clone.setNaam(dto.getNaam());
-        clone.setMaxAantalKaarten(cirkelsessie.getMaxAantalKaarten());
-        clone.setAantalCirkels(cirkelsessie.getAantalCirkels());
-        clone.setStatus(dto.getStatus());
-        clone.setStartDatum(dto.getStartDatum());
-        clone.setGebruiker(gebruiker);
 
         for(Deelname deelname : cirkelsessie.getDeelnames()){
             Deelname cloneDeelname = new Deelname();
