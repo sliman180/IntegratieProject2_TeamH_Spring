@@ -162,7 +162,9 @@
                     Organisatie: <b>{{cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
                     | Hoofdthema: <b>{{cirkelsessie.subthema.hoofdthema.naam}}</b>
                 </p>
-                <p>Subthema: <b>{{cirkelsessie.subthema.naam}}</b></p>
+
+                <p ng-if="cirkelsessie.subthema!=null">Subthema: <b>{{cirkelsessie.subthema.naam}}</b></p>
+
                 <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
 
                 <p>Startdatum: <b>{{cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b></p>

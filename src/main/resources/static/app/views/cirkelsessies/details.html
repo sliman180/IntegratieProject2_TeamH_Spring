@@ -183,6 +183,7 @@
         <b class="status-beeindigd"
            ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='BEEINDIGD'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gestart" ng-if="vm.isActive(vm.cirkelsessie.startDatum)">GESTART</b>
+
         <p ng-if="vm.cirkelsessie.subthema!=null">
             Organisatie: <b>{{vm.cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
             | Hoofdthema: <b>{{vm.cirkelsessie.subthema.hoofdthema.naam}}</b>

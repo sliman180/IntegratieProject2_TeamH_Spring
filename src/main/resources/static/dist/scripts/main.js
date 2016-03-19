@@ -384,6 +384,7 @@
         exports.beeindigSpel = function (cirkelsessie) {
             cirkelsessie.status = 'BEEINDIGD';
             cirkelsessie.gebruiker = cirkelsessie.gebruiker.id;
+            cirkelsessie.subthema = cirkelsessie.subthema.id;
             return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
                 return response.data;
             });
@@ -1320,7 +1321,7 @@
         };
 
         vm.cloneCirkelsessie = function (id, cirkelsessie) {
-            cirkelsessie.gebruiker=$rootScope.id;
+            cirkelsessie.gebruiker = $rootScope.id;
             CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });

@@ -59,7 +59,7 @@
         };
 
         vm.cloneCirkelsessie = function (id, cirkelsessie) {
-            cirkelsessie.gebruiker=$rootScope.id;
+            cirkelsessie.gebruiker = $rootScope.id;
             CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });
