@@ -782,6 +782,14 @@
 
         };
 
+        exports.getGebruiker = function (id) {
+
+            return $http.get("/api/kaarten/" + id + "/gebruiker").then(function (response) {
+                return response.data;
+            });
+
+        };
+
         exports.getKaarten = function (subthemaId) {
 
             return $http.get("/api/subthemas/" + subthemaId + "/kaarten").then(function (response) {
@@ -792,15 +800,7 @@
 
         exports.getComments = function (kaartId) {
 
-            return $http.get("/api/kaarten/" + kaartId + "/comments").then(function (response) {
-                return response.data;
-            });
-
-        };
-
-        exports.getGebruiker = function (id) {
-
-            return $http.get("/api/kaarten/" + id + "/gebruiker").then(function (response) {
+            return $http.get("/api/kaarten/" + kaartId + "/commentaren").then(function (response) {
                 return response.data;
             });
 
@@ -808,7 +808,7 @@
 
         exports.createComment = function (kaartId, comment) {
 
-            return $http.post("/api/kaarten/" + kaartId + "/comments", comment).then(function (response) {
+            return $http.post("/api/kaarten/" + kaartId + "/commentaren", comment).then(function (response) {
                 return response.data;
             });
 
@@ -1127,7 +1127,7 @@
     "use strict";
 
     CirkelsessieDetailsController.$inject = ["$location", "$timeout", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService", "DeelnameService", "$window"];
-    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService,$window) {
+    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, $window) {
 
         var vm = this;
 
@@ -1284,10 +1284,10 @@
 
         vm.beeindigSpel = function (cirkelsessie) {
             cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
-            if(cirkelsessie.subthema!=null){
+            if (cirkelsessie.subthema != null) {
                 cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
-            }else{
-                cirkelsessie.subthema=0;
+            } else {
+                cirkelsessie.subthema = 0;
             }
 
             CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
@@ -1306,7 +1306,7 @@
             return true;
         };
 
-        vm.deleteCirkelsessie =function(id){
+        vm.deleteCirkelsessie = function (id) {
             if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
                 CirkelsessieService.delete(id).then(function () {
                     $location.path("/#/cirkelsessies");
@@ -1344,10 +1344,10 @@
             cirkelsessie.id = $routeParams.id;
             cirkelsessie.gebruiker = $rootScope.id;
             cirkelsessie.status = vm.cirkelsessie.status;
-            if(cirkelsessie.subthema!=null){
+            if (cirkelsessie.subthema != null) {
                 cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
-            }else{
-                cirkelsessie.subthema=0;
+            } else {
+                cirkelsessie.subthema = 0;
             }
             CirkelsessieService.update(cirkelsessie).then(function () {
                 $location.path("/cirkelsessies");
@@ -1365,7 +1365,7 @@
     "use strict";
 
     CirkelsessieIndexController.$inject = ["$rootScope", "$route", "$location", "CirkelsessieService", "SubthemaService", "$window"];
-    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService,$window) {
+    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window) {
 
         var vm = this;
 
@@ -1428,7 +1428,7 @@
             });
         };
 
-        vm.deleteCirkelsessie =function(id){
+        vm.deleteCirkelsessie = function (id) {
             if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
                 CirkelsessieService.delete(id).then(function () {
                     $route.reload();
@@ -1503,7 +1503,7 @@
     "use strict";
 
     HoofdthemaIndexController.$inject = ["$rootScope", "$route", "HoofdthemaService", "OrganisatieService", "$window"];
-    function HoofdthemaIndexController($rootScope, $route, HoofdthemaService, OrganisatieService,$window) {
+    function HoofdthemaIndexController($rootScope, $route, HoofdthemaService, OrganisatieService, $window) {
 
         var vm = this;
 
@@ -1534,7 +1534,7 @@
             });
         };
 
-        vm.deleteHoofdthema =function(id){
+        vm.deleteHoofdthema = function (id) {
             if ($window.confirm("Bent u zeker dat u de hoofdthema wilt verwijderen?")) {
                 HoofdthemaService.delete(id).then(function () {
                     $route.reload();
@@ -1545,6 +1545,76 @@
     }
 
     angular.module("kandoe").controller("HoofdthemaIndexController", HoofdthemaIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    OrganisatieEditController.$inject = ["$routeParams", "$rootScope", "OrganisatieService", "$location"];
+    function OrganisatieEditController($routeParams, $rootScope, OrganisatieService, $location) {
+
+        var vm = this;
+
+        vm.organisatie = {};
+
+        OrganisatieService.find($routeParams.id).then(function (data) {
+            vm.organisatie = data;
+        });
+
+        vm.editOrganisatie = function (organisatie) {
+            organisatie.id = $routeParams.id;
+            organisatie.gebruiker = $rootScope.id;
+            OrganisatieService.update(organisatie).then(function () {
+                $location.path("/organisaties");
+            });
+        }
+
+    }
+
+    angular.module("kandoe").controller("OrganisatieEditController", OrganisatieEditController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    OrganisatieIndexController.$inject = ["$route", "$rootScope", "OrganisatieService", "$window"];
+    function OrganisatieIndexController($route, $rootScope, OrganisatieService, $window) {
+
+        var vm = this;
+
+        vm.organisaties = [];
+        vm.hoofdthemas = [];
+
+        OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.organisaties = data;
+            angular.forEach(vm.organisaties, function (value, key) {
+                OrganisatieService.getHoofdthemas(value.id).then(function (hoofdthemadata) {
+                    vm.hoofdthemas.push(hoofdthemadata);
+                });
+            });
+        });
+
+        vm.addOrganisatie = function (organisatie) {
+            organisatie.gebruiker = $rootScope.id;
+            OrganisatieService.create(organisatie).then(function () {
+                $route.reload();
+            });
+        };
+
+        vm.deleteOrganisatie = function (id) {
+            if ($window.confirm("Bent u zeker dat u de organisatie wilt verwijderen?")) {
+                OrganisatieService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
+        };
+    }
+
+    angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
 
 })(window.angular);
 
@@ -1623,79 +1693,9 @@
 
     "use strict";
 
-    OrganisatieEditController.$inject = ["$routeParams", "$rootScope", "OrganisatieService", "$location"];
-    function OrganisatieEditController($routeParams, $rootScope, OrganisatieService, $location) {
-
-        var vm = this;
-
-        vm.organisatie = {};
-
-        OrganisatieService.find($routeParams.id).then(function (data) {
-            vm.organisatie = data;
-        });
-
-        vm.editOrganisatie = function (organisatie) {
-            organisatie.id = $routeParams.id;
-            organisatie.gebruiker = $rootScope.id;
-            OrganisatieService.update(organisatie).then(function () {
-                $location.path("/organisaties");
-            });
-        }
-
-    }
-
-    angular.module("kandoe").controller("OrganisatieEditController", OrganisatieEditController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
-    OrganisatieIndexController.$inject = ["$route", "$rootScope", "OrganisatieService", "$window"];
-    function OrganisatieIndexController($route, $rootScope, OrganisatieService,$window) {
-
-        var vm = this;
-
-        vm.organisaties = [];
-        vm.hoofdthemas = [];
-
-        OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
-            vm.organisaties = data;
-            angular.forEach(vm.organisaties, function (value, key) {
-                OrganisatieService.getHoofdthemas(value.id).then(function (hoofdthemadata) {
-                    vm.hoofdthemas.push(hoofdthemadata);
-                });
-            });
-        });
-
-        vm.addOrganisatie = function (organisatie) {
-            organisatie.gebruiker = $rootScope.id;
-            OrganisatieService.create(organisatie).then(function () {
-                $route.reload();
-            });
-        };
-
-        vm.deleteOrganisatie =function(id){
-            if ($window.confirm("Bent u zeker dat u de organisatie wilt verwijderen?")) {
-                OrganisatieService.delete(id).then(function () {
-                    $route.reload();
-                });
-            }
-        };
-    }
-
-    angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
 
     SubthemaDetailsController.$inject = ["$route", "$rootScope", "$routeParams", "SubthemaService", "KaartService", "$window"];
-    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, KaartService,$window) {
+    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, KaartService, $window) {
 
         var vm = this;
 
@@ -1728,7 +1728,7 @@
             });
         };
 
-        vm.deleteKaart =function(id){
+        vm.deleteKaart = function (id) {
             if ($window.confirm("Bent u zeker dat u de kaart wilt verwijderen?")) {
                 KaartService.delete(id).then(function () {
                     $route.reload();
@@ -1808,7 +1808,7 @@
             });
         };
 
-        vm.deleteSubthema =function(id){
+        vm.deleteSubthema = function (id) {
             if ($window.confirm("Bent u zeker dat u de subthema wilt verwijderen?")) {
                 SubthemaService.delete(id).then(function () {
                     $route.reload();

@@ -222,10 +222,10 @@ public class KaartApiTest extends ApiTest
 
         CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
 
-        http.perform(post("/api/kaarten/1/comments", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserOneToken()))
+        http.perform(post("/api/kaarten/1/commentaren", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserOneToken()))
             .andExpect(status().isCreated());
 
-        http.perform(get("/api/kaarten/1/comments").header("Authorization", getUserOneToken()))
+        http.perform(get("/api/kaarten/1/commentaren").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -239,7 +239,7 @@ public class KaartApiTest extends ApiTest
 
         CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
 
-        http.perform(post("/api/kaarten/1/comments", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserOneToken()))
+        http.perform(post("/api/kaarten/1/commentaren", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserOneToken()))
             .andExpect(status().isConflict());
     }
 }
