@@ -1,10 +1,10 @@
-package be.kdg.teamh.exceptions;
+package be.kdg.teamh.exceptions.spelkaart;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
-public class SpelkaartMaxPositionReached extends RuntimeException
+public class MaximumPositieBereikt extends RuntimeException
 {
     //
 }

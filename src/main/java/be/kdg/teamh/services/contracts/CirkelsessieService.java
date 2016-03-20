@@ -5,10 +5,10 @@ import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
-import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.subthema.SubthemaNietGevonden;
 
 import java.util.List;
 
@@ -24,29 +24,29 @@ public interface CirkelsessieService
 
     List<Cirkelsessie> gepland();
 
-    void create(CirkelsessieRequest dto) throws GebruikerNotFound, SubthemaNotFound;
+    void create(CirkelsessieRequest dto) throws GebruikerNietGevonden, SubthemaNietGevonden;
 
-    Cirkelsessie find(int id) throws CirkelsessieNotFound;
+    Cirkelsessie find(int id) throws CirkelsessieNietGevonden;
 
-    void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound;
+    void update(int id, CirkelsessieRequest dto) throws CirkelsessieNietGevonden;
 
-    void delete(int id) throws CirkelsessieNotFound;
+    void delete(int id) throws CirkelsessieNietGevonden;
 
-    void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound;
+    void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNietGevonden;
 
-    Subthema findSubthema(int id) throws CirkelsessieNotFound;
+    Subthema findSubthema(int id) throws CirkelsessieNietGevonden;
 
-    List<Deelname> findDeelnames(int id) throws CirkelsessieNotFound;
+    List<Deelname> findDeelnames(int id) throws CirkelsessieNietGevonden;
 
-    void addDeelname(int id, int gebruikerId) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie;
+    void addDeelname(int id, int gebruikerId) throws CirkelsessieNietGevonden, GebruikerNietGevonden, GebruikerIsReedsDeelnemer;
 
-    List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNotFound;
+    List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNietGevonden;
 
-    void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
+    void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNietGevonden, GebruikerNietGevonden;
 
-    List<Bericht> findBerichten(int id) throws CirkelsessieNotFound;
+    List<Bericht> findBerichten(int id) throws CirkelsessieNietGevonden;
 
-    void addBericht(int id, BerichtRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
+    void addBericht(int id, BerichtRequest dto) throws CirkelsessieNietGevonden, GebruikerNietGevonden;
 
-    Gebruiker findGebruiker(int id) throws CirkelsessieNotFound;
+    Gebruiker findGebruiker(int id) throws CirkelsessieNietGevonden;
 }

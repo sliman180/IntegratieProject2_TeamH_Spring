@@ -5,9 +5,9 @@ import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.entities.Subthema;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.hoofdthema.HoofdthemaNietGevonden;
+import be.kdg.teamh.exceptions.organisatie.OrganisatieNietGevonden;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.HoofdthemaRepository;
 import be.kdg.teamh.repositories.OrganisatieRepository;
@@ -41,20 +41,20 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void create(HoofdthemaRequest dto) throws OrganisatieNotFound, GebruikerNotFound
+    public void create(HoofdthemaRequest dto) throws OrganisatieNietGevonden, GebruikerNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
 
         if (organisatie == null)
         {
-            throw new OrganisatieNotFound();
+            throw new OrganisatieNietGevonden();
         }
 
         Hoofdthema hoofdthema = new Hoofdthema();
@@ -72,40 +72,40 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public Hoofdthema find(int id) throws HoofdthemaNotFound
+    public Hoofdthema find(int id) throws HoofdthemaNietGevonden
     {
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
-            throw new HoofdthemaNotFound();
+            throw new HoofdthemaNietGevonden();
         }
 
         return hoofdthema;
     }
 
     @Override
-    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNotFound, OrganisatieNotFound, GebruikerNotFound
+    public void update(int id, HoofdthemaRequest dto) throws HoofdthemaNietGevonden, OrganisatieNietGevonden, GebruikerNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Organisatie organisatie = organisaties.findOne(dto.getOrganisatie());
 
         if (organisatie == null)
         {
-            throw new OrganisatieNotFound();
+            throw new OrganisatieNietGevonden();
         }
 
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
-            throw new HoofdthemaNotFound();
+            throw new HoofdthemaNietGevonden();
         }
 
         hoofdthema.setNaam(dto.getNaam());
@@ -117,41 +117,41 @@ public class HoofdthemaServiceImpl implements HoofdthemaService
     }
 
     @Override
-    public void delete(int id) throws HoofdthemaNotFound
+    public void delete(int id) throws HoofdthemaNietGevonden
     {
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
-            throw new HoofdthemaNotFound();
+            throw new HoofdthemaNietGevonden();
         }
 
         repository.delete(hoofdthema);
     }
 
     @Override
-    public Organisatie findOrganisatie(int id) throws HoofdthemaNotFound
+    public Organisatie findOrganisatie(int id) throws HoofdthemaNietGevonden
     {
 
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
-            throw new HoofdthemaNotFound();
+            throw new HoofdthemaNietGevonden();
         }
 
         return hoofdthema.getOrganisatie();
     }
 
     @Override
-    public List<Subthema> findSubthemas(int id) throws HoofdthemaNotFound
+    public List<Subthema> findSubthemas(int id) throws HoofdthemaNietGevonden
     {
 
         Hoofdthema hoofdthema = repository.findOne(id);
 
         if (hoofdthema == null)
         {
-            throw new HoofdthemaNotFound();
+            throw new HoofdthemaNietGevonden();
         }
 
         return hoofdthema.getSubthemas();

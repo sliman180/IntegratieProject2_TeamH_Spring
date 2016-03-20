@@ -4,8 +4,8 @@ import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.OrganisatieNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.organisatie.OrganisatieNietGevonden;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.OrganisatieRepository;
 import be.kdg.teamh.services.contracts.OrganisatieService;
@@ -35,13 +35,13 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void create(OrganisatieRequest dto) throws GebruikerNotFound
+    public void create(OrganisatieRequest dto) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Organisatie organisatie = new Organisatie();
@@ -55,33 +55,33 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public Organisatie find(int id) throws OrganisatieNotFound
+    public Organisatie find(int id) throws OrganisatieNietGevonden
     {
         Organisatie organisatie = repository.findOne(id);
 
         if (organisatie == null)
         {
-            throw new OrganisatieNotFound();
+            throw new OrganisatieNietGevonden();
         }
 
         return organisatie;
     }
 
     @Override
-    public void update(int id, OrganisatieRequest dto) throws OrganisatieNotFound, GebruikerNotFound
+    public void update(int id, OrganisatieRequest dto) throws OrganisatieNietGevonden, GebruikerNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Organisatie organisatie = repository.findOne(id);
 
         if (organisatie == null)
         {
-            throw new OrganisatieNotFound();
+            throw new OrganisatieNietGevonden();
         }
 
         organisatie.setNaam(dto.getNaam());
@@ -92,20 +92,20 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public void delete(int id) throws OrganisatieNotFound
+    public void delete(int id) throws OrganisatieNietGevonden
     {
         Organisatie organisatie = repository.findOne(id);
 
         if (organisatie == null)
         {
-            throw new OrganisatieNotFound();
+            throw new OrganisatieNietGevonden();
         }
 
         repository.delete(organisatie);
     }
 
     @Override
-    public List<Hoofdthema> findHoofdthemas(int id) throws OrganisatieNotFound
+    public List<Hoofdthema> findHoofdthemas(int id) throws OrganisatieNietGevonden
     {
         Organisatie organisatie = find(id);
 

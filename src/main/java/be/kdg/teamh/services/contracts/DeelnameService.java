@@ -4,19 +4,19 @@ import be.kdg.teamh.dtos.request.DeelnameRequest;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
+import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 
 public interface DeelnameService
 {
-    Deelname find(int id) throws DeelnameNotFound;
+    Deelname find(int id) throws DeelnameNietGevonden;
 
-    void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound;
+    void update(int id, DeelnameRequest dto) throws DeelnameNietGevonden, CirkelsessieNietGevonden, GebruikerNietGevonden;
 
-    void delete(int id) throws DeelnameNotFound;
+    void delete(int id) throws DeelnameNietGevonden;
 
-    Gebruiker getGebruiker(int id) throws DeelnameNotFound;
+    Gebruiker getGebruiker(int id) throws DeelnameNietGevonden;
 
-    Cirkelsessie getCirkelsessie(int id) throws DeelnameNotFound;
+    Cirkelsessie getCirkelsessie(int id) throws DeelnameNietGevonden;
 }

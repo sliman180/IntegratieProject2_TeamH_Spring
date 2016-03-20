@@ -2,7 +2,7 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.request.RolRequest;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.notfound.RolNotFound;
+import be.kdg.teamh.exceptions.rol.RolNietGevonden;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public interface RolService
 
     void create(RolRequest dto);
 
-    Rol find(int id) throws RolNotFound;
+    Rol find(int id) throws RolNietGevonden;
 
-    void update(int id, RolRequest dto) throws RolNotFound;
+    void update(int id, RolRequest dto) throws RolNietGevonden;
 
-    void delete(int id) throws RolNotFound;
+    void delete(int id) throws RolNietGevonden;
 }

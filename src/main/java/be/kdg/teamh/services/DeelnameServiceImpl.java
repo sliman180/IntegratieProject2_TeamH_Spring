@@ -4,9 +4,9 @@ import be.kdg.teamh.dtos.request.DeelnameRequest;
 import be.kdg.teamh.entities.Cirkelsessie;
 import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.notfound.DeelnameNotFound;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
+import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.repositories.GebruikerRepository;
@@ -32,40 +32,40 @@ public class DeelnameServiceImpl implements DeelnameService
     }
 
     @Override
-    public Deelname find(int id) throws DeelnameNotFound
+    public Deelname find(int id) throws DeelnameNietGevonden
     {
         Deelname deelname = repository.findOne(id);
 
         if (deelname == null)
         {
-            throw new DeelnameNotFound();
+            throw new DeelnameNietGevonden();
         }
 
         return deelname;
     }
 
     @Override
-    public void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound
+    public void update(int id, DeelnameRequest dto) throws DeelnameNietGevonden, CirkelsessieNietGevonden, GebruikerNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Deelname deelname = repository.findOne(id);
 
         if (deelname == null)
         {
-            throw new DeelnameNotFound();
+            throw new DeelnameNietGevonden();
         }
 
         deelname.setAangemaakteKaarten(dto.getAangemaakteKaarten());
@@ -77,39 +77,39 @@ public class DeelnameServiceImpl implements DeelnameService
     }
 
     @Override
-    public void delete(int id) throws DeelnameNotFound
+    public void delete(int id) throws DeelnameNietGevonden
     {
         Deelname deelname = repository.findOne(id);
 
         if (deelname == null)
         {
-            throw new DeelnameNotFound();
+            throw new DeelnameNietGevonden();
         }
 
         repository.delete(deelname);
     }
 
     @Override
-    public Gebruiker getGebruiker(int id) throws DeelnameNotFound
+    public Gebruiker getGebruiker(int id) throws DeelnameNietGevonden
     {
         Deelname deelname = repository.findOne(id);
 
         if (deelname == null)
         {
-            throw new DeelnameNotFound();
+            throw new DeelnameNietGevonden();
         }
 
         return deelname.getGebruiker();
     }
 
     @Override
-    public Cirkelsessie getCirkelsessie(int id) throws DeelnameNotFound
+    public Cirkelsessie getCirkelsessie(int id) throws DeelnameNietGevonden
     {
         Deelname deelname = repository.findOne(id);
 
         if (deelname == null)
         {
-            throw new DeelnameNotFound();
+            throw new DeelnameNietGevonden();
         }
 
         return deelname.getCirkelsessie();

@@ -5,10 +5,10 @@ import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.AlreadyJoinedCirkelsessie;
-import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.subthema.SubthemaNietGevonden;
 import be.kdg.teamh.repositories.*;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.joda.time.DateTime;
@@ -74,14 +74,14 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void create(CirkelsessieRequest dto) throws GebruikerNotFound, SubthemaNotFound
+    public void create(CirkelsessieRequest dto) throws GebruikerNietGevonden, SubthemaNietGevonden
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
         Subthema subthema = null;
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Cirkelsessie cirkelsessie = new Cirkelsessie();
@@ -98,7 +98,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
             if (subthema == null)
             {
-                throw new SubthemaNotFound();
+                throw new SubthemaNietGevonden();
             }
 
             cirkelsessie.setSubthema(subthema);
@@ -125,26 +125,26 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
 
     @Override
-    public Cirkelsessie find(int id) throws CirkelsessieNotFound
+    public Cirkelsessie find(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie;
     }
 
     @Override
-    public void update(int id, CirkelsessieRequest dto) throws CirkelsessieNotFound
+    public void update(int id, CirkelsessieRequest dto) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         cirkelsessie.setNaam(dto.getNaam());
@@ -157,25 +157,25 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public void delete(int id) throws CirkelsessieNotFound
+    public void delete(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         repository.delete(cirkelsessie);
     }
 
-    public void clone(int id) throws CirkelsessieNotFound
+    public void clone(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Cirkelsessie clone = new Cirkelsessie();
@@ -192,20 +192,20 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         repository.save(clone);
     }
 
-    public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound, SubthemaNotFound
+    public void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNietGevonden, SubthemaNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Cirkelsessie clone = new Cirkelsessie();
@@ -222,7 +222,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
             if (subthema == null)
             {
-                throw new SubthemaNotFound();
+                throw new SubthemaNietGevonden();
             }
 
             subthema.addCirkelsessie(cirkelsessie);
@@ -259,39 +259,39 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public Subthema findSubthema(int id) throws CirkelsessieNotFound
+    public Subthema findSubthema(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie.getSubthema();
     }
 
     @Override
-    public List<Deelname> findDeelnames(int id) throws CirkelsessieNotFound
+    public List<Deelname> findDeelnames(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie.getDeelnames();
     }
 
     @Override
-    public void addDeelname(int id, int gebruikerId) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie
+    public void addDeelname(int id, int gebruikerId) throws CirkelsessieNietGevonden, GebruikerNietGevonden, GebruikerIsReedsDeelnemer
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(gebruikerId);
@@ -300,7 +300,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
         {
             if (deelname.getGebruiker().equals(gebruiker))
             {
-                throw new AlreadyJoinedCirkelsessie();
+                throw new GebruikerIsReedsDeelnemer();
             }
         }
 
@@ -325,33 +325,33 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNotFound
+    public List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie.getSpelkaarten();
     }
 
     @Override
-    public void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNotFound, GebruikerNotFound
+    public void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNietGevonden, GebruikerNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Kaart kaart = new Kaart();
@@ -381,33 +381,33 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Bericht> findBerichten(int id) throws CirkelsessieNotFound
+    public List<Bericht> findBerichten(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie.getBerichten();
     }
 
     @Override
-    public void addBericht(int id, BerichtRequest dto) throws CirkelsessieNotFound, GebruikerNotFound
+    public void addBericht(int id, BerichtRequest dto) throws CirkelsessieNietGevonden, GebruikerNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         Bericht bericht = new Bericht();
@@ -425,13 +425,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public Gebruiker findGebruiker(int id) throws CirkelsessieNotFound
+    public Gebruiker findGebruiker(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         return cirkelsessie.getGebruiker();

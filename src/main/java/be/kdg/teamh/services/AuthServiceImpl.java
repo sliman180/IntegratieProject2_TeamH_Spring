@@ -3,9 +3,9 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.Forbidden;
-import be.kdg.teamh.exceptions.Unauthorized;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGeregistreerd;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.AuthService;
 import io.jsonwebtoken.Claims;
@@ -42,33 +42,33 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public Gebruiker findByToken(String token) throws GebruikerNotFound
+    public Gebruiker findByToken(String token) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker;
     }
 
     @Override
-    public void checkUserIsRegistered(String token) throws Unauthorized
+    public void checkUserIsRegistered(String token) throws GebruikerNietGeregistreerd
     {
         if (!isValidToken(token) || !hasRole(token, "user"))
         {
-            throw new Unauthorized();
+            throw new GebruikerNietGeregistreerd();
         }
     }
 
     @Override
-    public void checkUserIsAllowed(String token, Gebruiker gebruiker) throws Forbidden
+    public void checkUserIsAllowed(String token, Gebruiker gebruiker) throws ToegangVerboden
     {
         if (findByToken(token).getId() != gebruiker.getId())
         {
-            throw new Forbidden();
+            throw new ToegangVerboden();
         }
     }
 

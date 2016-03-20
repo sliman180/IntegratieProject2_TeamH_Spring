@@ -2,10 +2,10 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.SpelkaartRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.SpelkaartMaxPositionReached;
-import be.kdg.teamh.exceptions.notfound.CirkelsessieNotFound;
-import be.kdg.teamh.exceptions.notfound.KaartNotFound;
-import be.kdg.teamh.exceptions.notfound.SpelkaartNotFound;
+import be.kdg.teamh.exceptions.spelkaart.MaximumPositieBereikt;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
+import be.kdg.teamh.exceptions.kaart.KaartNietGevonden;
+import be.kdg.teamh.exceptions.spelkaart.SpelkaartNietGevonden;
 import be.kdg.teamh.repositories.CirkelsessieRepository;
 import be.kdg.teamh.repositories.DeelnameRepository;
 import be.kdg.teamh.repositories.KaartRepository;
@@ -43,20 +43,20 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public void create(SpelkaartRequest dto) throws CirkelsessieNotFound, KaartNotFound
+    public void create(SpelkaartRequest dto) throws CirkelsessieNietGevonden, KaartNietGevonden
     {
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Kaart kaart = kaarten.findOne(dto.getKaart());
 
         if (kaart == null)
         {
-            throw new KaartNotFound();
+            throw new KaartNietGevonden();
         }
 
         Spelkaart spelkaart = new Spelkaart();
@@ -69,40 +69,40 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public Spelkaart find(int id) throws SpelkaartNotFound
+    public Spelkaart find(int id) throws SpelkaartNietGevonden
     {
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null)
         {
-            throw new SpelkaartNotFound();
+            throw new SpelkaartNietGevonden();
         }
 
         return spelkaart;
     }
 
     @Override
-    public void update(int id, SpelkaartRequest dto) throws SpelkaartNotFound, CirkelsessieNotFound, KaartNotFound
+    public void update(int id, SpelkaartRequest dto) throws SpelkaartNietGevonden, CirkelsessieNietGevonden, KaartNietGevonden
     {
         Cirkelsessie cirkelsessie = cirkelsessies.findOne(dto.getCirkelsessie());
 
         if (cirkelsessie == null)
         {
-            throw new CirkelsessieNotFound();
+            throw new CirkelsessieNietGevonden();
         }
 
         Kaart kaart = kaarten.findOne(dto.getKaart());
 
         if (kaart == null)
         {
-            throw new KaartNotFound();
+            throw new KaartNietGevonden();
         }
 
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null)
         {
-            throw new SpelkaartNotFound();
+            throw new SpelkaartNietGevonden();
         }
 
         spelkaart.setPositie(dto.getPositie());
@@ -113,31 +113,31 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public void delete(int id) throws SpelkaartNotFound
+    public void delete(int id) throws SpelkaartNietGevonden
     {
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null)
         {
-            throw new SpelkaartNotFound();
+            throw new SpelkaartNietGevonden();
         }
 
         repository.delete(spelkaart);
     }
 
     @Override
-    public void verschuif(int id, Gebruiker gebruiker) throws SpelkaartNotFound, SpelkaartMaxPositionReached
+    public void verschuif(int id, Gebruiker gebruiker) throws SpelkaartNietGevonden, MaximumPositieBereikt
     {
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null)
         {
-            throw new SpelkaartNotFound();
+            throw new SpelkaartNietGevonden();
         }
 
         if (spelkaart.getPositie() >= spelkaart.getCirkelsessie().getAantalCirkels())
         {
-            throw new SpelkaartMaxPositionReached();
+            throw new MaximumPositieBereikt();
         }
 
         List<Deelname> deelnameList = spelkaart.getCirkelsessie().getDeelnames();
@@ -176,13 +176,13 @@ public class SpelkaartServiceImpl implements SpelkaartService
     }
 
     @Override
-    public Kaart getKaart(int id) throws SpelkaartNotFound
+    public Kaart getKaart(int id) throws SpelkaartNietGevonden
     {
         Spelkaart spelkaart = repository.findOne(id);
 
         if (spelkaart == null)
         {
-            throw new SpelkaartNotFound();
+            throw new SpelkaartNietGevonden();
         }
 
         return spelkaart.getKaart();

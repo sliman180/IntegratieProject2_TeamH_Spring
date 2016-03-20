@@ -3,9 +3,9 @@ package be.kdg.teamh.services.contracts;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.dtos.request.SubthemaRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.HoofdthemaNotFound;
-import be.kdg.teamh.exceptions.notfound.SubthemaNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.hoofdthema.HoofdthemaNietGevonden;
+import be.kdg.teamh.exceptions.subthema.SubthemaNietGevonden;
 
 import java.util.List;
 
@@ -13,21 +13,21 @@ public interface SubthemaService
 {
     List<Subthema> all();
 
-    void create(SubthemaRequest dto) throws HoofdthemaNotFound, GebruikerNotFound;
+    void create(SubthemaRequest dto) throws HoofdthemaNietGevonden, GebruikerNietGevonden;
 
-    Subthema find(int id) throws SubthemaNotFound;
+    Subthema find(int id) throws SubthemaNietGevonden;
 
-    void update(int id, SubthemaRequest dto) throws SubthemaNotFound, HoofdthemaNotFound, GebruikerNotFound;
+    void update(int id, SubthemaRequest dto) throws SubthemaNietGevonden, HoofdthemaNietGevonden, GebruikerNietGevonden;
 
-    void delete(int id) throws SubthemaNotFound;
+    void delete(int id) throws SubthemaNietGevonden;
 
-    Organisatie findOrganisatie(int id) throws SubthemaNotFound;
+    Organisatie findOrganisatie(int id) throws SubthemaNietGevonden;
 
-    Hoofdthema findHoofdthema(int id) throws SubthemaNotFound;
+    Hoofdthema findHoofdthema(int id) throws SubthemaNietGevonden;
 
-    List<Cirkelsessie> getCirkelsessies(int id) throws SubthemaNotFound;
+    List<Cirkelsessie> getCirkelsessies(int id) throws SubthemaNietGevonden;
 
-    List<Kaart> getKaarten(int id) throws SubthemaNotFound;
+    List<Kaart> getKaarten(int id) throws SubthemaNietGevonden;
 
-    void addKaart(int id, KaartRequest kaart) throws SubthemaNotFound, GebruikerNotFound;
+    void addKaart(int id, KaartRequest kaart) throws SubthemaNietGevonden, GebruikerNietGevonden;
 }
