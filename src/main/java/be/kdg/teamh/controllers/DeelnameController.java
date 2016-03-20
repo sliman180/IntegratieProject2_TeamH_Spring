@@ -2,7 +2,6 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.DeelnameRequest;
 import be.kdg.teamh.entities.Cirkelsessie;
-import be.kdg.teamh.entities.Deelname;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
 import be.kdg.teamh.services.contracts.AuthService;
@@ -40,7 +39,7 @@ public class DeelnameController
         int eigenaar = service.find(id).getGebruiker().getId();
         int organisator = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
 
-        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisator(id, gebruiker))
+        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisatorDeelname(id, gebruiker))
         {
             throw new ToegangVerboden();
         }
@@ -58,7 +57,7 @@ public class DeelnameController
         int eigenaar = service.find(id).getGebruiker().getId();
         int organisator = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
 
-        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisator(id, gebruiker))
+        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisatorDeelname(id, gebruiker))
         {
             throw new ToegangVerboden();
         }

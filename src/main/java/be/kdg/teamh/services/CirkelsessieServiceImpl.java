@@ -439,7 +439,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public boolean isMedeOrganisator(int id, int gebruiker)
+    public boolean isMedeOrganisatorDeelname(int id, int gebruiker)
     {
         Deelname deelname = deelnames.findOne(id);
 
@@ -448,11 +448,35 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             throw new DeelnameNietGevonden();
         }
 
-        for (Deelname cirkelsessieDeelname: deelname.getCirkelsessie().getDeelnames())
+        for (Deelname cirkelsessieDeelname : deelname.getCirkelsessie().getDeelnames())
         {
             if (gebruiker == cirkelsessieDeelname.getGebruiker().getId())
             {
                 if (cirkelsessieDeelname.isMedeorganisator())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isMedeOrganisatorCirkelsessie(int id, int gebruiker)
+    {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null)
+        {
+            throw new CirkelsessieNietGevonden();
+        }
+
+        for (Deelname deelname : cirkelsessie.getDeelnames())
+        {
+            if (gebruiker == deelname.getGebruiker().getId())
+            {
+                if (deelname.isMedeorganisator())
                 {
                     return true;
                 }

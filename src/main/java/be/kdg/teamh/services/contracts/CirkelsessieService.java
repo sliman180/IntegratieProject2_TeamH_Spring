@@ -179,5 +179,7 @@ public interface CirkelsessieService
      * @return true als de gebruiker een medeorganisator is, false als hij het niet is
      * @throws DeelnameNietGevonden
      */
-    boolean isMedeOrganisator(int id, int gebruiker)  throws DeelnameNietGevonden;
+    boolean isMedeOrganisatorDeelname(int id, int gebruiker)  throws DeelnameNietGevonden;
+
+    boolean isMedeOrganisatorCirkelsessie(int id, int gebruiker);
 }

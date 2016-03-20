@@ -2,6 +2,7 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.*;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,14 @@ public class CirkelsessieController
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
         auth.isGeregistreerd(token);
-        auth.isEigenaar(token, service.find(id).getGebruiker());
+
+        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int eigenaar = service.find(id).getGebruiker().getId();
+
+        if (gebruiker != eigenaar && !service.isMedeOrganisatorCirkelsessie(id, gebruiker))
+        {
+            throw new ToegangVerboden();
+        }
 
         service.update(id, cirkelsessie);
     }
@@ -91,7 +99,14 @@ public class CirkelsessieController
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        auth.isEigenaar(token, service.find(id).getGebruiker());
+
+        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int eigenaar = service.find(id).getGebruiker().getId();
+
+        if (gebruiker != eigenaar && !service.isMedeOrganisatorCirkelsessie(id, gebruiker))
+        {
+            throw new ToegangVerboden();
+        }
 
         service.delete(id);
     }
@@ -101,7 +116,14 @@ public class CirkelsessieController
     public void clone(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
     {
         auth.isGeregistreerd(token);
-        auth.isEigenaar(token, service.find(id).getGebruiker());
+
+        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int eigenaar = service.find(id).getGebruiker().getId();
+
+        if (gebruiker != eigenaar && !service.isMedeOrganisatorCirkelsessie(id, gebruiker))
+        {
+            throw new ToegangVerboden();
+        }
 
         service.clone(id, cirkelsessie);
     }
