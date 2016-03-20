@@ -1095,6 +1095,7 @@
 
         var vm = this;
 
+        vm.gebruiker={};
         vm.updateProfile = function (credentials) {
 
             if (credentials.wachtwoord == null) {
@@ -1109,6 +1110,7 @@
                     $rootScope.naam = data.gebruikersnaam;
                     $rootScope.rollen = data.rollen;
 
+                    vm.gebruiker=data;
                     $location.path("/");
 
                 });
@@ -1153,8 +1155,8 @@
 
     "use strict";
 
-    CirkelsessieDetailsController.$inject = ["$location", "$timeout", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService", "DeelnameService", "$window"];
-    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, $window) {
+    CirkelsessieDetailsController.$inject = ["$location", "$timeout", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService", "DeelnameService", "$window", "$route"];
+    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, $window,$route) {
 
         var vm = this;
 
@@ -1388,6 +1390,15 @@
             }
         };
 
+
+        vm.isAdmin = function(){
+            for (var i = 0; i < vm.deelnames.length; i++) {
+                if(vm.deelnames[i].gebruiker.id==$rootScope.id && vm.deelnames[i].medeorganisator == true){
+                    return true;
+                }
+            }
+            return false;
+        };
 
     }
 

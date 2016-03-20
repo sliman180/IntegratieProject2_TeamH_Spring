@@ -245,24 +245,23 @@
                 <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="">
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Naam</label>
                         <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam"
                                pattern="^.{3,30}$">
-                        <label class="mdl-textfield__label" for="naam">Naam</label>
                         <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Aantal cirkels</label>
                         <input class="mdl-textfield__input" type="text" pattern="^(1[0-0]|[5-9])$"
                                id="aantalCirkels" ng-model="cirkelsessie.aantalCirkels">
-                        <label class="mdl-textfield__label" for="aantalCirkels">Aantal cirkels</label>
                         <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Maximum toegelaten kaarten</label>
                         <input class="mdl-textfield__input" type="number" id="maxAantalKaarten"
                                ng-model="cirkelsessie.maxAantalKaarten">
-                        <label class="mdl-textfield__label" for="maxAantalKaarten">Maximum toegelaten
-                            kaarten</label>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -278,9 +277,9 @@
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Start datum</label>
                         <input class="mdl-textfield__input" type="datetime-local" id="datum"
                                ng-model="cirkelsessie.startDatum">
-                        <label class="mdl-textfield__label" for="datum"></label>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -315,8 +314,8 @@
                 <form ng-submit="vm.cloneCirkelsessie(cirkelsessieId,cirkelsessie)" action="">
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Naam</label>
                         <input class="mdl-textfield__input" type="text" id="cloneNaam" ng-model="cirkelsessie.naam">
-                        <label class="mdl-textfield__label" for="cloneNaam">Naam</label>
                     </div>
 
 
@@ -333,9 +332,10 @@
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <label>Start datum</label>
                         <input class="mdl-textfield__input" type="datetime-local" id="cloneDatum"
                                ng-model="cirkelsessie.startDatum">
-                        <label class="mdl-textfield__label" for="cloneDatum"></label>
+
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

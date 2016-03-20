@@ -9,19 +9,28 @@
         <form action="">
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="gebruikersnaam"
+                    <input class="mdl-textfield__input" type="text" id="gebruikersnaam" pattern="^.{5,20}$"
                            ng-model="credentials.gebruikersnaam">
                     <label class="mdl-textfield__label" for="gebruikersnaam">Gebruikersnaam</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 20 letters bevatten</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="password" id="wachtwoord"
+                    <input class="mdl-textfield__input" type="password" id="wachtwoord" pattern="^.{8,30}$"
                            ng-model="credentials.wachtwoord">
                     <label class="mdl-textfield__label" for="wachtwoord">Wachtwoord</label>
+                    <span class="mdl-textfield__error">Mag minimum 8 en maximum 30 letters/cijfer bevatten</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="password" id="confirmatie"
+                    <input class="mdl-textfield__input" type="password" id="confirmatie" pattern="^.{8,30}$"
                            ng-model="credentials.confirmatie">
                     <label class="mdl-textfield__label" for="confirmatie">Herhaal uw wachtwoord</label>
+                    <span class="mdl-textfield__error">Mag minimum 8 en maximum 30 letters/cijfers bevatten</span>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="email" pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"
+                           ng-model="credentials.email">
+                    <label class="mdl-textfield__label" for="email">Emailadres</label>
+                    <span class="mdl-textfield__error">Geen geldige emailadres</span>
                 </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -30,6 +39,7 @@
                     Registreren
                 </button>
             </div>
+
         </form>
 
     </div>
