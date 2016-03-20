@@ -35,8 +35,11 @@ public class DeelnameController
     {
         auth.isGeregistreerd(token);
 
-        if (auth.zoekGebruikerMetToken(token).getId() != cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId()
-            || auth.zoekGebruikerMetToken(token).getId() != service.find(id).getGebruiker().getId())
+        int aangemeldeGebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int organisatorCirkelsessie = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
+        int eigenaarDeelname = service.find(id).getGebruiker().getId();
+
+        if (aangemeldeGebruiker != organisatorCirkelsessie && aangemeldeGebruiker != eigenaarDeelname)
         {
             throw new ToegangVerboden();
         }
