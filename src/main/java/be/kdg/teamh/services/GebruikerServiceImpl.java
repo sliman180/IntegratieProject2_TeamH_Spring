@@ -76,6 +76,11 @@ public class GebruikerServiceImpl implements GebruikerService
             throw new GebruikerBestaatAl();
         }
 
+        if (repository.findByEmail(dto.getEmail()) != null)
+        {
+            throw new GebruikerBestaatAl();
+        }
+
         GebruikerRequest gebruiker = new GebruikerRequest();
 
         gebruiker.setEmail(dto.getEmail());

@@ -1,9 +1,9 @@
 insert into gebruikers
-  (gebruikersnaam, wachtwoord)
+  (email, gebruikersnaam, wachtwoord)
 values
-  ('userone', '1e9d59ad9be1cb302e155d55b61c95b3b3db897da2ed9643b15f8802039ffc8c'),
-  ('usertwo', 'f64c95e5e1f4537428da7ba9fd1ee87bd263091c38c52d52cefb8e2b408983e8'),
-  ('moussa', '90be0995aa2c8b9e273ce6b3ce732ba1d325245dd1d4547b843127649c435777');
+  ('userone@kandoe.be', 'userone', '1e9d59ad9be1cb302e155d55b61c95b3b3db897da2ed9643b15f8802039ffc8c'),
+  ('usertwo@kandoe.be', 'usertwo', 'f64c95e5e1f4537428da7ba9fd1ee87bd263091c38c52d52cefb8e2b408983e8'),
+  ('moussa@kandoe.be', 'moussa', '90be0995aa2c8b9e273ce6b3ce732ba1d325245dd1d4547b843127649c435777');
 
 insert into rollen
   (naam)

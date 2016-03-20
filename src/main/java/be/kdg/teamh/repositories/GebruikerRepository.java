@@ -16,4 +16,12 @@ public interface GebruikerRepository extends JpaRepository<Gebruiker, Integer>
      * @return {@link Gebruiker}
      */
     Gebruiker findByGebruikersnaam(String gebruikersnaam);
+
+    /**
+     * Zoekt een gebruiker op basis van de email.
+     *
+     * @param email Email van de gebruiker
+     * @return {@link Gebruiker}
+     */
+    Gebruiker findByEmail(String email);
 }

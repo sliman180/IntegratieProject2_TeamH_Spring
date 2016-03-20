@@ -22,7 +22,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void createGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()))
             .andExpect(status().isCreated());
@@ -35,7 +35,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void createGebruiker_nullInput() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest(null, null);
+        GebruikerRequest gebruiker = new GebruikerRequest(null, null, null);
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()))
             .andExpect(status().isBadRequest());
@@ -44,7 +44,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void createGebruiker_zonderAuthenticationHeader() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)))
             .andExpect(status().isBadRequest());
@@ -53,7 +53,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void createGebruiker_ongeregistreerdeGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getNonExistingUserToken()))
             .andExpect(status().isUnauthorized());
@@ -62,7 +62,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void showGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
@@ -81,24 +81,29 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void updateGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
-        gebruiker = new GebruikerRequest("newuser", "newuser");
+        gebruiker = new GebruikerRequest("new@user.com", "newuser", "newuser");
 
         http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()))
             .andExpect(status().isOk());
 
         http.perform(get("/api/gebruikers/4").header("Authorization", getUserOneToken()))
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.email", is("new@user.com")))
             .andExpect(jsonPath("$.gebruikersnaam", is("newuser")));
     }
 
     @Test
     public void updateGebruiker_nullInput() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest(null, null);
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
+
+        http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
+
+        gebruiker = new GebruikerRequest(null, null, null);
 
         http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()))
             .andExpect(status().isBadRequest());
@@ -107,7 +112,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void updateGebruiker_onbestaandeGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
@@ -116,11 +121,11 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void updateGebruiker_zonderAuthenticationHeader() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
-        gebruiker = new GebruikerRequest("newuser", "newuser");
+        gebruiker = new GebruikerRequest("test@user.com", "newuser", "newuser");
 
         http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)))
             .andExpect(status().isBadRequest());
@@ -129,11 +134,11 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void updateGebruiker_ongeregistreerdeGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
-        gebruiker = new GebruikerRequest("newuser", "newuser");
+        gebruiker = new GebruikerRequest("test@user.com", "newuser", "newuser");
 
         http.perform(put("/api/gebruikers/4", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getNonExistingUserToken()))
             .andExpect(status().isUnauthorized());
@@ -142,7 +147,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void deleteGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
@@ -164,7 +169,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void deleteGebruiker_zonderAuthenicationHeader() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
@@ -175,7 +180,7 @@ public class GebruikerApiTest extends ApiTest
     @Test
     public void deleteGebruiker_ongeregistreerdeGebruiker() throws Exception
     {
-        GebruikerRequest gebruiker = new GebruikerRequest("testuser", "testuser");
+        GebruikerRequest gebruiker = new GebruikerRequest("test@user.com", "testuser", "testuser");
 
         http.perform(post("/api/gebruikers", objectMapper.writeValueAsString(gebruiker)).header("Authorization", getUserOneToken()));
 
