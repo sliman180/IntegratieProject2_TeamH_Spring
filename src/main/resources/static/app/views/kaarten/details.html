@@ -236,8 +236,10 @@
             <form ng-submit="vm.createComment(vm.kaart.id, commentaar)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst">
+                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst"
+                           pattern="^.{5,30}$">
                     <label class="mdl-textfield__label" for="commentaartTekst">Inhoud</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
 
 

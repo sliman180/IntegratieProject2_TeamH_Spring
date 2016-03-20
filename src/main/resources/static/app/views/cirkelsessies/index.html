@@ -212,7 +212,7 @@
                         class="mdl-menu__item">Wijzig
                     </li>
                     <li ng-if="cirkelsessie.gebruiker.id==$root.id"
-                        ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder
+                        ng-click="vm.deleteCirkelsessie(cirkelsessie.id)" class="mdl-menu__item">Verwijder
                     </li>
                 </ul>
             </div>
@@ -235,8 +235,10 @@
                 <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="">
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
+                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam"
+                               pattern="^.{3,30}$">
                         <label class="mdl-textfield__label" for="naam">Naam</label>
+                        <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -255,7 +257,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label>Status </label>
-                        <select ng-model="cirkelsessie.status">
+                        <select ng-model="cirkelsessie.status" required>
                             <option value="OPEN">
                                 OPEN
                             </option>

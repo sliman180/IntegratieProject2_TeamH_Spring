@@ -3,7 +3,7 @@
     "use strict";
 
 
-    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, KaartService) {
+    function SubthemaDetailsController($route, $rootScope, $routeParams, SubthemaService, KaartService, $window) {
 
         var vm = this;
 
@@ -34,6 +34,14 @@
             KaartService.createKaartForSubthema(subthemaId, kaart).then(function () {
                 $route.reload();
             });
+        };
+
+        vm.deleteKaart = function (id) {
+            if ($window.confirm("Bent u zeker dat u de kaart wilt verwijderen?")) {
+                KaartService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
         };
     }
 

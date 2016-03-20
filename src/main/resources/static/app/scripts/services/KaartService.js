@@ -30,6 +30,14 @@
 
         };
 
+        exports.delete = function (id) {
+            return $http.delete("/api/kaarten/" + id).then(function (response) {
+                return response.data;
+            });
+
+        };
+
+
         exports.createKaartForSubthema = function (subthemaId, kaart) {
 
             return $http.post("/api/subthemas/" + subthemaId + "/kaart", kaart).then(function (response) {

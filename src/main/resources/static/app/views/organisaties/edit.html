@@ -9,16 +9,18 @@
         <form action="">
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="naam"
+                    <input class="mdl-textfield__input" type="text" id="naam" pattern="^.{3,30}$"
                            value="{{vm.organisatie.naam}}"
                            ng-model="organisatie.naam">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
+                    <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="tekst" id="beschrijving"
+                    <input class="mdl-textfield__input" type="tekst" id="beschrijving" pattern="^.{5,30}$"
                            value="{{vm.organisatie.beschrijving}}"
                            ng-model="organisatie.beschrijving">
                     <label class="mdl-textfield__label" for="beschrijving">Beschrijving</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">

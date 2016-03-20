@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function HoofdthemaIndexController($rootScope, $route, HoofdthemaService, OrganisatieService) {
+    function HoofdthemaIndexController($rootScope, $route, HoofdthemaService, OrganisatieService, $window) {
 
         var vm = this;
 
@@ -31,7 +31,15 @@
             HoofdthemaService.create(hoofdthema).then(function () {
                 $route.reload();
             });
-        }
+        };
+
+        vm.deleteHoofdthema = function (id) {
+            if ($window.confirm("Bent u zeker dat u de hoofdthema wilt verwijderen?")) {
+                HoofdthemaService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
+        };
 
     }
 

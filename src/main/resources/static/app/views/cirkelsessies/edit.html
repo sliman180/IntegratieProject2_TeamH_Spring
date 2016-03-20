@@ -9,16 +9,18 @@
         <form action="">
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="naam"
+                    <input class="mdl-textfield__input" type="text" id="naam" pattern="^.{3,30}$"
                            value="{{vm.cirkelsessie.naam}}"
                            ng-model="cirkelsessie.naam">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
+                    <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="tekst" id="aantalcirkels"
+                    <input class="mdl-textfield__input" type="tekst" id="aantalcirkels" pattern="^(1[0-0]|[5-9])$"
                            value="{{vm.cirkelsessie.aantalCirkels}}"
                            ng-model="cirkelsessie.aantalCirkels">
                     <label class="mdl-textfield__label" for="aantalcirkels">Aantal cirkels</label>
+                    <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="tekst" id="maxtoegelatenkaarten"

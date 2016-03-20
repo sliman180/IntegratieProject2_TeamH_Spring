@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService) {
+    function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, $window) {
 
         var vm = this;
 
@@ -101,19 +101,21 @@
 
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;
-            CirkelsessieService.addBericht(id, bericht);
+            CirkelsessieService.addBericht(id, bericht).then(function () {
+                $route.reload();
+            });
         };
 
         vm.addDeelname = function (id) {
             CirkelsessieService.addDeelname(id).then(function () {
-                alert('Beste ' + $rootScope.gebruikersnaam + ', Dank u voor uw deelname !');
+                alert('Beste ' + $rootScope.naam + ', Dank u voor uw deelname !');
             });
         };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             kaart.gebruiker = $rootScope.id;
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
-                alert('De kaart  ' + kaart.tekst + ' is toegevoegd.');
+                alert('De kaart  "' + kaart.tekst + '" is toegevoegd.');
             });
         };
 
@@ -156,6 +158,13 @@
         };
 
         vm.beeindigSpel = function (cirkelsessie) {
+            cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
+
             CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
                 alert('U hebt de spel beeindigd!');
             });
@@ -172,8 +181,12 @@
             return true;
         };
 
-        vm.deleteCirkelsessieLink = function (id) {
-            $location.path('/cirkelsessies/delete/' + id);
+        vm.deleteCirkelsessie = function (id) {
+            if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
+                CirkelsessieService.delete(id).then(function () {
+                    $location.path("/#/cirkelsessies");
+                });
+            }
         };
 
         vm.editCirkelsessieLink = function (id) {

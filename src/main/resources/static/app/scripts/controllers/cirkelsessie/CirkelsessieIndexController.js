@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService) {
+    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window) {
 
         var vm = this;
 
@@ -54,10 +54,6 @@
             $location.path('/cirkelsessies/details/' + id);
         };
 
-        vm.deleteCirkelsessieLink = function (id) {
-            $location.path('/cirkelsessies/delete/' + id);
-        };
-
         vm.editCirkelsessieLink = function (id) {
             $location.path('/cirkelsessies/edit/' + id);
         };
@@ -67,6 +63,14 @@
             CirkelsessieService.cloneCirkelsessie(id, cirkelsessie).then(function () {
                 $route.reload();
             });
+        };
+
+        vm.deleteCirkelsessie = function (id) {
+            if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
+                CirkelsessieService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
         };
 
     }

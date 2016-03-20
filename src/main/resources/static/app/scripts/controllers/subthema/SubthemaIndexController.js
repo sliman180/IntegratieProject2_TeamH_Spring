@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function SubthemaIndexController($route, $rootScope, HoofdthemaService, SubthemaService, OrganisatieService) {
+    function SubthemaIndexController($route, $rootScope, HoofdthemaService, SubthemaService, $window) {
 
         var vm = this;
 
@@ -31,7 +31,16 @@
             SubthemaService.create(subthema).then(function () {
                 $route.reload();
             });
-        }
+        };
+
+        vm.deleteSubthema = function (id) {
+            if ($window.confirm("Bent u zeker dat u de subthema wilt verwijderen?")) {
+                SubthemaService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
+        };
+
     }
 
     angular.module("kandoe").controller("SubthemaIndexController", SubthemaIndexController);

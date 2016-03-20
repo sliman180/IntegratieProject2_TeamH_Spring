@@ -16,7 +16,11 @@
             cirkelsessie.id = $routeParams.id;
             cirkelsessie.gebruiker = $rootScope.id;
             cirkelsessie.status = vm.cirkelsessie.status;
-            cirkelsessie.subthema = vm.cirkelsessie.subthema;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
             CirkelsessieService.update(cirkelsessie).then(function () {
                 $location.path("/cirkelsessies");
             });

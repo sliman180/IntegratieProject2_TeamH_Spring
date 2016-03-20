@@ -3,6 +3,7 @@ package be.kdg.teamh.controllers;
 import be.kdg.teamh.dtos.request.HoofdthemaRequest;
 import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.HoofdthemaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +76,13 @@ public class HoofdthemaController
     {
         return service.findOrganisatie(id);
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/subthemas", method = RequestMethod.GET)
+    public List<Subthema> getSubthemas(@PathVariable("id") int id)
+    {
+        return service.findSubthemas(id);
+    }
+
+
 }

@@ -431,7 +431,7 @@
             <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(vm.cirkelsessie.id)"
                 class="mdl-menu__item">Wijzig
             </li>
-            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id" ng-click="vm.deleteCirkelsessieLink(vm.cirkelsessie.id)"
+            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id" ng-click="vm.deleteCirkelsessie(vm.cirkelsessie.id)"
                 class="mdl-menu__item">Verwijder
             </li>
         </ul>
@@ -635,9 +635,12 @@
         <form ng-submit="vm.createKaart(vm.cirkelsessie.id, kaart)" action="">
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst">
+                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst"
+                       pattern="^.{3,30}$">
                 <label class="mdl-textfield__label" for="kaartTekst">Kaart tekst</label>
+                <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
             </div>
+
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" id="imageUrl" ng-model="kaart.imageUrl">
@@ -677,9 +680,12 @@
             <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
+                    <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst"
+                           pattern="^.{1,30}$">
                     <label class="mdl-textfield__label" for="tekst">Bericht</label>
+                    <span class="mdl-textfield__error">Mag minimum 1 en maximum 30 letters bevatten</span>
                 </div>
+
 
                 <button ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect">

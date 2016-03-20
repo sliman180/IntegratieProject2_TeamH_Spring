@@ -220,8 +220,8 @@
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <a>Verwijderen</a>
-                            <a href="/#/kaarten/edit/{{kaart.id}}">Wijzigen</a>
+                            <a ng-if="$root.id==kaart.gebruiker.id" href="" ng-click="vm.deleteKaart(kaart.id)">Verwijderen</a>
+                            <a ng-if="$root.id==kaart.gebruiker.id" href="/#/kaarten/edit/{{kaart.id}}">Wijzigen</a>
                             <a href="/#/kaarten/details/{{kaart.id}}">Meer informatie</a>
                         </div>
                     </div>
@@ -239,8 +239,10 @@
         <form ng-submit="vm.createKaart(vm.subthema.id,kaart)" action="">
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst">
+                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst"
+                       pattern="^.{3,30}$">
                 <label class="mdl-textfield__label" for="kaartTekst">Kaart tekst</label>
+                <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
             </div>
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

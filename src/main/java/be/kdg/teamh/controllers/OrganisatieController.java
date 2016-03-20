@@ -1,6 +1,7 @@
 package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
+import be.kdg.teamh.entities.Hoofdthema;
 import be.kdg.teamh.entities.Organisatie;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.OrganisatieService;
@@ -66,5 +67,12 @@ public class OrganisatieController
         auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
 
         service.delete(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
+    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id)
+    {
+        return service.getHoofdthemas(id);
     }
 }
