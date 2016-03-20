@@ -7,6 +7,9 @@ import java.io.Serializable;
 public class RegistratieRequest implements Serializable
 {
     @NotNull
+    private String email;
+
+    @NotNull
     private String gebruikersnaam;
 
     @NotNull
@@ -22,11 +25,22 @@ public class RegistratieRequest implements Serializable
         //
     }
 
-    public RegistratieRequest(String gebruikersnaam, String wachtwoord, String confirmatie)
+    public RegistratieRequest(String email, String gebruikersnaam, String wachtwoord, String confirmatie)
     {
+        this.email = email;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.confirmatie = confirmatie;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     public String getGebruikersnaam()

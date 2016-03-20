@@ -52,8 +52,12 @@ public class GebruikerServiceImpl implements GebruikerService
 
         Gebruiker gebruiker = new Gebruiker();
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
         gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        gebruiker.setVoornaam(dto.getVoornaam());
+        gebruiker.setFamilienaam(dto.getFamilienaam());
+        gebruiker.setTelefoon(dto.getTelefoon());
         gebruiker.addRol(rol);
 
         repository.save(gebruiker);
@@ -74,6 +78,7 @@ public class GebruikerServiceImpl implements GebruikerService
 
         GebruikerRequest gebruiker = new GebruikerRequest();
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
         gebruiker.setWachtwoord(dto.getWachtwoord());
 
@@ -121,7 +126,11 @@ public class GebruikerServiceImpl implements GebruikerService
             throw new GebruikerNietGevonden();
         }
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
+        gebruiker.setVoornaam(dto.getVoornaam());
+        gebruiker.setFamilienaam(dto.getFamilienaam());
+        gebruiker.setTelefoon(dto.getTelefoon());
 
         if (!dto.getWachtwoord().isEmpty())
         {
