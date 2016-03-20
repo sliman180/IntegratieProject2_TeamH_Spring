@@ -229,13 +229,13 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             subthema.addCirkelsessie(cirkelsessie);
             subthema = subthemas.saveAndFlush(subthema);
             clone.setSubthema(subthema);
+        }
 
-            for (Kaart kaart : subthema.getKaarten())
-            {
-                Spelkaart spelkaart = new Spelkaart(kaart, clone);
-                spelkaart = spelkaarten.save(spelkaart);
-                clone.addSpelkaart(spelkaart);
-            }
+        for (Spelkaart spelkaartje : cirkelsessie.getSpelkaarten())
+        {
+            Spelkaart spelkaart = new Spelkaart(spelkaartje.getKaart(), clone);
+            spelkaart = spelkaarten.save(spelkaart);
+            clone.addSpelkaart(spelkaart);
         }
 
         for (Deelname deelname : cirkelsessie.getDeelnames())
@@ -250,7 +250,8 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
 
             cloneDeelname = deelnames.save(cloneDeelname);
             clone.addDeelname(cloneDeelname);
-            gebruiker.addDeelname(cloneDeelname);
+            deelname.getGebruiker().addDeelname(cloneDeelname);
+            gebruikers.save(deelname.getGebruiker());
         }
 
         clone = repository.save(clone);
