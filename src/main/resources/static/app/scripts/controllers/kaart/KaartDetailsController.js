@@ -26,12 +26,6 @@
             });
         };
 
-
-        //vm.createComment = function (kaartId, kaart) {
-        //    KaartService.createKaartComment(kaartId, kaart).then(function () {
-        //        $route.reload();
-        //    });
-        //};
     }
 
 

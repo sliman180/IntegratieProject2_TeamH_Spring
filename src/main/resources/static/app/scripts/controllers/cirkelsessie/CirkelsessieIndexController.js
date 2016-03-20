@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window) {
+    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window, $timeout) {
 
         var vm = this;
 
@@ -12,6 +12,7 @@
         vm.subthema = {};
         vm.deelnames = [];
         vm.mijnCirkelsessies = [];
+        vm.aanDeBeurt = {};
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
@@ -21,14 +22,36 @@
             vm.mijnCirkelsessies = data;
         });
 
-        CirkelsessieService.all().then(function (data) {
-            vm.cirkelsessies = data;
-            angular.forEach(vm.cirkelsessies, function (value, key) {
-                CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
-                    vm.deelnames.push(deelnamesdata);
+        var cirkelsessiepolling = function () {
+            CirkelsessieService.all().then(function (data) {
+                vm.cirkelsessies = data;
+                angular.forEach(vm.cirkelsessies, function (value, key) {
+                    CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
+                        vm.deelnames.push(deelnamesdata);
+                    });
                 });
             });
-        });
+
+            var promise = $timeout(cirkelsessiepolling, 2000);
+
+            $rootScope.$on('$destroy', function () {
+                $timeout.cancel(promise);
+            });
+            $rootScope.$on('$locationChangeStart', function () {
+                $timeout.cancel(promise);
+            });
+        };
+
+        cirkelsessiepolling();
+
+        vm.initAanDeBeurt = function (index) {
+            angular.forEach(vm.deelnames[index], function (value, key) {
+                if (value.aanDeBeurt) {
+                    vm.aanDeBeurt = value.gebruiker.gebruikersnaam;
+                }
+            });
+        };
+
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);

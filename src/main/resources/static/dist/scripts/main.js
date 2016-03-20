@@ -418,6 +418,20 @@
             });
         };
 
+        exports.openSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'OPEN';
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
+        };
+
+        exports.sluitSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'GESLOTEN';
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
+        };
+
         return exports;
 
     }
@@ -1126,6 +1140,27 @@
 
     "use strict";
 
+    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
+    function DeelnameIndexController($rootScope, DeelnameService) {
+
+        var vm = this;
+
+        vm.deelnames = [];
+
+        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
+            vm.deelnames = data;
+        });
+
+    }
+
+    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     CirkelsessieDetailsController.$inject = ["$location", "$timeout", "$rootScope", "$routeParams", "CirkelsessieService", "KaartService", "DeelnameService", "$window"];
     function CirkelsessieDetailsController($location, $timeout, $rootScope, $routeParams, CirkelsessieService, KaartService, DeelnameService, $window) {
 
@@ -1270,16 +1305,14 @@
             return "#ffffff"
         };
 
-        vm.showTooltip = function (event, mouseovertext) {
+        vm.showTooltip = function (mouseovertext) {
             var tooltip = document.getElementById('tooltip');
-            tooltip.setAttribute("x", event.clientX - 50);
-            tooltip.setAttribute("y", event.clientY - 50);
-            tooltip.firstChild.data = mouseovertext;
-            tooltip.setAttribute("visibility", "visible");
+            tooltip.innerHTML=mouseovertext;
+            tooltip.setAttribute("display", "block");
         };
 
         vm.hideTooltip = function () {
-            document.getElementById('tooltip').setAttribute("visibility", "hidden");
+            document.getElementById('tooltip').setAttribute("display", "none");
         };
 
         vm.beeindigSpel = function (cirkelsessie) {
@@ -1292,6 +1325,32 @@
 
             CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
                 alert('U hebt de spel beeindigd!');
+            });
+        };
+
+        vm.openSpel = function (cirkelsessie) {
+            cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
+
+            CirkelsessieService.openSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel geopend!');
+            });
+        };
+
+        vm.sluitSpel = function (cirkelsessie) {
+            cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
+
+            CirkelsessieService.sluitSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel gesloten!');
             });
         };
 
@@ -1309,13 +1368,33 @@
         vm.deleteCirkelsessie = function (id) {
             if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
                 CirkelsessieService.delete(id).then(function () {
-                    $location.path("/#/cirkelsessies");
+                    $location.path("/cirkelsessies");
                 });
             }
         };
 
         vm.editCirkelsessieLink = function (id) {
             $location.path('/cirkelsessies/edit/' + id);
+        };
+
+        vm.maakAdmin = function (deelname) {
+            deelname.medeorganisator=true;
+            deelname.gebruiker=deelname.gebruiker.id;
+            deelname.cirkelsessie=deelname.cirkelsessie.id;
+                DeelnameService.update(deelname).then(function () {
+                    alert('De deelnemer "' + deelname.gebruiker.gebruikersnaam + '" is nu medeorganisator!');
+                });
+
+        };
+
+        vm.kickDeelnemer = function (deelname) {
+            deelname.gebruiker=deelname.gebruiker.id;
+            deelname.cirkelsessie=deelname.cirkelsessie.id;
+            if ($window.confirm('Bent u zeker dat u deelnemer "'+deelname.gebruiker.gebruikersnaam+'"  wilt kicken?')) {
+                DeelnameService.delete(deelname.id).then(function () {
+                    $route.reload();
+                });
+            }
         };
 
 
@@ -1364,8 +1443,8 @@
 
     "use strict";
 
-    CirkelsessieIndexController.$inject = ["$rootScope", "$route", "$location", "CirkelsessieService", "SubthemaService", "$window"];
-    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window) {
+    CirkelsessieIndexController.$inject = ["$rootScope", "$route", "$location", "CirkelsessieService", "SubthemaService", "$window", "$timeout"];
+    function CirkelsessieIndexController($rootScope, $route, $location, CirkelsessieService, SubthemaService, $window,$timeout) {
 
         var vm = this;
 
@@ -1375,6 +1454,7 @@
         vm.subthema = {};
         vm.deelnames = [];
         vm.mijnCirkelsessies = [];
+        vm.aanDeBeurt={};
 
         SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
             vm.subthemas = data;
@@ -1384,14 +1464,36 @@
             vm.mijnCirkelsessies = data;
         });
 
-        CirkelsessieService.all().then(function (data) {
-            vm.cirkelsessies = data;
-            angular.forEach(vm.cirkelsessies, function (value, key) {
-                CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
-                    vm.deelnames.push(deelnamesdata);
+        var cirkelsessiepolling = function(){
+            CirkelsessieService.all().then(function (data) {
+                vm.cirkelsessies = data;
+                angular.forEach(vm.cirkelsessies, function (value, key) {
+                    CirkelsessieService.getDeelnames(value.id).then(function (deelnamesdata) {
+                        vm.deelnames.push(deelnamesdata);
+                    });
                 });
             });
-        });
+
+            var promise = $timeout(cirkelsessiepolling, 2000);
+
+            $rootScope.$on('$destroy', function () {
+                $timeout.cancel(promise);
+            });
+            $rootScope.$on('$locationChangeStart', function () {
+                $timeout.cancel(promise);
+            });
+        };
+
+        cirkelsessiepolling();
+
+        vm.initAanDeBeurt = function(index){
+            angular.forEach(vm.deelnames[index], function (value, key) {
+                if (value.aanDeBeurt) {
+                    vm.aanDeBeurt=value.gebruiker.gebruikersnaam;
+                }
+            });
+        };
+
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);
@@ -1439,27 +1541,6 @@
     }
 
     angular.module("kandoe").controller("CirkelsessieIndexController", CirkelsessieIndexController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
-    DeelnameIndexController.$inject = ["$rootScope", "DeelnameService"];
-    function DeelnameIndexController($rootScope, DeelnameService) {
-
-        var vm = this;
-
-        vm.deelnames = [];
-
-        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
-            vm.deelnames = data;
-        });
-
-    }
-
-    angular.module("kandoe").controller("DeelnameIndexController", DeelnameIndexController);
 
 })(window.angular);
 
@@ -1552,6 +1633,71 @@
 
     "use strict";
 
+
+    KaartDetailsController.$inject = ["$route", "$routeParams", "KaartService", "$rootScope"];
+    function KaartDetailsController($route, $routeParams, KaartService, $rootScope) {
+
+        var vm = this;
+
+        vm.kaart = {};
+        vm.comments = [];
+
+        KaartService.find($routeParams.id).then(function (data) {
+            vm.kaart = data;
+
+            KaartService.getComments($routeParams.id).then(function (commentsdata) {
+                vm.comments = commentsdata;
+            });
+        });
+
+
+        vm.createComment = function (kaartId, comment) {
+            comment.gebruiker = $rootScope.id;
+            KaartService.createComment(kaartId, comment).then(function () {
+                $route.reload;
+            });
+        };
+
+    }
+
+
+    angular.module("kandoe").controller("KaartDetailsController", KaartDetailsController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
+    KaartEditController.$inject = ["$routeParams", "$rootScope", "KaartService"];
+    function KaartEditController($routeParams, $rootScope, KaartService) {
+
+        var vm = this;
+
+        vm.kaart = {};
+
+        KaartService.find($routeParams.id).then(function (data) {
+            vm.kaart = data;
+        });
+
+        vm.editKaart = function (kaart) {
+            kaart.id = $routeParams.id;
+            kaart.gebruiker = $rootScope.id;
+            KaartService.update(kaart).then(function () {
+                alert('Beste ' + $rootScope.naam + ', de kaart is gewijzigd!');
+            });
+        }
+
+    }
+
+    angular.module("kandoe").controller("KaartEditController", KaartEditController);
+
+})(window.angular);
+
+(function (angular) {
+
+    "use strict";
+
     OrganisatieEditController.$inject = ["$routeParams", "$rootScope", "OrganisatieService", "$location"];
     function OrganisatieEditController($routeParams, $rootScope, OrganisatieService, $location) {
 
@@ -1615,77 +1761,6 @@
     }
 
     angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
-
-    KaartDetailsController.$inject = ["$route", "$routeParams", "KaartService", "$rootScope"];
-    function KaartDetailsController($route, $routeParams, KaartService, $rootScope) {
-
-        var vm = this;
-
-        vm.kaart = {};
-        vm.comments = [];
-
-        KaartService.find($routeParams.id).then(function (data) {
-            vm.kaart = data;
-
-            KaartService.getComments($routeParams.id).then(function (commentsdata) {
-                vm.comments = commentsdata;
-            });
-        });
-
-
-        vm.createComment = function (kaartId, comment) {
-            comment.gebruiker = $rootScope.id;
-            KaartService.createComment(kaartId, comment).then(function () {
-                $route.reload;
-            });
-        };
-
-
-        //vm.createComment = function (kaartId, kaart) {
-        //    KaartService.createKaartComment(kaartId, kaart).then(function () {
-        //        $route.reload();
-        //    });
-        //};
-    }
-
-
-    angular.module("kandoe").controller("KaartDetailsController", KaartDetailsController);
-
-})(window.angular);
-
-(function (angular) {
-
-    "use strict";
-
-    KaartEditController.$inject = ["$routeParams", "$rootScope", "KaartService"];
-    function KaartEditController($routeParams, $rootScope, KaartService) {
-
-        var vm = this;
-
-        vm.kaart = {};
-
-        KaartService.find($routeParams.id).then(function (data) {
-            vm.kaart = data;
-        });
-
-        vm.editKaart = function (kaart) {
-            kaart.id = $routeParams.id;
-            kaart.gebruiker = $rootScope.id;
-            KaartService.update(kaart).then(function () {
-                alert('Beste ' + $rootScope.naam + ', de kaart is gewijzigd!');
-            });
-        }
-
-    }
-
-    angular.module("kandoe").controller("KaartEditController", KaartEditController);
 
 })(window.angular);
 
