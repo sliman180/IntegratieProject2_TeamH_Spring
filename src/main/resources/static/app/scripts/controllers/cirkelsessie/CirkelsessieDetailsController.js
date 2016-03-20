@@ -23,7 +23,6 @@
                             vm.gebruikers.push(gebruikerdata);
                         });
                     });
-
                 });
             });
 
@@ -145,16 +144,14 @@
             return "#ffffff"
         };
 
-        vm.showTooltip = function (event, mouseovertext) {
+        vm.showTooltip = function (mouseovertext) {
             var tooltip = document.getElementById('tooltip');
-            tooltip.setAttribute("x", event.clientX - 50);
-            tooltip.setAttribute("y", event.clientY - 50);
-            tooltip.firstChild.data = mouseovertext;
-            tooltip.setAttribute("visibility", "visible");
+            tooltip.innerHTML = mouseovertext;
+            tooltip.setAttribute("display", "block");
         };
 
         vm.hideTooltip = function () {
-            document.getElementById('tooltip').setAttribute("visibility", "hidden");
+            document.getElementById('tooltip').setAttribute("display", "none");
         };
 
         vm.beeindigSpel = function (cirkelsessie) {
@@ -167,6 +164,32 @@
 
             CirkelsessieService.beeindigSpel(cirkelsessie).then(function () {
                 alert('U hebt de spel beeindigd!');
+            });
+        };
+
+        vm.openSpel = function (cirkelsessie) {
+            cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
+
+            CirkelsessieService.openSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel geopend!');
+            });
+        };
+
+        vm.sluitSpel = function (cirkelsessie) {
+            cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
+            if (cirkelsessie.subthema != null) {
+                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            } else {
+                cirkelsessie.subthema = 0;
+            }
+
+            CirkelsessieService.sluitSpel(cirkelsessie).then(function () {
+                alert('U hebt de spel gesloten!');
             });
         };
 
@@ -184,13 +207,33 @@
         vm.deleteCirkelsessie = function (id) {
             if ($window.confirm("Bent u zeker dat u de cirkelsessie wilt verwijderen?")) {
                 CirkelsessieService.delete(id).then(function () {
-                    $location.path("/#/cirkelsessies");
+                    $location.path("/cirkelsessies");
                 });
             }
         };
 
         vm.editCirkelsessieLink = function (id) {
             $location.path('/cirkelsessies/edit/' + id);
+        };
+
+        vm.maakAdmin = function (deelname) {
+            deelname.medeorganisator = true;
+            deelname.gebruiker = deelname.gebruiker.id;
+            deelname.cirkelsessie = deelname.cirkelsessie.id;
+            DeelnameService.update(deelname).then(function () {
+                alert('De deelnemer "' + deelname.gebruiker.gebruikersnaam + '" is nu medeorganisator!');
+            });
+
+        };
+
+        vm.kickDeelnemer = function (deelname) {
+            deelname.gebruiker = deelname.gebruiker.id;
+            deelname.cirkelsessie = deelname.cirkelsessie.id;
+            if ($window.confirm('Bent u zeker dat u deelnemer "' + deelname.gebruiker.gebruikersnaam + '"  wilt kicken?')) {
+                DeelnameService.delete(deelname.id).then(function () {
+                    $route.reload();
+                });
+            }
         };
 
 

@@ -124,6 +124,20 @@
             });
         };
 
+        exports.openSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'OPEN';
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
+        };
+
+        exports.sluitSpel = function (cirkelsessie) {
+            cirkelsessie.status = 'GESLOTEN';
+            return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
+                return response.data;
+            });
+        };
+
         return exports;
 
     }

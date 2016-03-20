@@ -1,9 +1,5 @@
 <style>
 
-    .tooltip {
-        font-size: 12px;
-    }
-
     .mdl-card__title {
         background-color: royalblue;
     }
@@ -53,28 +49,59 @@
     }
 
     #deelnemerContainer {
-        max-height: 200px;
-        overflow-x: auto;
+        max-height: 300px;
+        overflow-y: auto !important;
     }
 
     .deelname {
-        width: 120px;
+        width: 200px;
         padding: 1%;
         margin-left: 1%;
         border: 1px solid black;
         color: black;
         background-color: lightgoldenrodyellow;
         float: left;
+        text-align: center;
+        height: 200px;
     }
 
     .deelnameAandeBeurt {
-        width: 120px;
+        width: 200px;
         padding: 1%;
         margin-left: 1%;
         border: 3px solid #1C8C81;
         color: black;
         background-color: #F7CD56;
         float: left;
+        margin-bottom: 3%;
+        text-align: center;
+        height: 200px;
+    }
+
+    .admin {
+        color: red;
+    }
+
+    .aanDeBeurt {
+        color: #9532C7;
+    }
+
+    .deelnemer-options {
+        padding: 0 5px !important;
+        float: right;
+    }
+
+    #tooltip {
+        padding: 1%;
+        float: right;
+        font-size: 2em;
+        background-color: #9C9C9C;
+        border: 1px solid black;
+        color: white;
+    }
+
+    rect, text {
+        cursor: help;
     }
 
 </style>
@@ -89,15 +116,13 @@
     <div id="header-buttons">
 
         <div>
-            <div ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'" class="beurt">
+            <div ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.isActive(vm.cirkelsessie.startDatum)" class="beurt">
                 <h4>U bent aan de beurt!</h4>
             </div>
 
-            <div ng-if="!vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'" class="beurt">
+            <div ng-if="!vm.isAanDeBeurt() && vm.isDeelnemer() && vm.isActive(vm.cirkelsessie.startDatum)"
+                 class="beurt">
                 <h4>Wachten op uw beurt...</h4>
-                <!-- MDL Spinner Component -->
-                <div ng-if="!vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
-                     class="mdl-spinner mdl-js-spinner is-active"></div>
             </div>
 
             <button ng-if="vm.isDeelnemer()"
@@ -110,7 +135,7 @@
                 <span>Deelnemen</span>
             </button>
 
-            <button ng-if="vm.isActive(vm.cirkelsessie.startDatum)"
+            <button ng-if="vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status!='BEEINDIGD'"
                     class="mdl-button mdl-js-button mdl-button--raised status-gestart" disabled>
                 De cirkelsessie is gestart!
             </button>
@@ -132,6 +157,16 @@
                     class="mdl-button mdl-js-button mdl-button--raised status-beeindigd">
                 Beëndigd de cirkelsessie!
             </button>
+            <button ng-if="vm.cirkelsessie.status!='BEEINDIGD' && vm.cirkelsessie.status!='OPEN' && $root.id==vm.cirkelsessie.gebruiker.id && !vm.isActive(vm.cirkelsessie.startDatum)"
+                    ng-click="vm.openSpel(vm.cirkelsessie)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-open">
+                Open de cirkelsessie!
+            </button>
+            <button ng-if="vm.cirkelsessie.status!='BEEINDIGD' && vm.cirkelsessie.status!='GESLOTEN' && $root.id==vm.cirkelsessie.gebruiker.id && !vm.isActive(vm.cirkelsessie.startDatum)"
+                    ng-click="vm.sluitSpel(vm.cirkelsessie)"
+                    class="mdl-button mdl-js-button mdl-button--raised status-gesloten">
+                Sluit de cirkelsessie!
+            </button>
         </div>
 
     </div>
@@ -151,14 +186,56 @@
         <div ng-if="vm.deelnames.length>0">
             <div ng-repeat="deelname in vm.deelnames | orderBy:'aanDeBeurt':true">
                 <div class="deelnameAandeBeurt" ng-if="deelname.aanDeBeurt">
+                    <div class="dropdown"
+                         ng-if="deelname.gebruiker.id!=$root.id && vm.cirkelsessie.gebruiker.id==$root.id || deelname.medeorganisator && deelname.gebruiker.id==$root.id">
+                        <button class="dropbtn deelnemer-options">+</button>
+                        <div class="dropdown-content">
+                            <div>
+                                <a ng-click="vm.maakAdmin(deelname)" ng-if="vm.cirkelsessie.gebruiker.id ==$root.id"
+                                   href="">
+                                    Maak medeorganisator
+                                </a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.gebruiker.id!=$root.id" href="">
+                                    Maak medeorganisator
+                                </a>
+                                <a ng-click="vm.kickDeelnemer(deelname)" href="">Kick deelnemer</a>
+                            </div>
+                        </div>
+                    </div>
                     <p>Naam: <b>{{deelname.gebruiker.gebruikersnaam}}</b></p>
+
+                    <p ng-if="deelname.medeorganisator || deelname.gebruiker.id==vm.cirkelsessie.gebruiker.id"><b
+                            class="admin">ADMIN</b></p>
+
+                    <p>Kaarten: <b>{{deelname.aangemaakteKaarten}}</b></p>
+
+                    <p><b class="aanDeBeurt">Is aan de beurt!</b></p>
 
                     <p>Deelgenomen op: <b>{{deelname.datum | date:'dd/MM/yyyy HH:mm'}}</b></p>
-
-                    <p><b>Is aan de beurt!</b></p>
                 </div>
                 <div class="deelname" ng-if=!deelname.aanDeBeurt">
+                    <div class="dropdown"
+                         ng-if="deelname.gebruiker.id!=$root.id && vm.cirkelsessie.gebruiker.id==$root.id || deelname.medeorganisator && deelname.gebruiker.id==$root.id">
+                        <button class="dropbtn deelnemer-options">+</button>
+                        <div class="dropdown-content">
+                            <div>
+                                <a ng-click="vm.maakAdmin(deelname)" ng-if="vm.cirkelsessie.gebruiker.id ==$root.id"
+                                   href="">
+                                    Maak medeorganisator
+                                </a>
+                                <a class="linkDisabled" ng-if="vm.cirkelsessie.gebruiker.id!=$root.id" href="">
+                                    Maak medeorganisator
+                                </a>
+                                <a ng-click="vm.kickDeelnemer(deelname)" href="">Kick deelnemer</a>
+                            </div>
+                        </div>
+                    </div>
                     <p>Naam: <b>{{deelname.gebruiker.gebruikersnaam}}</b></p>
+
+                    <p ng-if="deelname.medeorganisator || deelname.gebruiker.id==vm.cirkelsessie.gebruiker.id"><b
+                            class="admin">ADMIN</b></p>
+
+                    <p>Kaarten: <b>{{deelname.aangemaakteKaarten}}</b></p>
 
                     <p>Deelgenomen op: <b>{{deelname.datum | date:'dd/MM/yyyy HH:mm'}}</b></p>
                 </div>
@@ -192,8 +269,10 @@
     </div>
 
     <div class="mdl-card__actions mdl-card--border">
-        <h6>Max aan te maken aantal kaarten per gebruiker: </h6>
-        <span>{{vm.cirkelsessie.maxAantalKaarten}}</span>
+        <h6>Max aan te maken aantal kaarten per gebruiker: {{vm.cirkelsessie.maxAantalKaarten}} </h6>
+
+        <!--tooltip-->
+        <p id="tooltip"></p>
     </div>
 
     <div class="mdl-card__actions mdl-card--border">
@@ -215,15 +294,16 @@
                   y2="{{vm.cirkelsessie.aantalCirkels * 100}}"
                   style="stroke:white;stroke-width:2" stroke-linecap="round" stroke-dasharray="1, 5"></line>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:1}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      ng-attr-id="{{spelkaart.kaart.tekst}}"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                      y="10"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:1}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        ng-attr-id="{{spelkaart.kaart.tekst}}"
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                        y="10"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -235,14 +315,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:2}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                      y="60"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:2}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                        y="60"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -253,14 +334,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:3}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                      y="110"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:3}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                        y="110"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -271,14 +353,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:4}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
-                      y="160"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:4}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50}}"
+                        y="160"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -289,14 +372,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:5}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="210"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:5}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="210"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -307,14 +391,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:6}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="260"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:6}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="260"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -325,14 +410,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:7}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="310"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:7}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="310"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -343,14 +429,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:8}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="360"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:8}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="360"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -361,14 +448,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:9}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="410"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:9}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="410"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -379,14 +467,15 @@
                 </text>
             </g>
 
-            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:10}">
-                <rect ng-mouseenter="vm.ShowTooltip($event,spelkaart.kaart.tekst)"
-                      ng-mouseleave="vm.HideTooltip()"
-                      transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
-                      ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
-                      y="460"
-                      width="50" height="30" style="fill:#9C9C9C;"
-                      stroke="black" stroke-width="2">
+            <g ng-repeat="spelkaart in vm.spelkaarten | filter:{positie:10}"
+               ng-mouseenter="vm.showTooltip(spelkaart.kaart.tekst)"
+               ng-mouseout="vm.hideTooltip()">
+                <rect
+                        transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
+                        ng-attr-x="{{vm.cirkelsessie.aantalCirkels * 50 }}"
+                        y="460"
+                        width="50" height="30" style="fill:#9C9C9C;"
+                        stroke="black" stroke-width="2">
                 </rect>
                 <text
                         transform="rotate({{$index * 20}}, {{vm.cirkelsessie.aantalCirkels * 50}}, {{vm.cirkelsessie.aantalCirkels * 50}})"
@@ -396,13 +485,6 @@
                     {{spelkaart.kaart.tekst | limitTo: 4}}..
                 </text>
             </g>
-
-            <!--tooltip-->
-
-            <text x="0" y="0" width="20" height="10" fill="black" id="tooltip" font-size="10" visibility="hidden">
-                Tooltip
-            </text>
-
         </svg>
 
     </div>
@@ -560,7 +642,11 @@
     }
 
     .linkDisabled {
-        color: #7B7777;
+        color: #7B7777 !important;
+    }
+
+    .linkDisabled:hover {
+        cursor: not-allowed !important;
     }
 
 </style>
@@ -600,16 +686,19 @@
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <div ng-if="vm.cirkelsessie.status!='BEEINDIGD'">
-                                <a class="linkDisabled" ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt()">Verplaats naar
+                            <div>
+                                <a class="linkDisabled"
+                                   ng-if="!vm.isDeelnemer() || !vm.isAanDeBeurt() && vm.cirkelsessie.aantalCirkels!=spelkaart.positie">Verplaats
+                                    naar
                                     [{{spelkaart.positie +
                                     1}}]
                                 </a>
-                                <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie"
+                                <a ng-if="vm.isAanDeBeurt() && vm.isDeelnemer() && vm.cirkelsessie.aantalCirkels > spelkaart.positie && vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status!='BEEINDIGD'"
                                    ng-click="vm.verschuifKaart(spelkaart.id)">Verplaats
                                     naar[{{spelkaart.positie + 1}}]
                                 </a>
-                                <a class="linkDisabled" ng-if="vm.cirkelsessie.status=='GESLOTEN'">
+                                <a class="linkDisabled"
+                                   ng-if="!vm.isActive(vm.cirkelsessie.startDatum) || vm.cirkelsessie.status=='BEEINDIGD'">
                                     Verplaats naar[{{spelkaart.positie + 1}}]
                                 </a>
 
