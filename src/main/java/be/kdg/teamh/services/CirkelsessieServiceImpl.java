@@ -246,7 +246,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             cloneDeelname.setAangemaakteKaarten(deelname.getAangemaakteKaarten());
             cloneDeelname.setDatum(deelname.getDatum());
             cloneDeelname.setMedeorganisator(deelname.isMedeorganisator());
-            cloneDeelname.setGebruiker(gebruiker);
+            cloneDeelname.setGebruiker(deelname.getGebruiker());
 
             cloneDeelname = deelnames.save(cloneDeelname);
             clone.addDeelname(cloneDeelname);
