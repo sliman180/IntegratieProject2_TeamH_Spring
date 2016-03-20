@@ -4,11 +4,11 @@ import be.kdg.teamh.dtos.request.GebruikerRequest;
 import be.kdg.teamh.dtos.request.LoginRequest;
 import be.kdg.teamh.dtos.request.RegistratieRequest;
 import be.kdg.teamh.entities.*;
-import be.kdg.teamh.exceptions.GebruikerAlreadyExists;
-import be.kdg.teamh.exceptions.InvalidCredentials;
-import be.kdg.teamh.exceptions.PasswordsDoNotMatch;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
-import be.kdg.teamh.exceptions.notfound.RolNotFound;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerBestaatAl;
+import be.kdg.teamh.exceptions.gebruiker.OngeldigeGegevens;
+import be.kdg.teamh.exceptions.gebruiker.WachtwoordenKomenNietOvereen;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
+import be.kdg.teamh.exceptions.rol.RolNietGevonden;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.GebruikerService;
@@ -41,39 +41,49 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void create(GebruikerRequest dto) throws RolNotFound
+    public void create(GebruikerRequest dto) throws RolNietGevonden
     {
         Rol rol = rollen.findByNaam("user");
 
         if (rol == null)
         {
-            throw new RolNotFound();
+            throw new RolNietGevonden();
         }
 
         Gebruiker gebruiker = new Gebruiker();
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
         gebruiker.setWachtwoord(Hashing.sha256().hashString(dto.getWachtwoord(), StandardCharsets.UTF_8).toString());
+        gebruiker.setVoornaam(dto.getVoornaam());
+        gebruiker.setFamilienaam(dto.getFamilienaam());
+        gebruiker.setTelefoon(dto.getTelefoon());
         gebruiker.addRol(rol);
 
         repository.save(gebruiker);
     }
 
     @Override
-    public void register(RegistratieRequest dto) throws RolNotFound, PasswordsDoNotMatch
+    public void register(RegistratieRequest dto) throws RolNietGevonden, WachtwoordenKomenNietOvereen
     {
         if (!dto.getWachtwoord().equalsIgnoreCase(dto.getConfirmatie()))
         {
-            throw new PasswordsDoNotMatch();
+            throw new WachtwoordenKomenNietOvereen();
         }
 
         if (repository.findByGebruikersnaam(dto.getGebruikersnaam()) != null)
         {
-            throw new GebruikerAlreadyExists();
+            throw new GebruikerBestaatAl();
+        }
+
+        if (repository.findByEmail(dto.getEmail()) != null)
+        {
+            throw new GebruikerBestaatAl();
         }
 
         GebruikerRequest gebruiker = new GebruikerRequest();
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
         gebruiker.setWachtwoord(dto.getWachtwoord());
 
@@ -81,47 +91,51 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public Gebruiker find(int id) throws GebruikerNotFound
+    public Gebruiker find(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker;
     }
 
     @Override
-    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNotFound, InvalidCredentials
+    public Gebruiker findByLogin(LoginRequest login) throws GebruikerNietGevonden, OngeldigeGegevens
     {
         Gebruiker gebruiker = repository.findByGebruikersnaam(login.getGebruikersnaam());
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         if (!Hashing.sha256().hashString(login.getWachtwoord(), StandardCharsets.UTF_8).toString().equals(gebruiker.getWachtwoord()))
         {
-            throw new InvalidCredentials();
+            throw new OngeldigeGegevens();
         }
 
         return gebruiker;
     }
 
     @Override
-    public void update(int id, GebruikerRequest dto) throws GebruikerNotFound
+    public void update(int id, GebruikerRequest dto) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
+        gebruiker.setEmail(dto.getEmail());
         gebruiker.setGebruikersnaam(dto.getGebruikersnaam());
+        gebruiker.setVoornaam(dto.getVoornaam());
+        gebruiker.setFamilienaam(dto.getFamilienaam());
+        gebruiker.setTelefoon(dto.getTelefoon());
 
         if (!dto.getWachtwoord().isEmpty())
         {
@@ -135,78 +149,78 @@ public class GebruikerServiceImpl implements GebruikerService
     }
 
     @Override
-    public void delete(int id) throws GebruikerNotFound
+    public void delete(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         repository.delete(gebruiker);
     }
 
     @Override
-    public List<Organisatie> getOrganisaties(int id) throws GebruikerNotFound
+    public List<Organisatie> getOrganisaties(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker.getOrganisaties();
     }
 
     @Override
-    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNotFound
+    public List<Cirkelsessie> getCirkelsessies(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker.getCirkelsessies();
     }
 
     @Override
-    public List<Deelname> getDeelnames(int id) throws GebruikerNotFound
+    public List<Deelname> getDeelnames(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker.getDeelnames();
     }
 
     @Override
-    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNotFound
+    public List<Hoofdthema> getHoofdthemas(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker.getHoofdthemas();
     }
 
     @Override
-    public List<Subthema> getSubthemas(int id) throws GebruikerNotFound
+    public List<Subthema> getSubthemas(int id) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(id);
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker.getSubthemas();

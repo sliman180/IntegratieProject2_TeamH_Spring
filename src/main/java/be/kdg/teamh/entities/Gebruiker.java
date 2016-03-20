@@ -19,10 +19,18 @@ public class Gebruiker implements Serializable
 
     @NotNull
     @Column(unique = true)
+    private String email;
+
+    @NotNull
+    @Column(unique = true)
     private String gebruikersnaam;
 
     @NotNull
     private String wachtwoord;
+
+    private String voornaam;
+    private String familienaam;
+    private String telefoon;
 
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "gebruiker")
@@ -64,14 +72,16 @@ public class Gebruiker implements Serializable
         //
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord)
+    public Gebruiker(String email, String gebruikersnaam, String wachtwoord)
     {
+        this.email = email;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
     }
 
-    public Gebruiker(String gebruikersnaam, String wachtwoord, List<Rol> rollen)
+    public Gebruiker(String email, String gebruikersnaam, String wachtwoord, List<Rol> rollen)
     {
+        this.email = email;
         this.gebruikersnaam = gebruikersnaam;
         this.wachtwoord = wachtwoord;
         this.rollen = rollen;
@@ -80,6 +90,16 @@ public class Gebruiker implements Serializable
     public int getId()
     {
         return id;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
     public String getGebruikersnaam()
@@ -101,6 +121,36 @@ public class Gebruiker implements Serializable
     public void setWachtwoord(String wachtwoord)
     {
         this.wachtwoord = wachtwoord;
+    }
+
+    public String getVoornaam()
+    {
+        return voornaam;
+    }
+
+    public void setVoornaam(String voornaam)
+    {
+        this.voornaam = voornaam;
+    }
+
+    public String getFamilienaam()
+    {
+        return familienaam;
+    }
+
+    public void setFamilienaam(String familienaam)
+    {
+        this.familienaam = familienaam;
+    }
+
+    public String getTelefoon()
+    {
+        return telefoon;
+    }
+
+    public void setTelefoon(String telefoon)
+    {
+        this.telefoon = telefoon;
     }
 
     public List<Organisatie> getOrganisaties()

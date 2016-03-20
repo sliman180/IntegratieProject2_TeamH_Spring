@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function OrganisatieIndexController($route, $rootScope, OrganisatieService) {
+    function OrganisatieIndexController($route, $rootScope, OrganisatieService, $window) {
 
         var vm = this;
 
@@ -23,8 +23,15 @@
             OrganisatieService.create(organisatie).then(function () {
                 $route.reload();
             });
-        }
+        };
 
+        vm.deleteOrganisatie = function (id) {
+            if ($window.confirm("Bent u zeker dat u de organisatie wilt verwijderen?")) {
+                OrganisatieService.delete(id).then(function () {
+                    $route.reload();
+                });
+            }
+        };
     }
 
     angular.module("kandoe").controller("OrganisatieIndexController", OrganisatieIndexController);

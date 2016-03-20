@@ -2,17 +2,46 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGeregistreerd;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 
+/**
+ *
+ */
 public interface AuthService
 {
-    LoginResponse generateToken(Gebruiker gebruiker);
+    /**
+     * Genereert een JWT voor de gebruiker.
+     *
+     * @param gebruiker Aangemelde gebruiker
+     * @return {@link LoginResponse}
+     */
+    LoginResponse genereerToken(Gebruiker gebruiker);
 
-    Gebruiker findByToken(String token) throws GebruikerNotFound;
+    /**
+     * Haalt een specifieke gebruiker op basis van de JWT.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @return {@link Gebruiker}
+     * @throws GebruikerNietGevonden
+     */
+    Gebruiker zoekGebruikerMetToken(String token) throws GebruikerNietGevonden;
 
-    boolean isGuest(String token);
+    /**
+     * Controleert of een gebruiker is geregistreerd.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @throws GebruikerNietGeregistreerd
+     */
+    void isGeregistreerd(String token) throws GebruikerNietGeregistreerd;
 
-    boolean isRegistered(String token);
-
-    boolean isAdmin(String token);
+    /**
+     * Controleert of een gebruiker eigenaar is van een resource.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @param gebruiker Eigenaar van de beveiligde resource
+     * @throws ToegangVerboden
+     */
+    void isEigenaar(String token, Gebruiker gebruiker) throws ToegangVerboden;
 }

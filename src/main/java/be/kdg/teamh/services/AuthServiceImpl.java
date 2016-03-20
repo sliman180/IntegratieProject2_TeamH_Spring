@@ -3,7 +3,9 @@ package be.kdg.teamh.services;
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGeregistreerd;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 import be.kdg.teamh.repositories.GebruikerRepository;
 import be.kdg.teamh.services.contracts.AuthService;
 import io.jsonwebtoken.Claims;
@@ -29,7 +31,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public LoginResponse generateToken(Gebruiker gebruiker)
+    public LoginResponse genereerToken(Gebruiker gebruiker)
     {
         Claims claims = Jwts.claims().setSubject(String.valueOf(gebruiker.getId()));
 
@@ -40,39 +42,44 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public Gebruiker findByToken(String token) throws GebruikerNotFound
+    public Gebruiker zoekGebruikerMetToken(String token) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
         if (gebruiker == null)
         {
-            throw new GebruikerNotFound();
+            throw new GebruikerNietGevonden();
         }
 
         return gebruiker;
     }
 
     @Override
-    public boolean isGuest(String token)
+    public void isGeregistreerd(String token) throws GebruikerNietGeregistreerd
     {
-        return hasRole(token, "guest");
+        if (!isValidToken(token) || !hasRole(token, "user"))
+        {
+            throw new GebruikerNietGeregistreerd();
+        }
     }
 
     @Override
-    public boolean isRegistered(String token)
+    public void isEigenaar(String token, Gebruiker gebruiker) throws ToegangVerboden
     {
-        return hasRole(token, "user");
-    }
-
-    @Override
-    public boolean isAdmin(String token)
-    {
-        return hasRole(token, "admin");
+        if (zoekGebruikerMetToken(token).getId() != gebruiker.getId())
+        {
+            throw new ToegangVerboden();
+        }
     }
 
     private Claims parseToken(String token)
     {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token.substring(7)).getBody();
+    }
+
+    private boolean isValidToken(String token)
+    {
+        return token != null && token.startsWith("Bearer ");
     }
 
     private boolean hasRole(String token, String user)

@@ -43,7 +43,6 @@ public class Spelkaart implements Serializable
         this.kaart = kaart;
     }
 
-
     public int getId()
     {
         return id;

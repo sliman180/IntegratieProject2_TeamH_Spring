@@ -64,12 +64,8 @@
 
         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
             for="demo-menu-lower-right-d">
-            <!--<li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>-->
-            <!--<li disabled class="mdl-menu__item">Wijzig</li>-->
-            <!--<li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>-->
-
+            <li disabled class="mdl-menu__item">Wijzig</li>
             <li disabled class="mdl-menu__item">Verwijder</li>
-
         </ul>
     </div>
 </div>
@@ -236,8 +232,10 @@
             <form ng-submit="vm.createComment(vm.kaart.id, commentaar)" action="">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst">
+                    <input class="mdl-textfield__input" type="text" id="commentaartTekst" ng-model="commentaar.tekst"
+                           pattern="^.{5,30}$">
                     <label class="mdl-textfield__label" for="commentaartTekst">Inhoud</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
 
 

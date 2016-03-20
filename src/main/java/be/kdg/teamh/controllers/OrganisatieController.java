@@ -35,8 +35,10 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody OrganisatieRequest organisatie)
+    public void create(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
+        auth.isGeregistreerd(token);
+
         service.create(organisatie);
     }
 
@@ -49,22 +51,28 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody OrganisatieRequest organisatie)
+    public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
+        auth.isGeregistreerd(token);
+        auth.isEigenaar(token, service.find(id).getGebruiker());
+
         service.update(id, organisatie);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
+        auth.isGeregistreerd(token);
+        auth.isEigenaar(token, service.find(id).getGebruiker());
+
         service.delete(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
-    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id)
+    public List<Hoofdthema> findHoofdthemas(@PathVariable("id") int id)
     {
-        return service.getHoofdthemas(id);
+        return service.findHoofdthemas(id);
     }
 }

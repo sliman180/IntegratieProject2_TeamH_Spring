@@ -2,7 +2,7 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.entities.Bericht;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.BerichtNotFound;
+import be.kdg.teamh.exceptions.bericht.BerichtNietGevonden;
 import be.kdg.teamh.repositories.BerichtRepository;
 import be.kdg.teamh.services.contracts.BerichtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,13 @@ public class BerichtServiceImpl implements BerichtService
 
 
     @Override
-    public Gebruiker getGebruiker(int id) throws BerichtNotFound
+    public Gebruiker getGebruiker(int id) throws BerichtNietGevonden
     {
         Bericht bericht = repository.findOne(id);
 
         if (bericht == null)
         {
-            throw new BerichtNotFound();
+            throw new BerichtNietGevonden();
         }
 
         return bericht.getGebruiker();

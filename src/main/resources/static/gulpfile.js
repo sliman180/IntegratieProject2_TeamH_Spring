@@ -90,17 +90,16 @@
         var files = {
             vendor: [
                 paths.app.scripts + "/vendor/jquery.js",
-                paths.app.scripts + "/vendor/material.js",
                 paths.app.scripts + "/vendor/angular.js",
+                paths.app.scripts + "/vendor/material.js",
                 paths.app.scripts + "/vendor/angular-route.js",
                 paths.app.scripts + "/vendor/angular-storage.js"
             ],
             app: [
                 paths.app.scripts + "/module.js",
+                paths.app.scripts + "/auth.js",
                 paths.app.scripts + "/routes.js",
                 paths.app.scripts + "/interceptors/**/*",
-                paths.app.scripts + "/directives/**/*",
-                paths.app.scripts + "/filters/**/*",
                 paths.app.scripts + "/services/**/*",
                 paths.app.scripts + "/controllers/**/*"
             ]

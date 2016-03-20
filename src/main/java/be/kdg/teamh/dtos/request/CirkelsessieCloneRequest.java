@@ -23,6 +23,7 @@ public class CirkelsessieCloneRequest implements Serializable
 
     private int subthema;
 
+    @NotNull
     private int gebruiker;
 
     public CirkelsessieCloneRequest()
@@ -110,4 +111,5 @@ public class CirkelsessieCloneRequest implements Serializable
     {
         this.gebruiker = gebruiker;
     }
+
 }

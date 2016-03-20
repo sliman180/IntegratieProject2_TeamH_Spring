@@ -2,7 +2,7 @@ package be.kdg.teamh.services;
 
 import be.kdg.teamh.dtos.request.RolRequest;
 import be.kdg.teamh.entities.Rol;
-import be.kdg.teamh.exceptions.notfound.RolNotFound;
+import be.kdg.teamh.exceptions.rol.RolNietGevonden;
 import be.kdg.teamh.repositories.RolRepository;
 import be.kdg.teamh.services.contracts.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,26 +40,26 @@ public class RolServiceImpl implements RolService
     }
 
     @Override
-    public Rol find(int id) throws RolNotFound
+    public Rol find(int id) throws RolNietGevonden
     {
         Rol rol = repository.findOne(id);
 
         if (rol == null)
         {
-            throw new RolNotFound();
+            throw new RolNietGevonden();
         }
 
         return rol;
     }
 
     @Override
-    public void update(int id, RolRequest dto) throws RolNotFound
+    public void update(int id, RolRequest dto) throws RolNietGevonden
     {
         Rol rol = repository.findOne(id);
 
         if (rol == null)
         {
-            throw new RolNotFound();
+            throw new RolNietGevonden();
         }
 
         rol.setNaam(dto.getNaam());
@@ -68,13 +68,13 @@ public class RolServiceImpl implements RolService
     }
 
     @Override
-    public void delete(int id) throws RolNotFound
+    public void delete(int id) throws RolNietGevonden
     {
         Rol rol = repository.findOne(id);
 
         if (rol == null)
         {
-            throw new RolNotFound();
+            throw new RolNietGevonden();
         }
 
         repository.delete(rol);

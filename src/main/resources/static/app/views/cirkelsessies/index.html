@@ -94,6 +94,10 @@
         margin-top: 10%;
     }
 
+    .aanDeBeurt {
+        color: #9532C7;
+    }
+
 </style>
 
 
@@ -110,10 +114,11 @@
         <div class="type-cirkelsessie">
             <div>
                 <h4>Filter cirkelsessies op status</h4>
-                <!--<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">-->
-                <!--<input ng-model="statusFilter" type="radio" id="option-1" class="mdl-radio__button" name="options" value="ALLES" checked>-->
-                <!--<span class="mdl-radio__label">ALLES</span>-->
-                <!--</label>-->
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                    <input ng-model="statusFilter" type="radio" id="option-1" class="mdl-radio__button" name="options"
+                           value="" checked>
+                    <span class="mdl-radio__label">TOON ALLES</span>
+                </label>
                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
                     <input ng-model="filter.status" type="radio" id="option-2" class="mdl-radio__button" name="options"
                            value="OPEN">
@@ -161,8 +166,9 @@
                 <p ng-if="cirkelsessie.subthema!=null">
                     Organisatie: <b>{{cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
                     | Hoofdthema: <b>{{cirkelsessie.subthema.hoofdthema.naam}}</b>
-                    | Subthema: <b>{{cirkelsessie.subthema.naam}}</b>
                 </p>
+
+                <p ng-if="cirkelsessie.subthema!=null">Subthema: <b>{{cirkelsessie.subthema.naam}}</b></p>
 
                 <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
 
@@ -174,8 +180,13 @@
                        ng-if="!vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status=='GESLOTEN'">{{cirkelsessie.status}}</b>
                     <b class="status-beeindigd"
                        ng-if="!vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status=='BEEINDIGD'">{{cirkelsessie.status}}</b>
-                    <b class="status-gestart" ng-if="vm.isActive(cirkelsessie.startDatum)">GESTART</b>
+                    <b class="status-gestart"
+                       ng-if="vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status!='BEEINDIGD'">GESTART</b>
                 </p>
+
+                <p class="aanDeBeurt"
+                   ng-if="vm.isActive(cirkelsessie.startDatum) && cirkelsessie.status!='BEEINDIGD' && vm.deelnames[$index].length>0"
+                   ng-init="vm.initAanDeBeurt($index)">Deelnemer <b>"{{vm.aanDeBeurt}}"</b> is aan de beurt!</p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="/#/cirkelsessies/details/{{cirkelsessie.id}}"
@@ -207,8 +218,12 @@
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right {{cirkelsessie.id}}">
                     <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
-                    <li disabled class="mdl-menu__item">Wijzig</li>
-                    <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(cirkelsessie.id)"
+                        class="mdl-menu__item">Wijzig
+                    </li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id"
+                        ng-click="vm.deleteCirkelsessie(cirkelsessie.id)" class="mdl-menu__item">Verwijder
+                    </li>
                 </ul>
             </div>
         </div>
@@ -230,8 +245,10 @@
                 <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="" class="session-fo">
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
+                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam"
+                               pattern="^.{3,30}$">
                         <label class="mdl-textfield__label" for="naam">Naam</label>
+                        <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -299,7 +316,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="mdl-textfield__input" type="text" id="cloneNaam" ng-model="cirkelsessie.naam">
-                        <label class="mdl-textfield__label" for="naam">Naam</label>
+                        <label class="mdl-textfield__label" for="cloneNaam">Naam</label>
                     </div>
 
 
@@ -318,7 +335,7 @@
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <input class="mdl-textfield__input" type="datetime-local" id="cloneDatum"
                                ng-model="cirkelsessie.startDatum">
-                        <label class="mdl-textfield__label" for="datum"></label>
+                        <label class="mdl-textfield__label" for="cloneDatum"></label>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

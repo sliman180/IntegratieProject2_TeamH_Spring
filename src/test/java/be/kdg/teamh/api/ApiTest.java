@@ -39,44 +39,42 @@ public abstract class ApiTest
         this.http = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
-    protected MockHttpServletRequestBuilder get(String url)
+    public MockHttpServletRequestBuilder get(String url)
     {
         return MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON);
     }
 
-    protected MockHttpServletRequestBuilder post(String url, String json)
+    public MockHttpServletRequestBuilder post(String url, String json)
     {
         return MockMvcRequestBuilders.post(url).contentType(MediaType.APPLICATION_JSON).content(json);
     }
 
-    protected MockHttpServletRequestBuilder put(String url, String json)
+    public MockHttpServletRequestBuilder put(String url, String json)
     {
         return MockMvcRequestBuilders.put(url).contentType(MediaType.APPLICATION_JSON).content(json);
     }
 
-    protected MockHttpServletRequestBuilder delete(String url)
+    public MockHttpServletRequestBuilder delete(String url)
     {
         return MockMvcRequestBuilders.delete(url).contentType(MediaType.APPLICATION_JSON);
     }
 
-    protected String getUserToken() throws Exception
+    public String getUserOneToken() throws Exception
     {
-        MvcResult result = http.perform(post("/auth/login", objectMapper.writeValueAsString(new LoginRequest("user", "user")))).andReturn();
+        MvcResult result = http.perform(post("/auth/login", objectMapper.writeValueAsString(new LoginRequest("userone", "userone")))).andReturn();
 
         return "Bearer " + objectMapper.readValue(result.getResponse().getContentAsString(), LoginResponse.class).getToken();
     }
 
-    protected String getAdminToken() throws Exception
+    public String getUserTwoToken() throws Exception
     {
-        MvcResult result = http.perform(post("/auth/login", objectMapper.writeValueAsString(new LoginRequest("admin", "admin")))).andReturn();
+        MvcResult result = http.perform(post("/auth/login", objectMapper.writeValueAsString(new LoginRequest("usertwo", "usertwo")))).andReturn();
 
         return "Bearer " + objectMapper.readValue(result.getResponse().getContentAsString(), LoginResponse.class).getToken();
     }
 
-    protected String getNonExistingUserToken() throws Exception
+    public String getNonExistingUserToken() throws Exception
     {
-        MvcResult result = http.perform(post("/auth/login", objectMapper.writeValueAsString(new LoginRequest("wrong", "wrong")))).andReturn();
-
-        return "Bearer " + objectMapper.readValue(result.getResponse().getContentAsString(), LoginResponse.class).getToken();
+        return "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiZ2VicnVpa2Vyc25hYW0iOiJ3cm9uZyIsInJvbGxlbiI6W10sImlhdCI6MTQ1ODM5NzMyMX0.oisvjFAB6TX6M_qGmzqdDngvBDtN-zzkrgEbL5gD9ck";
     }
 }

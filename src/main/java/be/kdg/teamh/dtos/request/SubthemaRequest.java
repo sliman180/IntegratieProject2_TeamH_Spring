@@ -11,7 +11,7 @@ public class SubthemaRequest implements Serializable
     @NotNull
     private String beschrijving;
 
-    //    @NotNull
+    // @NotNull
     private int hoofdthema;
 
     @NotNull
