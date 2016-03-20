@@ -22,14 +22,6 @@ public class KaartRequest implements Serializable
         //
     }
 
-    public KaartRequest(String tekst, String imageUrl, int gebruiker)
-    {
-        this.tekst = tekst;
-        this.imageUrl = imageUrl;
-        this.commentsToelaatbaar = true;
-        this.gebruiker = gebruiker;
-    }
-
     public KaartRequest(String tekst, String imageUrl, boolean commentsToelaatbaar, int gebruiker)
     {
         this.tekst = tekst;
