@@ -112,7 +112,7 @@
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Organisatie</label>
-                    <select ng-model="hoofdthema.organisatie">
+                    <select ng-model="hoofdthema.organisatie" required>
                         <option ng-repeat="organisatie in vm.organisaties" value="{{organisatie.id}}" class="org-opt">
                             {{organisatie.naam}}
                         </option>

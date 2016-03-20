@@ -267,7 +267,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label>Status </label>
-                        <select ng-model="cirkelsessie.status">
+                        <select ng-model="cirkelsessie.status" required>
                             <option value="OPEN" class="sts-opt">
                                 OPEN
                             </option>
@@ -285,7 +285,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label>Subthema </label>
-                        <select ng-model="subthema">
+                        <select ng-model="cirkelsessie.subthema">
                             <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}" class="sbt-opt">
                                 {{subthema.naam}}
                             </option>
@@ -357,6 +357,6 @@
             </div>
 
         </div>
-
     </div>
 </div>
+
