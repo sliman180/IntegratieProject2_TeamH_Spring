@@ -2,7 +2,6 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.OrganisatieRequest;
 import be.kdg.teamh.entities.Organisatie;
-import be.kdg.teamh.exceptions.Unauthorized;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.OrganisatieService;
 import org.springframework.beans.factory.annotation.Autowired;
