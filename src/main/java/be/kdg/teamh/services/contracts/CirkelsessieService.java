@@ -1,9 +1,6 @@
 package be.kdg.teamh.services.contracts;
 
-import be.kdg.teamh.dtos.request.BerichtRequest;
-import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
-import be.kdg.teamh.dtos.request.CirkelsessieRequest;
-import be.kdg.teamh.dtos.request.KaartRequest;
+import be.kdg.teamh.dtos.request.*;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;

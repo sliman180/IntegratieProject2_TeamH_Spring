@@ -54,7 +54,7 @@ public class SubthemaController
     public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody SubthemaRequest subthema)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.update(id, subthema);
     }
@@ -64,7 +64,7 @@ public class SubthemaController
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }

@@ -1,9 +1,6 @@
 package be.kdg.teamh.controllers;
 
-import be.kdg.teamh.dtos.request.BerichtRequest;
-import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
-import be.kdg.teamh.dtos.request.CirkelsessieRequest;
-import be.kdg.teamh.dtos.request.KaartRequest;
+import be.kdg.teamh.dtos.request.*;
 import be.kdg.teamh.entities.*;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.CirkelsessieService;
@@ -84,7 +81,7 @@ public class CirkelsessieController
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.update(id, cirkelsessie);
     }
@@ -94,7 +91,7 @@ public class CirkelsessieController
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }
@@ -104,7 +101,7 @@ public class CirkelsessieController
     public void clone(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.clone(id, cirkelsessie);
     }

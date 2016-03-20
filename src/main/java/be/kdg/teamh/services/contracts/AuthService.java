@@ -37,11 +37,11 @@ public interface AuthService
     void isGeregistreerd(String token) throws GebruikerNietGeregistreerd;
 
     /**
-     * Controleert of een gebruiker toegang heeft tot een resource.
+     * Controleert of een gebruiker eigenaar is van een resource.
      *
      * @param token JWT die behoort tot een gebruiker
      * @param gebruiker Eigenaar van de beveiligde resource
      * @throws ToegangVerboden
      */
-    void isToegelaten(String token, Gebruiker gebruiker) throws ToegangVerboden;
+    void isEigenaar(String token, Gebruiker gebruiker) throws ToegangVerboden;
 }

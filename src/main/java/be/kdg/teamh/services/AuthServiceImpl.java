@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public void isToegelaten(String token, Gebruiker gebruiker) throws ToegangVerboden
+    public void isEigenaar(String token, Gebruiker gebruiker) throws ToegangVerboden
     {
         if (zoekGebruikerMetToken(token).getId() != gebruiker.getId())
         {

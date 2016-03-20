@@ -54,7 +54,7 @@ public class OrganisatieController
     public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.update(id, organisatie);
     }
@@ -64,7 +64,7 @@ public class OrganisatieController
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }

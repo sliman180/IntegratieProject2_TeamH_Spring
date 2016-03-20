@@ -5,9 +5,9 @@ import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
 import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;
-import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 import be.kdg.teamh.exceptions.subthema.SubthemaNietGevonden;
 import be.kdg.teamh.repositories.*;
@@ -439,7 +439,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public boolean isMedeOrganisator(int id, int gebruiker) throws DeelnameNietGevonden
+    public boolean isMedeOrganisator(int id, int gebruiker)
     {
         Deelname deelname = deelnames.findOne(id);
 
@@ -448,11 +448,11 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
             throw new DeelnameNietGevonden();
         }
 
-        for (Deelname deelnameCirkelsessie : deelname.getCirkelsessie().getDeelnames())
+        for (Deelname cirkelsessieDeelname: deelname.getCirkelsessie().getDeelnames())
         {
-            if (gebruiker == deelnameCirkelsessie.getGebruiker().getId())
+            if (gebruiker == cirkelsessieDeelname.getGebruiker().getId())
             {
-                if (deelnameCirkelsessie.isMedeorganisator())
+                if (cirkelsessieDeelname.isMedeorganisator())
                 {
                     return true;
                 }

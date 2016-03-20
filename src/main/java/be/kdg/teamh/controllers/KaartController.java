@@ -57,7 +57,7 @@ public class KaartController
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody KaartRequest kaart)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.update(id, kaart);
     }
@@ -67,7 +67,7 @@ public class KaartController
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        auth.isToegelaten(token, service.find(id).getGebruiker());
+        auth.isEigenaar(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }
