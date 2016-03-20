@@ -56,6 +56,24 @@ public class CirkelsessieApiTest extends ApiTest
     }
 
     @Test
+    public void createCirkelsessie_zonderAuthenticationHeader() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createCirkelsessie_ongeregistreerdeGebruiker() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void showCirkelsessie() throws Exception
     {
         CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
@@ -122,6 +140,45 @@ public class CirkelsessieApiTest extends ApiTest
     }
 
     @Test
+    public void updateCirkelsessie_zonderAuthenticationHeader() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        cirkelsessie = new CirkelsessieRequest("Nieuwe Naam Cirkelsessie", Status.GESLOTEN, 8, 15, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/cirkelsessies/1", objectMapper.writeValueAsString(cirkelsessie)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateCirkelsessie_ongeregistreerdeGebruiker() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        cirkelsessie = new CirkelsessieRequest("Nieuwe Naam Cirkelsessie", Status.GESLOTEN, 8, 15, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/cirkelsessies/1", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void updateCirkelsessie_verkeerdeGebruiker() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        cirkelsessie = new CirkelsessieRequest("Nieuwe Naam Cirkelsessie", Status.GESLOTEN, 8, 15, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/cirkelsessies/1", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserTwoToken()))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
     public void deleteCirkelsessie() throws Exception
     {
         CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
@@ -141,6 +198,39 @@ public class CirkelsessieApiTest extends ApiTest
     {
         http.perform(delete("/api/cirkelsessies/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteCirkelsessie_zonderAuthenticationHeader() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        http.perform(delete("/api/cirkelsessies/1"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteCirkelsessie_ongeregistreerdeGebruiker() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        http.perform(delete("/api/cirkelsessies/1").header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void deleteCirkelsessie_verkeerdeGebruiker() throws Exception
+    {
+        CirkelsessieRequest cirkelsessie = new CirkelsessieRequest("Naam Cirkelsessie", Status.OPEN, 10, 10, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
+
+        http.perform(delete("/api/cirkelsessies/1").header("Authorization", getUserTwoToken()))
+            .andExpect(status().isForbidden());
     }
 
     @Test

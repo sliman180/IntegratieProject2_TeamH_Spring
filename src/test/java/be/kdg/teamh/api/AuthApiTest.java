@@ -49,7 +49,7 @@ public class AuthApiTest extends ApiTest
     @Test
     public void register_wachtwoordTeKort() throws Exception
     {
-        RegistratieRequest registratie = new RegistratieRequest("test", "password", "password");
+        RegistratieRequest registratie = new RegistratieRequest("test", "pass", "pass");
 
         http.perform(post("/auth/register", objectMapper.writeValueAsString(registratie)))
             .andExpect(status().isBadRequest());
