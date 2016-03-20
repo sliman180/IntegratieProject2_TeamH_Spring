@@ -40,12 +40,51 @@ public class DeelnameApiTest extends ApiTest
     }
 
     @Test
-    public void updateCirkelsessie_nonExistingDeelname() throws Exception
+    public void updateCirkelsessie_onbestaandeDeelname() throws Exception
     {
         DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
 
         http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updateDeelname_zonderAuthenticationHeader() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()));
+
+        deelname = new DeelnameRequest(10, true, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateDeelname_ongeregistreerdeGebruiker() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()));
+
+        deelname = new DeelnameRequest(10, true, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void updateDeelname_verkeerdeGebruiker() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(20, true, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()));
+
+        deelname = new DeelnameRequest(10, true, DateTime.now(), 1, 1);
+
+        http.perform(put("/api/deelnames/1", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserTwoToken()))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -61,9 +100,45 @@ public class DeelnameApiTest extends ApiTest
     }
 
     @Test
-    public void deleteDeelname_nonExistingDeelname() throws Exception
+    public void deleteDeelname_onbestaandeDeelname() throws Exception
     {
         http.perform(delete("/api/deelnames/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteDeelname_zonderAuthenticationHeader() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(15, false, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()))
+            .andExpect(status().isCreated());
+
+        http.perform(delete("/api/deelnames/1"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteDeelname_ongeregistreerdeGebruiker() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(15, false, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()))
+            .andExpect(status().isCreated());
+
+        http.perform(delete("/api/deelnames/1").header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void deleteDeelname_verkeerdeGebruiker() throws Exception
+    {
+        DeelnameRequest deelname = new DeelnameRequest(15, false, DateTime.now(), 1, 1);
+
+        http.perform(post("/api/cirkelsessies/1/deelnames", objectMapper.writeValueAsString(deelname)).header("Authorization", getUserOneToken()))
+            .andExpect(status().isCreated());
+
+        http.perform(delete("/api/deelnames/1").header("Authorization", getUserTwoToken()))
+            .andExpect(status().isForbidden());
     }
 }
