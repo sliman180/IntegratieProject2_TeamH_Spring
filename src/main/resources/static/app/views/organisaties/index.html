@@ -71,8 +71,8 @@
         <li ng-repeat="organisatie in vm.organisaties" class="mdl-list__item mdl-list__item--two-line lijst-item">
             <span class="mdl-list__item-primary-content lijst-content">
               <i class="material-icons mdl-list__item-avatar">account_balance</i>
-              <span>Organisatie: <b>{{organisatie.naam}}</b></span>
-              <span class="mdl-list__item-sub-title">{{organisatie.beschrijving}}</span>
+              <span>Organisatie: <b class="org-naam">{{organisatie.naam}}</b></span>
+              <span class="mdl-list__item-sub-title org-beschrijving">{{organisatie.beschrijving}}</span>
                 <p class="mdl-list__item-sub-title">Aantal gekoppelde hoofthemas: {{vm.hoofdthemas[$index].length}}</p>
             </span>
             <span class="mdl-list__item-secondary-content">
@@ -105,7 +105,7 @@
     <div class="mdl-card mdl-shadow--6dp" id="form" ng-show="showForm">
         <div class="mdl-card__supporting-text">
 
-            <form ng-submit="vm.addOrganisatie(organisatie)">
+            <form ng-submit="vm.addOrganisatie(organisatie)" class="organisation-form">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" ng-model="organisatie.naam"

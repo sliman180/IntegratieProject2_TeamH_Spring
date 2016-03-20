@@ -131,7 +131,7 @@
             </button>
             <button ng-if="!vm.isDeelnemer() && vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.addDeelname(vm.cirkelsessie.id)"
-                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect participate-btn">
                 <span>Deelnemen</span>
             </button>
 
@@ -766,7 +766,7 @@
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="">
+            <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="" class="message-form">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst"
