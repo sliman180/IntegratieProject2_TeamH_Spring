@@ -378,7 +378,7 @@ public class CirkelsessieApiTest extends ApiTest
 
         http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
 
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         this.http.perform(post("/api/cirkelsessies/1/spelkaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isCreated());
@@ -395,7 +395,7 @@ public class CirkelsessieApiTest extends ApiTest
 
         http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
 
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         this.http.perform(post("/api/cirkelsessies/1/spelkaarten", objectMapper.writeValueAsString(kaart)))
             .andExpect(status().isBadRequest());
@@ -408,7 +408,7 @@ public class CirkelsessieApiTest extends ApiTest
 
         http.perform(post("/api/cirkelsessies", objectMapper.writeValueAsString(cirkelsessie)).header("Authorization", getUserOneToken()));
 
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         this.http.perform(post("/api/cirkelsessies/1/spelkaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getNonExistingUserToken()))
             .andExpect(status().isUnauthorized());

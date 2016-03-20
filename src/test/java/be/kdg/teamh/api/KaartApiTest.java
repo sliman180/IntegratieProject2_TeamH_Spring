@@ -22,7 +22,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void createKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isCreated());
@@ -35,7 +35,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void createKaart_nullInput() throws Exception
     {
-        KaartRequest kaart = new KaartRequest(null, null, 0);
+        KaartRequest kaart = new KaartRequest(null, null, false, 0);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isBadRequest());
@@ -44,7 +44,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void createKaart_zonderAuthenticationHeader() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)))
             .andExpect(status().isBadRequest());
@@ -53,7 +53,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void createKaart_ongeregistreerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getNonExistingUserToken()))
             .andExpect(status().isUnauthorized());
@@ -62,7 +62,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void showKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -82,11 +82,11 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
-        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", 1);
+        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", true, 1);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isOk());
@@ -100,11 +100,11 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart_nullInput() throws Exception
     {
-        KaartRequest kaart = new KaartRequest(null, null, 1);
+        KaartRequest kaart = new KaartRequest(null, null, false, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
-        kaart = new KaartRequest(null, null, 0);
+        kaart = new KaartRequest(null, null, false, 0);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isBadRequest());
@@ -113,7 +113,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart_onbestaandeKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
@@ -122,11 +122,11 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart_zonderAuthenticationHeader() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
-        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", 1);
+        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", true, 1);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)))
             .andExpect(status().isBadRequest());
@@ -135,11 +135,11 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart_ongeregistreerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
-        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", 1);
+        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", true, 1);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getNonExistingUserToken()))
             .andExpect(status().isUnauthorized());
@@ -148,11 +148,11 @@ public class KaartApiTest extends ApiTest
     @Test
     public void updateKaart_verkeerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
-        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", 1);
+        kaart = new KaartRequest("Nieuwe Naam Kaart", "http://www.gewijzigdeafbeelding.url", true, 1);
 
         http.perform(put("/api/kaarten/1", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserTwoToken()))
             .andExpect(status().isForbidden());
@@ -161,7 +161,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void deleteKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -183,7 +183,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void deleteKaart_zonderAuthenticationHeader() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -194,7 +194,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void deleteKaart_ongeregistreerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -205,7 +205,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void deleteKaart_verkeerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -216,7 +216,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void commentaarToevoegenAanKaart() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -246,7 +246,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void commentaarToevoegenAanKaart_zonderAuthenticationHeader() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
@@ -259,7 +259,7 @@ public class KaartApiTest extends ApiTest
     @Test
     public void commentaarToevoegenAanKaart_ongeregistreerdeGebruiker() throws Exception
     {
-        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", 1);
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
         http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
 
