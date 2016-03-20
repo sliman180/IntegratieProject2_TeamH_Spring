@@ -2,17 +2,17 @@ package be.kdg.teamh.services.contracts;
 
 import be.kdg.teamh.dtos.response.LoginResponse;
 import be.kdg.teamh.entities.Gebruiker;
-import be.kdg.teamh.exceptions.notfound.GebruikerNotFound;
+import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGeregistreerd;
+import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 
 public interface AuthService
 {
     LoginResponse generateToken(Gebruiker gebruiker);
 
-    Gebruiker findByToken(String token) throws GebruikerNotFound;
+    Gebruiker findByToken(String token) throws GebruikerNietGevonden;
 
-    boolean isGuest(String token);
+    void checkUserIsRegistered(String token) throws GebruikerNietGeregistreerd;
 
-    boolean isRegistered(String token);
-
-    boolean isAdmin(String token);
+    void checkUserIsAllowed(String token, Gebruiker gebruiker) throws ToegangVerboden;
 }

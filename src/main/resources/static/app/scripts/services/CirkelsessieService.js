@@ -111,8 +111,7 @@
         };
 
         exports.cloneCirkelsessie = function (id, cirkelsessie) {
-
-            return $http.post("/api/cirkelsessies/" + id + "/cloneSession", cirkelsessie).then(function (response) {
+            return $http.post("/api/cirkelsessies/" + id + "/clone", cirkelsessie).then(function (response) {
                 return response.data;
             });
 
@@ -120,7 +119,6 @@
 
         exports.beeindigSpel = function (cirkelsessie) {
             cirkelsessie.status = 'BEEINDIGD';
-            cirkelsessie.gebruiker = cirkelsessie.gebruiker.id;
             return $http.put("/api/cirkelsessies/" + cirkelsessie.id, cirkelsessie).then(function (response) {
                 return response.data;
             });

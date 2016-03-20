@@ -57,7 +57,7 @@
         <li ng-repeat="hoofdthema in vm.hoofdthemas" class="mdl-list__item mdl-list__item--two-line lijst-item">
             <span class="mdl-list__item-primary-content lijst-content">
               <i class="material-icons mdl-list__item-avatar">turned_in</i>
-                <span>Hoofthema: <a href="/#/">{{hoofdthema.naam}}</a></span>
+                <span>Hoofthema: <b>{{hoofdthema.naam}}</b></span>
                 <span class="mdl-list__item-sub-title">Beschrijving: {{hoofdthema.beschrijving}}</span>
                 <span class="mdl-list__item-sub-title">Organisatie: {{hoofdthema.organisatie.naam}}</span>
                 <span class="mdl-list__item-sub-title">Aantal subthemas: {{vm.subthemas[$index].length}}</span>
@@ -66,17 +66,17 @@
               <span id="hoofdthema-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
                 <p>
                     <div>
-                        <a id="details" class="mdl-list__item-secondary-action blueIcon" href="/#/"><i
-                                class="material-icons">info_outline</i></a>
-
-                        <div class="mdl-tooltip mdl-tooltip--large" for="details">Bekijk hoofthema</div>
-                        <a id="wijzig" class="mdl-list__item-secondary-action blackIcon" href="/#/"><i
+                        <a ng-if="$root.id==hoofdthema.gebruiker.id" id="wijzig"
+                           class="mdl-list__item-secondary-action blackIcon"
+                           href="/#/hoofdthemas/edit/{{hoofdthema.id}}"><i
                                 class="material-icons">mode_edit</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="wijzig">Wijzig hoofthema</div>
-                        <a id="verwijder" class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">delete</i></a>
+                        <a ng-if="$root.id==hoofdthema.gebruiker.id" id="verwijder"
+                           class="mdl-list__item-secondary-action" href=""
+                           ng-click="vm.deleteHoofdthema(hoofdthema.id)"><i class="material-icons">delete</i></a>
 
-                        <div class="mdl-tooltip mdl-tooltip--large" for="verwijder">Bekijk hoofthema</div>
+                        <div class="mdl-tooltip mdl-tooltip--large" for="verwijder">Verwijder hoofthema</div>
                     </div>
                 </p>
             </span>
@@ -97,19 +97,22 @@
             <form ng-submit="vm.addHoofdthema(hoofdthema)">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="hoofdthema.naam">
+                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="hoofdthema.naam"
+                           pattern="^.{3,30}$">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
+                    <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="beschrijving"
+                    <input class="mdl-textfield__input" type="text" id="beschrijving" pattern="^.{5,30}$"
                            ng-model="hoofdthema.beschrijving">
                     <label class="mdl-textfield__label" for="beschrijving">Beschrijving</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Organisatie</label>
-                    <select ng-model="hoofdthema.organisatie">
+                    <select ng-model="hoofdthema.organisatie" required>
                         <option ng-repeat="organisatie in vm.organisaties" value="{{organisatie.id}}" class="org-opt">
                             {{organisatie.naam}}
                         </option>

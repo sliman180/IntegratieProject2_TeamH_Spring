@@ -37,7 +37,7 @@ public class Subthema implements Serializable
     private List<Cirkelsessie> cirkelsessies = new ArrayList<>();
 
     @JsonBackReference
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "subthema")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "subthema")
     private List<Kaart> kaarten = new ArrayList<>();
 
     public Subthema()

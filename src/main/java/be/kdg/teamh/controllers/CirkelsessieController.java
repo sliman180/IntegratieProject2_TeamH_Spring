@@ -65,8 +65,10 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody CirkelsessieRequest cirkelsessie)
+    public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
+        auth.checkUserIsRegistered(token);
+
         service.create(cirkelsessie);
     }
 
@@ -79,86 +81,93 @@ public class CirkelsessieController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
+    public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.update(id, cirkelsessie);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.delete(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
-    public void clone(@PathVariable("id") int id)
+    public void clone(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
     {
-        service.clone(id);
-    }
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/cloneSession", method = RequestMethod.POST)
-    public void cloneWithChanges(@PathVariable("id") int id, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
-    {
         service.clone(id, cirkelsessie);
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
-    public Subthema getSubthema(@PathVariable("id") int id)
+    public Subthema findSubthema(@PathVariable("id") int id)
     {
-        return service.getSubthema(id);
+        return service.findSubthema(id);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "{id}/gebruiker", method = RequestMethod.GET)
+    public Gebruiker findGebruiker(@PathVariable("id") int id)
+    {
+        return service.findGebruiker(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/deelnames", method = RequestMethod.GET)
-    public List<Deelname> getDeelnames(@PathVariable("id") int id)
+    public List<Deelname> findDeelnames(@PathVariable("id") int id)
     {
-        return service.getDeelnames(id);
+        return service.findDeelnames(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/deelnames", method = RequestMethod.POST)
-    public void addDeelname(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
+    public void addDeelname(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
+        auth.checkUserIsRegistered(token);
+
         service.addDeelname(id, auth.findByToken(token).getId());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
-    public List<Spelkaart> getSpelkaarten(@PathVariable("id") int id)
+    public List<Spelkaart> findSpelkaarten(@PathVariable("id") int id)
     {
-        return service.getSpelkaarten(id);
+        return service.findSpelkaarten(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.POST)
-    public void addSpelkaart(@PathVariable("id") int id, @Valid @RequestBody KaartRequest kaart)
+    public void addSpelkaart(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody KaartRequest kaart)
     {
+        auth.checkUserIsRegistered(token);
+
         service.addSpelkaart(id, kaart);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}/berichten", method = RequestMethod.GET)
-    public List<Bericht> getBerichten(@PathVariable("id") int id)
+    public List<Bericht> findBerichten(@PathVariable("id") int id)
     {
-        return service.getBerichten(id);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "{id}/gebruiker", method = RequestMethod.GET)
-    public Gebruiker getGebruiker(@PathVariable("id") int id)
-    {
-        return service.getGebruiker(id);
+        return service.findBerichten(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "{id}/berichten", method = RequestMethod.POST)
-    public void addBericht(@PathVariable("id") int id, @Valid @RequestBody BerichtRequest bericht)
+    public void addBericht(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody BerichtRequest bericht)
     {
+        auth.checkUserIsRegistered(token);
+
         service.addBericht(id, bericht);
     }
 }

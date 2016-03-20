@@ -176,7 +176,6 @@
     <div class="mdl-card__supporting-text">
         Organisator: <b>{{vm.cirkelsessie.gebruiker.gebruikersnaam}} </b>
         | Startdatum: <b>{{vm.cirkelsessie.startDatum | date:'dd/MM/yyyy HH:mm'}}</b>
-        <span ng-if="vm.cirkelsessie.subthema!=null">| Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b></span>
         | Status:
         <b class="status-open" ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='OPEN'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gesloten"
@@ -184,6 +183,12 @@
         <b class="status-beeindigd"
            ng-if="!vm.isActive(vm.cirkelsessie.startDatum) && vm.cirkelsessie.status=='BEEINDIGD'">{{vm.cirkelsessie.status}}</b>
         <b class="status-gestart" ng-if="vm.isActive(vm.cirkelsessie.startDatum)">GESTART</b>
+
+        <p ng-if="vm.cirkelsessie.subthema!=null">
+            Organisatie: <b>{{vm.cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
+            | Hoofdthema: <b>{{vm.cirkelsessie.subthema.hoofdthema.naam}}</b>
+            | Subthema: <b>{{vm.cirkelsessie.subthema.naam}}</b>
+        </p>
     </div>
 
     <div class="mdl-card__actions mdl-card--border">
@@ -423,9 +428,12 @@
         </button>
 
         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right-d">
-            <li disabled ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
-            <li disabled class="mdl-menu__item">Wijzig</li>
-            <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(vm.cirkelsessie.id)"
+                class="mdl-menu__item">Wijzig
+            </li>
+            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id" ng-click="vm.deleteCirkelsessie(vm.cirkelsessie.id)"
+                class="mdl-menu__item">Verwijder
+            </li>
         </ul>
 
     </div>
@@ -627,9 +635,12 @@
         <form ng-submit="vm.createKaart(vm.cirkelsessie.id, kaart)" action="">
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst">
+                <input class="mdl-textfield__input" type="text" id="kaartTekst" ng-model="kaart.tekst"
+                       pattern="^.{3,30}$">
                 <label class="mdl-textfield__label" for="kaartTekst">Kaart tekst</label>
+                <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
             </div>
+
 
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" id="imageUrl" ng-model="kaart.imageUrl">
@@ -669,9 +680,12 @@
             <form ng-submit="vm.addBericht(vm.cirkelsessie.id, bericht)" action="" class="message-form">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst">
+                    <input class="mdl-textfield__input" type="text" id="tekst" ng-model="bericht.tekst"
+                           pattern="^.{1,30}$">
                     <label class="mdl-textfield__label" for="tekst">Bericht</label>
+                    <span class="mdl-textfield__error">Mag minimum 1 en maximum 30 letters bevatten</span>
                 </div>
+
 
                 <button ng-if="vm.isDeelnemer() && vm.cirkelsessie.status!='BEEINDIGD'"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect">

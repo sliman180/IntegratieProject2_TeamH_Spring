@@ -67,15 +67,19 @@
               <span id="subthema-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
                 <p>
                     <div>
-                        <a id="details" class="mdl-list__item-secondary-action blueIcon" href="/#/"><i
+                        <a id="details" class="mdl-list__item-secondary-action blueIcon"
+                           href="/#/subthemas/details/{{subthema.id}}"><i
                                 class="material-icons">info_outline</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="details">Bekijk subthema</div>
-                        <a id="wijzig" class="mdl-list__item-secondary-action blackIcon" href="/#/"><i
+                        <a ng-if="$root.id==subthema.gebruiker.id" id="wijzig"
+                           class="mdl-list__item-secondary-action blackIcon" href="/#/subthemas/edit/{{subthema.id}}"><i
                                 class="material-icons">mode_edit</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="wijzig">Wijzig subthema</div>
-                        <a id="verwijder" class="mdl-list__item-secondary-action" href="/#/"><i class="material-icons">delete</i></a>
+                        <a ng-if="$root.id==subthema.gebruiker.id" id="verwijder"
+                           class="mdl-list__item-secondary-action" href="" ng-click="vm.deleteSubthema(subthema.id)"><i
+                                class="material-icons">delete</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="verwijder">Verwijder subthema</div>
                     </div>
@@ -98,19 +102,22 @@
             <form ng-submit="vm.addSubthema(subthema)">
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="subthema.naam">
+                    <input class="mdl-textfield__input" type="text" id="naam" ng-model="subthema.naam"
+                           pattern="^.{3,30}$">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
+                    <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="beschrijving"
+                    <input class="mdl-textfield__input" type="text" id="beschrijving" pattern="^.{5,30}$"
                            ng-model="subthema.beschrijving">
                     <label class="mdl-textfield__label" for="beschrijving">Beschrijving</label>
+                    <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <label>Hoofdthema</label>
-                    <select ng-model="subthema.hoofdthema">
+                    <select ng-model="subthema.hoofdthema" required>
                         <option ng-repeat="hoofdthema in vm.hoofdthemas" value="{{hoofdthema.id}}" class="mt-opt">
                             {{hoofdthema.naam}}
                         </option>

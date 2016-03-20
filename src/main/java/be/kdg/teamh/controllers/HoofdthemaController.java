@@ -36,8 +36,10 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody HoofdthemaRequest hoofdthema)
+    public void create(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody HoofdthemaRequest hoofdthema)
     {
+        auth.checkUserIsRegistered(token);
+
         service.create(hoofdthema);
     }
 
@@ -50,15 +52,21 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody HoofdthemaRequest hoofdthema)
+    public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody HoofdthemaRequest hoofdthema)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.update(id, hoofdthema);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.delete(id);
     }
 
@@ -71,8 +79,8 @@ public class HoofdthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/subthemas", method = RequestMethod.GET)
-    public List<Subthema> showSubthemas(@PathVariable("id") int id)
+    public List<Subthema> getSubthemas(@PathVariable("id") int id)
     {
-        return service.showSubthemas(id);
+        return service.findSubthemas(id);
     }
 }

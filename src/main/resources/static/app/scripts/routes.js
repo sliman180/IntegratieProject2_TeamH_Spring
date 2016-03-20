@@ -78,6 +78,36 @@
                 controllerAs: "vm"
             })
 
+            .when ("/kaarten/edit/:id", {
+                templateUrl: "/dist/views/kaarten/edit.html",
+                controller: "KaartEditController",
+                controllerAs: "vm"
+            })
+            .when ("/cirkelsessies/edit/:id", {
+                templateUrl: "/dist/views/cirkelsessies/edit.html",
+                controller: "CirkelsessieEditController",
+                controllerAs: "vm"
+            })
+
+            .when ("/subthemas/edit/:id", {
+                templateUrl: "/dist/views/subthemas/edit.html",
+                controller: "SubthemaEditController",
+                controllerAs: "vm"
+            })
+
+            .when ("/organisaties/edit/:id", {
+                templateUrl: "/dist/views/organisaties/edit.html",
+                controller: "OrganisatieEditController",
+                controllerAs: "vm"
+            })
+
+            .when ("/hoofdthemas/edit/:id", {
+                templateUrl: "/dist/views/hoofdthemas/edit.html",
+                controller: "HoofdthemaEditController",
+                controllerAs: "vm"
+            })
+
+
             .otherwise({
                 redirectTo: "/"
             });

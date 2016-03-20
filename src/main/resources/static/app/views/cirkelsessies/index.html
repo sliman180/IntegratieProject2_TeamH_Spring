@@ -161,8 +161,9 @@
                 <p ng-if="cirkelsessie.subthema!=null">
                     Organisatie: <b>{{cirkelsessie.subthema.hoofdthema.organisatie.naam}}</b>
                     | Hoofdthema: <b>{{cirkelsessie.subthema.hoofdthema.naam}}</b>
-                    | Subthema: <b>{{cirkelsessie.subthema.naam}}</b>
                 </p>
+
+                <p ng-if="cirkelsessie.subthema!=null">Subthema: <b>{{cirkelsessie.subthema.naam}}</b></p>
 
                 <p>Organisator: <b>{{cirkelsessie.gebruiker.gebruikersnaam}}</b></p>
 
@@ -207,8 +208,12 @@
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right {{cirkelsessie.id}}">
                     <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
-                    <li disabled class="mdl-menu__item">Wijzig</li>
-                    <li ng-click="vm.deleteCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Verwijder</li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(cirkelsessie.id)"
+                        class="mdl-menu__item">Wijzig
+                    </li>
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.id"
+                        ng-click="vm.deleteCirkelsessie(cirkelsessie.id)" class="mdl-menu__item">Verwijder
+                    </li>
                 </ul>
             </div>
         </div>
@@ -230,8 +235,10 @@
                 <form ng-submit="vm.addCirkelsessie(cirkelsessie)" action="" class="session-fo">
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam">
+                        <input class="mdl-textfield__input" type="text" id="naam" ng-model="cirkelsessie.naam"
+                               pattern="^.{3,30}$">
                         <label class="mdl-textfield__label" for="naam">Naam</label>
+                        <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                     </div>
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
@@ -250,7 +257,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label>Status </label>
-                        <select ng-model="cirkelsessie.status">
+                        <select ng-model="cirkelsessie.status" required>
                             <option value="OPEN" class="sts-opt">
                                 OPEN
                             </option>
@@ -268,7 +275,7 @@
 
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                         <label>Subthema </label>
-                        <select ng-model="subthema">
+                        <select ng-model="cirkelsessie.subthema">
                             <option ng-repeat="subthema in vm.subthemas" value="{{subthema.id}}" class="sbt-opt">
                                 {{subthema.naam}}
                             </option>
@@ -340,6 +347,6 @@
             </div>
 
         </div>
-
     </div>
 </div>
+

@@ -34,8 +34,10 @@ public class GebruikerController
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void create(@Valid @RequestBody GebruikerRequest gebruiker)
+    public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody GebruikerRequest gebruiker)
     {
+        auth.checkUserIsRegistered(token);
+
         service.create(gebruiker);
     }
 
@@ -48,15 +50,19 @@ public class GebruikerController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody GebruikerRequest gebruiker)
+    public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody GebruikerRequest gebruiker)
     {
+        auth.checkUserIsRegistered(token);
+
         service.update(id, gebruiker);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
+        auth.checkUserIsRegistered(token);
+
         service.delete(id);
     }
 
@@ -94,12 +100,5 @@ public class GebruikerController
     public List<Deelname> getDeelnames(@PathVariable("id") int id)
     {
         return service.getDeelnames(id);
-    }
-
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-    public Gebruiker showWithToken(@RequestHeader(name = "Authorization") String token)
-    {
-        return auth.findByToken(token);
     }
 }
