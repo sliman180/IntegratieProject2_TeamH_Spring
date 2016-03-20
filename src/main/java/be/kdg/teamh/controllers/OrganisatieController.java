@@ -71,8 +71,8 @@ public class OrganisatieController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/hoofdthemas", method = RequestMethod.GET)
-    public List<Hoofdthema> getHoofdthemas(@PathVariable("id") int id)
+    public List<Hoofdthema> findHoofdthemas(@PathVariable("id") int id)
     {
-        return service.getHoofdthemas(id);
+        return service.findHoofdthemas(id);
     }
 }

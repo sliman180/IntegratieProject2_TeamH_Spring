@@ -34,19 +34,19 @@ public interface CirkelsessieService
 
     void clone(int id, CirkelsessieCloneRequest dto) throws CirkelsessieNotFound;
 
-    Subthema getSubthema(int id) throws CirkelsessieNotFound;
+    Subthema findSubthema(int id) throws CirkelsessieNotFound;
 
-    List<Deelname> getDeelnames(int id) throws CirkelsessieNotFound;
+    List<Deelname> findDeelnames(int id) throws CirkelsessieNotFound;
 
     void addDeelname(int id, int gebruikerId) throws CirkelsessieNotFound, GebruikerNotFound, AlreadyJoinedCirkelsessie;
 
-    List<Spelkaart> getSpelkaarten(int id) throws CirkelsessieNotFound;
+    List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNotFound;
 
     void addSpelkaart(int id, KaartRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
 
-    List<Bericht> getBerichten(int id) throws CirkelsessieNotFound;
+    List<Bericht> findBerichten(int id) throws CirkelsessieNotFound;
 
     void addBericht(int id, BerichtRequest dto) throws CirkelsessieNotFound, GebruikerNotFound;
 
-    Gebruiker getGebruiker(int id) throws CirkelsessieNotFound;
+    Gebruiker findGebruiker(int id) throws CirkelsessieNotFound;
 }

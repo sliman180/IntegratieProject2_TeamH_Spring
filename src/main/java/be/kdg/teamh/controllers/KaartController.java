@@ -2,9 +2,10 @@ package be.kdg.teamh.controllers;
 
 import be.kdg.teamh.dtos.request.CommentaarRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
-import be.kdg.teamh.dtos.request.SpelkaartRequest;
-import be.kdg.teamh.dtos.request.SubthemaRequest;
-import be.kdg.teamh.entities.*;
+import be.kdg.teamh.entities.Commentaar;
+import be.kdg.teamh.entities.Gebruiker;
+import be.kdg.teamh.entities.Kaart;
+import be.kdg.teamh.entities.Subthema;
 import be.kdg.teamh.services.contracts.AuthService;
 import be.kdg.teamh.services.contracts.KaartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,34 +79,6 @@ public class KaartController
         return service.getSubthema(id);
     }
 
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/subthemas", method = RequestMethod.POST)
-    public void addSubthemaToKaart(@PathVariable("id") int id, @Valid @RequestBody SubthemaRequest subthema)
-    {
-        service.addSubthema(id, subthema);
-    }
-
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
-    public List<Commentaar> comments(@PathVariable("id") int id)
-    {
-        return service.getCommentaren(id);
-    }
-
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
-    public void createComment(@PathVariable("id") int id, @Valid @RequestBody CommentaarRequest comment)
-    {
-        service.addCommentaar(id, comment);
-    }
-
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.GET)
-    public List<Spelkaart> getSpelkaarten(@PathVariable("id") int id)
-    {
-        return service.getSpelkaarten(id);
-    }
-
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/gebruiker", method = RequestMethod.GET)
     public Gebruiker getGebruiker(@PathVariable("id") int id)
@@ -113,10 +86,19 @@ public class KaartController
         return service.getGebruiker(id);
     }
 
-    @ResponseStatus(code = HttpStatus.CREATED)
-    @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.POST)
-    public void addSpelkaartAanKaart(@PathVariable("id") int id, @Valid @RequestBody SpelkaartRequest spelkaart)
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/commentaren", method = RequestMethod.GET)
+    public List<Commentaar> getCommentaren(@PathVariable("id") int id)
     {
-        service.addSpelkaart(id, spelkaart);
+        return service.getCommentaren(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(value = "{id}/commentaren", method = RequestMethod.POST)
+    public void addCommentaar(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CommentaarRequest comment)
+    {
+        auth.checkUserIsRegistered(token);
+
+        service.addCommentaar(id, comment);
     }
 }

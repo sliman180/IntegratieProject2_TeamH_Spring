@@ -20,6 +20,6 @@ public interface OrganisatieService
 
     void delete(int id) throws OrganisatieNotFound;
 
-    List<Hoofdthema> getHoofdthemas(int id) throws OrganisatieNotFound;
+    List<Hoofdthema> findHoofdthemas(int id) throws OrganisatieNotFound;
 
 }

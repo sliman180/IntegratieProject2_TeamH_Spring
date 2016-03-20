@@ -259,7 +259,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public Subthema getSubthema(int id) throws CirkelsessieNotFound
+    public Subthema findSubthema(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
@@ -272,7 +272,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Deelname> getDeelnames(int id) throws CirkelsessieNotFound
+    public List<Deelname> findDeelnames(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
@@ -325,7 +325,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Spelkaart> getSpelkaarten(int id) throws CirkelsessieNotFound
+    public List<Spelkaart> findSpelkaarten(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
@@ -381,7 +381,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public List<Bericht> getBerichten(int id) throws CirkelsessieNotFound
+    public List<Bericht> findBerichten(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 
@@ -425,7 +425,7 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public Gebruiker getGebruiker(int id) throws CirkelsessieNotFound
+    public Gebruiker findGebruiker(int id) throws CirkelsessieNotFound
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
 

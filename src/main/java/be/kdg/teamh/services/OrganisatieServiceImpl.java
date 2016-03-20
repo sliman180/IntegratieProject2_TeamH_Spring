@@ -105,7 +105,7 @@ public class OrganisatieServiceImpl implements OrganisatieService
     }
 
     @Override
-    public List<Hoofdthema> getHoofdthemas(int id) throws OrganisatieNotFound
+    public List<Hoofdthema> findHoofdthemas(int id) throws OrganisatieNotFound
     {
         Organisatie organisatie = find(id);
 

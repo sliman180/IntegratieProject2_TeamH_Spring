@@ -42,4 +42,11 @@ public class AuthController
     {
         service.register(registratie);
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public Gebruiker profile(@RequestHeader(name = "Authorization") String token)
+    {
+        return auth.findByToken(token);
+    }
 }

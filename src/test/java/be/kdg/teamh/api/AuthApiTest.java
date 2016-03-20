@@ -4,6 +4,7 @@ import be.kdg.teamh.dtos.request.LoginRequest;
 import be.kdg.teamh.dtos.request.RegistratieRequest;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,5 +63,31 @@ public class AuthApiTest extends ApiTest
 
         http.perform(post("/auth/register", objectMapper.writeValueAsString(registratie)))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void profile() throws Exception
+    {
+        http.perform(get("/auth/profile").header("Authorization", getUserOneToken()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.gebruikersnaam", is("userone")));
+
+        http.perform(get("/auth/profile").header("Authorization", getUserTwoToken()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.gebruikersnaam", is("usertwo")));
+    }
+
+    @Test
+    public void profile_zonderAuthenticationHeader() throws Exception
+    {
+        http.perform(get("/auth/profile"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void profile_ongeregistreerdeGebruiker() throws Exception
+    {
+        http.perform(get("/auth/profile").header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isNotFound());
     }
 }

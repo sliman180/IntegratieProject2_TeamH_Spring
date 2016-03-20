@@ -83,6 +83,4 @@ public class HoofdthemaController
     {
         return service.findSubthemas(id);
     }
-
-
 }
