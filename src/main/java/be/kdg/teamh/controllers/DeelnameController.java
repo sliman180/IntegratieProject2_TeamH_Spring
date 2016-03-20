@@ -27,15 +27,21 @@ public class DeelnameController
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable("id") int id, @Valid @RequestBody DeelnameRequest deelname)
+    public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody DeelnameRequest deelname)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.update(id, deelname);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
+        auth.checkUserIsRegistered(token);
+        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+
         service.delete(id);
     }
 

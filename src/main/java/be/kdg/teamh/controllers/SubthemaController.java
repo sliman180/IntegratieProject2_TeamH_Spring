@@ -59,7 +59,6 @@ public class SubthemaController
         service.update(id, subthema);
     }
 
-
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
@@ -72,9 +71,16 @@ public class SubthemaController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/organisatie", method = RequestMethod.GET)
-    public Organisatie getOrganisatie(@PathVariable int id)
+    public Organisatie findOrganisatie(@PathVariable int id)
     {
         return service.findOrganisatie(id);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
+    public Hoofdthema findHoofdthema(@PathVariable int id)
+    {
+        return service.findHoofdthema(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -82,13 +88,6 @@ public class SubthemaController
     public List<Cirkelsessie> getCirkelsessies(@PathVariable int id)
     {
         return service.getCirkelsessies(id);
-    }
-
-    @ResponseStatus(code = HttpStatus.OK)
-    @RequestMapping(value = "{id}/hoofdthema", method = RequestMethod.GET)
-    public Hoofdthema getHoofdthema(@PathVariable int id)
-    {
-        return service.findHoofdthema(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

@@ -32,6 +32,19 @@ public class DeelnameServiceImpl implements DeelnameService
     }
 
     @Override
+    public Deelname find(int id) throws DeelnameNotFound
+    {
+        Deelname deelname = repository.findOne(id);
+
+        if (deelname == null)
+        {
+            throw new DeelnameNotFound();
+        }
+
+        return deelname;
+    }
+
+    @Override
     public void update(int id, DeelnameRequest dto) throws DeelnameNotFound, CirkelsessieNotFound, GebruikerNotFound
     {
         Gebruiker gebruiker = gebruikers.findOne(dto.getGebruiker());

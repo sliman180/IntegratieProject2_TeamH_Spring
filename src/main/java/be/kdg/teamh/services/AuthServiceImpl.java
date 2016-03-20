@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public void checkUserIsRegistered(String token)
+    public void checkUserIsRegistered(String token) throws Unauthorized
     {
         if (!isValidToken(token) || !hasRole(token, "user"))
         {
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public void checkUserIsAllowed(String token, Gebruiker gebruiker)
+    public void checkUserIsAllowed(String token, Gebruiker gebruiker) throws Forbidden
     {
         if (findByToken(token).getId() != gebruiker.getId())
         {
