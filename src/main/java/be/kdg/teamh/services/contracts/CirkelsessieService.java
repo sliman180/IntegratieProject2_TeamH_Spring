@@ -5,6 +5,7 @@ import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;
 import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
@@ -172,4 +173,14 @@ public interface CirkelsessieService
      * @throws GebruikerNietGevonden
      */
     void addBericht(int id, BerichtRequest dto) throws CirkelsessieNietGevonden, GebruikerNietGevonden;
+
+    /**
+     * Kijkt na of een gebruiker een medeorganisator is van een cirkelsessie.
+     *
+     * @param id Code van de {@link Deelname} waarmee de huidige cirkelsessie kan opgezocht worden
+     * @param gebruiker {@link Gebruiker} waarvan moet nagekeken worden of hij medeorganisator is
+     * @return true als de gebruiker een medeorganisator is, false als hij het niet is
+     * @throws DeelnameNietGevonden
+     */
+    boolean isMedeOrganisator(int id, int gebruiker)  throws DeelnameNietGevonden;
 }

@@ -35,7 +35,15 @@ public class DeelnameController
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody DeelnameRequest deelname)
     {
         auth.isGeregistreerd(token);
-        controleerToegang(id, token);
+
+        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int eigenaar = service.find(id).getGebruiker().getId();
+        int organisator = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
+
+        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisator(id, gebruiker))
+        {
+            throw new ToegangVerboden();
+        }
 
         service.update(id, deelname);
     }
@@ -45,7 +53,15 @@ public class DeelnameController
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
         auth.isGeregistreerd(token);
-        controleerToegang(id, token);
+
+        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
+        int eigenaar = service.find(id).getGebruiker().getId();
+        int organisator = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
+
+        if (gebruiker != eigenaar && gebruiker != organisator && !cirkelsessies.isMedeOrganisator(id, gebruiker))
+        {
+            throw new ToegangVerboden();
+        }
 
         service.delete(id);
     }
@@ -62,33 +78,5 @@ public class DeelnameController
     public Cirkelsessie getCirkelsessie(@PathVariable("id") int id)
     {
         return service.getCirkelsessie(id);
-    }
-
-    private void controleerToegang(int id, String token)
-    {
-        int gebruiker = auth.zoekGebruikerMetToken(token).getId();
-        int eigenaar = service.find(id).getGebruiker().getId();
-        int organisator = cirkelsessies.find(service.find(id).getCirkelsessie().getId()).getGebruiker().getId();
-
-        if (gebruiker != eigenaar && gebruiker != organisator && !isMedeEigenaar(id, gebruiker))
-        {
-            throw new ToegangVerboden();
-        }
-    }
-
-    private boolean isMedeEigenaar(int id, int gebruiker)
-    {
-        for (Deelname deelname : service.find(id).getCirkelsessie().getDeelnames())
-        {
-            if (gebruiker == deelname.getGebruiker().getId())
-            {
-                if (deelname.isMedeorganisator())
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 }

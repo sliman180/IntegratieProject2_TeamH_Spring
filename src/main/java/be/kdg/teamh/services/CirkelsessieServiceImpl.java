@@ -5,6 +5,7 @@ import be.kdg.teamh.dtos.request.CirkelsessieCloneRequest;
 import be.kdg.teamh.dtos.request.CirkelsessieRequest;
 import be.kdg.teamh.dtos.request.KaartRequest;
 import be.kdg.teamh.entities.*;
+import be.kdg.teamh.exceptions.deelname.DeelnameNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerIsReedsDeelnemer;
 import be.kdg.teamh.exceptions.cirkelsessie.CirkelsessieNietGevonden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
@@ -272,6 +273,19 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
+    public Gebruiker findGebruiker(int id) throws CirkelsessieNietGevonden
+    {
+        Cirkelsessie cirkelsessie = repository.findOne(id);
+
+        if (cirkelsessie == null)
+        {
+            throw new CirkelsessieNietGevonden();
+        }
+
+        return cirkelsessie.getGebruiker();
+    }
+
+    @Override
     public List<Deelname> findDeelnames(int id) throws CirkelsessieNietGevonden
     {
         Cirkelsessie cirkelsessie = repository.findOne(id);
@@ -425,15 +439,26 @@ public class CirkelsessieServiceImpl implements CirkelsessieService
     }
 
     @Override
-    public Gebruiker findGebruiker(int id) throws CirkelsessieNietGevonden
+    public boolean isMedeOrganisator(int id, int gebruiker) throws DeelnameNietGevonden
     {
-        Cirkelsessie cirkelsessie = repository.findOne(id);
+        Deelname deelname = deelnames.findOne(id);
 
-        if (cirkelsessie == null)
+        if (deelname == null)
         {
-            throw new CirkelsessieNietGevonden();
+            throw new DeelnameNietGevonden();
         }
 
-        return cirkelsessie.getGebruiker();
+        for (Deelname deelnameCirkelsessie : deelname.getCirkelsessie().getDeelnames())
+        {
+            if (gebruiker == deelnameCirkelsessie.getGebruiker().getId())
+            {
+                if (deelnameCirkelsessie.isMedeorganisator())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
