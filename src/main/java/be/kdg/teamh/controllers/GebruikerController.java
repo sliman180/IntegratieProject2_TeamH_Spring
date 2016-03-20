@@ -36,7 +36,7 @@ public class GebruikerController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody GebruikerRequest gebruiker)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(gebruiker);
     }
@@ -52,7 +52,7 @@ public class GebruikerController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody GebruikerRequest gebruiker)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.update(id, gebruiker);
     }
@@ -61,7 +61,7 @@ public class GebruikerController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.delete(id);
     }

@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public LoginResponse generateToken(Gebruiker gebruiker)
+    public LoginResponse genereerToken(Gebruiker gebruiker)
     {
         Claims claims = Jwts.claims().setSubject(String.valueOf(gebruiker.getId()));
 
@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public Gebruiker findByToken(String token) throws GebruikerNietGevonden
+    public Gebruiker zoekGebruikerMetToken(String token) throws GebruikerNietGevonden
     {
         Gebruiker gebruiker = repository.findOne(Integer.parseInt(parseToken(token).getSubject()));
 
@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public void checkUserIsRegistered(String token) throws GebruikerNietGeregistreerd
+    public void isGeregistreerd(String token) throws GebruikerNietGeregistreerd
     {
         if (!isValidToken(token) || !hasRole(token, "user"))
         {
@@ -64,9 +64,9 @@ public class AuthServiceImpl implements AuthService
     }
 
     @Override
-    public void checkUserIsAllowed(String token, Gebruiker gebruiker) throws ToegangVerboden
+    public void isToegelaten(String token, Gebruiker gebruiker) throws ToegangVerboden
     {
-        if (findByToken(token).getId() != gebruiker.getId())
+        if (zoekGebruikerMetToken(token).getId() != gebruiker.getId())
         {
             throw new ToegangVerboden();
         }

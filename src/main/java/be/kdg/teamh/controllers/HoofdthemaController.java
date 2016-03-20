@@ -38,7 +38,7 @@ public class HoofdthemaController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody HoofdthemaRequest hoofdthema)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(hoofdthema);
     }
@@ -54,8 +54,8 @@ public class HoofdthemaController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody HoofdthemaRequest hoofdthema)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.update(id, hoofdthema);
     }
@@ -64,8 +64,8 @@ public class HoofdthemaController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }

@@ -32,7 +32,7 @@ public class AuthController
     {
         Gebruiker gebruiker = service.findByLogin(login);
 
-        return auth.generateToken(gebruiker);
+        return auth.genereerToken(gebruiker);
     }
 
 
@@ -47,6 +47,6 @@ public class AuthController
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public Gebruiker profile(@RequestHeader(name = "Authorization") String token)
     {
-        return auth.findByToken(token);
+        return auth.zoekGebruikerMetToken(token);
     }
 }

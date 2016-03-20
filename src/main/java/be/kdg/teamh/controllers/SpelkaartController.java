@@ -37,7 +37,7 @@ public class SpelkaartController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody SpelkaartRequest spelkaart)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(spelkaart);
     }
@@ -53,7 +53,7 @@ public class SpelkaartController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody SpelkaartRequest kaart)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.update(id, kaart);
     }
@@ -62,7 +62,7 @@ public class SpelkaartController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.delete(id);
     }
@@ -71,9 +71,9 @@ public class SpelkaartController
     @RequestMapping(value = "/{id}/verschuif", method = RequestMethod.POST)
     public void verschuifKaart(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
-        service.verschuif(id, auth.findByToken(token));
+        service.verschuif(id, auth.zoekGebruikerMetToken(token));
     }
 
     @ResponseStatus(code = HttpStatus.OK)

@@ -6,13 +6,42 @@ import be.kdg.teamh.exceptions.gebruiker.ToegangVerboden;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGeregistreerd;
 import be.kdg.teamh.exceptions.gebruiker.GebruikerNietGevonden;
 
+/**
+ *
+ */
 public interface AuthService
 {
-    LoginResponse generateToken(Gebruiker gebruiker);
+    /**
+     * Genereert een JWT voor de gebruiker.
+     *
+     * @param gebruiker Aangemelde gebruiker
+     * @return {@link LoginResponse}
+     */
+    LoginResponse genereerToken(Gebruiker gebruiker);
 
-    Gebruiker findByToken(String token) throws GebruikerNietGevonden;
+    /**
+     * Haalt een specifieke gebruiker op basis van de JWT.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @return {@link Gebruiker}
+     * @throws GebruikerNietGevonden
+     */
+    Gebruiker zoekGebruikerMetToken(String token) throws GebruikerNietGevonden;
 
-    void checkUserIsRegistered(String token) throws GebruikerNietGeregistreerd;
+    /**
+     * Controleert of een gebruiker is geregistreerd.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @throws GebruikerNietGeregistreerd
+     */
+    void isGeregistreerd(String token) throws GebruikerNietGeregistreerd;
 
-    void checkUserIsAllowed(String token, Gebruiker gebruiker) throws ToegangVerboden;
+    /**
+     * Controleert of een gebruiker toegang heeft tot een resource.
+     *
+     * @param token JWT die behoort tot een gebruiker
+     * @param gebruiker Eigenaar van de beveiligde resource
+     * @throws ToegangVerboden
+     */
+    void isToegelaten(String token, Gebruiker gebruiker) throws ToegangVerboden;
 }

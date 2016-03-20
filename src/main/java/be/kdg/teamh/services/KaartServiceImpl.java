@@ -135,36 +135,6 @@ public class KaartServiceImpl implements KaartService
     }
 
     @Override
-    public void addSubthema(int id, SubthemaRequest dto) throws KaartNietGevonden, HoofdthemaNietGevonden
-    {
-        Hoofdthema hoofdthema = hoofdthemas.findOne(dto.getHoofdthema());
-
-        if (hoofdthema == null)
-        {
-            throw new HoofdthemaNietGevonden();
-        }
-
-        Kaart kaart = repository.findOne(id);
-
-        if (kaart == null)
-        {
-            throw new KaartNietGevonden();
-        }
-
-        Subthema subthema = new Subthema();
-        subthema.setNaam(dto.getNaam());
-        subthema.setBeschrijving(dto.getBeschrijving());
-        subthema.setHoofdthema(hoofdthema);
-        subthema = subthemas.save(subthema);
-
-        hoofdthema.addSubthema(subthema);
-        hoofdthemas.saveAndFlush(hoofdthema);
-
-        kaart.setSubthema(subthema);
-        repository.saveAndFlush(kaart);
-    }
-
-    @Override
     public List<Commentaar> getCommentaren(int id) throws KaartNietGevonden
     {
         Kaart kaart = repository.findOne(id);

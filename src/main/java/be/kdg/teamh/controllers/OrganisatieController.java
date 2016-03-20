@@ -37,7 +37,7 @@ public class OrganisatieController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(organisatie);
     }
@@ -53,8 +53,8 @@ public class OrganisatieController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token, @Valid @RequestBody OrganisatieRequest organisatie)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.update(id, organisatie);
     }
@@ -63,8 +63,8 @@ public class OrganisatieController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader(name = "Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }

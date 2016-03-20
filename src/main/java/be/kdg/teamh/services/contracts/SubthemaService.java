@@ -70,7 +70,7 @@ public interface SubthemaService
     /**
      * Haalt het hoofdthema van een subthema op.
      *
-     * @param id Code van het {@link Subthema} waarvan de {@link Hoofdthema} moet worden opgehaald
+     * @param id Code van het {@link Subthema} waarvan het {@link Hoofdthema} moet worden opgehaald
      * @return {@link Hoofdthema}
      * @throws SubthemaNietGevonden
      */
@@ -88,7 +88,7 @@ public interface SubthemaService
     /**
      * Haalt alle kaarten van een subthema op.
      *
-     * @param id Code van het {@link Subthema} waarvan de {@link Kaart} moeten worden opgehaald
+     * @param id Code van het {@link Subthema} waarvan de {@link Kaart}en moeten worden opgehaald
      * @return Een lijst van {@link Kaart}en
      * @throws SubthemaNietGevonden
      */

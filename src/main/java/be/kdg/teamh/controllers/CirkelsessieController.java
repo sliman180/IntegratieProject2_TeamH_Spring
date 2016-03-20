@@ -67,7 +67,7 @@ public class CirkelsessieController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(cirkelsessie);
     }
@@ -83,8 +83,8 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieRequest cirkelsessie)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.update(id, cirkelsessie);
     }
@@ -93,8 +93,8 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }
@@ -103,8 +103,8 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}/clone", method = RequestMethod.POST)
     public void clone(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CirkelsessieCloneRequest cirkelsessie)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.clone(id, cirkelsessie);
     }
@@ -134,9 +134,9 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}/deelnames", method = RequestMethod.POST)
     public void addDeelname(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
-        service.addDeelname(id, auth.findByToken(token).getId());
+        service.addDeelname(id, auth.zoekGebruikerMetToken(token).getId());
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -150,7 +150,7 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}/spelkaarten", method = RequestMethod.POST)
     public void addSpelkaart(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody KaartRequest kaart)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.addSpelkaart(id, kaart);
     }
@@ -166,7 +166,7 @@ public class CirkelsessieController
     @RequestMapping(value = "{id}/berichten", method = RequestMethod.POST)
     public void addBericht(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody BerichtRequest bericht)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.addBericht(id, bericht);
     }

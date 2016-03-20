@@ -40,7 +40,7 @@ public class KaartController
     @RequestMapping(value = "", method = RequestMethod.POST)
     public void create(@RequestHeader("Authorization") String token, @Valid @RequestBody KaartRequest kaart)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.create(kaart);
     }
@@ -56,8 +56,8 @@ public class KaartController
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody KaartRequest kaart)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.update(id, kaart);
     }
@@ -66,8 +66,8 @@ public class KaartController
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") int id, @RequestHeader("Authorization") String token)
     {
-        auth.checkUserIsRegistered(token);
-        auth.checkUserIsAllowed(token, service.find(id).getGebruiker());
+        auth.isGeregistreerd(token);
+        auth.isToegelaten(token, service.find(id).getGebruiker());
 
         service.delete(id);
     }
@@ -97,7 +97,7 @@ public class KaartController
     @RequestMapping(value = "{id}/commentaren", method = RequestMethod.POST)
     public void addCommentaar(@PathVariable("id") int id, @RequestHeader("Authorization") String token, @Valid @RequestBody CommentaarRequest comment)
     {
-        auth.checkUserIsRegistered(token);
+        auth.isGeregistreerd(token);
 
         service.addCommentaar(id, comment);
     }
