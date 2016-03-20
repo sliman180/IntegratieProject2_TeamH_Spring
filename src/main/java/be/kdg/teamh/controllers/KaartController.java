@@ -74,7 +74,7 @@ public class KaartController
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "{id}/subthema", method = RequestMethod.GET)
-    public Subthema subthema(@PathVariable("id") int id)
+    public Subthema getSubthema(@PathVariable("id") int id)
     {
         return service.getSubthema(id);
     }

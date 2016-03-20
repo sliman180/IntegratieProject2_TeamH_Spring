@@ -73,7 +73,7 @@ public class KaartApiTest extends ApiTest
     }
 
     @Test
-    public void showKaart_nonExistingKaart() throws Exception
+    public void showKaart_onbestaandeKaart() throws Exception
     {
         http.perform(get("/api/kaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
@@ -111,7 +111,7 @@ public class KaartApiTest extends ApiTest
     }
 
     @Test
-    public void updateKaart_nonExistingKaart() throws Exception
+    public void updateKaart_onbestaandeKaart() throws Exception
     {
         KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
@@ -174,7 +174,7 @@ public class KaartApiTest extends ApiTest
     }
 
     @Test
-    public void deleteKaart_nonExistingKaart() throws Exception
+    public void deleteKaart_onbestaandeKaart() throws Exception
     {
         http.perform(delete("/api/kaarten/1").header("Authorization", getUserOneToken()))
             .andExpect(status().isNotFound());
@@ -214,7 +214,7 @@ public class KaartApiTest extends ApiTest
     }
 
     @Test
-    public void commentToevoegenAanKaart() throws Exception
+    public void commentaarToevoegenAanKaart() throws Exception
     {
         KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
 
@@ -231,7 +231,7 @@ public class KaartApiTest extends ApiTest
     }
 
     @Test
-    public void commentToevoegenAanKaart_nietToegelaten() throws Exception
+    public void commentaarToevoegenAanKaart_commentaarNietToegelaten() throws Exception
     {
         KaartRequest kaart = new KaartRequest("Een kaartje", "http://www.afbeeldingurl.be", false, 1);
 
@@ -241,5 +241,31 @@ public class KaartApiTest extends ApiTest
 
         http.perform(post("/api/kaarten/1/commentaren", objectMapper.writeValueAsString(commentaar)).header("Authorization", getUserOneToken()))
             .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void commentaarToevoegenAanKaart_zonderAuthenticationHeader() throws Exception
+    {
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
+
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
+
+        CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
+
+        http.perform(post("/api/kaarten/1/commentaren", objectMapper.writeValueAsString(commentaar)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void commentaarToevoegenAanKaart_ongeregistreerdeGebruiker() throws Exception
+    {
+        KaartRequest kaart = new KaartRequest("Naam Kaart", "http://www.afbeelding.url", true, 1);
+
+        http.perform(post("/api/kaarten", objectMapper.writeValueAsString(kaart)).header("Authorization", getUserOneToken()));
+
+        CommentaarRequest commentaar = new CommentaarRequest("Commentaar", DateTime.now(), 1, 1);
+
+        http.perform(post("/api/kaarten/1/commentaren", objectMapper.writeValueAsString(commentaar)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
     }
 }

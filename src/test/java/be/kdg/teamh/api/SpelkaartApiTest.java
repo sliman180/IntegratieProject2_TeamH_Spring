@@ -51,6 +51,24 @@ public class SpelkaartApiTest extends ApiTest
     }
 
     @Test
+    public void createSpelkaart_zonderAuthenticationHeader() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)))
+            .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void createSpelkaart_ongeregistreerdeGebruiker() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
     public void showSpelkaart() throws Exception
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
@@ -96,6 +114,32 @@ public class SpelkaartApiTest extends ApiTest
     }
 
     @Test
+    public void updateSpelkaart_zonderAuthenticationHeader() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        spelkaart.setPositie(5);
+
+        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateSpelkaart_ongeregistreerdeGebruiker() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        spelkaart.setPositie(5);
+
+        http.perform(put("/api/spelkaarten/1", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void deleteSpelkaart() throws Exception
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
@@ -118,7 +162,29 @@ public class SpelkaartApiTest extends ApiTest
     }
 
     @Test
-    public void verschuifSpelkaartMetEenStap() throws Exception
+    public void deleteSpelkaart_zonderAuthenticationHeader() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        http.perform(delete("/api/spelkaarten/1"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteSpelkaart_ongeregistreerdeGebruiker() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        http.perform(delete("/api/spelkaarten/1").header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void verschuifSpelkaart() throws Exception
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
@@ -133,7 +199,7 @@ public class SpelkaartApiTest extends ApiTest
     }
 
     @Test
-    public void verschuifSpelkaartMetEenStap_maximumPositieBereikt() throws Exception
+    public void verschuifSpelkaart_maximumPositieBereikt() throws Exception
     {
         SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
 
@@ -145,5 +211,27 @@ public class SpelkaartApiTest extends ApiTest
 
         http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getUserOneToken()))
             .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void verschuifSpelkaart_zonderAuthenticationHeader() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        http.perform(post("/api/spelkaarten/1/verschuif", ""))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void verschuifSpelkaart_ongeregistreerdeGebruiker() throws Exception
+    {
+        SpelkaartRequest spelkaart = new SpelkaartRequest(1, 1);
+
+        http.perform(post("/api/spelkaarten", objectMapper.writeValueAsString(spelkaart)).header("Authorization", getUserOneToken()));
+
+        http.perform(post("/api/spelkaarten/1/verschuif", "").header("Authorization", getNonExistingUserToken()))
+            .andExpect(status().isUnauthorized());
     }
 }
