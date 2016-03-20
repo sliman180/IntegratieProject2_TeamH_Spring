@@ -6,6 +6,7 @@
 
         var vm = this;
 
+        vm.gebruiker = {};
         vm.updateProfile = function (credentials) {
 
             if (credentials.wachtwoord == null) {
@@ -20,6 +21,7 @@
                     $rootScope.naam = data.gebruikersnaam;
                     $rootScope.rollen = data.rollen;
 
+                    vm.gebruiker = data;
                     $location.path("/");
 
                 });

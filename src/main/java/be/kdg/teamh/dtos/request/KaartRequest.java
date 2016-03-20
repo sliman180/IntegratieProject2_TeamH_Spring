@@ -22,11 +22,11 @@ public class KaartRequest implements Serializable
         //
     }
 
-    public KaartRequest(String tekst, String imageUrl, boolean commentsToelaatbaar, int gebruiker)
+    public KaartRequest(String tekst, String imageUrl, int gebruiker)
     {
         this.tekst = tekst;
         this.imageUrl = imageUrl;
-        this.commentsToelaatbaar = commentsToelaatbaar;
+        this.commentsToelaatbaar = true;
         this.gebruiker = gebruiker;
     }
 
