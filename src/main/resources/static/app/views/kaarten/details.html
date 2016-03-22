@@ -1,21 +1,6 @@
 <style>
-
-    .tooltip {
-        font-size: 12px;
-    }
-
     .mdl-card__title {
         background-color: royalblue;
-    }
-
-    #chat {
-        overflow-y: auto;
-        height: 300px;
-    }
-
-    #chatContainer {
-        height: 500px;
-        margin-top: 10%;
     }
 
     #kaart-header {
@@ -26,10 +11,6 @@
     #kaart-begroeting {
         width: 20%;
         font-size: 3em;
-    }
-
-    #header-buttons {
-        float: right;
     }
 
 </style>
@@ -195,6 +176,16 @@
         color: white;
     }
 
+    #toegelaten {
+        color: green;
+        font-weight: bold;
+    }
+
+    #niet-toegelaten {
+        color: red;
+        font-weight: bold;
+    }
+
 </style>
 
 
@@ -219,6 +210,10 @@
             </h2>
             <span class="mdl-badge" data-badge="{{vm.comments.length}}"></span>
         </div>
+        <div class="mdl-card__supporting-text">
+            <span id="toegelaten" ng-if="vm.kaart.commentsToelaatbaar">Commentaar toegelaten</span>
+            <span id="niet-toegelaten" ng-if="!vm.kaart.commentsToelaatbaar">Commentaar niet toegelaten</span>
+        </div>
         <div class="mdl-card__actions mdl-card--border">
             <div class="comment-item" ng-repeat="comment in  vm.comments | orderBy:'datum':true">
                 <p>Datum: {{comment.datum | date:'dd/MM/yyyy HH:mm:ss'}} | Gebruiker:
@@ -239,8 +234,13 @@
                 </div>
 
 
-                <button
+                <button ng-if="vm.kaart.commentsToelaatbaar"
                         class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    Commentaar toevoegen
+                </button>
+
+                <button ng-if="!vm.kaart.commentsToelaatbaar"
+                        class="mdl-button mdl-js-button mdl-js-ripple-effect" disabled>
                     Commentaar toevoegen
                 </button>
             </form>

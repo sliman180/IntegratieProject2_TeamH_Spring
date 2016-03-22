@@ -16,6 +16,11 @@
             cirkelsessie.id = $routeParams.id;
             cirkelsessie.gebruiker = $rootScope.id;
             cirkelsessie.status = vm.cirkelsessie.status;
+
+            if (cirkelsessie.status == 'BEEINDIGD') {
+                cirkelsessie.startDatum = vm.cirkelsessie.startDatum;
+            }
+
             if (cirkelsessie.subthema != null) {
                 cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
             } else {

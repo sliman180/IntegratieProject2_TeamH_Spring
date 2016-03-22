@@ -32,7 +32,7 @@
                 });
             });
 
-            var promise = $timeout(cirkelsessiepolling, 2000);
+            var promise = $timeout(cirkelsessiepolling, 5000);
 
             $rootScope.$on('$destroy', function () {
                 $timeout.cancel(promise);
@@ -55,6 +55,10 @@
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);
+        };
+
+        vm.gestartFilter = function (cirkelsessie) {
+            return new Date() > new Date(cirkelsessie.startDatum);
         };
 
         vm.getSubthema = function (subthemaId) {

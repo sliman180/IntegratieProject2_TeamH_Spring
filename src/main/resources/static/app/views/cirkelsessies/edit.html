@@ -10,28 +10,33 @@
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="naam" pattern="^.{3,30}$"
-                           value="{{vm.cirkelsessie.naam}}"
+                           ng-init="cirkelsessie.naam=vm.cirkelsessie.naam"
                            ng-model="cirkelsessie.naam">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
                     <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="tekst" id="aantalcirkels" pattern="^(1[0-0]|[5-9])$"
-                           value="{{vm.cirkelsessie.aantalCirkels}}"
+                           ng-init="cirkelsessie.aantalCirkels=vm.cirkelsessie.aantalCirkels"
                            ng-model="cirkelsessie.aantalCirkels">
                     <label class="mdl-textfield__label" for="aantalcirkels">Aantal cirkels</label>
                     <span class="mdl-textfield__error">Aantal moet tussen 5 en 10 zijn!</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="tekst" id="maxtoegelatenkaarten"
-                           value="{{vm.cirkelsessie.maxAantalKaarten}}"
+                           ng-init="cirkelsessie.maxAantalKaarten=vm.cirkelsessie.maxAantalKaarten"
                            ng-model="cirkelsessie.maxAantalKaarten">
                     <label class="mdl-textfield__label" for="maxtoegelatenkaarten">Maximum toegelaten kaarten</label>
                 </div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <div ng-if="vm.cirkelsessie.status!='BEEINDIGD'"
+                     class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="datetime-local" id="datum"
                            ng-model="cirkelsessie.startDatum">
                     <label class="mdl-textfield__label" for="datum"></label>
+                </div>
+                <div ng-if="vm.cirkelsessie.status=='BEEINDIGD'"
+                     class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <label>U kunt de startdatum niet meer wijzigen(de cirkelsessie is al beëindigd)</label>
                 </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">

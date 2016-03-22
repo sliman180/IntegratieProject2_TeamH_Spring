@@ -50,6 +50,7 @@
             <nav ng-if="!$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link nav-login-btn" href="/#/auth/login">Aanmelden</a>
                 <a class="mdl-navigation__link nav-register-btn" href="/#/auth/register">Registreren</a>
+                <a class="mdl-navigation__link nav-session-btn" href="/#/cirkelsessies">Cirkelsessies</a>
             </nav>
             <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
                 <a class="mdl-navigation__link mdl-badge badge nav-organisation-btn" data-badge="{{$root.aantalOrganisaties}}" href="/#/organisaties">Mijn organisaties</a>
@@ -70,12 +71,14 @@
         <nav ng-if="!$root.loggedIn" class="mdl-navigation">
             <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
             <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
+            <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
         </nav>
         <nav ng-if="$root.loggedIn" class="mdl-navigation">
             <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
             <a class="mdl-navigation__link" href="/#/hoofdthemas">Mijn hoofdthemas</a>
             <a class="mdl-navigation__link" href="/#/subthemas">Mijn subthemas</a>
             <a class="mdl-navigation__link" href="/#/deelnames">Mijn deelnames</a>
+            <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
             <a class="mdl-navigation__link" href="/#/auth/profile">Mijn profiel</a>
             <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
         </nav>

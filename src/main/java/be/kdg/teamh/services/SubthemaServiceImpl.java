@@ -203,7 +203,7 @@ public class SubthemaServiceImpl implements SubthemaService
         kaartje.setTekst(kaart.getTekst());
         kaartje.setGebruiker(gebruiker);
         kaartje.setSubthema(subthema);
-        kaartje.setCommentsToelaatbaar(false);
+        kaartje.setCommentsToelaatbaar(kaart.isCommentsToelaatbaar());
 
         Kaart savedKaart = kaarten.save(kaartje);
 

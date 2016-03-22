@@ -187,6 +187,10 @@
         cursor: pointer;
     }
 
+    .kaart-toevoegen-button {
+        margin-top: 10% !important;
+    }
+
 </style>
 
 
@@ -250,8 +254,14 @@
                 <label class="mdl-textfield__label" for="imageUrl">Afbeelding urlt</label>
             </div>
 
+            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="commentsToelaatbaar">
+                <input type="checkbox" id="commentsToelaatbaar" class="mdl-checkbox__input"
+                       ng-model="kaart.commentsToelaatbaar" checked>
+                <span class="mdl-checkbox__label">Comments toegelaten</span>
+            </label>
+
             <button
-                    class="mdl-button mdl-js-button mdl-js-ripple-effect">
+                    class="mdl-button mdl-js-button mdl-js-ripple-effect kaart-toevoegen-button">
                 Kaart toevoegen
             </button>
         </form>

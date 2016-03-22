@@ -51,7 +51,9 @@
                     });
 
                     $timeout(haalGebruikerDataOp, 1000);
-                }();
+                };
+
+                haalGebruikerDataOp();
 
             });
 

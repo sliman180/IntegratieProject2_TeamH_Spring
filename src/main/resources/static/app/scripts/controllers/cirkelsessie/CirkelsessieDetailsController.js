@@ -13,9 +13,15 @@
         vm.spelkaarten = [];
         vm.commentaren = [];
 
+        vm.setSvgViewBox = function (x) {
+            document.getElementById('svg').setAttribute("viewBox", "0 0 " + x + " " + x);
+        };
+
+
         var cirkelpolling = function () {
             CirkelsessieService.find($routeParams.id).then(function (data) {
                 vm.cirkelsessie = data;
+                vm.setSvgViewBox(vm.cirkelsessie.aantalCirkels * 100);
                 CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
                     vm.deelnames = deelnamedata;
                     angular.forEach(vm.deelnames, function (value, key) {
@@ -100,9 +106,8 @@
 
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;
-            CirkelsessieService.addBericht(id, bericht).then(function () {
-                $route.reload();
-            });
+            CirkelsessieService.addBericht(id, bericht);
+            document.getElementById('berichtTekst').value = "";
         };
 
         vm.addDeelname = function (id) {
@@ -113,9 +118,12 @@
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             kaart.gebruiker = $rootScope.id;
+            kaart.commentsToelaatbaar = !!document.getElementById('commentsToelaatbaar').checked;
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 alert('De kaart  "' + kaart.tekst + '" is toegevoegd.');
             });
+            document.getElementById('kaartTekst').value = "";
+            document.getElementById('imageUrl').value = "";
         };
 
         vm.verschuifKaart = function (spelkaartId) {

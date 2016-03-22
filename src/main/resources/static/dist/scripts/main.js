@@ -78,7 +78,9 @@
                     });
 
                     $timeout(haalGebruikerDataOp, 1000);
-                }();
+                };
+
+                haalGebruikerDataOp();
 
             });
 
@@ -1167,9 +1169,15 @@
         vm.spelkaarten = [];
         vm.commentaren = [];
 
+        vm.setSvgViewBox =function(x){
+            document.getElementById('svg').setAttribute("viewBox", "0 0 " + x + " " + x);
+        };
+
+
         var cirkelpolling = function () {
             CirkelsessieService.find($routeParams.id).then(function (data) {
                 vm.cirkelsessie = data;
+                vm.setSvgViewBox(vm.cirkelsessie.aantalCirkels * 100);
                 CirkelsessieService.getDeelnames(vm.cirkelsessie.id).then(function (deelnamedata) {
                     vm.deelnames = deelnamedata;
                     angular.forEach(vm.deelnames, function (value, key) {
@@ -1254,9 +1262,8 @@
 
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;
-            CirkelsessieService.addBericht(id, bericht).then(function () {
-                $route.reload();
-            });
+            CirkelsessieService.addBericht(id, bericht);
+            document.getElementById('berichtTekst').value="";
         };
 
         vm.addDeelname = function (id) {
@@ -1267,9 +1274,12 @@
 
         vm.createKaart = function (cirkelsessieId, kaart) {
             kaart.gebruiker = $rootScope.id;
+            kaart.commentsToelaatbaar = !!document.getElementById('commentsToelaatbaar').checked;
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 alert('De kaart  "' + kaart.tekst + '" is toegevoegd.');
             });
+            document.getElementById('kaartTekst').value="";
+            document.getElementById('imageUrl').value="";
         };
 
         vm.verschuifKaart = function (spelkaartId) {
@@ -1425,6 +1435,11 @@
             cirkelsessie.id = $routeParams.id;
             cirkelsessie.gebruiker = $rootScope.id;
             cirkelsessie.status = vm.cirkelsessie.status;
+
+            if(cirkelsessie.status=='BEEINDIGD'){
+                cirkelsessie.startDatum = vm.cirkelsessie.startDatum;
+            }
+
             if (cirkelsessie.subthema != null) {
                 cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
             } else {
@@ -1476,7 +1491,7 @@
                 });
             });
 
-            var promise = $timeout(cirkelsessiepolling, 2000);
+            var promise = $timeout(cirkelsessiepolling, 5000);
 
             $rootScope.$on('$destroy', function () {
                 $timeout.cancel(promise);
@@ -1499,6 +1514,10 @@
 
         vm.isActive = function (date) {
             return new Date() > new Date(date);
+        };
+
+        vm.gestartFilter = function (cirkelsessie) {
+            return new Date() > new Date(cirkelsessie.startDatum);
         };
 
         vm.getSubthema = function (subthemaId) {
@@ -1821,6 +1840,7 @@
 
         vm.createKaart = function (subthemaId, kaart) {
             kaart.gebruiker = $rootScope.id;
+            kaart.commentsToelaatbaar = !!document.getElementById('commentsToelaatbaar').checked;
             KaartService.createKaartForSubthema(subthemaId, kaart).then(function () {
                 $route.reload();
             });
