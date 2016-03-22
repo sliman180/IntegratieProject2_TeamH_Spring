@@ -1169,7 +1169,7 @@
         vm.spelkaarten = [];
         vm.commentaren = [];
 
-        vm.setSvgViewBox =function(x){
+        vm.setSvgViewBox = function (x) {
             document.getElementById('svg').setAttribute("viewBox", "0 0 " + x + " " + x);
         };
 
@@ -1263,7 +1263,7 @@
         vm.addBericht = function (id, bericht) {
             bericht.gebruiker = $rootScope.id;
             CirkelsessieService.addBericht(id, bericht);
-            document.getElementById('berichtTekst').value="";
+            document.getElementById('berichtTekst').value = "";
         };
 
         vm.addDeelname = function (id) {
@@ -1278,8 +1278,8 @@
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 alert('De kaart  "' + kaart.tekst + '" is toegevoegd.');
             });
-            document.getElementById('kaartTekst').value="";
-            document.getElementById('imageUrl').value="";
+            document.getElementById('kaartTekst').value = "";
+            document.getElementById('imageUrl').value = "";
         };
 
         vm.verschuifKaart = function (spelkaartId) {
@@ -1436,7 +1436,7 @@
             cirkelsessie.gebruiker = $rootScope.id;
             cirkelsessie.status = vm.cirkelsessie.status;
 
-            if(cirkelsessie.status=='BEEINDIGD'){
+            if (cirkelsessie.status == 'BEEINDIGD') {
                 cirkelsessie.startDatum = vm.cirkelsessie.startDatum;
             }
 
