@@ -1,34 +1,35 @@
 <div class="mdl-cell mdl-cell--12-col">
 
-    <div class="mdl-card mdl-shadow--6dp" style="margin: 3% auto">
+    <div class="mdl-card mdl-shadow--6dp form-box">
 
         <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
             <h2 class="mdl-card__title-text">Subthema wijzigen</h2>
         </div>
 
         <form action="">
+
             <div class="mdl-card__supporting-text">
+
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" id="naam" pattern="^.{3,30}$"
-                           value="{{vm.subthema.naam}}"
-                           ng-model="subthema.naam">
+                    <input class="mdl-textfield__input" type="text" id="naam" pattern="^.{3,30}$" ng-model="vm.subthema.naam">
                     <label class="mdl-textfield__label" for="naam">Naam</label>
                     <span class="mdl-textfield__error">Mag minimum 3 en maximum 30 letters bevatten</span>
                 </div>
+
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="tekst" id="beschrijving" pattern="^.{5,30}$"
-                           value="{{vm.subthema.beschrijving}}"
-                           ng-model="subthema.beschrijving">
+                    <input class="mdl-textfield__input" type="text" id="beschrijving" pattern="^.{5,30}$" ng-model="vm.subthema.beschrijving">
                     <label class="mdl-textfield__label" for="beschrijving">Beschrijving</label>
                     <span class="mdl-textfield__error">Mag minimum 5 en maximum 30 letters bevatten</span>
                 </div>
+
             </div>
+
             <div class="mdl-card__actions mdl-card--border">
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                        ng-click="vm.editSubthema(subthema)">
+                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" ng-click="vm.updateSubthema()">
                     Wijzig
                 </button>
             </div>
+
         </form>
 
     </div>

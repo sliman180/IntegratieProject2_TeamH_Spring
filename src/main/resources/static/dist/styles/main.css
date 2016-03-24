@@ -7658,19 +7658,20 @@ fieldset[disabled] .mdl-textfield .mdl-textfield__label, .mdl-textfield.is-disab
     margin-left: 91.66667%;
   }
 }
+.form-box {
+  margin: 3% auto;
+}
+
 .badge[data-badge]:after {
-  background-color: white !important;
-  color: black !important;
+  background-color: white;
+  color: black;
+  margin-bottom: 0;
 }
 
 .mdl-layout__header-row .mdl-navigation__link {
   line-height: 25px;
   padding-left: 50px;
-  padding-right: 0px;
-}
-
-.badge {
-  margin-bottom: 0 !important;
+  padding-right: 0;
 }
 
 .splash-content {

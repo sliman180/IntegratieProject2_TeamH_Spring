@@ -2,7 +2,7 @@
 
     "use strict";
 
-    angular.module("kandoe", ["ngRoute", "ngStorage"])
+    angular.module("kandoe", ["ngAnimate", "ngRoute", "ngStorage"])
 
         .config(function ($httpProvider, localStorageServiceProvider) {
 

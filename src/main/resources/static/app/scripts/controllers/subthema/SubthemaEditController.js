@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function SubthemaEditController($routeParams, $rootScope, SubthemaService, $location) {
+    function SubthemaEditController($routeParams, SubthemaService, $location) {
 
         var vm = this;
 
@@ -12,13 +12,15 @@
             vm.subthema = data;
         });
 
-        vm.editSubthema = function (subthema) {
-            subthema.id = $routeParams.id;
-            subthema.gebruiker = $rootScope.gebruiker.id;
-            subthema.hoofdthema = vm.subthema.hoofdthema.id;
-            SubthemaService.update(subthema).then(function () {
+        vm.updateSubthema = function () {
+
+            vm.subthema.gebruiker = vm.subthema.gebruiker.id;
+            vm.subthema.hoofdthema = vm.subthema.hoofdthema.id;
+
+            SubthemaService.update(vm.subthema).then(function () {
                 $location.path("/subthemas");
             });
+
         }
 
     }

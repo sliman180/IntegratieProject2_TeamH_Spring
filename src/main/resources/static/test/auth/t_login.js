@@ -17,6 +17,7 @@ describe("On the home page", function(){
 
         loginPage.index();
         expect(browser.getCurrentUrl()).toEqual('http://localhost:8080/#/');
+        
         loginPage.login();
         expect($('.nav-login-btn').isPresent()).toBe(false);
 

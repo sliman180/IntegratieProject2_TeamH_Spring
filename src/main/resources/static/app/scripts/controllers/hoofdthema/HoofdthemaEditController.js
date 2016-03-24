@@ -2,28 +2,25 @@
 
     "use strict";
 
-    function HoofdthemaEditController($routeParams, $rootScope, HoofdthemaService, $location) {
+    function HoofdthemaEditController($routeParams, HoofdthemaService, $location) {
 
         var vm = this;
 
         vm.hoofdthema = {};
 
-        var init = function () {
-            HoofdthemaService.find($routeParams.id).then(function (data) {
-                vm.hoofdthema = data;
-            });
+        HoofdthemaService.find($routeParams.id).then(function (data) {
+            vm.hoofdthema = data;
+        });
 
-        };
+        vm.updateHoofdthema = function () {
 
-        init();
+            vm.hoofdthema.gebruiker = vm.hoofdthema.gebruiker.id;
+            vm.hoofdthema.organisatie = vm.hoofdthema.organisatie.id;
 
-        vm.editHoofdthema = function (hoofdthema) {
-            hoofdthema.id = $routeParams.id;
-            hoofdthema.gebruiker = $rootScope.gebruiker.id;
-            hoofdthema.organisatie = vm.hoofdthema.organisatie.id;
-            HoofdthemaService.update(hoofdthema).then(function () {
+            HoofdthemaService.update(vm.hoofdthema).then(function () {
                 $location.path("/hoofdthemas");
             });
+
         }
 
     }

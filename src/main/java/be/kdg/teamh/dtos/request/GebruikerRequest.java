@@ -11,9 +11,7 @@ public class GebruikerRequest implements Serializable
     @NotNull
     private String gebruikersnaam;
 
-    @NotNull
     private String wachtwoord;
-
     private String voornaam;
     private String familienaam;
     private String telefoon;

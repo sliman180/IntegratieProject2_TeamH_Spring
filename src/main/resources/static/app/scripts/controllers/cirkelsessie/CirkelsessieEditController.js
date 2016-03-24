@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function CirkelsessieEditController($routeParams, $rootScope, CirkelsessieService, $location) {
+    function CirkelsessieEditController($routeParams, CirkelsessieService, $location) {
 
         var vm = this;
 
@@ -12,23 +12,20 @@
             vm.cirkelsessie = data;
         });
 
-        vm.editCirkelsessie = function (cirkelsessie) {
-            cirkelsessie.id = $routeParams.id;
-            cirkelsessie.gebruiker = $rootScope.gebruiker.id;
-            cirkelsessie.status = vm.cirkelsessie.status;
+        vm.updateCirkelsessie = function () {
 
-            if (cirkelsessie.status == 'BEEINDIGD') {
-                cirkelsessie.startDatum = vm.cirkelsessie.startDatum;
-            }
+            vm.cirkelsessie.gebruiker = vm.cirkelsessie.gebruiker.id;
 
-            if (cirkelsessie.subthema != null) {
-                cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
+            if (vm.cirkelsessie.subthema != null) {
+                vm.cirkelsessie.subthema = vm.cirkelsessie.subthema.id;
             } else {
-                cirkelsessie.subthema = 0;
+                vm.cirkelsessie.subthema = 0;
             }
+
             CirkelsessieService.update(cirkelsessie).then(function () {
                 $location.path("/cirkelsessies");
             });
+
         }
 
     }

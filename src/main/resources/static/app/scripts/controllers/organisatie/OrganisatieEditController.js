@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function OrganisatieEditController($routeParams, $rootScope, OrganisatieService, $location) {
+    function OrganisatieEditController($routeParams, OrganisatieService, $location) {
 
         var vm = this;
 
@@ -12,12 +12,14 @@
             vm.organisatie = data;
         });
 
-        vm.editOrganisatie = function (organisatie) {
-            organisatie.id = $routeParams.id;
-            organisatie.gebruiker = $rootScope.gebruiker.id;
-            OrganisatieService.update(organisatie).then(function () {
+        vm.updateOrganisatie = function () {
+
+            vm.organisatie.gebruiker = vm.organisatie.gebruiker.id;
+
+            OrganisatieService.update(vm.organisatie).then(function () {
                 $location.path("/organisaties");
             });
+
         }
 
     }

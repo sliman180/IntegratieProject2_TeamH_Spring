@@ -7,13 +7,18 @@
         var vm = this;
 
         vm.gebruiker = {};
-        vm.updateProfile = function (credentials) {
 
-            if (credentials.wachtwoord == null) {
-                credentials.wachtwoord = "";
+        GebruikerService.find($rootScope.gebruiker.id).then(function (data) {
+            vm.gebruiker = data;
+        });
+
+        vm.updateProfile = function () {
+
+            if (vm.gebruiker.wachtwoord == null) {
+                vm.gebruiker.wachtwoord = "";
             }
 
-            GebruikerService.update($rootScope.gebruiker.id, credentials).then(function () {
+            GebruikerService.update($rootScope.gebruiker.id, vm.gebruiker).then(function () {
 
                 GebruikerService.find($rootScope.gebruiker.id).then(function (data) {
 
@@ -21,7 +26,6 @@
                     $rootScope.gebruiker.naam = data.gebruikersnaam;
                     $rootScope.gebruiker.rollen = data.rollen;
 
-                    vm.gebruiker = data;
                     $location.path("/");
 
                 });

@@ -69,10 +69,6 @@
             return new Date() > new Date(date);
         };
 
-        vm.gestartFilter = function (cirkelsessie) {
-            return new Date() > new Date(cirkelsessie.startDatum);
-        };
-
         vm.addCirkelsessie = function (cirkelsessie) {
 
             cirkelsessie.gebruiker = $rootScope.gebruiker.id;

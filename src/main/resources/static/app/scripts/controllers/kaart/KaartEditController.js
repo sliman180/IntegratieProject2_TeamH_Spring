@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function KaartEditController($routeParams, $rootScope, KaartService) {
+    function KaartEditController($location, $routeParams, KaartService) {
 
         var vm = this;
 
@@ -12,12 +12,14 @@
             vm.kaart = data;
         });
 
-        vm.editKaart = function (kaart) {
-            kaart.id = $routeParams.id;
-            kaart.gebruiker = $rootScope.gebruiker.id;
-            KaartService.update(kaart).then(function () {
-                alert('Beste ' + $rootScope.gebruiker.naam + ', de kaart is gewijzigd!');
+        vm.updateKaart = function () {
+
+            vm.kaart.gebruiker = vm.kaart.gebruiker.id;
+
+            KaartService.update(vm.kaart).then(function () {
+                $location.path("/kaarten/details/" + $routeParams.id)
             });
+
         }
 
     }
