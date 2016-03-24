@@ -8,92 +8,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="//fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="dist/styles/main.min.css">
+
 </head>
 <body ng-cloak>
-<style>
-    .badge[data-badge]:after {
-        background-color: white !important;
-        color: black !important;
-    }
 
-    .mdl-layout__header-row .mdl-navigation__link {
-        line-height: 25px;
-        padding-left: 50px;
-        padding-right: 0px;
-    }
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-    .badge {
-        margin-bottom: 0 !important;
-    }
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">
+                    <a class="mdl-navigation__header" href="/#/">Kandoe</a>
+                </span>
+                <div class="mdl-layout-spacer"></div>
+                <nav ng-if="!$root.gebruiker.aangemeld" class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link nav-session-btn" href="/#/cirkelsessies">Cirkelsessies</a>
+                    <a class="mdl-navigation__link nav-login-btn" href="/#/auth/login">Aanmelden</a>
+                    <a class="mdl-navigation__link nav-register-btn" href="/#/auth/register">Registreren</a>
+                </nav>
+                <nav ng-if="$root.gebruiker.aangemeld" class="mdl-navigation mdl-layout--large-screen-only">
+                    <a class="mdl-navigation__link mdl-badge badge nav-organisation-btn" data-badge="{{$root.gebruiker.aantalOrganisaties}}" href="/#/organisaties">Mijn organisaties</a>
+                    <a class="mdl-navigation__link mdl-badge badge nav-main-theme-btn" data-badge="{{$root.gebruiker.aantalHoofdthemas}}" href="/#/hoofdthemas">Mijn hoofdthemas</a>
+                    <a class="mdl-navigation__link mdl-badge badge nav-subtheme-btn" data-badge="{{$root.gebruiker.aantalSubthemas}}" href="/#/subthemas">Mijn subthemas</a>
+                    <a class="mdl-navigation__link mdl-badge badge nav-participations-btn" data-badge="{{$root.gebruiker.aantalDeelnames}}" href="/#/deelnames">Mijn deelnames</a>
+                    <a class="mdl-navigation__link nav-session-btn" href="/#/cirkelsessies">Cirkelsessies</a>
+                    <a class="mdl-navigation__link nav-profile-btn" href="/#/auth/profile">Mijn Profiel</a>
+                    <a class="mdl-navigation__link nav-logoff-btn" href="" ng-click="logout()">Afmelden</a>
+                </nav>
+            </div>
+        </header>
 
-    .blackIcon{
-        color:black;
-    }
-
-    .blueIcon{
-        color:blue;
-    }
-</style>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-                    <span class="mdl-layout-title">
-                        <a class="mdl-navigation__header" href="/#/">Kandoe</a>
-                    </span>
-
-            <div class="mdl-layout-spacer"></div>
-            <nav ng-if="!$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link nav-login-btn" href="/#/auth/login">Aanmelden</a>
-                <a class="mdl-navigation__link nav-register-btn" href="/#/auth/register">Registreren</a>
-                <a class="mdl-navigation__link nav-session-btn" href="/#/cirkelsessies">Cirkelsessies</a>
+        <div class="mdl-layout__drawer">
+            <nav ng-if="!$root.gebruiker.aangemeld" class="mdl-navigation">
+                <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
+                <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
+                <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
             </nav>
-            <nav ng-if="$root.loggedIn" class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link mdl-badge badge nav-organisation-btn" data-badge="{{$root.aantalOrganisaties}}" href="/#/organisaties">Mijn organisaties</a>
-                <a class="mdl-navigation__link mdl-badge badge nav-main-theme-btn" data-badge="{{$root.aantalHoofdthemas}}"
-                   href="/#/hoofdthemas">Mijn hoofdthemas</a>
-                <a class="mdl-navigation__link mdl-badge badge nav-subtheme-btn" data-badge="{{$root.aantalSubthemas}}"
-                   href="/#/subthemas">Mijn subthemas</a>
-                <a class="mdl-navigation__link mdl-badge badge nav-participations-btn" data-badge="{{$root.aantalDeelnames}}"
-                   href="/#/deelnames">Mijn deelnames</a>
-                <a class="mdl-navigation__link nav-session-btn" href="/#/cirkelsessies">Cirkelsessies</a>
-                <a class="mdl-navigation__link nav-profile-btn" href="/#/auth/profile">Mijn Profiel</a>
-                <a class="mdl-navigation__link nav-logoff-btn" href="" ng-click="logout()">Afmelden</a>
+            <nav ng-if="$root.gebruiker.aangemeld" class="mdl-navigation">
+                <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
+                <a class="mdl-navigation__link" href="/#/hoofdthemas">Mijn hoofdthemas</a>
+                <a class="mdl-navigation__link" href="/#/subthemas">Mijn subthemas</a>
+                <a class="mdl-navigation__link" href="/#/deelnames">Mijn deelnames</a>
+                <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
+                <a class="mdl-navigation__link" href="/#/auth/profile">Mijn profiel</a>
+                <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
             </nav>
         </div>
-    </header>
 
-    <div class="mdl-layout__drawer">
-        <nav ng-if="!$root.loggedIn" class="mdl-navigation">
-            <a class="mdl-navigation__link" href="/#/auth/login">Aanmelden</a>
-            <a class="mdl-navigation__link" href="/#/auth/register">Registreren</a>
-            <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
-        </nav>
-        <nav ng-if="$root.loggedIn" class="mdl-navigation">
-            <a class="mdl-navigation__link" href="/#/organisaties">Mijn organisaties</a>
-            <a class="mdl-navigation__link" href="/#/hoofdthemas">Mijn hoofdthemas</a>
-            <a class="mdl-navigation__link" href="/#/subthemas">Mijn subthemas</a>
-            <a class="mdl-navigation__link" href="/#/deelnames">Mijn deelnames</a>
-            <a class="mdl-navigation__link" href="/#/cirkelsessies">Cirkelsessies</a>
-            <a class="mdl-navigation__link" href="/#/auth/profile">Mijn profiel</a>
-            <a class="mdl-navigation__link" href="" ng-click="logout()">Afmelden</a>
-        </nav>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid" ng-view></div>
+        </main>
+
     </div>
 
-    <main class="mdl-layout__content">
-
-        <div class="mdl-grid" ng-view></div>
-
-    </main>
-
-</div>
-
-<script src="dist/scripts/vendor.js"></script>
-<script src="dist/scripts/main.js"></script>
+    <script src="dist/scripts/vendor.js"></script>
+    <script src="dist/scripts/main.js"></script>
 
 </body>
 </html>

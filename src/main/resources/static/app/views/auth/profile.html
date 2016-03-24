@@ -10,7 +10,7 @@
             <div class="mdl-card__supporting-text">
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input" type="text" id="gebruikersnaam" pattern="^.{5,20}$"
-                           ng-init="credentials.gebruikersnaam = $root.naam"
+                           ng-init="credentials.gebruikersnaam = $root.gebruiker.naam"
                            ng-model="credentials.gebruikersnaam">
                     <label class="mdl-textfield__label" for="gebruikersnaam">Gebruikersnaam</label>
                     <span class="mdl-textfield__error">Mag minimum 5 en maximum 20 letters/cijfer bevatten</span>

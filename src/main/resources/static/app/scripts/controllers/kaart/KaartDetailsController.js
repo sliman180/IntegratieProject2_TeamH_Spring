@@ -20,7 +20,7 @@
 
 
         vm.createComment = function (kaartId, comment) {
-            comment.gebruiker = $rootScope.id;
+            comment.gebruiker = $rootScope.gebruiker.id;
             KaartService.createComment(kaartId, comment).then(function () {
                 $route.reload;
             });

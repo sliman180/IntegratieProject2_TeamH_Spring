@@ -8,7 +8,7 @@
 
         vm.deelnames = [];
 
-        DeelnameService.allOfGebruiker($rootScope.id).then(function (data) {
+        DeelnameService.allOfGebruiker($rootScope.gebruiker.id).then(function (data) {
             vm.deelnames = data;
         });
 

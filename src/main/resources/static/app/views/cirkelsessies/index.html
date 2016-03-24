@@ -104,14 +104,9 @@
 
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
-    <div id="cirkelsessie-title" class="mdl-card__title-text">
-        <span>Alle cirkelsessies({{vm.cirkelsessies.length}})</span>
-        <!--<div id="header-buttons">-->
-        <!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect">-->
-        <!--Mijn cirkelsessies-->
-        <!--</button>-->
-        <!--</div>-->
-    </div>
+    <h2 id="cirkelsessie-title" class="mdl-card__title-text">
+        <span>Alle cirkelsessies ({{ vm.cirkelsessies.length }})</span>
+    </h2>
     <div id="cirkelsessie-filter" class="mdl-card__title-text">
         <div class="type-cirkelsessie">
             <div>
@@ -129,7 +124,7 @@
                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-my">
                     <input ng-model="filter.gebruiker.id" type="radio" id="option-my" class="mdl-radio__button"
                            name="options"
-                           value="{{$root.id}}" checked>
+                           value="{{$root.gebruiker.id}}" checked>
                     <span class="mdl-radio__label">MIJN SESSIES</span>
                 </label>
                 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-open">
@@ -222,10 +217,10 @@
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right {{cirkelsessie.id}}">
                     <li ng-click="vm.showCirkelsessieLink(cirkelsessie.id)" class="mdl-menu__item">Bekijk</li>
-                    <li ng-if="cirkelsessie.gebruiker.id==$root.id" ng-click="vm.editCirkelsessieLink(cirkelsessie.id)"
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.gebruiker.id" ng-click="vm.editCirkelsessieLink(cirkelsessie.id)"
                         class="mdl-menu__item">Wijzig
                     </li>
-                    <li ng-if="cirkelsessie.gebruiker.id==$root.id"
+                    <li ng-if="cirkelsessie.gebruiker.id==$root.gebruiker.id"
                         ng-click="vm.deleteCirkelsessie(cirkelsessie.id)" class="mdl-menu__item">Verwijder
                     </li>
                 </ul>

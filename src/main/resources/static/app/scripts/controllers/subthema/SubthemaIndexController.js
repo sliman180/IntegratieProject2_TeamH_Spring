@@ -12,7 +12,7 @@
 
         vm.hoofdthemas = [];
 
-        SubthemaService.allOfGebruiker($rootScope.id).then(function (data) {
+        SubthemaService.allOfGebruiker($rootScope.gebruiker.id).then(function (data) {
             vm.subthemas = data;
             angular.forEach(vm.subthemas, function (value, key) {
                 SubthemaService.getKaarten(value.id).then(function (kaartendata) {
@@ -21,13 +21,13 @@
             });
         });
 
-        HoofdthemaService.allOfGebruiker($rootScope.id).then(function (data) {
+        HoofdthemaService.allOfGebruiker($rootScope.gebruiker.id).then(function (data) {
             vm.hoofdthemas = data;
         });
 
 
         vm.addSubthema = function (subthema) {
-            subthema.gebruiker = $rootScope.id;
+            subthema.gebruiker = $rootScope.gebruiker.id;
             SubthemaService.create(subthema).then(function () {
                 $route.reload();
             });

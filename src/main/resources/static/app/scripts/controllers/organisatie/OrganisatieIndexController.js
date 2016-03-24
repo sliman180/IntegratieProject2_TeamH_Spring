@@ -9,7 +9,7 @@
         vm.organisaties = [];
         vm.hoofdthemas = [];
 
-        OrganisatieService.allOfGebruiker($rootScope.id).then(function (data) {
+        OrganisatieService.allOfGebruiker($rootScope.gebruiker.id).then(function (data) {
             vm.organisaties = data;
             angular.forEach(vm.organisaties, function (value, key) {
                 OrganisatieService.getHoofdthemas(value.id).then(function (hoofdthemadata) {
@@ -19,7 +19,7 @@
         });
 
         vm.addOrganisatie = function (organisatie) {
-            organisatie.gebruiker = $rootScope.id;
+            organisatie.gebruiker = $rootScope.gebruiker.id;
             OrganisatieService.create(organisatie).then(function () {
                 $route.reload();
             });

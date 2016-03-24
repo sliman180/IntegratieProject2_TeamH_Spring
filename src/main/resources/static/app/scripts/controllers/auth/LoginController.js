@@ -16,10 +16,11 @@
 
                 GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (gebruiker) {
 
-                    $rootScope.id = gebruiker.id;
-                    $rootScope.naam = gebruiker.gebruikersnaam;
-                    $rootScope.rollen = gebruiker.rollen;
-                    $rootScope.loggedIn = true;
+                    $rootScope.gebruiker = {};
+                    $rootScope.gebruiker.id = gebruiker.id;
+                    $rootScope.gebruiker.naam = gebruiker.gebruikersnaam;
+                    $rootScope.gebruiker.rollen = gebruiker.rollen;
+                    $rootScope.gebruiker.aangemeld = true;
 
                     $location.path("/");
 

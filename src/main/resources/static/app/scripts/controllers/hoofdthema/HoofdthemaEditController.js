@@ -19,7 +19,7 @@
 
         vm.editHoofdthema = function (hoofdthema) {
             hoofdthema.id = $routeParams.id;
-            hoofdthema.gebruiker = $rootScope.id;
+            hoofdthema.gebruiker = $rootScope.gebruiker.id;
             hoofdthema.organisatie = vm.hoofdthema.organisatie.id;
             HoofdthemaService.update(hoofdthema).then(function () {
                 $location.path("/hoofdthemas");

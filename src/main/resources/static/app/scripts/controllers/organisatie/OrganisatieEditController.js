@@ -14,7 +14,7 @@
 
         vm.editOrganisatie = function (organisatie) {
             organisatie.id = $routeParams.id;
-            organisatie.gebruiker = $rootScope.id;
+            organisatie.gebruiker = $rootScope.gebruiker.id;
             OrganisatieService.update(organisatie).then(function () {
                 $location.path("/organisaties");
             });

@@ -7658,3 +7658,27 @@ fieldset[disabled] .mdl-textfield .mdl-textfield__label, .mdl-textfield.is-disab
     margin-left: 91.66667%;
   }
 }
+.badge[data-badge]:after {
+  background-color: white !important;
+  color: black !important;
+}
+
+.mdl-layout__header-row .mdl-navigation__link {
+  line-height: 25px;
+  padding-left: 50px;
+  padding-right: 0px;
+}
+
+.badge {
+  margin-bottom: 0 !important;
+}
+
+.splash-content {
+  padding: 5% 0;
+  text-align: center;
+}
+
+.splash-content img {
+  margin-bottom: 30px;
+  width: 350px;
+}

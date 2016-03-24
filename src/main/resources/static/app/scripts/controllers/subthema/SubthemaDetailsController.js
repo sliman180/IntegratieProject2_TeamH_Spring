@@ -30,7 +30,7 @@
         });
 
         vm.createKaart = function (subthemaId, kaart) {
-            kaart.gebruiker = $rootScope.id;
+            kaart.gebruiker = $rootScope.gebruiker.id;
             kaart.commentsToelaatbaar = !!document.getElementById('commentsToelaatbaar').checked;
             KaartService.createKaartForSubthema(subthemaId, kaart).then(function () {
                 $route.reload();

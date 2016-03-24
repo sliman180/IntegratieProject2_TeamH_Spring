@@ -224,8 +224,8 @@
                     <div class="dropdown">
                         <button class="dropbtn">Instellingen</button>
                         <div class="dropdown-content">
-                            <a ng-if="$root.id==kaart.gebruiker.id" href="" ng-click="vm.deleteKaart(kaart.id)">Verwijderen</a>
-                            <a ng-if="$root.id==kaart.gebruiker.id" href="/#/kaarten/edit/{{kaart.id}}">Wijzigen</a>
+                            <a ng-if="$root.gebruiker.id==kaart.gebruiker.id" href="" ng-click="vm.deleteKaart(kaart.id)">Verwijderen</a>
+                            <a ng-if="$root.gebruiker.id==kaart.gebruiker.id" href="/#/kaarten/edit/{{kaart.id}}">Wijzigen</a>
                             <a href="/#/kaarten/details/{{kaart.id}}">Meer informatie</a>
                         </div>
                     </div>

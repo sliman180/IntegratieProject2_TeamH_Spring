@@ -14,7 +14,7 @@
 
         vm.editSubthema = function (subthema) {
             subthema.id = $routeParams.id;
-            subthema.gebruiker = $rootScope.id;
+            subthema.gebruiker = $rootScope.gebruiker.id;
             subthema.hoofdthema = vm.subthema.hoofdthema.id;
             SubthemaService.update(subthema).then(function () {
                 $location.path("/subthemas");

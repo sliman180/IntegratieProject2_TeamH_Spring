@@ -65,7 +65,9 @@
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
 
-    <h2 id="organisatie-title" class="mdl-card__title-text">Mijn organisaties ({{ vm.organisaties.length }})</h2>
+    <h2 id="organisatie-title" class="mdl-card__title-text">
+        Mijn organisaties ({{ vm.organisaties.length }})
+    </h2>
 
     <ul class="demo-list-two mdl-list lijst">
         <li ng-repeat="organisatie in vm.organisaties" class="mdl-list__item mdl-list__item--two-line lijst-item">
@@ -79,13 +81,13 @@
               <span id="organisatie-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
                 <p>
                     <div>
-                        <a ng-if="$root.id==organisatie.gebruiker.id" id="wijzig"
+                        <a ng-if="$root.gebruiker.id==organisatie.gebruiker.id" id="wijzig"
                            class="mdl-list__item-secondary-action blackIcon"
                            href="/#/organisaties/edit/{{organisatie.id}}"><i
                                 class="material-icons">mode_edit</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="wijzig">Wijzig organisatie</div>
-                        <a ng-if="$root.id==organisatie.gebruiker.id" ng-click="vm.deleteOrganisatie(organisatie.id)"
+                        <a ng-if="$root.gebruiker.id==organisatie.gebruiker.id" ng-click="vm.deleteOrganisatie(organisatie.id)"
                            href="" id="verwijder" class="mdl-list__item-secondary-action"><i class="material-icons">delete</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="verwijder">Verwijder organisatie</div>

@@ -126,7 +126,7 @@
 <div id="cirkelsessie-header">
 
     <span id="cirkelsessie-begroeting">
-        Welkom, {{ $root.naam }}!
+        Welkom, {{ $root.gebruiker.naam }}!
     </span>
 
     <div id="header-buttons">
@@ -169,17 +169,17 @@
                     class="mdl-button mdl-js-button mdl-button--raised status-beeindigd" disabled>
                 De cirkelsessie is beëndigd!
             </button>
-            <button ng-if="vm.cirkelsessie.status!='BEEINDIGD' && ($root.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin())"
+            <button ng-if="vm.cirkelsessie.status!='BEEINDIGD' && ($root.gebruiker.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin())"
                     ng-click="vm.beeindigSpel(vm.cirkelsessie)"
                     class="mdl-button mdl-js-button mdl-button--raised status-beeindigd">
                 Beëndigd de cirkelsessie!
             </button>
-            <button ng-if="vm.cirkelsessie.status=='GESLOTEN' && !vm.isActive(vm.cirkelsessie.startDatum) && (($root.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin()) || vm.isAdmin()) && !vm.isActive(vm.cirkelsessie.startDatum)"
+            <button ng-if="vm.cirkelsessie.status=='GESLOTEN' && !vm.isActive(vm.cirkelsessie.startDatum) && (($root.gebruiker.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin()) || vm.isAdmin()) && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.openSpel(vm.cirkelsessie)"
                     class="mdl-button mdl-js-button mdl-button--raised status-open">
                 Open de cirkelsessie!
             </button>
-            <button ng-if="vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum) && ($root.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin()) && !vm.isActive(vm.cirkelsessie.startDatum)"
+            <button ng-if="vm.cirkelsessie.status=='OPEN' && !vm.isActive(vm.cirkelsessie.startDatum) && ($root.gebruiker.id==vm.cirkelsessie.gebruiker.id || vm.isAdmin()) && !vm.isActive(vm.cirkelsessie.startDatum)"
                     ng-click="vm.sluitSpel(vm.cirkelsessie)"
                     class="mdl-button mdl-js-button mdl-button--raised status-gesloten">
                 Sluit de cirkelsessie!
@@ -210,16 +210,16 @@
             <div ng-repeat="deelname in vm.deelnames | orderBy:'aanDeBeurt':true">
                 <div class="deelnameAandeBeurt" ng-if="deelname.aanDeBeurt">
                     <div class="dropdown"
-                         ng-if="(vm.cirkelsessie.gebruiker.id==$root.id || vm.isAdmin()) && !deelname.medeorganisator && deelname.gebruiker.id != $root.id">
+                         ng-if="(vm.cirkelsessie.gebruiker.id==$root.gebruiker.id || vm.isAdmin()) && !deelname.medeorganisator && deelname.gebruiker.id != $root.gebruiker.id">
                         <button class="dropbtn deelnemer-options">+</button>
                         <div class="dropdown-content">
                             <div>
-                                <a ng-if="deelname.gebruiker.id!=$root.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
+                                <a ng-if="deelname.gebruiker.id!=$root.gebruiker.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
                                    ng-click="vm.maakAdmin(deelname)"
                                    href="">
                                     Maak medeorganisator
                                 </a>
-                                <a ng-if="deelname.gebruiker.id!=$root.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
+                                <a ng-if="deelname.gebruiker.id!=$root.gebruiker.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
                                    ng-click="vm.kickDeelnemer(deelname)" href="">Kick deelnemer</a>
                             </div>
                         </div>
@@ -238,16 +238,16 @@
                 </div>
                 <div class="deelname" ng-if=!deelname.aanDeBeurt">
                     <div class="dropdown"
-                         ng-if="(vm.cirkelsessie.gebruiker.id==$root.id || vm.isAdmin()) && !deelname.medeorganisator && deelname.gebruiker.id != $root.id">
+                         ng-if="(vm.cirkelsessie.gebruiker.id==$root.gebruiker.id || vm.isAdmin()) && !deelname.medeorganisator && deelname.gebruiker.id != $root.gebruiker.id">
                         <button class="dropbtn deelnemer-options">+</button>
                         <div class="dropdown-content">
                             <div>
-                                <a ng-if="deelname.gebruiker.id!=$root.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
+                                <a ng-if="deelname.gebruiker.id!=$root.gebruiker.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
                                    ng-click="vm.maakAdmin(deelname)"
                                    href="">
                                     Maak medeorganisator
                                 </a>
-                                <a ng-if="deelname.gebruiker.id!=$root.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
+                                <a ng-if="deelname.gebruiker.id!=$root.gebruiker.id || deelname.gebruiker.id!=vm.cirkelsessie.gebruiker.id"
                                    ng-click="vm.kickDeelnemer(deelname)" href="">Kick deelnemer</a>
                             </div>
                         </div>
@@ -526,11 +526,11 @@
         </button>
 
         <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right-d">
-            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id || vm.isAdmin()"
+            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.gebruiker.id || vm.isAdmin()"
                 ng-click="vm.editCirkelsessieLink(vm.cirkelsessie.id)"
                 class="mdl-menu__item">Wijzig
             </li>
-            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.id || vm.isAdmin()"
+            <li ng-if="vm.cirkelsessie.gebruiker.id==$root.gebruiker.id || vm.isAdmin()"
                 ng-click="vm.deleteCirkelsessie(vm.cirkelsessie.id)"
                 class="mdl-menu__item">Verwijder
             </li>

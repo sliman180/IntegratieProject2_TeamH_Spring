@@ -14,9 +14,9 @@
 
         vm.editKaart = function (kaart) {
             kaart.id = $routeParams.id;
-            kaart.gebruiker = $rootScope.id;
+            kaart.gebruiker = $rootScope.gebruiker.id;
             KaartService.update(kaart).then(function () {
-                alert('Beste ' + $rootScope.naam + ', de kaart is gewijzigd!');
+                alert('Beste ' + $rootScope.gebruiker.naam + ', de kaart is gewijzigd!');
             });
         }
 

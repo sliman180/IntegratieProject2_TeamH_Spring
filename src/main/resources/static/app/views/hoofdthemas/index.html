@@ -51,7 +51,7 @@
 </style>
 
 <div class="mdl-cell mdl-cell--9-col ng-scope">
-    <h2 id="hoofdthema-title" class="mdl-card__title-text">Mijn hoofdthemas({{vm.hoofdthemas.length}})</h2>
+    <h2 id="hoofdthema-title" class="mdl-card__title-text">Mijn hoofdthemas ({{vm.hoofdthemas.length}})</h2>
 
     <ul class="demo-list-two mdl-list lijst">
         <li ng-repeat="hoofdthema in vm.hoofdthemas" class="mdl-list__item mdl-list__item--two-line lijst-item">
@@ -66,13 +66,13 @@
               <span id="hoofdthema-instellingen" class="mdl-list__item-secondary-info">Instellingen</span>
                 <p>
                     <div>
-                        <a ng-if="$root.id==hoofdthema.gebruiker.id" id="wijzig"
+                        <a ng-if="$root.gebruiker.id==hoofdthema.gebruiker.id" id="wijzig"
                            class="mdl-list__item-secondary-action blackIcon"
                            href="/#/hoofdthemas/edit/{{hoofdthema.id}}"><i
                                 class="material-icons">mode_edit</i></a>
 
                         <div class="mdl-tooltip mdl-tooltip--large" for="wijzig">Wijzig hoofthema</div>
-                        <a ng-if="$root.id==hoofdthema.gebruiker.id" id="verwijder"
+                        <a ng-if="$root.gebruiker.id==hoofdthema.gebruiker.id" id="verwijder"
                            class="mdl-list__item-secondary-action" href=""
                            ng-click="vm.deleteHoofdthema(hoofdthema.id)"><i class="material-icons">delete</i></a>
 

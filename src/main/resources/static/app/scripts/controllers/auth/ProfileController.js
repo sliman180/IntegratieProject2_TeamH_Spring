@@ -13,13 +13,13 @@
                 credentials.wachtwoord = "";
             }
 
-            GebruikerService.update($rootScope.id, credentials).then(function () {
+            GebruikerService.update($rootScope.gebruiker.id, credentials).then(function () {
 
-                GebruikerService.find($rootScope.id).then(function (data) {
+                GebruikerService.find($rootScope.gebruiker.id).then(function (data) {
 
-                    $rootScope.id = data.id;
-                    $rootScope.naam = data.gebruikersnaam;
-                    $rootScope.rollen = data.rollen;
+                    $rootScope.gebruiker.id = data.id;
+                    $rootScope.gebruiker.naam = data.gebruikersnaam;
+                    $rootScope.gebruiker.rollen = data.rollen;
 
                     vm.gebruiker = data;
                     $location.path("/");

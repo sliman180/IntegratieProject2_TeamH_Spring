@@ -1,12 +1,9 @@
 spring:
     main:
         banner-mode: "off"
-
----
-
-spring:
-    profiles: travis
-
+    jpa:
+        hibernate:
+            ddl-auto: create-drop
     mail:
         host: smtp.gmail.com
         username: kdo.team.h@gmail.com
@@ -21,9 +18,7 @@ spring:
                         fallback: false
                     ssl:
                         enable: true
-    jpa:
-        hibernate:
-            ddl-auto: create-drop
+
 ---
 
 spring:
@@ -34,6 +29,7 @@ logging:
         root: WARN
         org:
             hibernate: OFF
+
 ---
 
 spring:
@@ -41,7 +37,7 @@ spring:
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQL82Dialect
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
     datasource:
         url: ${JDBC_DATABASE_URL}
         driverClassName: org.postgresql.Driver

@@ -2,62 +2,60 @@
 
     "use strict";
 
-    angular.module("kandoe").run(function ($location, $rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
+    angular.module("kandoe")
 
-        $rootScope.logout = function () {
+        .run(function ($location, $rootScope, localStorageService) {
 
-            localStorageService.remove("auth");
+            $rootScope.logout = function () {
 
-            $rootScope.id = null;
-            $rootScope.naam = null;
-            $rootScope.rollen = null;
-            $rootScope.loggedIn = false;
-            $rootScope.aantalDeelnames = null;
-            $rootScope.aantalHoofdthemas = null;
-            $rootScope.aantalOrganisaties = null;
-            $rootScope.aantalSubthemas = null;
+                localStorageService.remove("auth");
+                $rootScope.gebruiker = null;
+                $location.path("/");
 
-            $location.path("/");
+            };
 
-        };
+        })
 
-        var data = localStorageService.get("auth");
+        .run(function ($rootScope, $timeout, GebruikerService, JwtService, localStorageService) {
 
-        if (data) {
+            var data = localStorageService.get("auth");
 
-            GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (gebruiker) {
+            if (data) {
 
-                $rootScope.id = gebruiker.id;
-                $rootScope.naam = gebruiker.gebruikersnaam;
-                $rootScope.rollen = gebruiker.rollen;
-                $rootScope.loggedIn = true;
+                GebruikerService.find(JwtService.decodeToken(data.token).sub).then(function (gebruiker) {
 
-                var haalGebruikerDataOp = function () {
+                    $rootScope.gebruiker = {};
+                    $rootScope.gebruiker.id = gebruiker.id;
+                    $rootScope.gebruiker.naam = gebruiker.gebruikersnaam;
+                    $rootScope.gebruiker.rollen = gebruiker.rollen;
+                    $rootScope.gebruiker.aangemeld = true;
 
-                    GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
-                        $rootScope.aantalDeelnames = deelnames.length;
-                    });
+                    var haalGebruikerDataOp = function () {
 
-                    GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
-                        $rootScope.aantalHoofdthemas = hoofdthemas.length;
-                    });
+                        GebruikerService.deelnames(gebruiker.id).then(function (deelnames) {
+                            $rootScope.gebruiker.aantalDeelnames = deelnames.length;
+                        });
 
-                    GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
-                        $rootScope.aantalOrganisaties = organisaties.length;
-                    });
+                        GebruikerService.hoofdthemas(gebruiker.id).then(function (hoofdthemas) {
+                            $rootScope.gebruiker.aantalHoofdthemas = hoofdthemas.length;
+                        });
 
-                    GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
-                        $rootScope.aantalSubthemas = subthemas.length;
-                    });
+                        GebruikerService.organisaties(gebruiker.id).then(function (organisaties) {
+                            $rootScope.gebruiker.aantalOrganisaties = organisaties.length;
+                        });
 
-                    $timeout(haalGebruikerDataOp, 1000);
-                };
+                        GebruikerService.subthemas(gebruiker.id).then(function (subthemas) {
+                            $rootScope.gebruiker.aantalSubthemas = subthemas.length;
+                        });
 
-                haalGebruikerDataOp();
+                        $timeout(haalGebruikerDataOp, 1000);
+                    };
 
-            });
+                    haalGebruikerDataOp();
 
-        }
+                });
+
+            }
 
     });
 

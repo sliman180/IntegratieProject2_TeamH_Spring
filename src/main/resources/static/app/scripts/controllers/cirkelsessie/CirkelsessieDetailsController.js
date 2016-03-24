@@ -84,7 +84,7 @@
 
         vm.isDeelnemer = function () {
             for (var i = 0; i < vm.gebruikers.length; i++) {
-                if ($rootScope.id == vm.gebruikers[i].id) {
+                if ($rootScope.gebruiker.id == vm.gebruikers[i].id) {
                     return true;
                 }
             }
@@ -95,7 +95,7 @@
         vm.isAanDeBeurt = function () {
 
             for (var i = 0; i < vm.deelnames.length; i++) {
-                if ($rootScope.id == vm.deelnames[i].gebruiker.id && vm.deelnames[i].aanDeBeurt == true) {
+                if ($rootScope.gebruiker.id == vm.deelnames[i].gebruiker.id && vm.deelnames[i].aanDeBeurt == true) {
                     return true;
                 }
             }
@@ -105,19 +105,19 @@
 
 
         vm.addBericht = function (id, bericht) {
-            bericht.gebruiker = $rootScope.id;
+            bericht.gebruiker = $rootScope.gebruiker.id;
             CirkelsessieService.addBericht(id, bericht);
             document.getElementById('berichtTekst').value = "";
         };
 
         vm.addDeelname = function (id) {
             CirkelsessieService.addDeelname(id).then(function () {
-                alert('Beste ' + $rootScope.naam + ', Dank u voor uw deelname !');
+                alert('Beste ' + $rootScope.gebruiker.naam + ', Dank u voor uw deelname !');
             });
         };
 
         vm.createKaart = function (cirkelsessieId, kaart) {
-            kaart.gebruiker = $rootScope.id;
+            kaart.gebruiker = $rootScope.gebruiker.id;
             kaart.commentsToelaatbaar = !!document.getElementById('commentsToelaatbaar').checked;
             KaartService.createKaart(cirkelsessieId, kaart).then(function () {
                 alert('De kaart  "' + kaart.tekst + '" is toegevoegd.');
@@ -203,7 +203,7 @@
 
         vm.kanKaartenToevoegen = function () {
             for (var x = 0; x < vm.deelnames.length; x++) {
-                if (vm.deelnames[x].gebruiker.id == $rootScope.id) {
+                if (vm.deelnames[x].gebruiker.id == $rootScope.gebruiker.id) {
                     if (vm.cirkelsessie.maxAantalKaarten == vm.deelnames[x].aangemaakteKaarten) {
                         return false;
                     }
@@ -247,7 +247,7 @@
 
         vm.isAdmin = function () {
             for (var i = 0; i < vm.deelnames.length; i++) {
-                if (vm.deelnames[i].gebruiker.id == $rootScope.id && vm.deelnames[i].medeorganisator == true) {
+                if (vm.deelnames[i].gebruiker.id == $rootScope.gebruiker.id && vm.deelnames[i].medeorganisator == true) {
                     return true;
                 }
             }

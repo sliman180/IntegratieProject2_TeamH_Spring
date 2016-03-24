@@ -14,7 +14,7 @@
 
         vm.editCirkelsessie = function (cirkelsessie) {
             cirkelsessie.id = $routeParams.id;
-            cirkelsessie.gebruiker = $rootScope.id;
+            cirkelsessie.gebruiker = $rootScope.gebruiker.id;
             cirkelsessie.status = vm.cirkelsessie.status;
 
             if (cirkelsessie.status == 'BEEINDIGD') {
