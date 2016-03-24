@@ -1,24 +1,24 @@
-var AuthenticationPageObject = require('./authenticatiePageObject.js');
+var AuthenticationPageObject = require("./authenticatiePageObject.js");
 
 describe("On the home page", function(){
 
-    var loginPage;
+    var authPageObject;
 
     beforeEach(function(){
-        loginPage = new AuthenticationPageObject();
+        authPageObject = new AuthenticationPageObject();
         browser.driver.manage().window().maximize();
     });
 
     afterEach(function(){
-        loginPage.logOff();
+        authPageObject.logOff();
     });
 
     it("user should be able to login", function(){
 
-        loginPage.index();
-        expect(browser.getCurrentUrl()).toEqual('http://localhost:8080/#/');
-        loginPage.login();
-        expect($('.nav-login-btn').isPresent()).toBe(false);
+        authPageObject.index();
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/");
+        authPageObject.login("userone","userone");
+        expect($(".nav-login-btn").isPresent()).toBe(false);
 
     });
 

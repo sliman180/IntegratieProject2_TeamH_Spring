@@ -5,6 +5,7 @@ describe("On the home page", function(){
     var regPageObj;
 
     beforeEach(function(){
+
         regPageObj = new RegistrationPageObject();
         browser.driver.manage().window().maximize();
 
@@ -13,7 +14,7 @@ describe("On the home page", function(){
     it("user should be able to register", function(){
 
         regPageObj.index();
-        regPageObj.register();
+        regPageObj.register("GeorgyBagramyan","GeorgyBagramyan1988");
         expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/auth/login");
 
     });

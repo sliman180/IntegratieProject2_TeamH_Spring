@@ -21,14 +21,14 @@ describe("From a organisation page",function(){
 
     it("user should be able to create a organisation",function(){
         orgPageObj.create();
-        expect(element.all(by.repeater('organisatie in vm.organisaties')).count()).toBe(1);
         expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/organisaties");
+        expect(element.all(by.repeater('organisatie in vm.organisaties')).count()).toBe(1);
         orgPageObj.delete();
-
     });
 
     it("user should be able to delete a organisation",function(){
         orgPageObj.create();
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/organisaties");
         expect(element.all(by.repeater('organisatie in vm.organisaties')).count()).toBe(1);
         orgPageObj.delete();
         expect(element.all(by.repeater('organisatie in vm.organisaties')).count()).toBe(0);
@@ -36,6 +36,7 @@ describe("From a organisation page",function(){
 
     it("user should be able to edit a organisation",function(){
         orgPageObj.create();
+        expect(browser.getCurrentUrl()).toEqual("http://localhost:8080/#/organisaties");
         expect(element.all(by.repeater('organisatie in vm.organisaties')).count()).toBe(1);
         orgPageObj.edit('DTO','Data Transfer Object');
         expect($('.org-naam').getText()).toEqual('DTO');

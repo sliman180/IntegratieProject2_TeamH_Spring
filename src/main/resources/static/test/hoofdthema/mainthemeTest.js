@@ -1,11 +1,5 @@
 describe("From a home page", function(){
 
-    var orgTest = require("./../organisatie/t_organisatie.js");
-
-    beforeEach(function(){
-        orgTest();
-    });
-
     it("user should be able to create main theme and attache existing organisation to it",function(){
 
         element(by.css(".nav-main-theme-btn")).click();

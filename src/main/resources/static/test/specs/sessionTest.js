@@ -19,7 +19,6 @@ describe("From home page", function(){
 
     });
 
-
     //filter
 
     //sort
