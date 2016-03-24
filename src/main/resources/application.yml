@@ -42,6 +42,7 @@ spring:
         url: ${JDBC_DATABASE_URL}
         driverClassName: org.postgresql.Driver
         removeAbandoned: true
+        initialize: false
         initialSize: 5
         maxActive: 10
         maxIdle: 5
