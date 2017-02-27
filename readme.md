@@ -1,4 +1,4 @@
-# Integratieproject 2: Team H
+# Integratieproject 2: Team H (School project)
 
 [![Build Status](https://travis-ci.org/sliman180/teamh-spring.svg?branch=master)](https://travis-ci.org/sliman180/teamh-spring)
 
